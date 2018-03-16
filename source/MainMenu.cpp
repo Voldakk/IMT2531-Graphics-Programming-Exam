@@ -2,6 +2,7 @@
 
 #include "Application.hpp"
 #include "SceneManager.hpp"
+#include "Game.hpp"
 
 // Constructor
 MainMenu::MainMenu()
@@ -12,6 +13,7 @@ MainMenu::MainMenu()
 	logo.SetAnimation("normal");
 	logo.scale = glm::vec2(0.8f, 0.2f);
 	logo.position.y = 0.4f;
+	
 
 	//Buttons
 	spriteSheet = "../assets/Button.png";
@@ -43,7 +45,7 @@ void MainMenu::OnButtonPressed(int i)
 	{
 		// Start button
 		case 0:
-			SceneManager::ChangeScene<MainMenu>();
+			SceneManager::ChangeScene<Game>();
 			return;
 
 		// Start button
