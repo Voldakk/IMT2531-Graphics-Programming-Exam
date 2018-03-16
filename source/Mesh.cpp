@@ -21,7 +21,7 @@ Mesh::Mesh(const char * path)
 	projectionID = glGetUniformLocation(shader, "projection");
 	modelID = glGetUniformLocation(shader, "model");
 
-	Texture t = { 0, TextureType::Diffuse, "../assets/fly.png" };
+	Texture t = { 0, TextureType::Diffuse, "../assets/uv.png" };
 	t.id = TextureManager::GetTexture(t.path);
 	textures.push_back(t);
 

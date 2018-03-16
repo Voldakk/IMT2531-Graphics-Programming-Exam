@@ -15,3 +15,14 @@ public:
 private:
 	static std::map<std::string, GLuint> textures;
 };
+
+// Different texture types
+enum TextureType { Diffuse, Specular, Normal, Height };
+
+// Struct for holding texture info
+struct Texture 
+{
+	unsigned int id;
+	TextureType type;
+	std::string path;
+};
