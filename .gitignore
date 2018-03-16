@@ -1,0 +1,8 @@
+.vscode/
+
+build/
+dll/
+glew/
+glfw/
+glm/
+SOIL/
