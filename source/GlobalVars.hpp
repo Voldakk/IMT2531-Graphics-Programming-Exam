@@ -15,5 +15,5 @@ const glm::vec4 BUTTON_TEXT_COLOR = { 0.0f, 0.0f, 0.0f, 1.0f };	// The menu's de
 const glm::vec4 BACKGROUND_COLOR = { 0.5f, 0.5f, 0.5f, 1.0f };	// The GL clear color
 
 // Starting scene
-class MainMenu;
-typedef MainMenu StartScene;
+class Game;
+typedef Game StartScene;

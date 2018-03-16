@@ -1,10 +1,13 @@
 #version 330 core
-out vec4 color;
+
+uniform sampler2D texture_diffuse1;
 
 in vec2 uv;
-uniform sampler2D texture_diffuse1;
+in vec3 diffuse; 
+
+out vec4 outColor;
 
 void main()
 {    
-    color = vec4(texture(texture_diffuse1, uv).rgb, 1.0);
+     outColor = vec4(texture(texture_diffuse1, uv).rgb * diffuse, 1.0);
 }

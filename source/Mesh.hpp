@@ -6,16 +6,12 @@
 
 #include "TextureManager.hpp"
 
-struct Vertex {
-	// position
+struct Vertex 
+{
 	glm::vec3 Position;
-	// normal
 	glm::vec3 Normal;
-	// texCoords
 	glm::vec2 TexCoords;
-	// tangent
 	glm::vec3 Tangent;
-	// bitangent
 	glm::vec3 Bitangent;
 };
 
@@ -24,15 +20,17 @@ class Mesh
 
 public:
 
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 scale = glm::vec3(1.0f);;
+
 	Mesh(const char * path);
 	~Mesh();
 
 	void Create();
 	void Render();
 
-	glm::vec3 position;
-	glm::vec3 scale;
-	glm::vec3 rotation;
+	void AddTexture(const TextureType type, const char * path);
 
 protected:
 

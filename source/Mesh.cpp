@@ -20,14 +20,6 @@ Mesh::Mesh(const char * path)
 	viewID = glGetUniformLocation(shader, "view");
 	projectionID = glGetUniformLocation(shader, "projection");
 	modelID = glGetUniformLocation(shader, "model");
-
-	Texture t = { 0, TextureType::Diffuse, "../assets/uv.png" };
-	t.id = TextureManager::GetTexture(t.path);
-	textures.push_back(t);
-
-	Create();
-
-	scale = glm::vec3(1.0f);
 }
 
 Mesh::~Mesh()
@@ -78,6 +70,30 @@ void Mesh::Create()
 
 void Mesh::Render()
 {
+	glm::vec3 lightSourcePosition = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 lightColor = glm::vec3(0.8f, 1.0f, 0.8f);
+	float attenuationA = 1.0f;
+	float attenuationB = 0.2f;
+	float attenuationC = 0.0f;
+
+	GLint normalMatrixID = glGetUniformLocation(shader, "normalMatrix");
+	
+	
+	GLint attenuationAID = glGetUniformLocation(shader, "attenuationA");
+	GLint attenuationBID = glGetUniformLocation(shader, "attenuationB");
+	GLint attenuationCID = glGetUniformLocation(shader, "attenuationC");
+	GLint lightID = glGetUniformLocation(shader, "lightColor");
+	GLint lightSourcePositionID = glGetUniformLocation(shader, "lightSourcePosition");
+	GLint CamPosID = glGetUniformLocation(shader, "CamPos");
+
+	glUniform1f(attenuationAID, attenuationA);
+	glUniform1f(attenuationBID, attenuationB);
+	glUniform1f(attenuationCID, attenuationC);
+	glUniform3fv(lightID, 1, value_ptr(lightColor));
+	glUniform3fv(lightSourcePositionID, 1, value_ptr(lightSourcePosition));
+	glUniform3fv(CamPosID, 1, value_ptr(glm::vec3(0.0f)));
+
+
 	// Textures
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
@@ -126,11 +142,14 @@ void Mesh::Render()
 	model = glm::rotate(model, rotation.z, glm::vec3(0, 0, 1));
 	glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(model));
 
-	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(view));
 
 	glm::mat4 projection = Application::GetProjectionMatrix(false);
 	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(projection));
+
+	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*model)));
+	glUniformMatrix3fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
 	// Draw
 	glBindVertexArray(VAO);
@@ -143,4 +162,11 @@ void Mesh::Render()
 	// Reset
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void Mesh::AddTexture(const TextureType type, const char * path)
+{
+	Texture t = { 0,type, path };
+	t.id = TextureManager::GetTexture(t.path);
+	textures.push_back(t);
 }

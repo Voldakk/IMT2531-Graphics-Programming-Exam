@@ -14,6 +14,7 @@
 #include "GlobalVars.hpp"
 #include "SceneManager.hpp"
 #include "MainMenu.hpp"
+#include "Game.hpp"
 
 glm::ivec2 Application::windowSize;
 GLFWwindow * Application::window;
@@ -81,6 +82,7 @@ bool Application::CreateWindow()
 	glfwSwapInterval(1);
 
 	// Set OpenGL options
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
