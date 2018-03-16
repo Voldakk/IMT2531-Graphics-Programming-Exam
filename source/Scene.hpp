@@ -12,5 +12,6 @@ public:
 	/// <summary>Render all scene elements to the screen</summary>
     virtual void Render(){};
 
+	/// <summary>Shared pointer to itself</summary>
 	std::shared_ptr<Scene> self;
 };

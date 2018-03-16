@@ -43,12 +43,12 @@ void MainMenu::OnButtonPressed(int i)
 	{
 		// Start button
 		case 0:
-			//SceneManager::ChangeScene(std::make_shared<Game>(1));
+			SceneManager::ChangeScene<MainMenu>();
 			return;
 
 		// Start button
 		case 1:
-			//SceneManager::ChangeScene(std::make_shared<Game>(2));
+			SceneManager::ChangeScene<MainMenu>();
 			return;
 
 		// Exit button

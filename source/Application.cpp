@@ -36,7 +36,7 @@ void Application::Init()
 	Sprite::Init();
 
 	// Load starting scene
-	SceneManager::LoadScene(std::make_shared<StartScene>());
+	SceneManager::CreateScene<StartScene>();
 
 	// Run the window loop
 	Loop();

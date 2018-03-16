@@ -1,24 +1,37 @@
 #pragma once
+
 #include <vector>
 #include <memory>
+#include <iostream>
 
 #include "Scene.hpp"
+#include "Input.hpp"
 
 // Manages the active scenes in the game
 class SceneManager
 {
     public:
-		/// <summary>Loads a scene ontop of any currently active scenes</summary>
-		/// <param name="scene">The scene to be loaded</param>  
-        static void LoadScene(std::shared_ptr<Scene> scene);
+		/// <summary>Creates and loads a new scene ontop of any currently active scenes</summary>
+		/// <returns>Returns a pointer to the newly created scene</returns>  
+		template <class T>
+		static std::shared_ptr<T> CreateScene();
 
-		/// <summary>Unloads scene</summary>
+		/// <summary>Loads an existing scene ontop of any currently active scenes</summary>
+		/// <param name="scene">The scene to be loaded</param>  
+		static void LoadScene(std::shared_ptr<Scene> scene);
+
+		/// <summary>Unloads a scene</summary>
 		/// <param name="scene">The scene to be unloaded</param>  
         static void UnloadScene(std::shared_ptr<Scene> scene);
 
-		/// <summary>Unloads all active scenes and loads a new scene</summary>
+		/// <summary>Unloads all active scenes and loads an existing scene</summary>
 		/// <param name="scene">The new scene</param>  
 		static void ChangeScene(std::shared_ptr<Scene> scene);
+
+		/// <summary>Unloads all active scenes and creates a new scene</summary>
+		/// <returns>Returns a pointer to the newly created scene</returns>  
+		template <class T>
+		static std::shared_ptr<Scene> ChangeScene();
 
 		/// <summary>Updates all active scenes</summary>
 		/// <param name="deltaTime">The time in seconds between frames</param>
@@ -34,4 +47,29 @@ class SceneManager
 		/// <param name="path">The scene to find</param>  
 		/// <returns>The index of the scene. Return -1 if the scene was not found</returns>  
 		static int GetIndex(std::shared_ptr<Scene> scene);
+
+		/// <summary>Clears the list of scenes and restes the scenes self pointer</summary>
+		static void ClearScenes();
 };
+
+template<class T>
+std::shared_ptr<T> SceneManager::CreateScene()
+{
+	std::cout << "SceneManager::CreateScene - Creating scene: " << typeid(T).name() << " \n";
+	std::shared_ptr<T> scene = std::make_shared<T>();
+
+	LoadScene(scene);
+
+	return scene;
+}
+
+template<class T>
+std::shared_ptr<Scene> SceneManager::ChangeScene()
+{
+	std::cout << "SceneManager::ChangeScene - Changing scene: " << typeid(T).name() << " \n";
+	ClearScenes();
+
+	Input::ClearKeys();
+
+	return CreateScene<T>();
+}
