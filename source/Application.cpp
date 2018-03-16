@@ -129,12 +129,16 @@ void Application::Loop()
 	glfwTerminate();
 }
 
-glm::mat4 Application::GetProjectionMatrix()
+glm::mat4 Application::GetProjectionMatrix(bool orto)
 {
-	if(windowSize.x > windowSize.y)
-		return glm::ortho(-(float)windowSize.x / (float)windowSize.y, (float)windowSize.x / (float)windowSize.y, -1.0f, 1.0f, -1.0f, 1.0f);
-	else 
-		return glm::ortho(-1.0f, 1.0f, -(float)windowSize.y / (float)windowSize.x, (float)windowSize.y / (float)windowSize.x, -1.0f, 1.0f);
+	if (orto)
+	{
+		if (windowSize.x > windowSize.y)
+			return glm::ortho(-(float)windowSize.x / (float)windowSize.y, (float)windowSize.x / (float)windowSize.y, -1.0f, 1.0f, -1.0f, 1.0f);
+		else
+			return glm::ortho(-1.0f, 1.0f, -(float)windowSize.y / (float)windowSize.x, (float)windowSize.y / (float)windowSize.x, -1.0f, 1.0f);
+	}
+	return  glm::perspective(60.0f, (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
 }
 
 void Application::WindowResizeCallback(GLFWwindow * window, int width, int height)
