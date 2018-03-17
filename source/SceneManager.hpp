@@ -69,7 +69,7 @@ std::shared_ptr<Scene> SceneManager::ChangeScene()
 	std::cout << "SceneManager::ChangeScene - Changing scene: " << typeid(T).name() << " \n";
 	ClearScenes();
 
-	Input::ClearKeys();
+	Input::Clear();
 
 	return CreateScene<T>();
 }

@@ -117,7 +117,7 @@ void Application::Loop()
 		glfwSwapBuffers(window);
 
 		// Input
-		Input::ClearKeys();
+		Input::Clear();
 		glfwPollEvents();
 
 		// Limit fps

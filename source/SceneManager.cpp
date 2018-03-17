@@ -6,7 +6,7 @@ void SceneManager::LoadScene(std::shared_ptr<Scene> scene)
 {
 	if (GetIndex(scene) == -1)
 	{
-		Input::ClearKeys();
+		Input::Clear();
 
 		std::cout << "SceneManager::LoadScene - Loading scene: " << typeid(*scene).name() << " \n";
 		scene->self = scene;
@@ -29,7 +29,7 @@ void SceneManager::ChangeScene(std::shared_ptr<Scene> scene)
 	std::cout << "SceneManager::ChangeScene - Changing scene: " << typeid(*scene).name() << " \n";
 	ClearScenes();
 
-	Input::ClearKeys();
+	Input::Clear();
 
 	LoadScene(scene);
 }

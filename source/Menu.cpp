@@ -20,13 +20,13 @@ Menu::~Menu()
 void Menu::Update(float deltaTime)
 {
 	// Press selected button
-	if (Input::GetKeyDown(GLFW_KEY_ENTER) || Input::GetKeyDown(GLFW_KEY_SPACE))
+	if (Input::KeyDown(GLFW_KEY_ENTER) || Input::KeyDown(GLFW_KEY_SPACE))
 	{
 		OnButtonPressed(selected);
 	}
 
 	// Navigate buttons
-	if (Input::GetKeyDown(GLFW_KEY_UP) || Input::GetKeyDown(GLFW_KEY_W))
+	if (Input::KeyDown(GLFW_KEY_UP) || Input::KeyDown(GLFW_KEY_W))
 	{
 		if (selected != 0)
 		{
@@ -34,7 +34,7 @@ void Menu::Update(float deltaTime)
 			buttons[--selected]->SetAnimation("selected");
 		}
 	}
-	else if (Input::GetKeyDown(GLFW_KEY_DOWN) || Input::GetKeyDown(GLFW_KEY_S))
+	else if (Input::KeyDown(GLFW_KEY_DOWN) || Input::KeyDown(GLFW_KEY_S))
 	{
 		if (selected != buttons.size() - 1)
 		{
