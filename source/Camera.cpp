@@ -59,7 +59,7 @@ void Camera::Update(float deltaTime)
 
 glm::mat4 Camera::GetViewMatrix()
 {
-	return glm::lookAt(position, position + front, up);
+	return viewMatrix;
 }
 
 void Camera::UpdateDirections()
@@ -71,4 +71,6 @@ void Camera::UpdateDirections()
 
 	right = glm::normalize(glm::cross(front, { 0.0f, 1.0f, 0.0f })); 
 	up = glm::normalize(glm::cross(right, front));
+
+	viewMatrix = glm::lookAt(position, position + front, up);
 }

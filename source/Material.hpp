@@ -18,5 +18,7 @@ public:
 	Material();
 	
 	void AddTexture(const TextureType type, const char * path);
+
+	static Material * activeMaterial;
 };
 

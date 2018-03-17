@@ -30,5 +30,7 @@ public:
 
 private:
 	void UpdateDirections();
+
+	glm::mat4 viewMatrix;
 };
 

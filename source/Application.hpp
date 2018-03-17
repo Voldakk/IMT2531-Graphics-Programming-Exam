@@ -30,4 +30,6 @@ public:
 private:
 	static glm::ivec2 windowSize;
 	static GLFWwindow * window;
+	static glm::mat4 ortoProjection;
+	static glm::mat4 perspectiveProjection;
 };

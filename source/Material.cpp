@@ -2,11 +2,12 @@
 
 #include "TextureManager.hpp"
 
+Material * Material::activeMaterial;
+
 Material::Material()
 {
 
 }
-
 
 void Material::AddTexture(const TextureType type, const char * path)
 {

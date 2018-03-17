@@ -9,7 +9,7 @@ class Shader
 {
 public:
 
-	unsigned int shader;
+	unsigned int id;
 
 	unsigned int viewID;
 	unsigned int projectionID;
@@ -26,5 +26,7 @@ public:
 	Shader();
 
 	void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material);
+
+	static unsigned int activeShader;
 };
 

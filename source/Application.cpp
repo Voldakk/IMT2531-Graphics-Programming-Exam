@@ -21,6 +21,9 @@ glm::ivec2 Application::windowSize;
 GLFWwindow * Application::window;
 Camera Application::camera;
 
+glm::mat4 Application::ortoProjection;
+glm::mat4 Application::perspectiveProjection;
+
 void Application::Init()
 {
 	if (!CreateWindow())
@@ -30,7 +33,8 @@ void Application::Init()
 
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
-	windowSize = glm::ivec2(width, height);
+
+	WindowResizeCallback(window, width, height);
 
 	// Input
 	Input::SetWindow(window);
@@ -140,13 +144,9 @@ void Application::Loop()
 glm::mat4 Application::GetProjectionMatrix(bool orto)
 {
 	if (orto)
-	{
-		if (windowSize.x > windowSize.y)
-			return glm::ortho(-(float)windowSize.x / (float)windowSize.y, (float)windowSize.x / (float)windowSize.y, -1.0f, 1.0f, -1.0f, 1.0f);
-		else
-			return glm::ortho(-1.0f, 1.0f, -(float)windowSize.y / (float)windowSize.x, (float)windowSize.y / (float)windowSize.x, -1.0f, 1.0f);
-	}
-	return  glm::perspective(camera.fov, (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
+		return ortoProjection;
+
+	return  perspectiveProjection;
 }
 
 void Application::WindowResizeCallback(GLFWwindow * window, int width, int height)
@@ -154,6 +154,14 @@ void Application::WindowResizeCallback(GLFWwindow * window, int width, int heigh
 	windowSize = glm::ivec2(width, height);
 
 	glViewport(0, 0, width, height);
+
+	// Projection matrices
+	if (windowSize.x > windowSize.y)
+		ortoProjection = glm::ortho(-(float)windowSize.x / (float)windowSize.y, (float)windowSize.x / (float)windowSize.y, -1.0f, 1.0f, -1.0f, 1.0f);
+	else
+		ortoProjection = glm::ortho(-1.0f, 1.0f, -(float)windowSize.y / (float)windowSize.x, (float)windowSize.y / (float)windowSize.x, -1.0f, 1.0f);
+	
+	perspectiveProjection = glm::perspective(camera.fov, (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
 }
 
 void Application::Exit()

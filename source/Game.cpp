@@ -25,6 +25,9 @@ Game::Game()
 	// Material
 	std::shared_ptr<Material> material = std::make_shared<Material>();
 	material->AddTexture(TextureType::Diffuse, "../assets/uv.png");
+
+	std::shared_ptr<Material> material2 = std::make_shared<Material>();
+	material2->AddTexture(TextureType::Diffuse, "../assets/uv2.png");
 	
 	// Meshes
 	std::shared_ptr<Mesh> cubeMesh = std::make_shared<Primitive>(PrimitiveType::Cube);
@@ -32,7 +35,7 @@ Game::Game()
 
 	// Cube
 	std::shared_ptr<GameObject> cube = CreateGameObject();
-	cube->transform->position = { 0.0f, 0.0f, 3.0f };
+	cube->transform->SetPosition({ -3.0f, 0.0f, -3.0f });
 
 	std::shared_ptr<MeshRenderer> mr = cube->AddComponent<MeshRenderer>();
 	mr->shader = shader;
@@ -40,19 +43,28 @@ Game::Game()
 	mr->mesh = cubeMesh;
 
 	// Spheres
-	for (size_t i = 0; i < 10; i++)
+	for (size_t x = 0; x < 100; x++)
 	{
-		std::shared_ptr<GameObject> sphere = CreateGameObject();
-		sphere->transform->position = { i * 3.0f, 0.0f, 0.0f };
+		for (size_t z = 0; z < 100; z++)
+		{
+			std::shared_ptr<GameObject> sphere = CreateGameObject();
+			sphere->transform->SetPosition({ x * 3.0f, 0.0f, z * 3.0f });
 
-		mr = sphere->AddComponent<MeshRenderer>();
-		mr->shader = shader;
-		mr->material = material;
-		mr->mesh = sphereMesh;
+			mr = sphere->AddComponent<MeshRenderer>();
+			mr->shader = shader;
+			mr->mesh = sphereMesh;
+
+			if (x % 2 == 0)
+				mr->material = material;
+			else
+				mr->material = material2;
+			
+		}
 	}
 }
 
 void Game::Update(float deltaTime)
 {
 	Application::camera.Update(deltaTime);
+	std::cout << "FPS: " << 1.0f / deltaTime << "\n";
 }
