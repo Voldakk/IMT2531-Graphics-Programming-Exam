@@ -12,6 +12,10 @@
 #include "Application.hpp"
 #include "TextureManager.hpp"
 
+Mesh::Mesh()
+{
+}
+
 Mesh::Mesh(const char * path)
 {
 	OBJLoader::Load(path, vertices);
@@ -20,6 +24,8 @@ Mesh::Mesh(const char * path)
 	viewID = glGetUniformLocation(shader, "view");
 	projectionID = glGetUniformLocation(shader, "projection");
 	modelID = glGetUniformLocation(shader, "model");
+
+	Create();
 }
 
 Mesh::~Mesh()

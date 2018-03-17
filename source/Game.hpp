@@ -17,7 +17,7 @@ public:
 	void Render() override;
 
 private:
-	Cube * cube;
-	Cube * cube2;
+	Primitive * cube;
+	Primitive * cube2;
 };
 

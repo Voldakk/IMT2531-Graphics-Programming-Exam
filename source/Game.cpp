@@ -5,21 +5,19 @@
 
 #include "GLFW/glfw3.h"
 
-#include "Cube.hpp"
+#include "Primitive.hpp"
 #include "Input.hpp"
 #include "Application.hpp"
 
 Game::Game()
 {
-	cube = new Cube();
+	cube = new Primitive(PrimitiveType::Cube);
 	cube->AddTexture(TextureType::Diffuse, "../assets/uv.png");
 	cube->position = { 0.0f, 1.5f, 2.0f };
-	cube->Create();
 
-	cube2 = new Cube();
+	cube2 = new Primitive(PrimitiveType::Cube);
 	cube2->AddTexture(TextureType::Diffuse, "../assets/uv.png");
 	cube2->position = { 2.0f, 0.0f, 3.0f };
-	cube2->Create();
 }
 
 
