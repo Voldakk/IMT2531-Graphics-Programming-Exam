@@ -49,6 +49,14 @@ protected:
 	unsigned int projectionID;
 	unsigned int modelID;
 
+	unsigned int materialShininessID;
+	unsigned int materialSpecularColorID;
+	unsigned int lightPositionID;
+	unsigned int lightIntensitiesID;
+	unsigned int lightAttenuationID;
+	unsigned int lightAmbientCoefficientID;
+	unsigned int cameraPositionID;
+
 	void LoadShader();
 	void LoadMesh(const char * path);
 

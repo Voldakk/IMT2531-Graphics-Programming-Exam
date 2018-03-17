@@ -71,29 +71,36 @@ void Mesh::Create()
 
 void Mesh::Render()
 {
-	glm::vec3 lightSourcePosition = glm::vec3(1.0f, 1.0f, 1.0f);
-	glm::vec3 lightColor = glm::vec3(0.8f, 1.0f, 0.8f);
-	float attenuationA = 1.0f;
-	float attenuationB = 0.2f;
-	float attenuationC = 0.0f;
+	float materialShininess = 1000.0f;
+	glm::vec3 materialSpecularColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
-	GLint normalMatrixID = glGetUniformLocation(shader, "normalMatrix");
-	
-	
-	GLint attenuationAID = glGetUniformLocation(shader, "attenuationA");
-	GLint attenuationBID = glGetUniformLocation(shader, "attenuationB");
-	GLint attenuationCID = glGetUniformLocation(shader, "attenuationC");
-	GLint lightID = glGetUniformLocation(shader, "lightColor");
-	GLint lightSourcePositionID = glGetUniformLocation(shader, "lightSourcePosition");
-	GLint CamPosID = glGetUniformLocation(shader, "CamPos");
+	glm::vec3 lightPosition = glm::vec3(100.0f, 100.0f, 100.0f);
+	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
-	glUniform1f(attenuationAID, attenuationA);
-	glUniform1f(attenuationBID, attenuationB);
-	glUniform1f(attenuationCID, attenuationC);
-	glUniform3fv(lightID, 1, value_ptr(lightColor));
-	glUniform3fv(lightSourcePositionID, 1, value_ptr(lightSourcePosition));
-	glUniform3fv(CamPosID, 1, value_ptr(glm::vec3(0.0f)));
+	float lightAttenuation = 0.0f;
+	float lightAmbientCoefficient = 0.005f;
 
+	materialShininessID = glGetUniformLocation(shader, "materialShininess");
+	materialSpecularColorID = glGetUniformLocation(shader, "materialSpecularColor");
+
+	lightPositionID = glGetUniformLocation(shader, "light.position");
+	lightIntensitiesID = glGetUniformLocation(shader, "light.intensities");
+
+	lightAttenuationID = glGetUniformLocation(shader, "light.attenuation");
+	lightAmbientCoefficientID = glGetUniformLocation(shader, "light.ambientCoefficient");
+
+	cameraPositionID = glGetUniformLocation(shader, "cameraPosition");
+
+	glUniform1f(materialShininessID, materialShininess);
+	glUniform3fv(materialSpecularColorID, 1, value_ptr(materialSpecularColor));
+
+	glUniform3fv(lightPositionID, 1, value_ptr(lightPosition));
+	glUniform3fv(lightIntensitiesID, 1, value_ptr(lightColor));
+
+	glUniform1f(lightAttenuationID, lightAttenuation);
+	glUniform1f(lightAmbientCoefficientID, lightAmbientCoefficient);
+
+	glUniform3fv(cameraPositionID, 1, value_ptr(Application::camera.position));
 
 	// Textures
 	unsigned int diffuseNr = 1;
@@ -149,8 +156,8 @@ void Mesh::Render()
 	glm::mat4 projection = Application::GetProjectionMatrix(false);
 	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(projection));
 
-	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*model)));
-	glUniformMatrix3fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+	/*glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*model)));
+	glUniformMatrix3fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));*/
 
 	// Draw
 	glBindVertexArray(VAO);
