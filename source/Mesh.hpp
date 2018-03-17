@@ -4,6 +4,7 @@
 
 #include "glm/glm/glm.hpp"
 
+#include "Scene.hpp"
 #include "TextureManager.hpp"
 
 struct Vertex 
@@ -24,12 +25,14 @@ public:
 	glm::vec3 rotation;
 	glm::vec3 scale = glm::vec3(1.0f);
 
+	float materialShininess = 1000.0f;
+	glm::vec3 materialSpecularColor = glm::vec3(1.0f, 1.0f, 1.0f);
+
 	Mesh();
 	Mesh(const char * path);
-	~Mesh();
 
 	void Create();
-	void Render();
+	void Render(Scene * scene);
 
 	void AddTexture(const TextureType type, const char * path);
 
@@ -59,6 +62,4 @@ protected:
 
 	void LoadShader();
 	void LoadMesh(const char * path);
-
 };
-

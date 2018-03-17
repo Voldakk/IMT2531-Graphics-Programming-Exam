@@ -64,7 +64,8 @@ bool Application::CreateWindow()
 	// Open a window and create its OpenGL context
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-	window = glfwCreateWindow(mode->width, mode->height, APPLICATION_NAME.c_str(), glfwGetPrimaryMonitor(), NULL);
+	//window = glfwCreateWindow(mode->width, mode->height, APPLICATION_NAME.c_str(), glfwGetPrimaryMonitor(), NULL);
+	window = glfwCreateWindow(1920, 1080, APPLICATION_NAME.c_str(), NULL, NULL);
 	glfwMakeContextCurrent(window);
 	if (window == NULL) {
 		fprintf(stderr, "Failed to open GLFW window.\n");

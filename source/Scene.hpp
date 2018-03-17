@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 
+#include "Light.hpp"
+
 // A scene that can be run by the SceneManager
 class Scene
 {
@@ -14,4 +16,6 @@ public:
 
 	/// <summary>Shared pointer to itself</summary>
 	std::shared_ptr<Scene> self;
+
+	Light light;
 };

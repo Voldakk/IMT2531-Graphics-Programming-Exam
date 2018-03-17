@@ -7,6 +7,7 @@
 #include "glm/glm/gtc/type_ptr.hpp"
 #include "glm/glm/gtc/matrix_transform.hpp"
 
+#include "Scene.hpp"
 #include "OBJLoader.hpp"
 #include "Shaderload.hpp"
 #include "Application.hpp"
@@ -21,11 +22,6 @@ Mesh::Mesh(const char * path)
 {
 	LoadShader();
 	LoadMesh(path);
-}
-
-Mesh::~Mesh()
-{
-
 }
 
 void Mesh::Create()
@@ -69,37 +65,19 @@ void Mesh::Create()
 	glBindVertexArray(0);
 }
 
-void Mesh::Render()
+void Mesh::Render(Scene * scene)
 {
-	float materialShininess = 1000.0f;
-	glm::vec3 materialSpecularColor = glm::vec3(1.0f, 1.0f, 1.0f);
-
-	glm::vec3 lightPosition = glm::vec3(100.0f, 100.0f, 100.0f);
-	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-
-	float lightAttenuation = 0.0f;
-	float lightAmbientCoefficient = 0.005f;
-
-	materialShininessID = glGetUniformLocation(shader, "materialShininess");
-	materialSpecularColorID = glGetUniformLocation(shader, "materialSpecularColor");
-
-	lightPositionID = glGetUniformLocation(shader, "light.position");
-	lightIntensitiesID = glGetUniformLocation(shader, "light.intensities");
-
-	lightAttenuationID = glGetUniformLocation(shader, "light.attenuation");
-	lightAmbientCoefficientID = glGetUniformLocation(shader, "light.ambientCoefficient");
-
-	cameraPositionID = glGetUniformLocation(shader, "cameraPosition");
-
+	// Lights
 	glUniform1f(materialShininessID, materialShininess);
 	glUniform3fv(materialSpecularColorID, 1, value_ptr(materialSpecularColor));
 
-	glUniform3fv(lightPositionID, 1, value_ptr(lightPosition));
-	glUniform3fv(lightIntensitiesID, 1, value_ptr(lightColor));
+	glUniform3fv(lightPositionID, 1, value_ptr(scene->light.position));
+	glUniform3fv(lightIntensitiesID, 1, value_ptr(scene->light.color));
 
-	glUniform1f(lightAttenuationID, lightAttenuation);
-	glUniform1f(lightAmbientCoefficientID, lightAmbientCoefficient);
+	glUniform1f(lightAttenuationID, scene->light.attenuation);
+	glUniform1f(lightAmbientCoefficientID, scene->light.ambientCoefficient);
 
+	// Camera
 	glUniform3fv(cameraPositionID, 1, value_ptr(Application::camera.position));
 
 	// Textures
@@ -156,9 +134,6 @@ void Mesh::Render()
 	glm::mat4 projection = Application::GetProjectionMatrix(false);
 	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(projection));
 
-	/*glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*model)));
-	glUniformMatrix3fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));*/
-
 	// Draw
 	glBindVertexArray(VAO);
 
@@ -182,9 +157,21 @@ void Mesh::AddTexture(const TextureType type, const char * path)
 void Mesh::LoadShader()
 {
 	shader = ShaderLoad::CreateProgram("../shaders/standard.vert", "../shaders/standard.frag");
+
 	viewID = glGetUniformLocation(shader, "view");
 	projectionID = glGetUniformLocation(shader, "projection");
 	modelID = glGetUniformLocation(shader, "model");
+
+	materialShininessID = glGetUniformLocation(shader, "materialShininess");
+	materialSpecularColorID = glGetUniformLocation(shader, "materialSpecularColor");
+
+	lightPositionID = glGetUniformLocation(shader, "light.position");
+	lightIntensitiesID = glGetUniformLocation(shader, "light.intensities");
+
+	lightAttenuationID = glGetUniformLocation(shader, "light.attenuation");
+	lightAmbientCoefficientID = glGetUniformLocation(shader, "light.ambientCoefficient");
+
+	cameraPositionID = glGetUniformLocation(shader, "cameraPosition");
 }
 
 void Mesh::LoadMesh(const char * path)

@@ -8,8 +8,8 @@
 class Game : public Scene
 {
 public:
+
 	Game();
-	~Game();
 
 	/// <summary>Called every frame.</summary>
 	/// <param name="deltaTime">The time in seconds between frames</param>
