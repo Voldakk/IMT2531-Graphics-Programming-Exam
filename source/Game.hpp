@@ -1,9 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "Scene.hpp"
-#include "Primitive.hpp"
+#include "GameObject.hpp"
 
 class Game : public Scene
 {
@@ -20,6 +21,6 @@ public:
 
 private:
 
-	std::vector<Mesh> meshes;
+	std::vector<std::shared_ptr<GameObject>> gameObjects;
 };
 

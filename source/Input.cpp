@@ -112,8 +112,8 @@ bool Input::MouseButtonUp(int button)
 
 void Input::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	scroll.x = xoffset;
-	scroll.y = yoffset;
+	scroll.x = (float)xoffset;
+	scroll.y = (float)yoffset;
 }
 
 glm::vec2 Input::GetScroll()
