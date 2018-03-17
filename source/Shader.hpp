@@ -11,6 +11,18 @@ public:
 
 	unsigned int id;
 
+	
+
+	Shader();
+
+	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material);
+
+	static unsigned int activeShader;
+};
+
+class StandardShader : public Shader
+{
+public:
 	unsigned int viewID;
 	unsigned int projectionID;
 	unsigned int modelID;
@@ -23,10 +35,19 @@ public:
 	unsigned int lightAmbientCoefficientID;
 	unsigned int cameraPositionID;
 
-	Shader();
+	StandardShader();
 
-	void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material);
-
-	static unsigned int activeShader;
+	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
 };
 
+class UnlitTextureShader : public Shader
+{
+public:
+	unsigned int viewID;
+	unsigned int projectionID;
+	unsigned int modelID;
+
+	UnlitTextureShader();
+
+	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
+};

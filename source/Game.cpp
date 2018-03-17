@@ -19,10 +19,11 @@ Game::Game()
 	// Light
 	light.position = { 10.0f, 0.0f, 5.0f };
 
-	// Shader
-	std::shared_ptr<Shader> shader = std::make_shared<Shader>();
+	// Shaders
+	std::shared_ptr<Shader> shader = std::make_shared<StandardShader>();
+	std::shared_ptr<Shader> unlit = std::make_shared<UnlitTextureShader>();
 
-	// Material
+	// Materials
 	std::shared_ptr<Material> material = std::make_shared<Material>();
 	material->AddTexture(TextureType::Diffuse, "../assets/uv.png");
 
@@ -51,14 +52,19 @@ Game::Game()
 			sphere->transform->SetPosition({ x * 3.0f, 0.0f, z * 3.0f });
 
 			mr = sphere->AddComponent<MeshRenderer>();
-			mr->shader = shader;
+			
 			mr->mesh = sphereMesh;
 
 			if (x % 2 == 0)
+			{
+				mr->shader = shader;
 				mr->material = material;
+			}
 			else
+			{
+				mr->shader = unlit;
 				mr->material = material2;
-			
+			}
 		}
 	}
 }

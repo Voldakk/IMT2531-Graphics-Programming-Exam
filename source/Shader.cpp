@@ -19,6 +19,16 @@ unsigned int Shader::activeShader;
 
 Shader::Shader()
 {
+	id = -1;
+}
+
+void Shader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
+{
+	
+}
+
+StandardShader::StandardShader()
+{
 	id = ShaderLoad::CreateProgram("../shaders/standard.vert", "../shaders/standard.frag");
 
 	viewID = glGetUniformLocation(id, "view");
@@ -37,11 +47,12 @@ Shader::Shader()
 	cameraPositionID = glGetUniformLocation(id, "cameraPosition");
 }
 
-void Shader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
+void StandardShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
 {
 	if (id != activeShader)
 	{
 		activeShader = id;
+		glUseProgram(id);
 
 		// Lights
 		glUniform3fv(lightPositionID, 1, value_ptr(scene->light.position));
@@ -98,7 +109,7 @@ void Shader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Mate
 			glBindTexture(GL_TEXTURE_2D, material->textures[i].id);
 		}
 	}
-	
+
 	// Camera
 	glUniform3fv(cameraPositionID, 1, value_ptr(Application::camera.position));
 
@@ -106,4 +117,60 @@ void Shader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Mate
 	glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
 	glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
 	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(Application::GetProjectionMatrix(false)));
+}
+
+UnlitTextureShader::UnlitTextureShader()
+{
+	id = ShaderLoad::CreateProgram("../shaders/unlit_texture.vert", "../shaders/unlit_texture.frag");
+
+	viewID = glGetUniformLocation(id, "view");
+	projectionID = glGetUniformLocation(id, "projection");
+	modelID = glGetUniformLocation(id, "model");
+}
+
+void UnlitTextureShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
+{
+	if (id != activeShader)
+	{
+		activeShader = id;
+		glUseProgram(id);
+	}
+
+	// Matrices
+	glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
+	glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
+	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(Application::GetProjectionMatrix(false)));
+
+	// Material
+	if (material != nullptr && (material != Material::activeMaterial || id != activeShader))
+	{
+		Material::activeMaterial = material;
+
+		// Textures
+		unsigned int diffuseNr = 1;
+
+		for (unsigned int i = 0; i < material->textures.size(); i++)
+		{
+			// Activate the texture
+			glActiveTexture(GL_TEXTURE0 + i);
+
+			// Find the name based on the texture type
+			std::string name = "";
+
+			switch (material->textures[i].type)
+			{
+			case TextureType::Diffuse:
+				name = "texture_diffuse" + std::to_string(diffuseNr++);
+				break;
+			default:
+				break;
+			}
+
+			// Set the sampler to the correct texture unit
+			glUniform1i(glGetUniformLocation(id, name.c_str()), i);
+
+			// Bind the texture
+			glBindTexture(GL_TEXTURE_2D, material->textures[i].id);
+		}
+	}
 }

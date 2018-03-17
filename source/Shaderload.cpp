@@ -12,7 +12,8 @@
 #include <GL/glew.h>
 #include "GLFW/glfw3.h"
 
-void ShaderLoad::ReadShaderSource(const char *fname, std::vector<char> &buffer) {
+void ShaderLoad::ReadShaderSource(const char *fname, std::vector<char> &buffer) 
+{
 	std::ifstream in;
 	in.open(fname, std::ios::binary);
 
@@ -37,7 +38,10 @@ void ShaderLoad::ReadShaderSource(const char *fname, std::vector<char> &buffer) 
 		exit(-1);
 	}
 }
-GLuint ShaderLoad::LoadAndCompileShader(const char *fname, GLenum shaderType) {
+GLuint ShaderLoad::LoadAndCompileShader(const char *fname, GLenum shaderType) 
+{
+	std::cout << "ShaderLoad::LoadAndCompileShader - " << fname << "\n";
+
 	// Load a shader from an external file
 	std::vector<char> buffer;
 	ReadShaderSource(fname, buffer);
