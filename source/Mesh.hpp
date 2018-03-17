@@ -49,5 +49,8 @@ protected:
 	unsigned int projectionID;
 	unsigned int modelID;
 
+	void LoadShader();
+	void LoadMesh(const char * path);
+
 };
 

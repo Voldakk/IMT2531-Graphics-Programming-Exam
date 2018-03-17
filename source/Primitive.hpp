@@ -2,7 +2,7 @@
 
 #include "Mesh.hpp"
 
-enum PrimitiveType { Cube };
+enum PrimitiveType { Circle, Cone, Cube, Cylinder, Icosphere, Monkey, MonkeyHigh, Plane, Sphere, Torus };
 
 class Primitive :
 	public Mesh

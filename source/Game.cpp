@@ -11,25 +11,23 @@
 
 Game::Game()
 {
-	cube = new Primitive(PrimitiveType::Cube);
-	cube->AddTexture(TextureType::Diffuse, "../assets/uv.png");
-	cube->position = { 0.0f, 1.5f, 2.0f };
-
-	cube2 = new Primitive(PrimitiveType::Cube);
-	cube2->AddTexture(TextureType::Diffuse, "../assets/uv.png");
-	cube2->position = { 2.0f, 0.0f, 3.0f };
+	for (size_t i = 0; i <= PrimitiveType::Torus; i++)
+	{
+		Mesh mesh = Primitive((PrimitiveType)i);
+		mesh.AddTexture(TextureType::Diffuse, "../assets/uv.png");
+		mesh.position = { i * 3.0f, 0.0f, 2.0f };
+		meshes.push_back(mesh);
+	}
 }
 
 
 Game::~Game()
 {
-	delete(cube);
-	delete(cube2);
 }
 
 void Game::Update(float deltaTime)
 {
-	cube->rotation.y += deltaTime /2;
+	//cube->rotation.y += deltaTime /2;
 
 	Application::camera.Update(deltaTime);
 
@@ -64,6 +62,8 @@ void Game::Update(float deltaTime)
 
 void Game::Render()
 {
-	cube->Render();
-	cube2->Render();
+	for (size_t i = 0; i < meshes.size(); i++)
+	{
+		meshes[i].Render();
+	}
 }

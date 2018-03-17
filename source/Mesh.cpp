@@ -14,18 +14,13 @@
 
 Mesh::Mesh()
 {
+	LoadShader();
 }
 
 Mesh::Mesh(const char * path)
 {
-	OBJLoader::Load(path, vertices);
-
-	shader = ShaderLoad::CreateProgram("../shaders/standard.vert", "../shaders/standard.frag");
-	viewID = glGetUniformLocation(shader, "view");
-	projectionID = glGetUniformLocation(shader, "projection");
-	modelID = glGetUniformLocation(shader, "model");
-
-	Create();
+	LoadShader();
+	LoadMesh(path);
 }
 
 Mesh::~Mesh()
@@ -175,4 +170,18 @@ void Mesh::AddTexture(const TextureType type, const char * path)
 	Texture t = { 0,type, path };
 	t.id = TextureManager::GetTexture(t.path);
 	textures.push_back(t);
+}
+
+void Mesh::LoadShader()
+{
+	shader = ShaderLoad::CreateProgram("../shaders/standard.vert", "../shaders/standard.frag");
+	viewID = glGetUniformLocation(shader, "view");
+	projectionID = glGetUniformLocation(shader, "projection");
+	modelID = glGetUniformLocation(shader, "model");
+}
+
+void Mesh::LoadMesh(const char * path)
+{
+	OBJLoader::Load(path, vertices);
+	Create();
 }

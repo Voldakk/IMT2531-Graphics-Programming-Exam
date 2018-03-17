@@ -8,14 +8,43 @@ Primitive::Primitive(PrimitiveType type)
 
 	switch (type)
 	{
+	case Circle:
+		path += "circle.obj";
+		break;
+	case Cone:
+		path += "cone.obj";
+		break;
 	case Cube:
 		path += "cube.obj";
 		break;
+	case Cylinder:
+		path += "cylinder.obj";
+		break;
+	case Monkey:
+		path += "monkey_low.obj";
+		break;
+	case MonkeyHigh:
+		path += "monkey_high.obj";
+		break;
+	case Icosphere:
+		path += "icosphere.obj";
+		break;
+	case Plane:
+		path += "plane.obj";
+		break;
+	case Sphere:
+		path += "sphere.obj";
+		break;
+	case Torus:
+		path += "torus.obj";
+		break;
+		// Default to cube
 	default:
+		path += "cube.obj";
 		break;
 	}
 
-	Mesh(path);
+	LoadMesh(path.c_str());
 }
 
 Primitive::~Primitive()

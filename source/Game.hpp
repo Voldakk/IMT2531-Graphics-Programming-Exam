@@ -1,7 +1,9 @@
 #pragma once
 
+#include <vector>
+
 #include "Scene.hpp"
-#include "Cube.hpp"
+#include "Primitive.hpp"
 
 class Game : public Scene
 {
@@ -17,7 +19,7 @@ public:
 	void Render() override;
 
 private:
-	Primitive * cube;
-	Primitive * cube2;
+
+	std::vector<Mesh> meshes;
 };
 
