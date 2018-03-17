@@ -39,10 +39,3 @@ void GameObject::Render()
 		components[i]->Render();
 	}
 }
-
-Component * GameObject::AddComponent(std::shared_ptr<Component> component)
-{
-	component->gameObject = this;
-	components.push_back(component);
-	return component.get();
-}

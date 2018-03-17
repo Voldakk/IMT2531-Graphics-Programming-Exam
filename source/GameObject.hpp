@@ -45,6 +45,17 @@ public:
 	void Update(float deltaTime);
 	void Render();
 
-	Component * AddComponent(std::shared_ptr<Component> component);
+	template <class T>
+	std::shared_ptr<T> AddComponent();
 };
 
+template<class T>
+inline std::shared_ptr<T> GameObject::AddComponent()
+{
+	std::shared_ptr<T> component = std::make_shared<T>();
+
+	component->gameObject = this;
+	components.push_back(component);
+
+	return component;
+}
