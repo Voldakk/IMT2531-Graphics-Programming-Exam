@@ -15,9 +15,11 @@
 #include "SceneManager.hpp"
 #include "MainMenu.hpp"
 #include "Game.hpp"
+#include "Camera.hpp"
 
 glm::ivec2 Application::windowSize;
 GLFWwindow * Application::window;
+Camera Application::camera;
 
 void Application::Init()
 {
@@ -60,7 +62,9 @@ bool Application::CreateWindow()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, APPLICATION_NAME.c_str(), NULL, NULL);
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+	window = glfwCreateWindow(mode->width, mode->height, APPLICATION_NAME.c_str(), glfwGetPrimaryMonitor(), NULL);
 	glfwMakeContextCurrent(window);
 	if (window == NULL) {
 		fprintf(stderr, "Failed to open GLFW window.\n");
@@ -140,7 +144,7 @@ glm::mat4 Application::GetProjectionMatrix(bool orto)
 		else
 			return glm::ortho(-1.0f, 1.0f, -(float)windowSize.y / (float)windowSize.x, (float)windowSize.y / (float)windowSize.x, -1.0f, 1.0f);
 	}
-	return  glm::perspective(60.0f, (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
+	return  glm::perspective(camera.fov, (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
 }
 
 void Application::WindowResizeCallback(GLFWwindow * window, int width, int height)

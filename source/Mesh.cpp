@@ -142,7 +142,7 @@ void Mesh::Render()
 	model = glm::rotate(model, rotation.z, glm::vec3(0, 0, 1));
 	glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(model));
 
-	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 view = Application::camera.GetViewMatrix();
 	glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(view));
 
 	glm::mat4 projection = Application::GetProjectionMatrix(false);

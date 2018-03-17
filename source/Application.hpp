@@ -4,6 +4,8 @@
 #include "GLFW/glfw3.h"
 #include "glm/glm/glm.hpp"
 
+#include "Camera.hpp"
+
 class Application
 {
 public:
@@ -22,6 +24,8 @@ public:
 
 	/// <summary>Exits the application</summary>
 	static void Exit();
+
+	static Camera camera;
 
 private:
 	static glm::ivec2 windowSize;

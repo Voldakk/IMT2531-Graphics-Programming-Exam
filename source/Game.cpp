@@ -33,6 +33,8 @@ void Game::Update(float deltaTime)
 {
 	cube->rotation.y += deltaTime /2;
 
+	Application::camera.Update(deltaTime);
+
 	/* Input testing
 
 	if (Input::MouseButtonDown(GLFW_MOUSE_BUTTON_1))
