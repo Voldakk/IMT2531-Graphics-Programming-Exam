@@ -174,3 +174,42 @@ void UnlitTextureShader::SetUniforms(Scene * scene, Transform * transform, Mesh 
 		}
 	}
 }
+
+SkyboxShader::SkyboxShader()
+{
+	id = ShaderLoad::CreateProgram("../shaders/skybox.vert", "../shaders/skybox.frag");
+
+	viewID = glGetUniformLocation(id, "view");
+	projectionID = glGetUniformLocation(id, "projection");
+	modelID = glGetUniformLocation(id, "model");
+
+	textureID = glGetUniformLocation(id, "skytexture");
+}
+
+void SkyboxShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
+{
+	if (id != activeShader)
+	{
+		activeShader = id;
+		glUseProgram(id);
+	}
+
+	// Matrices
+	glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
+	glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
+	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(Application::GetProjectionMatrix(false)));
+
+	// Material
+	if (material != nullptr && (material != Material::activeMaterial || id != activeShader))
+	{
+		Material::activeMaterial = material;
+
+		// Activate the texture
+		glActiveTexture(GL_TEXTURE0);
+
+		glUniform1i(textureID, 0);
+
+		// Bind the texture
+		glBindTexture(GL_TEXTURE_2D, material->textures[0].id);
+	}
+}

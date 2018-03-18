@@ -14,6 +14,11 @@ void Scene::Update(float deltaTime)
 
 void Scene::Render()
 {
+	if (skybox != nullptr)
+	{
+		skybox->Render();
+	}
+
 	for (size_t i = 0; i < gameObjects.size(); i++)
 	{
 		gameObjects[i]->Render();

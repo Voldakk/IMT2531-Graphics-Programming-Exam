@@ -43,11 +43,27 @@ public:
 class UnlitTextureShader : public Shader
 {
 public:
+
 	unsigned int viewID;
 	unsigned int projectionID;
 	unsigned int modelID;
 
 	UnlitTextureShader();
+
+	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
+};
+
+class SkyboxShader : public Shader
+{
+public:
+
+	unsigned int viewID;
+	unsigned int projectionID;
+	unsigned int modelID;
+
+	unsigned int textureID;
+
+	SkyboxShader();
 
 	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
 };

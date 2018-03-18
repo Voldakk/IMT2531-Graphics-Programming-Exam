@@ -17,6 +17,9 @@ Primitive::Primitive(PrimitiveType type)
 	case Cube:
 		path += "cube.obj";
 		break;
+	case CubeInverted:
+		path += "cube_inverted.obj";
+		break;
 	case Cylinder:
 		path += "cylinder.obj";
 		break;

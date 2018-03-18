@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Light.hpp"
+#include "Skybox.hpp"
 #include "GameObject.hpp"
 
 // A scene that can be run by the SceneManager
@@ -29,4 +30,6 @@ public:
 
 	/// <summary></summary>
 	std::shared_ptr<GameObject> CreateGameObject();
+
+	std::unique_ptr<Skybox> skybox;
 };

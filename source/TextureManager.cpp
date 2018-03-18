@@ -16,9 +16,9 @@ GLuint TextureManager::GetTexture(std::string path)
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// Load the image
-	int width, height;
+	int width, height, channels;
 	unsigned char* image;
-	image = SOIL_load_image(path.c_str(), &width, &height, 0, SOIL_LOAD_AUTO);
+	image = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 	SOIL_free_image_data(image);
 

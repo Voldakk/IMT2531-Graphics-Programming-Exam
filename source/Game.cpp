@@ -16,8 +16,12 @@
 
 Game::Game()
 {
-	// Light
-	light.position = { 10.0f, 0.0f, 5.0f };
+	// Skybox
+	skybox = std::make_unique<Skybox>("../assets/ame_ash/", ".tga");
+
+	// Make the light fit the skybox
+	light.position = { 0.0f, 100.0f, -1000.0f };
+
 
 	// Shaders
 	std::shared_ptr<Shader> shader = std::make_shared<StandardShader>();
@@ -72,5 +76,5 @@ Game::Game()
 void Game::Update(float deltaTime)
 {
 	Application::camera.Update(deltaTime);
-	std::cout << "FPS: " << 1.0f / deltaTime << "\n";
+	//std::cout << "FPS: " << 1.0f / deltaTime << "\n";
 }
