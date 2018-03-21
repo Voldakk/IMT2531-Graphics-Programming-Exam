@@ -49,8 +49,3 @@ Primitive::Primitive(PrimitiveType type)
 
 	LoadMesh(path.c_str());
 }
-
-Primitive::~Primitive()
-{
-
-}

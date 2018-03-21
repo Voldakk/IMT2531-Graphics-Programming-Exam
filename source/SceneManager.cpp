@@ -2,7 +2,7 @@
 
 std::vector<std::shared_ptr<Scene>> SceneManager::scenes;
 
-void SceneManager::LoadScene(std::shared_ptr<Scene> scene)
+void SceneManager::LoadScene(const std::shared_ptr<Scene>& scene)
 {
 	if (GetIndex(scene) == -1)
 	{
@@ -14,9 +14,9 @@ void SceneManager::LoadScene(std::shared_ptr<Scene> scene)
 	}
 }
 
-void SceneManager::UnloadScene(std::shared_ptr<Scene> scene)
+void SceneManager::UnloadScene(const std::shared_ptr<Scene>& scene)
 {
-	int i = GetIndex(scene);
+	const auto i = GetIndex(scene);
 	if (i != -1)
 	{
 		std::cout << "SceneManager::UnloadScene - Unloading scene: " << typeid(*scene).name() << " \n";
@@ -24,7 +24,7 @@ void SceneManager::UnloadScene(std::shared_ptr<Scene> scene)
 	}
 }
 
-void SceneManager::ChangeScene(std::shared_ptr<Scene> scene)
+void SceneManager::ChangeScene(const std::shared_ptr<Scene>& scene)
 {
 	std::cout << "SceneManager::ChangeScene - Changing scene: " << typeid(*scene).name() << " \n";
 	ClearScenes();
@@ -34,23 +34,23 @@ void SceneManager::ChangeScene(std::shared_ptr<Scene> scene)
 	LoadScene(scene);
 }
 
-void SceneManager::Update(float deltaTime)
+void SceneManager::Update(const float deltaTime)
 {
-	for (size_t i = 0; i < scenes.size(); i++)
+	for (auto& scene : scenes)
 	{
-		scenes[i]->Update(deltaTime);
+		scene->Update(deltaTime);
 	}
 }
 
 void SceneManager::Render()
 {
-	for (size_t i = 0; i < scenes.size(); i++)
+	for (auto& scene : scenes)
 	{
-		scenes[i]->Render();
+		scene->Render();
 	}
 }
 
-int SceneManager::GetIndex(std::shared_ptr<Scene> scene)
+int SceneManager::GetIndex(const std::shared_ptr<Scene>& scene)
 {
 	for (size_t i = 0; i < scenes.size(); i++)
 	{
@@ -62,9 +62,9 @@ int SceneManager::GetIndex(std::shared_ptr<Scene> scene)
 
 void SceneManager::ClearScenes()
 {
-	for (size_t i = 0; i < scenes.size(); i++)
+	for (auto& scene : scenes)
 	{
-		scenes[i]->self.reset();
+		scene->self.reset();
 	}
 
 	scenes.clear();

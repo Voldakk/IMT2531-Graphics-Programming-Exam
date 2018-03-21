@@ -5,10 +5,9 @@ class GameObject;
 class Component
 {
 public:
-
 	GameObject * gameObject;
 
-	Component();
+	Component(GameObject * gameObject);
 	virtual void Update(float deltaTime);
 	virtual void Render();
 };

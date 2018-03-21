@@ -7,11 +7,6 @@
 
 Camera::Camera()
 {
-	Reset();
-}
-
-void Camera::Reset()
-{
 	position = glm::vec3(0.0f);
 
 	pitch = 0.0f;
@@ -24,7 +19,7 @@ void Camera::Reset()
 	UpdateDirections();
 }
 
-void Camera::Update(float deltaTime)
+void Camera::Update(const float deltaTime)
 {
 	// Movement
 
@@ -44,7 +39,7 @@ void Camera::Update(float deltaTime)
 		position -= up * movementSpeed * deltaTime;
 
 	// Look
-	glm::vec2 mouseMovement = Input::MouseMovement();
+	const auto mouseMovement = Input::MouseMovement();
 
 	yaw += mouseMovement.x * mouseSensitivity;
 	pitch -= mouseMovement.y * mouseSensitivity;
@@ -57,7 +52,7 @@ void Camera::Update(float deltaTime)
 	UpdateDirections();
 }
 
-glm::mat4 Camera::GetViewMatrix()
+glm::mat4 Camera::GetViewMatrix() const
 {
 	return viewMatrix;
 }

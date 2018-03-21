@@ -17,8 +17,8 @@ public:
 
 	Material();
 	
-	void AddTexture(const TextureType type, const char * path);
-	void AddTexture(const TextureType type, unsigned int id);
+	void AddTexture(TextureType type, const char * path);
+	void AddTexture(TextureType type, unsigned int id);
 
 	static Material * activeMaterial;
 };

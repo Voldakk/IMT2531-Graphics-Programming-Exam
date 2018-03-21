@@ -27,7 +27,7 @@ protected:
 
 	glm::vec2 offset;
 	glm::vec2 buttonScale;
-	float spacing;
+	float spacing = 0;
 
 	size_t selected = 0;
 	std::vector<Sprite*> buttons;
@@ -38,7 +38,7 @@ protected:
 	/// <param name="text">The text on the button</param>  
 	/// <param name="tint">The text color</param>  
 	/// <returns>The index of the button in the menu</returns>  
-	int CreateButton(std::string text = "", glm::vec4 tint = BUTTON_TEXT_COLOR);
+	int CreateButton(const std::string& text = "", glm::vec4 tint = BUTTON_TEXT_COLOR);
 
 	/// <summary>Sets the currently selected button</summary>
 	/// <param name="i">The index of the newly selected button</param>  

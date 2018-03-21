@@ -22,11 +22,9 @@ public:
 
 	Camera();
 
-	void Reset();
-
 	void Update(float deltaTime);
 
-	glm::mat4 GetViewMatrix();
+	glm::mat4 GetViewMatrix() const;
 
 private:
 	void UpdateDirections();

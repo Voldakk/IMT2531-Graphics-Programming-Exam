@@ -35,19 +35,19 @@ void Input::Clear()
 	mouseOffset = glm::vec2(0.0f, 0.0f);
 }
 
-bool Input::Key(int key)
+bool Input::Key(const int key)
 {
     return glfwGetKey(window, key) == GLFW_PRESS;
 }
 
-bool Input::KeyDown(int key)
+bool Input::KeyDown(const int key)
 {
 	if (keyStates.count(key))
 		return keyStates[key] == GLFW_PRESS;
 	return false;
 }
 
-bool Input::KeyUp(int key)
+bool Input::KeyUp(const int key)
 {
 	if (keyStates.count(key))
 		return keyStates[key] == GLFW_RELEASE;
@@ -56,9 +56,9 @@ bool Input::KeyUp(int key)
 
 // ========== MOUSE POSITION ==========
 
-void Input::CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
+void Input::CursorPositionCallback(GLFWwindow* window, const double xpos, const double ypos)
 {
-	glm::vec2 newPos = glm::vec2(xpos, ypos);
+	const auto newPos = glm::vec2(xpos, ypos);
 
 	if (lastMousePosition == glm::vec2(0.0f))
 	{
@@ -83,25 +83,25 @@ glm::vec2 Input::MouseMovement()
 
 // ========== MOUSE BUTTONS ==========
 
-void Input::MouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
+void Input::MouseButtonCallback(GLFWwindow * window, const int button, const int action, const int mods)
 {
 	keyStates[button] = action;
 }
 
-bool Input::MouseButton(int button)
+bool Input::MouseButton(const int button)
 {
-	int state = glfwGetMouseButton(window, button);
+	const auto state = glfwGetMouseButton(window, button);
 	return state == GLFW_PRESS;
 }
 
-bool Input::MouseButtonDown(int button)
+bool Input::MouseButtonDown(const int button)
 {
 	if (keyStates.count(button))
 		return keyStates[button] == GLFW_PRESS;
 	return false;
 }
 
-bool Input::MouseButtonUp(int button)
+bool Input::MouseButtonUp(const int button)
 {
 	if (keyStates.count(button))
 		return keyStates[button] == GLFW_RELEASE;
@@ -110,7 +110,7 @@ bool Input::MouseButtonUp(int button)
 
 // ========== MOUSE SCROLL ==========
 
-void Input::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+void Input::ScrollCallback(GLFWwindow* window, const double xoffset, const double yoffset)
 {
 	scroll.x = (float)xoffset;
 	scroll.y = (float)yoffset;

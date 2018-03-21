@@ -16,7 +16,7 @@ class Text
 		/// <param name="center">Whether the text is centered around the position</param>  
 		/// <param name="size">The size of one leter</param>  
 		/// <param name="tint">The color of the text</param>  
-        Text(std::string text, glm::vec2 position = glm::vec2(0.0f, 0.0f), bool center = false, float size = 0.1, glm::vec4 tint = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        Text(const std::string& text, glm::vec2 position = glm::vec2(0.0f, 0.0f), bool center = false, float size = 0.1, glm::vec4 tint = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
 		/// <summary>Changes the displayed text
 		/// <para>Generates the vertex positions and UV coordinates for the new text</para> 

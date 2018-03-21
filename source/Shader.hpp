@@ -9,7 +9,7 @@ class Shader
 {
 public:
 
-	unsigned int id;
+	unsigned int id = -1;
 	Shader();
 
 	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material);
@@ -20,47 +20,47 @@ public:
 class StandardShader : public Shader
 {
 public:
-	unsigned int viewID;
-	unsigned int projectionID;
-	unsigned int modelID;
+	unsigned int viewId;
+	unsigned int projectionId;
+	unsigned int modelId;
 
-	unsigned int materialShininessID;
-	unsigned int materialSpecularColorID;
-	unsigned int lightPositionID;
-	unsigned int lightIntensitiesID;
-	unsigned int lightAttenuationID;
-	unsigned int lightAmbientCoefficientID;
-	unsigned int cameraPositionID;
+	unsigned int materialShininessId;
+	unsigned int materialSpecularColorId;
+	unsigned int lightPositionId;
+	unsigned int lightIntensitiesId;
+	unsigned int lightAttenuationId;
+	unsigned int lightAmbientCoefficientId;
+	unsigned int cameraPositionId;
 
 	StandardShader();
 
-	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
+	void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
 };
 
 class UnlitTextureShader : public Shader
 {
 public:
 
-	unsigned int viewID;
-	unsigned int projectionID;
-	unsigned int modelID;
+	unsigned int viewId;
+	unsigned int projectionId;
+	unsigned int modelId;
 
 	UnlitTextureShader();
 
-	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
+	void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
 };
 
 class SkyboxShader : public Shader
 {
 public:
 
-	unsigned int viewID;
-	unsigned int projectionID;
-	unsigned int modelID;
+	unsigned int viewId;
+	unsigned int projectionId;
+	unsigned int modelId;
 
-	unsigned int textureID;
+	unsigned int textureId;
 
 	SkyboxShader();
 
-	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
+	void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
 };

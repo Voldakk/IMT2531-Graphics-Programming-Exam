@@ -4,10 +4,7 @@
 
 Material * Material::activeMaterial;
 
-Material::Material()
-{
-
-}
+Material::Material() = default;
 
 void Material::AddTexture(const TextureType type, const char * path)
 {
@@ -16,8 +13,8 @@ void Material::AddTexture(const TextureType type, const char * path)
 	textures.push_back(t);
 }
 
-void Material::AddTexture(const TextureType type, unsigned int id)
+void Material::AddTexture(const TextureType type, const unsigned int id)
 {
-	Texture t = { id, type, "" };
+	const Texture t = { id, type, "" };
 	textures.push_back(t);
 }

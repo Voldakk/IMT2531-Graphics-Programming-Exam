@@ -20,10 +20,11 @@ void ShaderLoad::ReadShaderSource(const char *fname, std::vector<char> &buffer)
 	std::ifstream in;
 	in.open(fname, std::ios::binary);
 
-	if (!in.fail()) {
+	if (!in.fail()) 
+	{
 		// Get the number of bytes stored in this file
 		in.seekg(0, std::ios::end);
-		size_t length = (size_t)in.tellg();
+		const auto length = (size_t)in.tellg();
 
 		// Go to start of the file
 		in.seekg(0, std::ios::beg);
@@ -35,13 +36,14 @@ void ShaderLoad::ReadShaderSource(const char *fname, std::vector<char> &buffer)
 		// Add a valid C - string end
 		buffer[length] = '\0';
 	}
-	else {
+	else 
+	{
 		std::cerr << "Unable to open " << fname << " I'm out!" << std::endl;
 		//std::cerr << "Unable to open " << fname << " I'm out!" << std::endl;
 		exit(-1);
 	}
 }
-GLuint ShaderLoad::LoadAndCompileShader(const char *fname, GLenum shaderType) 
+GLuint ShaderLoad::LoadAndCompileShader(const char *fname, const GLenum shaderType) 
 {
 	std::cout << "ShaderLoad::LoadAndCompileShader - " << fname << "\n";
 
@@ -51,18 +53,19 @@ GLuint ShaderLoad::LoadAndCompileShader(const char *fname, GLenum shaderType)
 	const char *src = &buffer[0];
 
 	// Create shaders
-	GLuint shader = glCreateShader(shaderType);
+	const auto shader = glCreateShader(shaderType);
 	//attach the shader source code to the shader objec
-	glShaderSource(shader, 1, &src, NULL);
+	glShaderSource(shader, 1, &src, nullptr);
 
 	// Compile the shader
 	glCompileShader(shader);
 	// Comile the shader, translates into internal representation and checks for errors.
 	GLint compileOK;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOK);
-	if (!compileOK) {
+	if (!compileOK) 
+	{
 		char infolog[1024];;
-		glGetShaderInfoLog(shader, 1024, NULL, infolog);
+		glGetShaderInfoLog(shader, 1024, nullptr, infolog);
 		std::cout << "The program failed to compile with the error:" << std::endl << infolog << std::endl;
 		glfwTerminate();
 		getchar();
@@ -70,14 +73,15 @@ GLuint ShaderLoad::LoadAndCompileShader(const char *fname, GLenum shaderType)
 	}
 	return shader;
 }
-GLuint ShaderLoad::CreateProgram(const char *path_vert_shader, const char *path_frag_shader) {
+GLuint ShaderLoad::CreateProgram(const char *pathVertShader, const char *pathFragShader) 
+{
 	// Load and compile the vertex and fragment shaders
-	GLuint vertexShader = LoadAndCompileShader((SHADER_PATH + path_vert_shader).c_str(), GL_VERTEX_SHADER);
-	GLuint fragmentShader = LoadAndCompileShader((SHADER_PATH + path_frag_shader).c_str(), GL_FRAGMENT_SHADER);
+	const auto vertexShader = LoadAndCompileShader((SHADER_PATH + pathVertShader).c_str(), GL_VERTEX_SHADER);
+	const auto fragmentShader = LoadAndCompileShader((SHADER_PATH + pathFragShader).c_str(), GL_FRAGMENT_SHADER);
 
 	// Create a program object and attach the two shaders we have compiled, the program object contains
 	// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
-	GLuint shaderProgram = glCreateProgram();
+	const auto shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 

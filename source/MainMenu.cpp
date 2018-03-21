@@ -8,7 +8,7 @@
 MainMenu::MainMenu()
 {
 	// Pacman logo
-	logo.LoadSpriteSheet("../assets/Logo.png", glm::vec2(1, 1));
+	logo.LoadSpriteSheet("./assets/Logo.png", glm::vec2(1, 1));
 	logo.AddAnimation("normal", glm::uvec2(0, 0));
 	logo.SetAnimation("normal");
 	logo.scale = glm::vec2(0.8f, 0.2f);
@@ -16,7 +16,7 @@ MainMenu::MainMenu()
 	
 
 	//Buttons
-	spriteSheet = "../assets/Button.png";
+	spriteSheet = "./assets/Button.png";
 	buttonScale = glm::vec2(0.5f, 0.1f);
 	spacing = -0.3f;
 
@@ -39,7 +39,7 @@ void MainMenu::Render()
 	logo.Render();
 }
 
-void MainMenu::OnButtonPressed(int i)
+void MainMenu::OnButtonPressed(const int i)
 {
 	switch (i)
 	{

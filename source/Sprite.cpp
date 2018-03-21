@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "SOIL.h"
 #include "glm/glm/gtc/matrix_transform.hpp"
 
 #include "Application.hpp"
@@ -22,6 +21,10 @@ GLuint tintId;
 
 Sprite::Sprite()
 {
+	framesPerSec = 0;
+	texture = 0;
+	tintMask = 0;
+
 	position = glm::vec2(0, 0);
 	scale = glm::vec2(0.1f, 0.1f);
 	rotation = 0.0f;
@@ -45,7 +48,7 @@ void Sprite::Init()
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 	// Vertices
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 7 * 4, NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 7 * 4, nullptr, GL_DYNAMIC_DRAW);
 
 	// Create ebo
 	glGenBuffers(1, &ebo);
@@ -57,18 +60,18 @@ void Sprite::Init()
 		2, 3, 0
 	};
 
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * 3 * 2, NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * 3 * 2, nullptr, GL_DYNAMIC_DRAW);
 	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(elements), elements);
 
 	// Create shader programm
 	shaderProgram = ShaderLoad::CreateProgram("texture.vert", "texture.frag");
 
 	// Create attributes
-	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+	const auto posAttrib = glGetAttribLocation(shaderProgram, "position");
 	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
 
-	GLint texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
+	const auto texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
 	glEnableVertexAttribArray(texAttrib);
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
 
@@ -80,7 +83,7 @@ void Sprite::Init()
 	tintId = glGetUniformLocation(shaderProgram, "tint");
 }
 
-void Sprite::LoadSpriteSheet(std::string path, glm::vec2 numSprites)
+void Sprite::LoadSpriteSheet(const std::string& path, const glm::vec2 numSprites)
 {
 	// Clear current sequences
 	this->numSprites = numSprites;
@@ -91,7 +94,7 @@ void Sprite::LoadSpriteSheet(std::string path, glm::vec2 numSprites)
 	texture = TextureManager::GetTexture(path);
 }
 
-void Sprite::LoadTintMask(std::string path)
+void Sprite::LoadTintMask(const std::string& path)
 {
 	// Load mask
 	tintMask = TextureManager::GetTexture(path);
@@ -99,7 +102,7 @@ void Sprite::LoadTintMask(std::string path)
 
 void Sprite::Update(float deltaTime)
 {
-	if (currentAnimation == "")
+	if (currentAnimation.empty())
 		return;
 
 	counter += deltaTime;
@@ -109,7 +112,7 @@ void Sprite::Update(float deltaTime)
 		counter = 0;
 		currentSprite += currentPlayDir;
 
-		Animation a = animations[currentAnimation];
+		const auto a = animations[currentAnimation];
 
 		switch (a.loopMode)
 		{
@@ -148,11 +151,11 @@ void Sprite::Render()
 	glBindTexture(GL_TEXTURE_2D, tintMask);
 
 	// Update vertices and uv coords
-	if (currentAnimation != "")
+	if (!currentAnimation.empty())
 		UpdateVertices(animations[currentAnimation]);
 
 	// Transformation
-	glm::mat4 pm = Application::GetProjectionMatrix();
+	glm::mat4 pm = Application::GetOrthographicMatrix();
 
 	glm::mat4 tm = glm::translate(glm::mat4(1.0), glm::vec3(position.x, position.y, 0.0f));
 	glm::mat4 sm = glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
@@ -167,7 +170,7 @@ void Sprite::Render()
 	glUniform4fv(tintId, 1, &tint[0]);
 
 	// Draw
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const GLvoid*)0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, static_cast<const GLvoid*>(nullptr));
 
 	// Unbind
 	glActiveTexture(GL_TEXTURE0);
@@ -182,7 +185,7 @@ void Sprite::Render()
 	glUseProgram(0);
 }
 
-void Sprite::SetFPS(float fps)
+void Sprite::SetFps(float fps)
 {
 	if (fps > 0)
 		framesPerSec = fps;
@@ -190,12 +193,12 @@ void Sprite::SetFPS(float fps)
 		throw(std::runtime_error("Sprite::SetFPS - fps must be greater than 0"));
 }
 
-void Sprite::AddAnimation(std::string name, glm::uvec2 start, glm::uvec2 size, int numSprites, Animation::PlayDirection dir, Animation::LoopMode loopMode)
+void Sprite::AddAnimation(const std::string& name, glm::uvec2 start, glm::uvec2 size, int numSprites, Animation::PlayDirection dir, Animation::LoopMode loopMode)
 {
 	animations[name] = { start, size, numSprites, dir, loopMode };
 }
 
-void Sprite::SetAnimation(std::string name)
+void Sprite::SetAnimation(const std::string& name)
 {
 	if (name == currentAnimation)
 		return;
@@ -210,28 +213,29 @@ void Sprite::SetAnimation(std::string name)
 	}
 }
 
-bool Sprite::ContainsPoint(glm::vec2 point)
+bool Sprite::ContainsPoint(const glm::vec2 point) const
 {
-	glm::vec2 max = position + scale;
-	glm::vec2 min = position - scale;
+	const auto max = position + scale;
+	const auto min = position - scale;
 
 	return (point.x < max.x && point.x > min.x && point.y < max.y && point.y > min.y);
 }
 
-bool Sprite::Overlap(Sprite & other)
+bool Sprite::Overlap(Sprite & other) const
 {
-	glm::vec2 max = other.position + other.scale;
-	glm::vec2 min = other.position - other.scale;
+	const auto max = other.position + other.scale;
+	const auto min = other.position - other.scale;
 
 	return ContainsPoint(max) || ContainsPoint(min) || ContainsPoint(glm::vec2(max.x, min.y)) || ContainsPoint(glm::vec2(min.x, max.y));
 }
 
-void Sprite::UpdateVertices(Animation & a)
+void Sprite::UpdateVertices(Animation & a) const
 {
-	float w = (float)1 / numSprites.x;
-	float h = (float)1 / numSprites.y;
+	const auto w = float(1) / numSprites.x;
+	const auto h = float(1) / numSprites.y;
 
-	int x, y;
+	auto x = 1;
+	auto y = 1;
 
 	if (a.dir == Animation::PlayDirection::Horizontal)
 	{

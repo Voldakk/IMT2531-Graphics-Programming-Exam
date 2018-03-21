@@ -6,11 +6,11 @@
 
 struct Vertex 
 {
-	glm::vec3 Position;
-	glm::vec3 Normal;
-	glm::vec2 TexCoords;
-	glm::vec3 Tangent;
-	glm::vec3 Bitangent;
+	glm::vec3 position;
+	glm::vec3 normal;
+	glm::vec2 texCoords;
+	glm::vec3 tangent;
+	glm::vec3 bitangent;
 };
 
 class Mesh
@@ -19,19 +19,19 @@ class Mesh
 public:
 
 	Mesh();
-	Mesh(const char * path);
+	explicit Mesh(const char * path);
 
 	void Create();
-	void Draw();
+	void Draw() const;
 
 protected:
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> faceIndices;
 
-	unsigned int VAO;
-	unsigned int VBO;
-	unsigned int EBO;
+	unsigned int vao{};
+	unsigned int vbo{};
+	unsigned int ebo{};
 
 	void LoadMesh(const char * path);
 };

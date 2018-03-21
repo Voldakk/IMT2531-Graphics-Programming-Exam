@@ -2,9 +2,9 @@
 
 #include "Scene.hpp"
 
-MeshRenderer::MeshRenderer()
+MeshRenderer::MeshRenderer(GameObject * gameobject) : Component(gameobject)
 {
-
+	
 }
 
 void MeshRenderer::Render()

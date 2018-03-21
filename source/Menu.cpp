@@ -6,13 +6,13 @@
 // Destructor
 Menu::~Menu()
 {
-	for (size_t i = 0; i < buttons.size(); i++)
+	for (auto& button : buttons)
 	{
-		delete(buttons[i]);
+		delete(button);
 	}
-	for (size_t i = 0; i < texts.size(); i++)
+	for (auto& text : texts)
 	{
-		delete(texts[i]);
+		delete(text);
 	}
 }
 
@@ -47,18 +47,18 @@ void Menu::Update(float deltaTime)
 // Called every frame after Update
 void Menu::Render()
 {
-	for (size_t i = 0; i < buttons.size(); i++)
+	for (auto& button : buttons)
 	{
-		buttons[i]->Render();
+		button->Render();
 	}
 
-	for (size_t i = 0; i < texts.size(); i++)
+	for (auto& text : texts)
 	{
-		texts[i]->Render();
+		text->Render();
 	}
 }
 
-int Menu::CreateButton(std::string text, glm::vec4 tint)
+int Menu::CreateButton(const std::string& text, const glm::vec4 tint)
 {
 	// Button sprite
 	Sprite * s = new Sprite();
@@ -71,19 +71,19 @@ int Menu::CreateButton(std::string text, glm::vec4 tint)
 	buttons.push_back(s);
 
 	//Text
-	if (text != "")
+	if (!text.empty())
 	{
-		Text * t = new Text(text, s->position, true, s->scale.y * 0.8f, tint);
+		const auto t = new Text(text, s->position, true, s->scale.y * 0.8f, tint);
 		texts.push_back(t);
 	}
 
 	return buttons.size() - 1;
 }
 
-void Menu::SetSelected(size_t i)
+void Menu::SetSelected(const size_t i)
 {
-	if (i < 0 || i >= buttons.size() || buttons[i] == nullptr ||
-		selected < 0 || selected >= buttons.size() || buttons[selected] == nullptr)
+	if (i >= buttons.size() || buttons[i] == nullptr ||
+		selected >= buttons.size() || buttons[selected] == nullptr)
 		return;
 
 	buttons[selected]->SetAnimation("normal");

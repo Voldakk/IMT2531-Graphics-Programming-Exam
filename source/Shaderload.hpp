@@ -9,10 +9,10 @@ class ShaderLoad
 {
 	public:
 		/// <summary>Creates a shader program from the provided shader files</summary>
-		/// <param name="path_vert_shader">The path to the vertex shader</param>  
-		/// <param name="path_frag_shader">The path to the fragment shader</param>  
+		/// <param name="pathVertShader">The path to the vertex shader</param>  
+		/// <param name="pathFragShader">The path to the fragment shader</param>  
 		/// <returns>A reference to the shader program</returns>  
-		static GLuint CreateProgram(const char *path_vert_shader, const char *path_frag_shader);
+		static GLuint CreateProgram(const char *pathVertShader, const char *pathFragShader);
 	
 	private:
 		/// <summary>Reads the file and stores the content in the provided buffer</summary>

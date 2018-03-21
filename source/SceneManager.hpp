@@ -18,15 +18,15 @@ class SceneManager
 
 		/// <summary>Loads an existing scene ontop of any currently active scenes</summary>
 		/// <param name="scene">The scene to be loaded</param>  
-		static void LoadScene(std::shared_ptr<Scene> scene);
+		static void LoadScene(const std::shared_ptr<Scene>& scene);
 
 		/// <summary>Unloads a scene</summary>
 		/// <param name="scene">The scene to be unloaded</param>  
-        static void UnloadScene(std::shared_ptr<Scene> scene);
+        static void UnloadScene(const std::shared_ptr<Scene>& scene);
 
 		/// <summary>Unloads all active scenes and loads an existing scene</summary>
 		/// <param name="scene">The new scene</param>  
-		static void ChangeScene(std::shared_ptr<Scene> scene);
+		static void ChangeScene(const std::shared_ptr<Scene>& scene);
 
 		/// <summary>Unloads all active scenes and creates a new scene</summary>
 		/// <returns>Returns a pointer to the newly created scene</returns>  
@@ -46,7 +46,7 @@ class SceneManager
 		/// <summary>Findes the index of the scene in the scenes vector</summary>
 		/// <param name="path">The scene to find</param>  
 		/// <returns>The index of the scene. Return -1 if the scene was not found</returns>  
-		static int GetIndex(std::shared_ptr<Scene> scene);
+		static int GetIndex(const std::shared_ptr<Scene>& scene);
 
 		/// <summary>Clears the list of scenes and restes the scenes self pointer</summary>
 		static void ClearScenes();

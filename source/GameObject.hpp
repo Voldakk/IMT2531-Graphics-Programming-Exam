@@ -12,7 +12,7 @@ class GameObject
 {
 public:
 
-	Scene * scene;
+	Scene * scene{};
 	std::unique_ptr<Transform> transform;
 	std::vector<std::shared_ptr<Component>> components;
 
@@ -26,11 +26,9 @@ public:
 };
 
 template<class T>
-inline std::shared_ptr<T> GameObject::AddComponent()
+std::shared_ptr<T> GameObject::AddComponent()
 {
-	std::shared_ptr<T> component = std::make_shared<T>();
-
-	component->gameObject = this;
+	std::shared_ptr<T> component = std::make_shared<T>(this);
 	components.push_back(component);
 
 	return component;

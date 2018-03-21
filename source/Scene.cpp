@@ -1,14 +1,12 @@
-#pragma once
+#include "Scene.hpp"
 
 #include <memory>
 
-#include "Scene.hpp"
-
-void Scene::Update(float deltaTime)
+void Scene::Update(const float deltaTime)
 {
-	for (size_t i = 0; i < gameObjects.size(); i++)
+	for (auto& gameObject : gameObjects)
 	{
-		gameObjects[i]->Update(deltaTime);
+		gameObject->Update(deltaTime);
 	}
 }
 
@@ -19,15 +17,15 @@ void Scene::Render()
 		skybox->Render();
 	}
 
-	for (size_t i = 0; i < gameObjects.size(); i++)
+	for (auto& gameObject : gameObjects)
 	{
-		gameObjects[i]->Render();
+		gameObject->Render();
 	}
 }
 
 std::shared_ptr<GameObject> Scene::CreateGameObject()
 {
-	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
+	auto gameObject = std::make_shared<GameObject>();
 
 	gameObject->scene = this;
 

@@ -11,7 +11,7 @@ public:
 	/// <summary>Loads an image from file to a GL texture. imeadiatly returns if texture already exists</summary>
 	/// <param name="path">The path to the image file</param>  
 	/// <returns>A refference to the GL texture</returns>  
-	static GLuint GetTexture(std::string path);
+	static GLuint GetTexture(const std::string& path);
 
 private:
 	static std::map<std::string, GLuint> textures;

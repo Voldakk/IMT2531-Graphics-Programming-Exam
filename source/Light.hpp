@@ -11,4 +11,3 @@ struct Light
 
 	float ambientCoefficient = 0.005f;
 };
-

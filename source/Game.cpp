@@ -1,8 +1,6 @@
 #include "Game.hpp"
 
 #include <memory>
-#include <iostream>
-#include <string>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -24,8 +22,8 @@ Game::Game()
 
 
 	// Shaders
-	std::shared_ptr<Shader> shader = std::make_shared<StandardShader>();
-	std::shared_ptr<Shader> unlit = std::make_shared<UnlitTextureShader>();
+	const std::shared_ptr<Shader> shader = std::make_shared<StandardShader>();
+	const std::shared_ptr<Shader> unlit = std::make_shared<UnlitTextureShader>();
 
 	// Materials
 	std::shared_ptr<Material> material = std::make_shared<Material>();
@@ -35,14 +33,14 @@ Game::Game()
 	material2->AddTexture(TextureType::Diffuse, "./assets/uv2.png");
 	
 	// Meshes
-	std::shared_ptr<Mesh> cubeMesh = std::make_shared<Primitive>(PrimitiveType::Cube);
-	std::shared_ptr<Mesh> sphereMesh = std::make_shared<Primitive>(PrimitiveType::Sphere);
+	const std::shared_ptr<Mesh> cubeMesh = std::make_shared<Primitive>(PrimitiveType::Cube);
+	const std::shared_ptr<Mesh> sphereMesh = std::make_shared<Primitive>(PrimitiveType::Sphere);
 
 	// Cube
-	std::shared_ptr<GameObject> cube = CreateGameObject();
+	auto cube = CreateGameObject();
 	cube->transform->SetPosition({ -3.0f, 0.0f, -3.0f });
 
-	std::shared_ptr<MeshRenderer> mr = cube->AddComponent<MeshRenderer>();
+	auto mr = cube->AddComponent<MeshRenderer>();
 	mr->shader = shader;
 	mr->material = material;
 	mr->mesh = cubeMesh;
@@ -73,8 +71,7 @@ Game::Game()
 	}
 }
 
-void Game::Update(float deltaTime)
+void Game::Update(const float deltaTime)
 {
 	Application::camera.Update(deltaTime);
-	//std::cout << "FPS: " << 1.0f / deltaTime << "\n";
 }

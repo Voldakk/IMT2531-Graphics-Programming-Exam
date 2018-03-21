@@ -4,22 +4,21 @@
 
 GameObject::GameObject()
 {
-	transform = std::make_unique<Transform>();
-	transform->gameObject = this;
+	transform = std::make_unique<Transform>(this);
 }
 
-void GameObject::Update(float deltaTime)
+void GameObject::Update(const float deltaTime)
 {
-	for (size_t i = 0; i < components.size(); i++)
+	for (auto& component : components)
 	{
-		components[i]->Update(deltaTime);
+		component->Update(deltaTime);
 	}
 }
 
 void GameObject::Render()
 {
-	for (size_t i = 0; i < components.size(); i++)
+	for (auto& component : components)
 	{
-		components[i]->Render();
+		component->Render();
 	}
 }

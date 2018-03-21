@@ -12,7 +12,7 @@ public:
 	glm::vec3 rotation = glm::vec3(0.0f);
 	glm::vec3 scale = glm::vec3(1.0f);
 
-	Transform();
+	explicit Transform(GameObject * gameObject);
 
 	void Translate(glm::vec3 offset);
 	void SetPosition(glm::vec3 newPosition);
@@ -25,7 +25,7 @@ public:
 
 	void UpdateModelMatrix();
 
-	glm::mat4 GetModelMatrix();
+	glm::mat4 GetModelMatrix() const;
 
 private:
 	glm::mat4 model;

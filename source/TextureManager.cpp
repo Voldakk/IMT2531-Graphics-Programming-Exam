@@ -4,7 +4,7 @@
 
 std::map<std::string, GLuint> TextureManager::textures;
 
-GLuint TextureManager::GetTexture(std::string path)
+GLuint TextureManager::GetTexture(const std::string& path)
 {
 	// Return the id if the texture's already loaded
 	if (textures.count(path))
@@ -17,8 +17,7 @@ GLuint TextureManager::GetTexture(std::string path)
 
 	// Load the image
 	int width, height, channels;
-	unsigned char* image;
-	image = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
+	const auto image = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 	SOIL_free_image_data(image);
 

@@ -28,7 +28,6 @@ struct Animation
 		None
 	};
 
-public:
 	glm::uvec2 start;
 	glm::uvec2 size;
 	int numSprites;
@@ -40,7 +39,6 @@ public:
 class Sprite
 {
 public:
-
 	glm::vec2 position;
 	glm::vec2 scale;
 	float rotation;
@@ -57,11 +55,11 @@ public:
 	/// <summary>Loads an image to be used as a sprite sheet</summary>
 	/// <param name="path">The path to the image file</param>  
 	/// <param name="numSprites">The number of rows and columns in the sprite sheet</param>  
-	void LoadSpriteSheet(std::string path, glm::vec2 numSprites);
+	void LoadSpriteSheet(const std::string& path, glm::vec2 numSprites);
 
 	/// <summary>Loads an image to be used as a tint mask</summary>
 	/// <param name="path">The path to the image file</param>  
-	void LoadTintMask(std::string path);
+	void LoadTintMask(const std::string& path);
 
 	/// <summary>Updates the sprites animations. Should be called every frame the sprite is active</summary>
 	/// <param name="deltaTime">The time in seconds between frames</param>  
@@ -72,7 +70,7 @@ public:
 
 	/// <summary>Sets the sprites animation playback fps</summary>
 	/// <param name="fps">The number of frames per second</param>  
-	void SetFPS(float fps);
+	void SetFps(float fps);
 
 	/// <summary>Adds an animation to the sprite</summary>
 	/// <param name="name">The name used to refference the animation</param>  
@@ -83,21 +81,21 @@ public:
 	/// <param name="loopMode">The animations loop mode</param>
 	/// <seealso cref="Animation::PlayDirection"/>
 	/// <seealso cref="Animation::LoopMode"/>
-	void AddAnimation(std::string name, glm::uvec2 start, glm::uvec2 size = glm::uvec2(1, 1), int numSprites = 1, Animation::PlayDirection dir = Animation::PlayDirection::Horizontal, Animation::LoopMode loopMode = Animation::LoopMode::Loop);
+	void AddAnimation(const std::string& name, glm::uvec2 start, glm::uvec2 size = glm::uvec2(1, 1), int numSprites = 1, Animation::PlayDirection dir = Animation::PlayDirection::Horizontal, Animation::LoopMode loopMode = Animation::LoopMode::Loop);
 	
 	/// <summary>Sets the currently playing animation</summary>
 	/// <param name="name">The name of the animation</param>  
-	void SetAnimation(std::string name);
+	void SetAnimation(const std::string& name);
 
 	/// <summary>Checks if a point is contained within the sprites bounding box</summary>
 	/// <param name="point">The position of the point</param>  
 	/// <returns>Returns true if the point is within the bounding box, false if not</returns>  
-	bool ContainsPoint(glm::vec2 point);
+	bool ContainsPoint(glm::vec2 point) const;
 
 	/// <summary>Checks if this sprites bounding box overlaps another sprites bounding box</summary>
 	/// <param name="other">The other sprite</param>  
 	/// <returns>Returns true if the bounding boxes overlap, false if not</returns>  
-	bool Overlap(Sprite &other);
+	bool Overlap(Sprite &other) const;
 
 private:
 
@@ -116,5 +114,5 @@ private:
 
 	/// <summary>Updates the verteces UV coordinates to match the animation</summary>
 	/// <param name="s">The current animation</param>  
-	void UpdateVertices(Animation & s);
+	void UpdateVertices(Animation & a) const;
 };

@@ -12,15 +12,15 @@ class Skybox
 {
 public:
 
-	unsigned int texture;
+	unsigned int texture = -1;
 
 	std::unique_ptr<Mesh> mesh;
 	std::unique_ptr<Shader> shader;
 	std::unique_ptr<Material> material;
 	std::unique_ptr<Transform> transform;
 
-	Skybox(std::string path, std::string fileType);
+	Skybox(const std::string& path, const std::string& fileType);
 	~Skybox();
 
-	void Render();
+	void Render() const;
 };

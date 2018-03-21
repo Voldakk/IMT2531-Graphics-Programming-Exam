@@ -17,7 +17,10 @@ public:
 	static void Loop();
 
 	/// <summary>Gets the projection matrix for the current window size</summary>
-	static glm::mat4 GetProjectionMatrix(bool orto = true);
+	static glm::mat4 GetPerspectiveMatrix();
+
+	/// <summary>Gets the projection matrix for the current window size</summary>
+	static glm::mat4 GetOrthographicMatrix();
 
 	/// <summary>Callback for when the window is resized</summary>
 	static void WindowResizeCallback(GLFWwindow* window, int width, int height);

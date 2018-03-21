@@ -14,7 +14,7 @@
 #include "Primitive.hpp"
 #include "Application.hpp"
 
-Skybox::Skybox(std::string path, std::string fileType)
+Skybox::Skybox(const std::string& path, const std::string& fileType)
 {
 	// Load textures 
 	glActiveTexture(GL_TEXTURE0);
@@ -28,19 +28,22 @@ Skybox::Skybox(std::string path, std::string fileType)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	std::string sideNames[] = { "xpos", "xneg", "ypos", "yneg", "zpos", "zneg" };
-	unsigned int sideIds[] = { 
+
+	unsigned int sideIds[] = 
+	{ 
 		GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 
 		GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z };
+		GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z 
+	};
 
 	for (size_t i = 0; i < 6; i++)
 	{
-		std::string fullPath = path + sideNames[i] + fileType;
+		auto fullPath = path + sideNames[i];
+		fullPath.append(fileType);
 
 		int width, height, channels;
-		unsigned char* image;
-		
-		image = SOIL_load_image(fullPath.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
+
+		const auto image = SOIL_load_image(fullPath.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
 
 		glTexImage2D(sideIds[i], 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
@@ -58,16 +61,15 @@ Skybox::Skybox(std::string path, std::string fileType)
 	shader = std::make_unique<SkyboxShader>();
 
 	// Transform
-	transform = std::make_unique<Transform>();
+	transform = std::make_unique<Transform>(nullptr);
 }
-
 
 Skybox::~Skybox()
 {
 	glDeleteTextures(1, &texture);
 }
 
-void Skybox::Render()
+void Skybox::Render() const
 {
 	transform->SetPosition(Application::camera.position);
 

@@ -4,8 +4,9 @@
 #include <memory>
 
 #include "Light.hpp"
-#include "Skybox.hpp"
+
 #include "GameObject.hpp"
+#include "Skybox.hpp"
 
 // A scene that can be run by the SceneManager
 class Scene

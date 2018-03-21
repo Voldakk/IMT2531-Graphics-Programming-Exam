@@ -2,8 +2,7 @@
 
 #include <chrono>
 #include <thread>
-#include <stdio.h>
-#include <iostream>
+#include <cstdio>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -13,9 +12,9 @@
 #include "Sprite.hpp"
 #include "GlobalVars.hpp"
 #include "SceneManager.hpp"
-#include "MainMenu.hpp"
 #include "Game.hpp"
 #include "Camera.hpp"
+#include "MainMenu.hpp"
 
 glm::ivec2 Application::windowSize;
 GLFWwindow * Application::window;
@@ -66,12 +65,14 @@ bool Application::CreateWindow()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
+	//auto mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	//window = glfwCreateWindow(mode->width, mode->height, APPLICATION_NAME.c_str(), glfwGetPrimaryMonitor(), NULL);
-	window = glfwCreateWindow(1920, 1080, APPLICATION_NAME.c_str(), NULL, NULL);
+	
+	window = glfwCreateWindow(1920, 1080, APPLICATION_NAME.c_str(), nullptr, nullptr);
+	
 	glfwMakeContextCurrent(window);
-	if (window == NULL) {
+	
+	if (window == nullptr) {
 		fprintf(stderr, "Failed to open GLFW window.\n");
 		getchar();
 		glfwTerminate();
@@ -104,16 +105,14 @@ bool Application::CreateWindow()
 
 void Application::Loop()
 {
-	// Time variables
-	float deltaTime;
-	double currentFrameTime = glfwGetTime();
-	double lastFrameTime = currentFrameTime;
+	auto currentFrameTime = glfwGetTime();
+	auto lastFrameTime = currentFrameTime;
 
 	while (glfwWindowShouldClose(window) == 0)
 	{
 		// Measure delta time 
 		currentFrameTime = glfwGetTime();
-		deltaTime = (float)(currentFrameTime - lastFrameTime);
+		const auto deltaTime = (float)(currentFrameTime - lastFrameTime);
 		lastFrameTime = currentFrameTime;
 
 		// ==== UPDATE ====
@@ -131,7 +130,7 @@ void Application::Loop()
 		glfwPollEvents();
 
 		// Limit fps
-		double sleepDur = (1.0 / MAX_FPS) - deltaTime;
+		const auto sleepDur = (1.0 / MAX_FPS) - deltaTime;
 		if (sleepDur > 0)
 			std::this_thread::sleep_for(std::chrono::milliseconds((int)(sleepDur * 1000)));
 	}
@@ -141,12 +140,14 @@ void Application::Loop()
 	glfwTerminate();
 }
 
-glm::mat4 Application::GetProjectionMatrix(bool orto)
+glm::mat4 Application::GetPerspectiveMatrix()
 {
-	if (orto)
-		return ortoProjection;
-
 	return  perspectiveProjection;
+}
+
+glm::mat4 Application::GetOrthographicMatrix()
+{
+	return ortoProjection;
 }
 
 void Application::WindowResizeCallback(GLFWwindow * window, int width, int height)

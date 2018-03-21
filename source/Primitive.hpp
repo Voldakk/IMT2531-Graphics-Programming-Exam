@@ -8,7 +8,6 @@ class Primitive : public Mesh
 {
 public:
 
-	Primitive(PrimitiveType type);
-	~Primitive();
+	explicit Primitive(PrimitiveType type);
 };
 

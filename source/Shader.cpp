@@ -4,7 +4,6 @@
 
 #include "GL/glew.h"
 #include "glm/glm/gtc/type_ptr.hpp"
-#include "glm/glm/gtc/matrix_transform.hpp"
 
 #include "Shaderload.hpp"
 
@@ -17,34 +16,31 @@
 
 unsigned int Shader::activeShader;
 
-Shader::Shader()
-{
-	id = -1;
-}
+Shader::Shader() = default;
 
-void Shader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
+void Shader::SetUniforms(Scene* scene, Transform* transform, Mesh* mesh, Material* material)
 {
-	
+
 }
 
 StandardShader::StandardShader()
 {
 	id = ShaderLoad::CreateProgram("standard.vert", "standard.frag");
 
-	viewID = glGetUniformLocation(id, "view");
-	projectionID = glGetUniformLocation(id, "projection");
-	modelID = glGetUniformLocation(id, "model");
+	viewId = glGetUniformLocation(id, "view");
+	projectionId = glGetUniformLocation(id, "projection");
+	modelId = glGetUniformLocation(id, "model");
 
-	materialShininessID = glGetUniformLocation(id, "materialShininess");
-	materialSpecularColorID = glGetUniformLocation(id, "materialSpecularColor");
+	materialShininessId = glGetUniformLocation(id, "materialShininess");
+	materialSpecularColorId = glGetUniformLocation(id, "materialSpecularColor");
 
-	lightPositionID = glGetUniformLocation(id, "light.position");
-	lightIntensitiesID = glGetUniformLocation(id, "light.intensities");
+	lightPositionId = glGetUniformLocation(id, "light.position");
+	lightIntensitiesId = glGetUniformLocation(id, "light.intensities");
 
-	lightAttenuationID = glGetUniformLocation(id, "light.attenuation");
-	lightAmbientCoefficientID = glGetUniformLocation(id, "light.ambientCoefficient");
+	lightAttenuationId = glGetUniformLocation(id, "light.attenuation");
+	lightAmbientCoefficientId = glGetUniformLocation(id, "light.ambientCoefficient");
 
-	cameraPositionID = glGetUniformLocation(id, "cameraPosition");
+	cameraPositionId = glGetUniformLocation(id, "cameraPosition");
 }
 
 void StandardShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
@@ -55,11 +51,11 @@ void StandardShader::SetUniforms(Scene * scene, Transform * transform, Mesh * me
 		glUseProgram(id);
 
 		// Lights
-		glUniform3fv(lightPositionID, 1, value_ptr(scene->light.position));
-		glUniform3fv(lightIntensitiesID, 1, value_ptr(scene->light.color));
+		glUniform3fv(lightPositionId, 1, value_ptr(scene->light.position));
+		glUniform3fv(lightIntensitiesId, 1, value_ptr(scene->light.color));
 
-		glUniform1f(lightAttenuationID, scene->light.attenuation);
-		glUniform1f(lightAmbientCoefficientID, scene->light.ambientCoefficient);
+		glUniform1f(lightAttenuationId, scene->light.attenuation);
+		glUniform1f(lightAmbientCoefficientId, scene->light.ambientCoefficient);
 	}
 
 	// Material
@@ -67,8 +63,8 @@ void StandardShader::SetUniforms(Scene * scene, Transform * transform, Mesh * me
 	{
 		Material::activeMaterial = material;
 
-		glUniform1f(materialShininessID, material->materialShininess);
-		glUniform3fv(materialSpecularColorID, 1, value_ptr(material->materialSpecularColor));
+		glUniform1f(materialShininessId, material->materialShininess);
+		glUniform3fv(materialSpecularColorId, 1, value_ptr(material->materialSpecularColor));
 
 		// Textures
 		unsigned int diffuseNr = 1;
@@ -82,7 +78,7 @@ void StandardShader::SetUniforms(Scene * scene, Transform * transform, Mesh * me
 			glActiveTexture(GL_TEXTURE0 + i);
 
 			// Find the name based on the texture type
-			std::string name = "";
+			std::string name;
 
 			switch (material->textures[i].type)
 			{
@@ -111,21 +107,21 @@ void StandardShader::SetUniforms(Scene * scene, Transform * transform, Mesh * me
 	}
 
 	// Camera
-	glUniform3fv(cameraPositionID, 1, value_ptr(Application::camera.position));
+	glUniform3fv(cameraPositionId, 1, value_ptr(Application::camera.position));
 
 	// Matrices
-	glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
-	glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
-	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(Application::GetProjectionMatrix(false)));
+	glUniformMatrix4fv(modelId, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
+	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
+	glUniformMatrix4fv(projectionId, 1, GL_FALSE, glm::value_ptr(Application::GetPerspectiveMatrix()));
 }
 
 UnlitTextureShader::UnlitTextureShader()
 {
 	id = ShaderLoad::CreateProgram("unlit_texture.vert", "unlit_texture.frag");
 
-	viewID = glGetUniformLocation(id, "view");
-	projectionID = glGetUniformLocation(id, "projection");
-	modelID = glGetUniformLocation(id, "model");
+	viewId = glGetUniformLocation(id, "view");
+	projectionId = glGetUniformLocation(id, "projection");
+	modelId = glGetUniformLocation(id, "model");
 }
 
 void UnlitTextureShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
@@ -137,9 +133,9 @@ void UnlitTextureShader::SetUniforms(Scene * scene, Transform * transform, Mesh 
 	}
 
 	// Matrices
-	glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
-	glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
-	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(Application::GetProjectionMatrix(false)));
+	glUniformMatrix4fv(modelId, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
+	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
+	glUniformMatrix4fv(projectionId, 1, GL_FALSE, glm::value_ptr(Application::GetPerspectiveMatrix()));
 
 	// Material
 	if (material != nullptr && (material != Material::activeMaterial || id != activeShader))
@@ -155,7 +151,7 @@ void UnlitTextureShader::SetUniforms(Scene * scene, Transform * transform, Mesh 
 			glActiveTexture(GL_TEXTURE0 + i);
 
 			// Find the name based on the texture type
-			std::string name = "";
+			std::string name;
 
 			switch (material->textures[i].type)
 			{
@@ -179,11 +175,11 @@ SkyboxShader::SkyboxShader()
 {
 	id = ShaderLoad::CreateProgram("skybox.vert", "skybox.frag");
 
-	viewID = glGetUniformLocation(id, "view");
-	projectionID = glGetUniformLocation(id, "projection");
-	modelID = glGetUniformLocation(id, "model");
+	viewId = glGetUniformLocation(id, "view");
+	projectionId = glGetUniformLocation(id, "projection");
+	modelId = glGetUniformLocation(id, "model");
 
-	textureID = glGetUniformLocation(id, "skytexture");
+	textureId = glGetUniformLocation(id, "skytexture");
 }
 
 void SkyboxShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material)
@@ -195,9 +191,9 @@ void SkyboxShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh
 	}
 
 	// Matrices
-	glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
-	glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
-	glUniformMatrix4fv(projectionID, 1, GL_FALSE, glm::value_ptr(Application::GetProjectionMatrix(false)));
+	glUniformMatrix4fv(modelId, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
+	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
+	glUniformMatrix4fv(projectionId, 1, GL_FALSE, glm::value_ptr(Application::GetPerspectiveMatrix()));
 
 	// Material
 	if (material != nullptr && (material != Material::activeMaterial || id != activeShader))
@@ -207,7 +203,7 @@ void SkyboxShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh
 		// Activate the texture
 		glActiveTexture(GL_TEXTURE0);
 
-		glUniform1i(textureID, 0);
+		glUniform1i(textureId, 0);
 
 		// Bind the texture
 		glBindTexture(GL_TEXTURE_2D, material->textures[0].id);
