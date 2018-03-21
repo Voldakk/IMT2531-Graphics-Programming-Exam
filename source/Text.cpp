@@ -12,8 +12,8 @@ Text::Text(std::string text, glm::vec2 pos, bool center, float size, glm::vec4 t
     this->size = size;
     
     // Create texture and shader program
-    texture = TextureManager::GetTexture("../assets/font_5.png");
-    shaderProgram = ShaderLoad::CreateProgram("../shaders/texture.vert", "../shaders/texture.frag");
+    texture = TextureManager::GetTexture("./assets/font_5.png");
+    shaderProgram = ShaderLoad::CreateProgram("texture.vert", "texture.frag");
 
     // Use a Vertex Array Object
 	glGenVertexArrays(1, &vao);

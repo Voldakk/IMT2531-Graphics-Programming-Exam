@@ -17,7 +17,7 @@
 Game::Game()
 {
 	// Skybox
-	skybox = std::make_unique<Skybox>("../assets/ame_ash/", ".tga");
+	skybox = std::make_unique<Skybox>("./assets/ame_ash/", ".tga");
 
 	// Make the light fit the skybox
 	light.position = { 0.0f, 100.0f, -1000.0f };
@@ -29,10 +29,10 @@ Game::Game()
 
 	// Materials
 	std::shared_ptr<Material> material = std::make_shared<Material>();
-	material->AddTexture(TextureType::Diffuse, "../assets/uv.png");
+	material->AddTexture(TextureType::Diffuse, "./assets/uv.png");
 
 	std::shared_ptr<Material> material2 = std::make_shared<Material>();
-	material2->AddTexture(TextureType::Diffuse, "../assets/uv2.png");
+	material2->AddTexture(TextureType::Diffuse, "./assets/uv2.png");
 	
 	// Meshes
 	std::shared_ptr<Mesh> cubeMesh = std::make_shared<Primitive>(PrimitiveType::Cube);

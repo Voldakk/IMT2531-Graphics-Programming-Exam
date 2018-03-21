@@ -8,9 +8,12 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 #include <GL/glew.h>
 #include "GLFW/glfw3.h"
+
+const std::string SHADER_PATH = "./assets/shaders/";
 
 void ShaderLoad::ReadShaderSource(const char *fname, std::vector<char> &buffer) 
 {
@@ -69,8 +72,8 @@ GLuint ShaderLoad::LoadAndCompileShader(const char *fname, GLenum shaderType)
 }
 GLuint ShaderLoad::CreateProgram(const char *path_vert_shader, const char *path_frag_shader) {
 	// Load and compile the vertex and fragment shaders
-	GLuint vertexShader = LoadAndCompileShader(path_vert_shader, GL_VERTEX_SHADER);
-	GLuint fragmentShader = LoadAndCompileShader(path_frag_shader, GL_FRAGMENT_SHADER);
+	GLuint vertexShader = LoadAndCompileShader((SHADER_PATH + path_vert_shader).c_str(), GL_VERTEX_SHADER);
+	GLuint fragmentShader = LoadAndCompileShader((SHADER_PATH + path_frag_shader).c_str(), GL_FRAGMENT_SHADER);
 
 	// Create a program object and attach the two shaders we have compiled, the program object contains
 	// both vertex and fragment shaders as well as information about uniforms and attributes common to both.

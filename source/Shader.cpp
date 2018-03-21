@@ -29,7 +29,7 @@ void Shader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Mate
 
 StandardShader::StandardShader()
 {
-	id = ShaderLoad::CreateProgram("../shaders/standard.vert", "../shaders/standard.frag");
+	id = ShaderLoad::CreateProgram("standard.vert", "standard.frag");
 
 	viewID = glGetUniformLocation(id, "view");
 	projectionID = glGetUniformLocation(id, "projection");
@@ -121,7 +121,7 @@ void StandardShader::SetUniforms(Scene * scene, Transform * transform, Mesh * me
 
 UnlitTextureShader::UnlitTextureShader()
 {
-	id = ShaderLoad::CreateProgram("../shaders/unlit_texture.vert", "../shaders/unlit_texture.frag");
+	id = ShaderLoad::CreateProgram("unlit_texture.vert", "unlit_texture.frag");
 
 	viewID = glGetUniformLocation(id, "view");
 	projectionID = glGetUniformLocation(id, "projection");
@@ -177,7 +177,7 @@ void UnlitTextureShader::SetUniforms(Scene * scene, Transform * transform, Mesh 
 
 SkyboxShader::SkyboxShader()
 {
-	id = ShaderLoad::CreateProgram("../shaders/skybox.vert", "../shaders/skybox.frag");
+	id = ShaderLoad::CreateProgram("skybox.vert", "skybox.frag");
 
 	viewID = glGetUniformLocation(id, "view");
 	projectionID = glGetUniformLocation(id, "projection");

@@ -61,7 +61,7 @@ void Sprite::Init()
 	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(elements), elements);
 
 	// Create shader programm
-	shaderProgram = ShaderLoad::CreateProgram("../shaders/texture.vert", "../shaders/texture.frag");
+	shaderProgram = ShaderLoad::CreateProgram("texture.vert", "texture.frag");
 
 	// Create attributes
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");

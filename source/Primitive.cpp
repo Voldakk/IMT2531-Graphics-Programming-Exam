@@ -4,7 +4,7 @@
 
 Primitive::Primitive(PrimitiveType type)
 {
-	std::string path = "../assets/primitives/";
+	std::string path = "./assets/primitives/";
 
 	switch (type)
 	{
