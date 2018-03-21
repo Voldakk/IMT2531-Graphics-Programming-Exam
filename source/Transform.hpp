@@ -3,6 +3,10 @@
 #include "glm/glm/glm.hpp"
 
 #include "Component.hpp"
+#include <vector>
+#include <memory>
+
+class GameObject;
 
 class Transform : public Component
 {
@@ -11,6 +15,9 @@ public:
 	glm::vec3 position = glm::vec3(0.0f);
 	glm::vec3 rotation = glm::vec3(0.0f);
 	glm::vec3 scale = glm::vec3(1.0f);
+
+	std::shared_ptr<Transform> parent;
+	std::vector<Transform*> children;
 
 	explicit Transform(GameObject * gameObject);
 
@@ -26,6 +33,12 @@ public:
 	void UpdateModelMatrix();
 
 	glm::mat4 GetModelMatrix() const;
+
+	void SetParent(GameObject * newParent);
+	void SetParent(std::shared_ptr<Transform>& newParent);
+
+	int GetChildIndex(Transform * child) const;
+	int GetChildIndex(GameObject * child) const;
 
 private:
 	glm::mat4 model;

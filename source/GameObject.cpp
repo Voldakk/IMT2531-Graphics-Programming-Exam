@@ -22,3 +22,24 @@ void GameObject::Render()
 		component->Render();
 	}
 }
+
+void GameObject::SetParent(GameObject* newParent)
+{
+	transform->SetParent(newParent->transform);
+}
+
+void GameObject::SetParent(std::shared_ptr<GameObject>& newParent)
+{
+	transform->SetParent(newParent->transform);
+}
+
+
+int GameObject::GetChildIndex(Transform* child) const
+{
+	return transform->GetChildIndex(child);
+}
+
+int GameObject::GetChildIndex(GameObject* child) const
+{
+	return transform->GetChildIndex(child);
+}

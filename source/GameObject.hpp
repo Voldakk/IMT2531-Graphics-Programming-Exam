@@ -13,7 +13,7 @@ class GameObject
 public:
 
 	Scene * scene{};
-	std::unique_ptr<Transform> transform;
+	std::shared_ptr<Transform> transform;
 	std::vector<std::shared_ptr<Component>> components;
 
 	GameObject();
@@ -23,6 +23,12 @@ public:
 
 	template <class T>
 	std::shared_ptr<T> AddComponent();
+
+	void SetParent(GameObject * newParent);
+	void SetParent(std::shared_ptr<GameObject>& newParent);
+
+	int GetChildIndex(Transform * child) const;
+	int GetChildIndex(GameObject * child) const;
 };
 
 template<class T>
