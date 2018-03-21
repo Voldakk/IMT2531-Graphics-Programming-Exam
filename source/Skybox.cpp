@@ -10,7 +10,7 @@
 #include "Material.hpp"
 #include "Shader.hpp"
 #include "TextureManager.hpp"
-#include "GameObject.hpp"
+#include "Transform.hpp"
 #include "Primitive.hpp"
 #include "Application.hpp"
 

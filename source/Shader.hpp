@@ -10,9 +10,6 @@ class Shader
 public:
 
 	unsigned int id;
-
-	
-
 	Shader();
 
 	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material);

@@ -5,15 +5,15 @@
 #include "Mesh.hpp"	
 #include "Shader.hpp"
 #include "Material.hpp"	
-#include "GameObject.hpp"
+#include "Component.hpp"
 
 class MeshRenderer : public Component
 {
 public:
 
 	std::shared_ptr<Mesh> mesh;
-	std::shared_ptr<Material> material;
 	std::shared_ptr<Shader> shader;
+	std::shared_ptr<Material> material;
 
 	MeshRenderer();
 

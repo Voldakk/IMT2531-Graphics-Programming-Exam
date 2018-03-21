@@ -11,7 +11,7 @@
 #include "Application.hpp"
 
 #include "Scene.hpp"
-#include "GameObject.hpp"
+#include "Transform.hpp"
 #include "Mesh.hpp"
 #include "Material.hpp"
 
