@@ -150,16 +150,6 @@ void Application::Loop()
 	glfwTerminate();
 }
 
-glm::mat4 Application::GetPerspectiveMatrix()
-{
-	return  perspectiveProjection;
-}
-
-glm::mat4 Application::GetOrthographicMatrix()
-{
-	return ortoProjection;
-}
-
 void Application::WindowResizeCallback(GLFWwindow * window, int width, int height)
 {
 	windowSize = glm::ivec2(width, height);

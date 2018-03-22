@@ -12,7 +12,7 @@ public:
 	unsigned int id = -1;
 	Shader();
 
-	virtual void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material);
+	virtual void SetUniforms(Scene * scene, Transform * transform, Material * material);
 
 	static unsigned int activeShader;
 };
@@ -34,7 +34,26 @@ public:
 
 	StandardShader();
 
-	void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
+	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
+};
+
+class StandardInstancedShader : public Shader
+{
+public:
+
+	unsigned int viewId;
+	unsigned int projectionId;
+
+	unsigned int materialShininessId;
+	unsigned int materialSpecularColorId;
+	unsigned int lightPositionId;
+	unsigned int lightIntensitiesId;
+	unsigned int lightAttenuationId;
+	unsigned int lightAmbientCoefficientId;
+	unsigned int cameraPositionId;
+
+	StandardInstancedShader();
+	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
 };
 
 class UnlitTextureShader : public Shader
@@ -47,7 +66,19 @@ public:
 
 	UnlitTextureShader();
 
-	void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
+	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
+};
+
+class UnlitTextureInstancedShader : public Shader
+{
+public:
+
+	unsigned int viewId;
+	unsigned int projectionId;
+
+	UnlitTextureInstancedShader();
+
+	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
 };
 
 class SkyboxShader : public Shader
@@ -62,5 +93,5 @@ public:
 
 	SkyboxShader();
 
-	void SetUniforms(Scene * scene, Transform * transform, Mesh * mesh, Material * material) override;
+	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
 };

@@ -67,12 +67,6 @@ void Transform::UpdateModelMatrix()
 		child->UpdateModelMatrix();
 	}
 }
-
-glm::mat4 Transform::GetModelMatrix() const
-{
-	return model;
-}
-
 void Transform::SetParent(GameObject* newParent)
 {
 	if (newParent != nullptr)

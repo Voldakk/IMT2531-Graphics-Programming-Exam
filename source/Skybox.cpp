@@ -40,7 +40,7 @@ Skybox::~Skybox()
 void Skybox::Render() const
 {
 	transform->SetPosition(Application::mainCamera->gameObject->transform->position);
-	material->shader->SetUniforms(nullptr, transform.get(), mesh.get(), material.get());
+	material->shader->SetUniforms(nullptr, transform.get(), material.get());
 
 	glDepthMask(GL_FALSE);
 	mesh->Draw();

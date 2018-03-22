@@ -10,18 +10,55 @@ void Scene::Update(const float deltaTime)
 	}
 }
 
+bool dirty = true;
+int count = 0;
+
 void Scene::Render()
 {
 	if (skybox != nullptr)
 	{
 		skybox->Render();
 	}
-
-	for (auto meshRenderers : meshRendererses)
+	
+	for (auto& materials : meshRenderers)
 	{
-		for (auto meshRenderer : meshRenderers)
+		if(materials[0][0]->material->enableInstancing)
 		{
-			meshRenderer->Render();
+			// Set material / shader
+			materials[0][0]->material->shader->SetUniforms(materials[0][0]->gameObject->scene, nullptr, materials[0][0]->material.get());
+
+			// For each mesh
+			for (auto& meshes : materials)
+			{
+				if (!meshes[0]->mesh->isStatic || (meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasIbo()) )
+				{
+					// Get all the model matrices
+					std::vector<glm::mat4> models;
+					models.reserve(meshes.size());
+
+					for (auto& meshRenderer : meshes)
+					{
+						models.push_back(meshRenderer->gameObject->transform->GetModelMatrix());
+					}
+
+					meshes[0]->mesh->SetIbo(models);
+
+					dirty = false;
+					count = models.size();
+				}
+
+				meshes[0]->mesh->DrawInstanced(count);
+			}
+		}
+		else
+		{
+			for (auto& meshes : materials)
+			{
+				for (auto& meshRenderer : meshes)
+				{
+					meshRenderer->Render();
+				}
+			}
 		}
 	}
 }
@@ -39,16 +76,31 @@ std::shared_ptr<GameObject> Scene::CreateGameObject()
 
 void Scene::RegisterMeshRenderer(MeshRenderer* meshRenderer)
 {
-	for (auto& meshRenderers : meshRendererses)
+	for (auto& materials : meshRenderers)
 	{
-		if(meshRenderers[0]->material == meshRenderer->material)
+		if(materials[0][0]->material == meshRenderer->material)
 		{
-			meshRenderers.push_back(meshRenderer);
-			return;
+			for (auto& meshes : materials)
+			{
+				if (meshes[0]->mesh == meshRenderer->mesh)
+				{
+					meshes.push_back(meshRenderer);
+					return;
+				}
+			}
+
+			std::vector<MeshRenderer*> meshes;
+			meshes.push_back(meshRenderer);
+
+			materials.push_back(meshes);
 		}
 	}
 
-	std::vector<MeshRenderer*> meshRenderers;
-	meshRenderers.push_back(meshRenderer);
-	meshRendererses.push_back(meshRenderers);
+	std::vector<MeshRenderer*> meshes;
+	meshes.push_back(meshRenderer);
+
+	std::vector<std::vector<MeshRenderer*>> materials;
+	materials.push_back(meshes);
+
+	meshRenderers.push_back(materials);
 }

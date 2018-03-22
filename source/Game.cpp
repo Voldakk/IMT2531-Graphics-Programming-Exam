@@ -27,12 +27,25 @@ Game::Game()
 
 	// Shaders
 	const auto standardShader = std::make_shared<StandardShader>();
+	const auto standardInstancedShader = std::make_shared<StandardInstancedShader>();
+
 	const auto unlitTextureShader = std::make_shared<UnlitTextureShader>();
+	const auto unlitTextureInstancedShader = std::make_shared<UnlitTextureInstancedShader>();
 
 	// Materials
 	const auto materialUv = std::make_shared<Material>();
 	materialUv->AddTexture(TextureType::Diffuse, "./assets/uv.png");
 	materialUv->shader = standardShader;
+
+	const auto materialUvInstanced = std::make_shared<Material>();
+	materialUvInstanced->AddTexture(TextureType::Diffuse, "./assets/uv.png");
+	materialUvInstanced->shader = standardInstancedShader;
+	materialUvInstanced->enableInstancing = true;
+
+	const auto materialUvInstancedUnlit = std::make_shared<Material>();
+	materialUvInstancedUnlit->AddTexture(TextureType::Diffuse, "./assets/uv.png");
+	materialUvInstancedUnlit->shader = unlitTextureInstancedShader;
+	materialUvInstancedUnlit->enableInstancing = true;
 
 	const auto materialYellow = std::make_shared<Material>();
 	materialYellow->AddTexture(TextureType::Diffuse, "./assets/uv2.png");
@@ -43,17 +56,19 @@ Game::Game()
 	materialGrid->shader = unlitTextureShader;
 
 	// Meshes
-	const auto meahCube = std::make_shared<Primitive>(PrimitiveType::Cube);
-	const auto meshSphere = std::make_shared<Primitive>(PrimitiveType::Sphere);
+	const auto meshCube = std::make_shared<Primitive>(PrimitiveType::Cube);
 	const auto meshCone = std::make_shared<Primitive>(PrimitiveType::Cone);
 	const auto meshPlane = std::make_shared<Primitive>(PrimitiveType::Plane);
 
+	const auto meshSphere_STATIC = std::make_shared<Primitive>(PrimitiveType::Sphere);
+	meshSphere_STATIC->isStatic = true;
+	
 	// Cube
 	goCube = CreateGameObject();
 	goCube->transform->SetPosition({ 0.0f, 1.0f, 0.0f });
 
 	auto mr = goCube->AddComponent<MeshRenderer>();
-	mr->Set(meahCube, materialUv);
+	mr->Set(meshCube, materialUv);
 
 	// Cone
 	goCone = CreateGameObject();
@@ -78,28 +93,32 @@ Game::Game()
 
 	mr = goGround->AddComponent<MeshRenderer>();
 	mr->Set(meshPlane, materialGrid);
-
+	
 	// Camera
 	auto goCamera = CreateGameObject();
 	Application::mainCamera = goCamera->AddComponent<Camera>();
 
+	
 	// Spheres
 	for (int x = 0; x < 100; x++)
 	{
 		for (int z = 0; z < 100; z++)
 		{
-			for (int y = 0; y < 10; y++)
+			for (int y = 0; y < 5; y++)
 			{
 				auto goSphere = CreateGameObject();
-				goSphere->transform->SetPosition({ x + 10, y, z });
+				goSphere->transform->SetPosition({ x + 11, y, z });
 				goSphere->transform->SetScale(glm::vec3(0.5f));
 
-				mr = goSphere->AddComponent<MeshRenderer>();
-				mr->Set(meshSphere, y % 2 ? materialUv : materialYellow);
+				auto mr = goSphere->AddComponent<MeshRenderer>();
+				mr->Set(meshSphere_STATIC, materialUvInstanced);
 			}
 		}
 	}
 }
+
+int frameCounter = 0;
+float timeCounter = 0;
 
 void Game::Update(const float deltaTime) 
 {
@@ -109,8 +128,17 @@ void Game::Update(const float deltaTime)
 	goCube->transform->Rotate({ 0.0f, rotation, 0.0f });
 	goCone->transform->Rotate({ 0.0f, -2 * rotation, 0.0f });
 
-	std::cout << std::fixed;
-	std::cout.precision(1);
 
-	std::cout << "FPS:" << std::setw(5) << 1.0f / deltaTime << "\n";
+	frameCounter++;
+	timeCounter += deltaTime;
+	if (frameCounter == 10)
+	{
+		std::cout << std::fixed;
+		std::cout.precision(1);
+
+		std::cout << "FPS:" << std::setw(5) << 10.0f / timeCounter << "\n";
+
+		frameCounter = 0;
+		timeCounter = 0;
+	}
 }

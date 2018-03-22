@@ -36,7 +36,10 @@ public:
 
 	void UpdateModelMatrix();
 
-	glm::mat4 GetModelMatrix() const;
+	inline glm::mat4 GetModelMatrix() const
+	{
+		return model;
+	}
 
 	void SetParent(GameObject * newParent);
 	void SetParent(std::shared_ptr<Transform>& newParent);

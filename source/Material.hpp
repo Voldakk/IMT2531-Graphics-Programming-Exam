@@ -12,6 +12,8 @@ class Material
 {
 public:
 
+	bool enableInstancing = false;
+
 	float materialShininess = 1000.0f;
 	glm::vec3 materialSpecularColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -25,4 +27,3 @@ public:
 
 	static Material * activeMaterial;
 };
-

@@ -19,11 +19,17 @@ public:
 
 	static void Loop();
 
-	/// <summary>Gets the projection matrix for the current window size</summary>
-	static glm::mat4 GetPerspectiveMatrix();
+	/// <summary>Gets the perspective projection matrix for the current window size and camera fov</summary>
+	static inline glm::mat4 GetPerspectiveMatrix()
+	{
+		return perspectiveProjection;
+	}
 
-	/// <summary>Gets the projection matrix for the current window size</summary>
-	static glm::mat4 GetOrthographicMatrix();
+	/// <summary>Gets the orthographic projection matrix for the current window size</summary>
+	static inline glm::mat4 GetOrthographicMatrix()
+	{
+		return ortoProjection;
+	}
 
 	/// <summary>Callback for when the window is resized</summary>
 	static void WindowResizeCallback(GLFWwindow* window, int width, int height);
@@ -42,5 +48,4 @@ private:
 
 	static glm::mat4 ortoProjection;
 	static glm::mat4 perspectiveProjection;
-	
 };
