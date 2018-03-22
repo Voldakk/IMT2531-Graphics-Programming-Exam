@@ -3,14 +3,18 @@
 #include <vector>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 
 #include <glm/glm.hpp>
 
 #include "Mesh.hpp"
 
 
-bool OBJLoader::Load(const char * path, std::vector<Vertex> & vertices)
+std::vector<std::shared_ptr<Mesh>> OBJLoader::Load(const char * path)
 {
+	std::vector<std::shared_ptr<Mesh>> meshes;
+	std::vector<std::shared_ptr<Mesh>> empty;
+
 	std::vector<unsigned int> finVertIdx, finUvIdx, finNormIdx;
 
 	std::vector<glm::vec3> tmpVert;
@@ -22,12 +26,15 @@ bool OBJLoader::Load(const char * path, std::vector<Vertex> & vertices)
 	if (file == nullptr)
 	{
 		printf("OBJLoader::Load - Unable to open file: %s", path);
-		return false;
+		return empty;
 	}
+
+	char symb[100];
+	char buffer[1000];
+	std::string name;
 
 	while (true)
 	{
-		char symb[130];
 		const auto res = fscanf(file, "%s", symb);
 
 		if (res == EOF) 
@@ -35,7 +42,24 @@ bool OBJLoader::Load(const char * path, std::vector<Vertex> & vertices)
 			break;
 		}
 
-		if (strcmp(symb, "v") == 0) 
+		if (strcmp(symb, "o") == 0)
+		{
+			// Save the current mesh
+			if(!tmpVert.empty())
+			{
+				meshes.push_back(CreateMesh(name, tmpVert, tmpUv, tmpNorms, finVertIdx, finUvIdx, finNormIdx));
+
+				finVertIdx.clear();
+				finUvIdx.clear();
+				finNormIdx.clear();
+			}
+
+			// Read the name of the new mesh
+			fscanf(file, "%s", &buffer);
+			name = buffer;
+			std::cout << "OBJLoader::Load - Loading object: " << name << std::endl;
+		}
+		else if (strcmp(symb, "v") == 0) 
 		{
 			glm::vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
@@ -67,7 +91,7 @@ bool OBJLoader::Load(const char * path, std::vector<Vertex> & vertices)
 			{
 				printf("Wrong format for face specification.");
 				fclose(file);
-				return false;
+				return empty;
 			}
 			finVertIdx.push_back(vertIdx[0]);
 			finVertIdx.push_back(vertIdx[1]);
@@ -85,14 +109,27 @@ bool OBJLoader::Load(const char * path, std::vector<Vertex> & vertices)
 		else 
 		{
 			//discard
-			char discardBuffer[1000];
-			fgets(discardBuffer, 1000, file);
+			fgets(buffer, 1000, file);
 		}
 	}
 
-	vertices.clear();
+	fclose(file);
 
-	for (unsigned int i = 0; i < finVertIdx.size(); i++) 
+	// Save the current mesh
+	if (!tmpVert.empty())
+		meshes.push_back(CreateMesh(name, tmpVert, tmpUv, tmpNorms, finVertIdx, finUvIdx, finNormIdx));
+
+	return meshes;
+}
+
+std::shared_ptr<Mesh> OBJLoader::CreateMesh(std::string name, 
+	std::vector<glm::vec3> tmpVert, std::vector<glm::vec2> tmpUv, std::vector<glm::vec3> tmpNorms, 
+	std::vector<unsigned int> finVertIdx, std::vector<unsigned int> finUvIdx, std::vector<unsigned int> finNormIdx)
+{
+
+	std::vector<Vertex> vertices;
+
+	for (unsigned int i = 0; i < finVertIdx.size(); i++)
 	{
 		const auto vertIdx = finVertIdx[i];
 		const auto uvIdx = finUvIdx[i];
@@ -105,7 +142,5 @@ bool OBJLoader::Load(const char * path, std::vector<Vertex> & vertices)
 		vertices.push_back({ vertex, normals, uv });
 	}
 
-	fclose(file);
-
-	return true;
+	return std::make_shared<Mesh>(vertices);
 }

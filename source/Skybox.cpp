@@ -10,7 +10,7 @@
 #include "Shader.hpp"
 #include "TextureManager.hpp"
 #include "Transform.hpp"
-#include "Primitive.hpp"
+#include "Mesh.hpp"
 #include "Application.hpp"
 
 Skybox::Skybox(const std::string& folderPath, const std::string& fileType)
@@ -26,7 +26,7 @@ Skybox::Skybox(const std::string& folderPath, const std::string& fileType)
 	material->shader = std::make_unique<SkyboxShader>();
 
 	// Mesh
-	mesh = std::make_unique<Primitive>(PrimitiveType::CubeInverted);
+	mesh = Mesh::Primitive(PrimitiveType::CubeInverted);
 
 	// Transform
 	transform = std::make_unique<Transform>(nullptr);

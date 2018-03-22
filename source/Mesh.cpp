@@ -5,11 +5,10 @@
 #include "Scene.hpp"
 #include "OBJLoader.hpp"
 
-Mesh::Mesh() = default;
-
-Mesh::Mesh(const char * path)
+Mesh::Mesh(const std::vector<Vertex>& vertices)
 {
-	LoadMesh(path);
+	this->vertices = vertices;
+	Create();
 }
 
 void Mesh::Create()
@@ -89,7 +88,7 @@ void Mesh::SetIbo(const std::vector<glm::mat4>& models)
 	glBindVertexArray(0);
 }
 
-void Mesh::DrawInstanced(int count) const
+void Mesh::DrawInstanced(const int count) const
 {
 	// Draw
 	glBindVertexArray(vao);
@@ -104,13 +103,69 @@ void Mesh::DrawInstanced(int count) const
 	glActiveTexture(GL_TEXTURE0);
 }
 
-bool Mesh::HasIbo()
+bool Mesh::HasIbo() const
 {
 	return ibo != 0;
 }
 
-void Mesh::LoadMesh(const char * path)
+std::shared_ptr<Mesh> Mesh::Load(const std::string& path)
 {
-	OBJLoader::Load(path, vertices);
-	Create();
+	auto meshes = OBJLoader::Load(path.c_str());
+	if (!meshes.empty())
+		return meshes[0];
+	else
+		return nullptr;
+}
+
+std::vector<std::shared_ptr<Mesh>> Mesh::LoadMultiple(const std::string& path)
+{
+	return  OBJLoader::Load(path.c_str());
+}
+
+std::shared_ptr<Mesh> Mesh::Primitive(const PrimitiveType type)
+{
+	std::string path = "./assets/primitives/";
+
+	switch (type)
+	{
+	case Circle:
+		path += "circle.obj";
+		break;
+	case Cone:
+		path += "cone.obj";
+		break;
+	case Cube:
+		path += "cube.obj";
+		break;
+	case CubeInverted:
+		path += "cube_inverted.obj";
+		break;
+	case Cylinder:
+		path += "cylinder.obj";
+		break;
+	case Monkey:
+		path += "monkey_low.obj";
+		break;
+	case MonkeyHigh:
+		path += "monkey_high.obj";
+		break;
+	case Icosphere:
+		path += "icosphere.obj";
+		break;
+	case Plane:
+		path += "plane.obj";
+		break;
+	case Sphere:
+		path += "sphere.obj";
+		break;
+	case Torus:
+		path += "torus.obj";
+		break;
+		// Default to cube
+	default:
+		path += "cube.obj";
+		break;
+	}
+
+	return Load(path);
 }

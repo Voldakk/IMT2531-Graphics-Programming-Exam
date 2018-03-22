@@ -10,9 +10,6 @@ void Scene::Update(const float deltaTime)
 	}
 }
 
-bool dirty = true;
-int count = 0;
-
 void Scene::Render()
 {
 	if (skybox != nullptr)
@@ -43,11 +40,10 @@ void Scene::Render()
 
 					meshes[0]->mesh->SetIbo(models);
 
-					dirty = false;
-					count = models.size();
+					meshes[0]->mesh->instanceCount = models.size();
 				}
 
-				meshes[0]->mesh->DrawInstanced(count);
+				meshes[0]->mesh->DrawInstanced(meshes[0]->mesh->instanceCount);
 			}
 		}
 		else

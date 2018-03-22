@@ -10,3 +10,5 @@ glew/
 glfw/
 glm/
 SOIL/
+
+*.blend1

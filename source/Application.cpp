@@ -28,6 +28,12 @@ GLFWwindow * Application::window;
 glm::mat4 Application::ortoProjection;
 glm::mat4 Application::perspectiveProjection;
 
+int main(void)
+{
+	Application::Init();
+
+	return 0;
+}
 
 void Application::Init()
 {

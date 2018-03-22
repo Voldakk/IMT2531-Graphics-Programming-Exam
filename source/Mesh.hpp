@@ -1,8 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <memory>
+#include <string>
 
 #include "glm/glm/glm.hpp"
+
+enum PrimitiveType { Circle, Cone, Cube, CubeInverted, Cylinder, Icosphere, Monkey, MonkeyHigh, Plane, Sphere, Torus };
 
 struct Vertex 
 {
@@ -17,16 +21,20 @@ class Mesh
 public:
 
 	bool isStatic = false;
+	int instanceCount = 0;
 
-	Mesh();
-	explicit Mesh(const char * path);
+	explicit Mesh(const std::vector<Vertex>& vertices);
 
 	void Create();
 	void Draw() const;
 	void SetIbo(const std::vector<glm::mat4>& models);
 	void DrawInstanced(int count) const;
 
-	bool HasIbo();
+	bool HasIbo() const;
+
+	static std::shared_ptr<Mesh> Load(const std::string& path);
+	static std::vector<std::shared_ptr<Mesh>> LoadMultiple(const std::string& path);
+	static std::shared_ptr<Mesh> Primitive(PrimitiveType type);
 
 protected:
 
@@ -37,6 +45,4 @@ protected:
 	unsigned int vbo{};
 	unsigned int ebo{};
 	unsigned int ibo{};
-
-	void LoadMesh(const char * path);
 };
