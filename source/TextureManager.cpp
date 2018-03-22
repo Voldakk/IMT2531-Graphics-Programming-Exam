@@ -18,7 +18,21 @@ GLuint TextureManager::GetTexture(const std::string& path)
 	// Load the image
 	int width, height, channels;
 	const auto image = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+	// Mirror the image vertically
+	const auto finalImage = new unsigned char[width*height*channels];
+	for (int i = 0; i < width; ++i) {
+		for (int j = 0; j < height; ++j) {
+			for (int k = 0; k < channels; ++k) {
+				finalImage[(i + j * width) * channels + k] = image[(i + (height - 1 - j) * width) * channels + k];
+			}
+		}
+	}
+
+	// Save the texture
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, finalImage);
+
+	delete[](finalImage);
 	SOIL_free_image_data(image);
 
 	// Texture parameters
