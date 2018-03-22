@@ -16,5 +16,7 @@ public:
 
 	explicit MeshRenderer(GameObject * gameobject);
 
-	virtual void Render() override;
+	void Set(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
+
+	void Render();
 };

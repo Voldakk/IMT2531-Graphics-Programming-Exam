@@ -17,9 +17,12 @@ void Scene::Render()
 		skybox->Render();
 	}
 
-	for (auto& gameObject : gameObjects)
+	for (auto meshRenderers : meshRendererses)
 	{
-		gameObject->Render();
+		for (auto meshRenderer : meshRenderers)
+		{
+			meshRenderer->Render();
+		}
 	}
 }
 
@@ -32,4 +35,20 @@ std::shared_ptr<GameObject> Scene::CreateGameObject()
 	gameObjects.push_back(gameObject);
 
 	return gameObject;
+}
+
+void Scene::RegisterMeshRenderer(MeshRenderer* meshRenderer)
+{
+	for (auto& meshRenderers : meshRendererses)
+	{
+		if(meshRenderers[0]->material == meshRenderer->material)
+		{
+			meshRenderers.push_back(meshRenderer);
+			return;
+		}
+	}
+
+	std::vector<MeshRenderer*> meshRenderers;
+	meshRenderers.push_back(meshRenderer);
+	meshRendererses.push_back(meshRenderers);
 }

@@ -9,5 +9,4 @@ public:
 
 	Component(GameObject * gameObject);
 	virtual void Update(float deltaTime);
-	virtual void Render();
 };

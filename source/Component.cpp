@@ -9,8 +9,3 @@ void Component::Update(float deltaTime)
 {
 
 }
-
-void Component::Render()
-{
-
-}

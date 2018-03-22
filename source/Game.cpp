@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
 #include <memory>
+#include <iostream>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -11,6 +12,7 @@
 #include "MeshRenderer.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
+#include <iomanip>
 
 std::shared_ptr<GameObject> goCube;
 std::shared_ptr<GameObject> goCone;
@@ -34,7 +36,7 @@ Game::Game()
 
 	const auto materialYellow = std::make_shared<Material>();
 	materialYellow->AddTexture(TextureType::Diffuse, "./assets/uv2.png");
-	materialYellow->shader = standardShader;
+	materialYellow->shader = unlitTextureShader;
 
 	const auto materialGrid = std::make_shared<Material>();
 	materialGrid->AddTexture(TextureType::Diffuse, "./assets/grid.png");
@@ -51,8 +53,7 @@ Game::Game()
 	goCube->transform->SetPosition({ 0.0f, 1.0f, 0.0f });
 
 	auto mr = goCube->AddComponent<MeshRenderer>();
-	mr->material = materialUv;
-	mr->mesh = meahCube;
+	mr->Set(meahCube, materialUv);
 
 	// Cone
 	goCone = CreateGameObject();
@@ -60,8 +61,7 @@ Game::Game()
 	goCone->SetParent(goCube);
 
 	mr = goCone->AddComponent<MeshRenderer>();
-	mr->material = materialUv;
-	mr->mesh = meshCone;
+	mr->Set(meshCone, materialUv);
 
 	// Cone
 	auto goCone2 = CreateGameObject();
@@ -70,20 +70,35 @@ Game::Game()
 	goCone2->SetParent(goCone);
 
 	mr = goCone2->AddComponent<MeshRenderer>();
-	mr->material = materialUv;
-	mr->mesh = meshCone;
+	mr->Set(meshCone, materialUv);
 
 	// Ground
 	auto goGround = CreateGameObject();
 	goGround->transform->SetScale({ 10.0f, 1.0f, 10.0f });
 
 	mr = goGround->AddComponent<MeshRenderer>();
-	mr->material = materialGrid;
-	mr->mesh = meshPlane;
+	mr->Set(meshPlane, materialGrid);
 
 	// Camera
 	auto goCamera = CreateGameObject();
 	Application::mainCamera = goCamera->AddComponent<Camera>();
+
+	// Spheres
+	for (int x = 0; x < 100; x++)
+	{
+		for (int z = 0; z < 100; z++)
+		{
+			for (int y = 0; y < 10; y++)
+			{
+				auto goSphere = CreateGameObject();
+				goSphere->transform->SetPosition({ x + 10, y, z });
+				goSphere->transform->SetScale(glm::vec3(0.5f));
+
+				mr = goSphere->AddComponent<MeshRenderer>();
+				mr->Set(meshSphere, y % 2 ? materialUv : materialYellow);
+			}
+		}
+	}
 }
 
 void Game::Update(const float deltaTime) 
@@ -93,4 +108,9 @@ void Game::Update(const float deltaTime)
 	const auto rotation = 1.0f * deltaTime;
 	goCube->transform->Rotate({ 0.0f, rotation, 0.0f });
 	goCone->transform->Rotate({ 0.0f, -2 * rotation, 0.0f });
+
+	std::cout << std::fixed;
+	std::cout.precision(1);
+
+	std::cout << "FPS:" << std::setw(5) << 1.0f / deltaTime << "\n";
 }

@@ -7,6 +7,7 @@
 
 #include "GameObject.hpp"
 #include "Skybox.hpp"
+#include "MeshRenderer.hpp"
 
 // A scene that can be run by the SceneManager
 class Scene
@@ -33,4 +34,10 @@ public:
 	std::shared_ptr<GameObject> CreateGameObject();
 
 	std::unique_ptr<Skybox> skybox;
+
+	void RegisterMeshRenderer(MeshRenderer * meshRenderer);
+
+private:
+
+	std::vector<std::vector<MeshRenderer*>> meshRendererses;
 };

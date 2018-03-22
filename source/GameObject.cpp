@@ -15,14 +15,6 @@ void GameObject::Update(const float deltaTime)
 	}
 }
 
-void GameObject::Render()
-{
-	for (auto& component : components)
-	{
-		component->Render();
-	}
-}
-
 void GameObject::SetParent(GameObject* newParent)
 {
 	transform->SetParent(newParent->transform);

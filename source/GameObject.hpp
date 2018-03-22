@@ -19,7 +19,6 @@ public:
 	GameObject();
 
 	void Update(float deltaTime);
-	void Render();
 
 	template <class T>
 	std::shared_ptr<T> AddComponent();
