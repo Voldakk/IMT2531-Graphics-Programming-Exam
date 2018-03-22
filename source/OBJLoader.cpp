@@ -17,10 +17,9 @@ bool OBJLoader::Load(const char * path, std::vector<Vertex> & vertices)
 	std::vector<glm::vec2> tmpUv;
 	std::vector<glm::vec3> tmpNorms;
 
-	FILE *file;
-	errno_t err;
+	FILE *file = fopen(path, "r");
 
-	if ((err = fopen_s(&file, path, "r")) != 0) 
+	if (file == nullptr)
 	{
 		printf("OBJLoader::Load - Unable to open file: %s", path);
 		return false;

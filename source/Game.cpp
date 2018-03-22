@@ -104,7 +104,7 @@ Game::Game()
 	{
 		for (int z = 0; z < 100; z++)
 		{
-			for (int y = 0; y < 5; y++)
+			for (int y = 0; y < 1; y++)
 			{
 				auto goSphere = CreateGameObject();
 				goSphere->transform->SetPosition({ x + 11, y, z });
