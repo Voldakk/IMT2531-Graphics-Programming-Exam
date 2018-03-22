@@ -13,6 +13,7 @@
 #include "Material.hpp"
 
 std::shared_ptr<GameObject> cube;
+std::shared_ptr<GameObject> cone;
 
 Game::Game()
 {
@@ -21,7 +22,6 @@ Game::Game()
 
 	// Make the light fit the skybox
 	light.position = { 0.0f, 100.0f, -1000.0f };
-
 
 	// Shaders
 	const auto shader = std::make_shared<StandardShader>();
@@ -33,70 +33,58 @@ Game::Game()
 
 	const auto material2 = std::make_shared<Material>();
 	material2->AddTexture(TextureType::Diffuse, "./assets/uv2.png");
+
+	const auto materialGrid = std::make_shared<Material>();
+	materialGrid->AddTexture(TextureType::Diffuse, "./assets/grid.png");
 	
 	// Meshes
 	const auto cubeMesh = std::make_shared<Primitive>(PrimitiveType::Cube);
 	const auto sphereMesh = std::make_shared<Primitive>(PrimitiveType::Sphere);
-	const auto monkeyMesh = std::make_shared<Primitive>(PrimitiveType::Monkey);
+	const auto coneMesh = std::make_shared<Primitive>(PrimitiveType::Cone);
 	const auto planeMesh = std::make_shared<Primitive>(PrimitiveType::Plane);
 
 	// Cube
 	cube = CreateGameObject();
+	cube->transform->SetPosition({ 0.0f, 1.0f, 0.0f });
 
 	auto mr = cube->AddComponent<MeshRenderer>();
 	mr->shader = shader;
 	mr->material = material;
 	mr->mesh = cubeMesh;
 
-	// Monkey
-	auto monkey = CreateGameObject();
-	monkey->transform->SetPosition({ 5.0f, 0.0f, 0.0f });
-	monkey->SetParent(cube);
+	// Cone
+	cone = CreateGameObject();
+	cone->transform->SetPosition({ 0.0f, 0.0f, 5.0f });
+	cone->SetParent(cube);
 
-	mr = monkey->AddComponent<MeshRenderer>();
+	mr = cone->AddComponent<MeshRenderer>();
 	mr->shader = shader;
 	mr->material = material;
-	mr->mesh = monkeyMesh;
+	mr->mesh = coneMesh;
+
+	// Cone
+	auto cone2 = CreateGameObject();
+	cone2->transform->SetPosition({ 0.0f, 0.0f, 2.0f });
+	cone2->transform->SetScale(glm::vec3(0.2f));
+	cone2->SetParent(cone);
+
+	mr = cone2->AddComponent<MeshRenderer>();
+	mr->shader = shader;
+	mr->material = material;
+	mr->mesh = coneMesh;
 
 	// Ground
 	auto ground = CreateGameObject();
-	ground->transform->SetPosition({ 0.0f, -1.0f, 0.0f });
 	ground->transform->SetScale({ 10.0f, 1.0f, 10.0f });
 
 	mr = ground->AddComponent<MeshRenderer>();
-	mr->shader = shader;
-	mr->material = material;
+	mr->shader = unlit;
+	mr->material = materialGrid;
 	mr->mesh = planeMesh;
 
+	// Camera
 	auto camera = CreateGameObject();
 	Application::mainCamera = camera->AddComponent<Camera>();
-
-	/*
-	// Spheres
-	for (size_t x = 0; x < 100; x++)
-	{
-		for (size_t z = 0; z < 100; z++)
-		{
-			std::shared_ptr<GameObject> sphere = CreateGameObject();
-			sphere->transform->SetPosition({ x * 3.0f, 0.0f, z * 3.0f });
-
-			mr = sphere->AddComponent<MeshRenderer>();
-
-			mr->mesh = sphereMesh;
-
-			if (x % 2 == 0)
-			{
-				mr->shader = shader;
-				mr->material = material;
-			}
-			else
-			{
-				mr->shader = unlit;
-				mr->material = material2;
-			}
-		}
-	}
-	*/
 }
 
 void Game::Update(const float deltaTime) 
@@ -105,4 +93,5 @@ void Game::Update(const float deltaTime)
 
 	const auto rotation = 1.0f * deltaTime;
 	cube->transform->Rotate({ 0.0f, rotation, 0.0f });
+	cone->transform->Rotate({ 0.0f, -2 * rotation, 0.0f });
 }

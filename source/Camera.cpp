@@ -19,35 +19,35 @@ Camera::Camera(GameObject * gameObject) : Component(gameObject)
 void Camera::Update(const float deltaTime)
 {
 	// Movement
-	auto position = gameObject->transform->position;
+	auto position = gameObject->transform->localPosition;
 
-	if (Input::Key(GLFW_KEY_W))
+	if (Input::Key(GLFW_KEY_W)) // Front
 		position += front * movementSpeed * deltaTime;
-	if (Input::Key(GLFW_KEY_S))
+	if (Input::Key(GLFW_KEY_S))	// Back
 		position -= front * movementSpeed * deltaTime;
 
-	if (Input::Key(GLFW_KEY_D))
+	if (Input::Key(GLFW_KEY_D))	// Right
 		position += right * movementSpeed * deltaTime;
-	if (Input::Key(GLFW_KEY_A))
+	if (Input::Key(GLFW_KEY_A))	// Left
 		position -= right * movementSpeed * deltaTime;
 
-	if (Input::Key(GLFW_KEY_SPACE))
+	if (Input::Key(GLFW_KEY_SPACE)) // Up
 		position += up * movementSpeed * deltaTime;
-	if (Input::Key(GLFW_KEY_LEFT_SHIFT))
+	if (Input::Key(GLFW_KEY_LEFT_SHIFT)) // Down
 		position -= up * movementSpeed * deltaTime;
 
 	gameObject->transform->SetPosition(position);
 
 	// Look
-	auto rotation = gameObject->transform->rotation;
+	auto rotation = gameObject->transform->localRotation;
 
 	const auto mouseMovement = Input::MouseMovement();
-	rotation += glm::vec3( -mouseMovement.y , mouseMovement.x, 0) * mouseSensitivity;
+	rotation += glm::vec3( -mouseMovement.y , mouseMovement.x, 0) * mouseSensitivity * deltaTime;
 
-	if (rotation.x < -89.0f)
-		rotation.x = -89.0f;
-	else if (rotation.x > 89.0f)
-		rotation.x = 89.0f;
+	if (rotation.x < glm::radians(-89.0f))
+		rotation.x = glm::radians(-89.0f);
+	else if (rotation.x > glm::radians(89.0f))
+		rotation.x = glm::radians(89.0f);
 
 	gameObject->transform->SetRotation(rotation);
 
@@ -67,9 +67,9 @@ void Camera::UpdateDirections()
 	const auto pitch = gameObject->transform->rotation.x;
 	const auto yaw = gameObject->transform->rotation.y;
 
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front.x = cos(yaw) * cos(pitch);
+	front.y = sin(pitch);
+	front.z = sin(yaw) * cos(pitch);
 	front = glm::normalize(front);
 
 	right = glm::normalize(glm::cross(front, { 0.0f, 1.0f, 0.0f })); 

@@ -13,48 +13,54 @@ Transform::Transform(GameObject * gameObject) : Component(gameObject)
 
 void Transform::Translate(const glm::vec3 offset)
 {
-	position += offset;
+	localPosition += offset;
 	UpdateModelMatrix();
 }
 
 void Transform::SetPosition(const glm::vec3 newPosition)
 {
-	position = newPosition;
+	localPosition = newPosition;
 	UpdateModelMatrix();
 }
 
 void Transform::Rotate(const glm::vec3 offset)
 {
-	rotation += offset;
+	localRotation += offset;
 	UpdateModelMatrix();
 }
 
 void Transform::SetRotation(const glm::vec3 newRotation)
 {
-	rotation = newRotation;
+	localRotation = newRotation;
 	UpdateModelMatrix();
 }
 
 void Transform::Scale(const glm::vec3 offset)
 {
-	scale += offset;
+	localScale += offset;
 	UpdateModelMatrix();
 }
 
 void Transform::SetScale(const glm::vec3 newScale)
 {
-	scale = newScale;
+	localScale = newScale;
 	UpdateModelMatrix();
 }
 
 void Transform::UpdateModelMatrix()
 {
+	rotation = parent == nullptr ? localRotation : parent->rotation + localRotation;
+	scale = parent == nullptr ? localScale : parent->scale * localScale;
+	position = parent == nullptr ? localPosition : glm::vec3(parent->GetModelMatrix() * glm::vec4(localPosition, 1.0f));
+
 	model = parent == nullptr ?  glm::mat4() : parent->GetModelMatrix();
-	model = glm::translate(model, position);
-	model = glm::scale(model, scale);
-	model = glm::rotate(model, rotation.y, glm::vec3(0, 1, 0));
-	model = glm::rotate(model, rotation.x, glm::vec3(1, 0, 0));
-	model = glm::rotate(model, rotation.z, glm::vec3(0, 0, 1));
+	model = glm::translate(model, localPosition);
+	
+	model = glm::rotate(model, localRotation.y, glm::vec3(0, 1, 0));
+	model = glm::rotate(model, localRotation.x, glm::vec3(1, 0, 0));
+	model = glm::rotate(model, localRotation.z, glm::vec3(0, 0, 1));
+
+	model = glm::scale(model, localScale);
 
 	for (auto child : children)
 	{
