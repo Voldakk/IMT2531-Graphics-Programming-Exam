@@ -19,7 +19,7 @@ public:
 	std::unique_ptr<Material> material;
 	std::unique_ptr<Transform> transform;
 
-	Skybox(const std::string& path, const std::string& fileType);
+	Skybox(const std::string& folderPath, const std::string& fileType);
 	~Skybox();
 
 	void Render() const;

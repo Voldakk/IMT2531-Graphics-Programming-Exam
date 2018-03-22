@@ -13,6 +13,8 @@ public:
 	/// <returns>A refference to the GL texture</returns>  
 	static GLuint GetTexture(const std::string& path);
 
+	static GLuint GetTextureCubemap(const std::string& folderPath, const std::string& fileType);
+
 private:
 	static std::map<std::string, GLuint> textures;
 };
