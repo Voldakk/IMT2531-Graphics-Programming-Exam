@@ -68,6 +68,9 @@ Game::Game()
 	mr->material = material;
 	mr->mesh = planeMesh;
 
+	auto camera = CreateGameObject();
+	Application::mainCamera = camera->AddComponent<Camera>();
+
 	/*
 	// Spheres
 	for (size_t x = 0; x < 100; x++)
@@ -96,10 +99,9 @@ Game::Game()
 	*/
 }
 
-void Game::Update(const float deltaTime)
+void Game::Update(const float deltaTime) 
 {
-	Application::camera.Update(deltaTime);
-
+	Scene::Update(deltaTime);
 
 	const auto rotation = 1.0f * deltaTime;
 	cube->transform->Rotate({ 0.0f, rotation, 0.0f });

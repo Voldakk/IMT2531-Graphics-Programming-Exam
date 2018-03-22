@@ -14,26 +14,36 @@
 #include "SceneManager.hpp"
 #include "Game.hpp"
 #include "Camera.hpp"
+#include "GameObject.hpp"
 #include "MainMenu.hpp"
+
+std::shared_ptr<Camera> Application::mainCamera;
+std::shared_ptr<Camera> Application::defaultCamera;
+
+GameObject Application::defaultCameraObject;
 
 glm::ivec2 Application::windowSize;
 GLFWwindow * Application::window;
-Camera Application::camera;
 
 glm::mat4 Application::ortoProjection;
 glm::mat4 Application::perspectiveProjection;
+
 
 void Application::Init()
 {
 	if (!CreateWindow())
 		return;
 
+	// Camera
+	defaultCamera = defaultCameraObject.AddComponent<Camera>();
+	mainCamera = defaultCamera;
+
 	glfwSetWindowSizeCallback(window, WindowResizeCallback);
 
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
 
-	WindowResizeCallback(window, width, height);
+	WindowResizeCallback(window, width, height);	
 
 	// Input
 	Input::SetWindow(window);
@@ -162,7 +172,8 @@ void Application::WindowResizeCallback(GLFWwindow * window, int width, int heigh
 	else
 		ortoProjection = glm::ortho(-1.0f, 1.0f, -(float)windowSize.y / (float)windowSize.x, (float)windowSize.y / (float)windowSize.x, -1.0f, 1.0f);
 	
-	perspectiveProjection = glm::perspective(camera.fov, (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
+	if(mainCamera != nullptr)
+		perspectiveProjection = glm::perspective(mainCamera->fov, (float)windowSize.x / (float)windowSize.y, 0.1f, 100.0f);
 }
 
 void Application::Exit()

@@ -2,10 +2,13 @@
 
 #include "glm/glm/glm.hpp"
 
-class Camera
+#include "Component.hpp"
+
+class GameObject;
+
+class Camera : public Component
 {
 public:
-	glm::vec3 position;
 	glm::vec3 front;
 	glm::vec3 right;
 	glm::vec3 up;
@@ -13,16 +16,13 @@ public:
 	float mouseSensitivity = 0.1f;
 	float movementSpeed = 5.0f;
 
-	float pitch;
-	float yaw;
-
 	float fov;
 	float near;
 	float far;
 
-	Camera();
+	explicit Camera(GameObject * gameObject);
 
-	void Update(float deltaTime);
+	void Update(float deltaTime) override;
 
 	glm::mat4 GetViewMatrix() const;
 

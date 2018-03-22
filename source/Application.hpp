@@ -1,10 +1,13 @@
 #pragma once
 
+#include <memory>
+
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm/glm.hpp"
 
 #include "Camera.hpp"
+#include "GameObject.hpp"
 
 class Application
 {
@@ -28,11 +31,16 @@ public:
 	/// <summary>Exits the application</summary>
 	static void Exit();
 
-	static Camera camera;
+	static std::shared_ptr<Camera> mainCamera;
+	static std::shared_ptr<Camera> defaultCamera;
 
 private:
+	static GameObject defaultCameraObject;
+
 	static glm::ivec2 windowSize;
 	static GLFWwindow * window;
+
 	static glm::mat4 ortoProjection;
 	static glm::mat4 perspectiveProjection;
+	
 };

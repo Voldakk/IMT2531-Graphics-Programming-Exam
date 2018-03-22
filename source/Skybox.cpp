@@ -71,7 +71,7 @@ Skybox::~Skybox()
 
 void Skybox::Render() const
 {
-	transform->SetPosition(Application::camera.position);
+	transform->SetPosition(Application::mainCamera->gameObject->transform->position);
 
 	glDepthMask(GL_FALSE);
 	shader->SetUniforms(nullptr, transform.get(), mesh.get(), material.get());

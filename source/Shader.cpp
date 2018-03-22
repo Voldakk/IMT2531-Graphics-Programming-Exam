@@ -107,11 +107,11 @@ void StandardShader::SetUniforms(Scene * scene, Transform * transform, Mesh * me
 	}
 
 	// Camera
-	glUniform3fv(cameraPositionId, 1, value_ptr(Application::camera.position));
+	glUniform3fv(cameraPositionId, 1, value_ptr(Application::mainCamera->gameObject->transform->position));
 
 	// Matrices
 	glUniformMatrix4fv(modelId, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
-	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
+	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::mainCamera->GetViewMatrix()));
 	glUniformMatrix4fv(projectionId, 1, GL_FALSE, glm::value_ptr(Application::GetPerspectiveMatrix()));
 }
 
@@ -134,7 +134,7 @@ void UnlitTextureShader::SetUniforms(Scene * scene, Transform * transform, Mesh 
 
 	// Matrices
 	glUniformMatrix4fv(modelId, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
-	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
+	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::mainCamera->GetViewMatrix()));
 	glUniformMatrix4fv(projectionId, 1, GL_FALSE, glm::value_ptr(Application::GetPerspectiveMatrix()));
 
 	// Material
@@ -192,7 +192,7 @@ void SkyboxShader::SetUniforms(Scene * scene, Transform * transform, Mesh * mesh
 
 	// Matrices
 	glUniformMatrix4fv(modelId, 1, GL_FALSE, glm::value_ptr(transform->GetModelMatrix()));
-	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::camera.GetViewMatrix()));
+	glUniformMatrix4fv(viewId, 1, GL_FALSE, glm::value_ptr(Application::mainCamera->GetViewMatrix()));
 	glUniformMatrix4fv(projectionId, 1, GL_FALSE, glm::value_ptr(Application::GetPerspectiveMatrix()));
 
 	// Material
