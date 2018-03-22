@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "GL/glew.h"
-#include "SOIL.h"
 
 #include "Mesh.hpp"
 #include "Material.hpp"
@@ -23,11 +22,11 @@ Skybox::Skybox(const std::string& folderPath, const std::string& fileType)
 	material = std::make_unique<Material>();
 	material->AddTexture(TextureType::Diffuse, texture);
 
+	// Shader
+	material->shader = std::make_unique<SkyboxShader>();
+
 	// Mesh
 	mesh = std::make_unique<Primitive>(PrimitiveType::CubeInverted);
-
-	// Shader
-	shader = std::make_unique<SkyboxShader>();
 
 	// Transform
 	transform = std::make_unique<Transform>(nullptr);
@@ -41,9 +40,9 @@ Skybox::~Skybox()
 void Skybox::Render() const
 {
 	transform->SetPosition(Application::mainCamera->gameObject->transform->position);
+	material->shader->SetUniforms(nullptr, transform.get(), mesh.get(), material.get());
 
 	glDepthMask(GL_FALSE);
-	shader->SetUniforms(nullptr, transform.get(), mesh.get(), material.get());
 	mesh->Draw();
 	glDepthMask(GL_TRUE);
 }

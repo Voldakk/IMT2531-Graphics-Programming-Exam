@@ -15,7 +15,6 @@ public:
 	unsigned int texture = -1;
 
 	std::unique_ptr<Mesh> mesh;
-	std::unique_ptr<Shader> shader;
 	std::unique_ptr<Material> material;
 	std::unique_ptr<Transform> transform;
 

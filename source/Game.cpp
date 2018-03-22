@@ -12,8 +12,8 @@
 #include "Shader.hpp"
 #include "Material.hpp"
 
-std::shared_ptr<GameObject> cube;
-std::shared_ptr<GameObject> cone;
+std::shared_ptr<GameObject> goCube;
+std::shared_ptr<GameObject> goCone;
 
 Game::Game()
 {
@@ -24,67 +24,66 @@ Game::Game()
 	light.position = { 0.0f, 100.0f, -1000.0f };
 
 	// Shaders
-	const auto shader = std::make_shared<StandardShader>();
-	const auto unlit = std::make_shared<UnlitTextureShader>();
+	const auto standardShader = std::make_shared<StandardShader>();
+	const auto unlitTextureShader = std::make_shared<UnlitTextureShader>();
 
 	// Materials
-	const auto material = std::make_shared<Material>();
-	material->AddTexture(TextureType::Diffuse, "./assets/uv.png");
+	const auto materialUv = std::make_shared<Material>();
+	materialUv->AddTexture(TextureType::Diffuse, "./assets/uv.png");
+	materialUv->shader = standardShader;
 
-	const auto material2 = std::make_shared<Material>();
-	material2->AddTexture(TextureType::Diffuse, "./assets/uv2.png");
+	const auto materialYellow = std::make_shared<Material>();
+	materialYellow->AddTexture(TextureType::Diffuse, "./assets/uv2.png");
+	materialYellow->shader = standardShader;
 
 	const auto materialGrid = std::make_shared<Material>();
 	materialGrid->AddTexture(TextureType::Diffuse, "./assets/grid.png");
-	
+	materialGrid->shader = unlitTextureShader;
+
 	// Meshes
-	const auto cubeMesh = std::make_shared<Primitive>(PrimitiveType::Cube);
-	const auto sphereMesh = std::make_shared<Primitive>(PrimitiveType::Sphere);
-	const auto coneMesh = std::make_shared<Primitive>(PrimitiveType::Cone);
-	const auto planeMesh = std::make_shared<Primitive>(PrimitiveType::Plane);
+	const auto meahCube = std::make_shared<Primitive>(PrimitiveType::Cube);
+	const auto meshSphere = std::make_shared<Primitive>(PrimitiveType::Sphere);
+	const auto meshCone = std::make_shared<Primitive>(PrimitiveType::Cone);
+	const auto meshPlane = std::make_shared<Primitive>(PrimitiveType::Plane);
 
 	// Cube
-	cube = CreateGameObject();
-	cube->transform->SetPosition({ 0.0f, 1.0f, 0.0f });
+	goCube = CreateGameObject();
+	goCube->transform->SetPosition({ 0.0f, 1.0f, 0.0f });
 
-	auto mr = cube->AddComponent<MeshRenderer>();
-	mr->shader = shader;
-	mr->material = material;
-	mr->mesh = cubeMesh;
-
-	// Cone
-	cone = CreateGameObject();
-	cone->transform->SetPosition({ 0.0f, 0.0f, 5.0f });
-	cone->SetParent(cube);
-
-	mr = cone->AddComponent<MeshRenderer>();
-	mr->shader = shader;
-	mr->material = material;
-	mr->mesh = coneMesh;
+	auto mr = goCube->AddComponent<MeshRenderer>();
+	mr->material = materialUv;
+	mr->mesh = meahCube;
 
 	// Cone
-	auto cone2 = CreateGameObject();
-	cone2->transform->SetPosition({ 0.0f, 0.0f, 2.0f });
-	cone2->transform->SetScale(glm::vec3(0.2f));
-	cone2->SetParent(cone);
+	goCone = CreateGameObject();
+	goCone->transform->SetPosition({ 0.0f, 0.0f, 5.0f });
+	goCone->SetParent(goCube);
 
-	mr = cone2->AddComponent<MeshRenderer>();
-	mr->shader = shader;
-	mr->material = material;
-	mr->mesh = coneMesh;
+	mr = goCone->AddComponent<MeshRenderer>();
+	mr->material = materialUv;
+	mr->mesh = meshCone;
+
+	// Cone
+	auto goCone2 = CreateGameObject();
+	goCone2->transform->SetPosition({ 0.0f, 0.0f, 2.0f });
+	goCone2->transform->SetScale(glm::vec3(0.2f));
+	goCone2->SetParent(goCone);
+
+	mr = goCone2->AddComponent<MeshRenderer>();
+	mr->material = materialUv;
+	mr->mesh = meshCone;
 
 	// Ground
-	auto ground = CreateGameObject();
-	ground->transform->SetScale({ 10.0f, 1.0f, 10.0f });
+	auto goGround = CreateGameObject();
+	goGround->transform->SetScale({ 10.0f, 1.0f, 10.0f });
 
-	mr = ground->AddComponent<MeshRenderer>();
-	mr->shader = unlit;
+	mr = goGround->AddComponent<MeshRenderer>();
 	mr->material = materialGrid;
-	mr->mesh = planeMesh;
+	mr->mesh = meshPlane;
 
 	// Camera
-	auto camera = CreateGameObject();
-	Application::mainCamera = camera->AddComponent<Camera>();
+	auto goCamera = CreateGameObject();
+	Application::mainCamera = goCamera->AddComponent<Camera>();
 }
 
 void Game::Update(const float deltaTime) 
@@ -92,6 +91,6 @@ void Game::Update(const float deltaTime)
 	Scene::Update(deltaTime);
 
 	const auto rotation = 1.0f * deltaTime;
-	cube->transform->Rotate({ 0.0f, rotation, 0.0f });
-	cone->transform->Rotate({ 0.0f, -2 * rotation, 0.0f });
+	goCube->transform->Rotate({ 0.0f, rotation, 0.0f });
+	goCone->transform->Rotate({ 0.0f, -2 * rotation, 0.0f });
 }

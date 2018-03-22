@@ -9,6 +9,6 @@ MeshRenderer::MeshRenderer(GameObject * gameobject) : Component(gameobject)
 
 void MeshRenderer::Render()
 {
-	shader->SetUniforms(gameObject->scene, gameObject->transform.get(), mesh.get(), material.get());
+	material->shader->SetUniforms(gameObject->scene, gameObject->transform.get(), mesh.get(), material.get());
 	mesh->Draw();
 }
