@@ -122,7 +122,7 @@ std::vector<std::shared_ptr<Mesh>> OBJLoader::Load(const char * path)
 	return meshes;
 }
 
-std::shared_ptr<Mesh> OBJLoader::CreateMesh(std::string name, 
+std::shared_ptr<Mesh> OBJLoader::CreateMesh(const std::string& name, 
 	std::vector<glm::vec3> tmpVert, std::vector<glm::vec2> tmpUv, std::vector<glm::vec3> tmpNorms, 
 	std::vector<unsigned int> finVertIdx, std::vector<unsigned int> finUvIdx, std::vector<unsigned int> finNormIdx)
 {
@@ -142,5 +142,5 @@ std::shared_ptr<Mesh> OBJLoader::CreateMesh(std::string name,
 		vertices.push_back({ vertex, normals, uv });
 	}
 
-	return std::make_shared<Mesh>(vertices);
+	return std::make_shared<Mesh>(vertices, name);
 }

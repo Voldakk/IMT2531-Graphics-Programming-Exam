@@ -1,7 +1,8 @@
 #include "MainMenu.hpp"
 
-#include "Application.hpp"
-#include "SceneManager.hpp"
+#include "EVA-Engine/SceneManager.hpp"
+#include "EVA-Engine/Application.hpp"
+
 #include "Game.hpp"
 
 // Constructor

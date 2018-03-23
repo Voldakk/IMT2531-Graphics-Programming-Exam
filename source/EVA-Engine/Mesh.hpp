@@ -20,10 +20,13 @@ class Mesh
 
 public:
 
+	std::string name;
+
 	bool isStatic = false;
 	int instanceCount = 0;
 
 	explicit Mesh(const std::vector<Vertex>& vertices);
+	explicit Mesh(const std::vector<Vertex>& vertices, const std::string& name);
 
 	void Create();
 	void Draw() const;

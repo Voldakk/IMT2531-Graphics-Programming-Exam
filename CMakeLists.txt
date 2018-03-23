@@ -41,15 +41,15 @@ if(WINDOWS)
 endif(WINDOWS)
 
 file(GLOB SOURCES
-    source/*
+    source/* source/EVA-Engine/*
 )
 
-add_executable(Application ${SOURCES})
+add_executable(main ${SOURCES})
 
 if(WINDOWS)
-	target_link_libraries(Application glfw glew32 SOIL ${GLFW_LIBRARIES}  ${SOIL_LIBRARIES}) 
+	target_link_libraries(main glfw glew32 SOIL ${GLFW_LIBRARIES}  ${SOIL_LIBRARIES}) 
 else()
-	target_link_libraries(Application glfw SOIL ${GLEW_LIBRARY} ${GLFW_LIBRARIES}  ${SOIL_LIBRARIES}) 
+	target_link_libraries(main glfw SOIL ${GLEW_LIBRARY} ${GLFW_LIBRARIES}  ${SOIL_LIBRARIES}) 
 endif(WINDOWS)
 
 include_directories(${PROJECT_SOURCE_DIR}/include/)

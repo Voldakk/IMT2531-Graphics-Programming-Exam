@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Menu.hpp"
-#include "Sprite.hpp"
+#include "EVA-Engine/Menu.hpp"
+#include "EVA-Engine/Sprite.hpp"
 
 // The game's main menu
 class MainMenu : public Menu

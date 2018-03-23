@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene.hpp"
+#include "EVA-Engine/Scene.hpp"
 
 class Game : public Scene
 {

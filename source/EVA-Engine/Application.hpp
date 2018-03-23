@@ -13,11 +13,17 @@ class Application
 {
 public:
 
-	static void Init();
+	static std::shared_ptr<Camera> mainCamera;
+	static std::shared_ptr<Camera> defaultCamera;
 
-	static bool CreateWindow();
+	/// <summary>Initializes the application</summary>
+	static void Init(const std::string& title);
 
-	static void Loop();
+	/// <summary>Starts the game loop</summary>
+	static void Run();
+
+	/// <summary>Exits the application</summary>
+	static void Exit();
 
 	/// <summary>Gets the perspective projection matrix for the current window size and camera fov</summary>
 	static inline glm::mat4 GetPerspectiveMatrix()
@@ -31,16 +37,8 @@ public:
 		return ortoProjection;
 	}
 
-	/// <summary>Callback for when the window is resized</summary>
-	static void WindowResizeCallback(GLFWwindow* window, int width, int height);
-
-	/// <summary>Exits the application</summary>
-	static void Exit();
-
-	static std::shared_ptr<Camera> mainCamera;
-	static std::shared_ptr<Camera> defaultCamera;
-
 private:
+
 	static GameObject defaultCameraObject;
 
 	static glm::ivec2 windowSize;
@@ -48,4 +46,9 @@ private:
 
 	static glm::mat4 ortoProjection;
 	static glm::mat4 perspectiveProjection;
+
+	static bool CreateWindow(const std::string& title);
+
+	/// <summary>Callback for when the window is resized</summary>
+	static void WindowResizeCallback(GLFWwindow* window, int width, int height);
 };

@@ -12,10 +12,8 @@
 #include "Sprite.hpp"
 #include "GlobalVars.hpp"
 #include "SceneManager.hpp"
-#include "Game.hpp"
 #include "Camera.hpp"
 #include "GameObject.hpp"
-#include "MainMenu.hpp"
 
 std::shared_ptr<Camera> Application::mainCamera;
 std::shared_ptr<Camera> Application::defaultCamera;
@@ -28,16 +26,9 @@ GLFWwindow * Application::window;
 glm::mat4 Application::ortoProjection;
 glm::mat4 Application::perspectiveProjection;
 
-int main(void)
+void Application::Init(const std::string& title)
 {
-	Application::Init();
-
-	return 0;
-}
-
-void Application::Init()
-{
-	if (!CreateWindow())
+	if (!CreateWindow(title))
 		return;
 
 	// Camera
@@ -56,15 +47,9 @@ void Application::Init()
 
 	// Initialize shared sprite resources
 	Sprite::Init();
-
-	// Load starting scene
-	SceneManager::CreateScene<StartScene>();
-
-	// Run the window loop
-	Loop();
 }
 
-bool Application::CreateWindow()
+bool Application::CreateWindow(const std::string& title)
 {
 	// Initialise GLFW
 	if (!glfwInit())
@@ -84,7 +69,7 @@ bool Application::CreateWindow()
 	//auto mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	//window = glfwCreateWindow(mode->width, mode->height, APPLICATION_NAME.c_str(), glfwGetPrimaryMonitor(), NULL);
 	
-	window = glfwCreateWindow(1920, 1080, APPLICATION_NAME.c_str(), nullptr, nullptr);
+	window = glfwCreateWindow(1920, 1080, title.c_str(), nullptr, nullptr);
 	
 	glfwMakeContextCurrent(window);
 	
@@ -119,7 +104,7 @@ bool Application::CreateWindow()
 	return true;
 }
 
-void Application::Loop()
+void Application::Run()
 {
 	auto currentFrameTime = glfwGetTime();
 	auto lastFrameTime = currentFrameTime;

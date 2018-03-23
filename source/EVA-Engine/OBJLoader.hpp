@@ -14,7 +14,7 @@ public:
 private:
 
 	static std::shared_ptr<Mesh> CreateMesh(
-		std::string name, 
+		const std::string& name, 
 		std::vector<glm::vec3> tmpVert,
 		std::vector<glm::vec2> tmpUv,
 		std::vector<glm::vec3> tmpNorms,

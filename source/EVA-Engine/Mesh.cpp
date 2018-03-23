@@ -11,6 +11,13 @@ Mesh::Mesh(const std::vector<Vertex>& vertices)
 	Create();
 }
 
+Mesh::Mesh(const std::vector<Vertex>& vertices, const std::string& name)
+{
+	this->name = name;
+	this->vertices = vertices;
+	Create();
+}
+
 void Mesh::Create()
 {
 	// Create VAO, VBO and EBO
