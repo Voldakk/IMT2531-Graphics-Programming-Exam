@@ -8,9 +8,13 @@
 #include "Shader.hpp"
 #include "TextureManager.hpp"
 
+class Scene;
+class Transform;
+
 class Material
 {
 public:
+	static Material * activeMaterial;
 
 	bool enableInstancing = false;
 
@@ -25,5 +29,8 @@ public:
 	void AddTexture(TextureType type, const char * path);
 	void AddTexture(TextureType type, unsigned int id);
 
-	static Material * activeMaterial;
+	void Activate(Scene * scene, Transform * transform);
+	void SetMaterialUniforms(Scene * scene);
+	void SetObjectUniforms(Transform * transform);
+	void SetTextures();
 };

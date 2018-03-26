@@ -2,7 +2,7 @@
 
 #include "glm/glm/glm.hpp"
 
-const int MAX_FPS = 200;										// The max fps the game can run at
+const int MAX_FPS = 2000;										// The max fps the game can run at
 const int WINDOW_WIDTH = 1024;									// The window's width in pixels
 const int WINDOW_HEIGHT = 1024;									// The window's height in pixels
 

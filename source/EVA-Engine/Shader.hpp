@@ -1,97 +1,50 @@
 #pragma once
 
-class Mesh;
-class Scene;
-class Material;
-class Transform;
+#include <string>
+#include <unordered_map>
+
+#include <glm/glm.hpp>
 
 class Shader
 {
+private:
+
+	unsigned int id;
+	std::unordered_map<std::string, int> uniformLocationMap;
+
+	int GetUniformLocation(std::string name);
+
 public:
 
-	unsigned int id = -1;
-	Shader();
+	Shader(std::string vertexPath, std::string fragmentPath);
+	~Shader();
 
-	virtual void SetUniforms(Scene * scene, Transform * transform, Material * material);
+	void Bind();
+	void Unbind();
 
-	static unsigned int activeShader;
+	void SetUniform1i(std::string name, int value);
+
+	void SetUniform1f(std::string name, float value);
+	void SetUniform3fv(std::string name, glm::vec3 value);
+
+	void SetUniformMatrix4fv(std::string name, glm::mat4 value);
+
 };
 
 class StandardShader : public Shader
 {
 public:
-	unsigned int viewId;
-	unsigned int projectionId;
-	unsigned int modelId;
-
-	unsigned int materialShininessId;
-	unsigned int materialSpecularColorId;
-	unsigned int lightPositionId;
-	unsigned int lightIntensitiesId;
-	unsigned int lightAttenuationId;
-	unsigned int lightAmbientCoefficientId;
-	unsigned int cameraPositionId;
-
 	StandardShader();
-
-	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
 };
 
 class StandardInstancedShader : public Shader
 {
 public:
-
-	unsigned int viewId;
-	unsigned int projectionId;
-
-	unsigned int materialShininessId;
-	unsigned int materialSpecularColorId;
-	unsigned int lightPositionId;
-	unsigned int lightIntensitiesId;
-	unsigned int lightAttenuationId;
-	unsigned int lightAmbientCoefficientId;
-	unsigned int cameraPositionId;
-
 	StandardInstancedShader();
-	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
-};
-
-class UnlitTextureShader : public Shader
-{
-public:
-
-	unsigned int viewId;
-	unsigned int projectionId;
-	unsigned int modelId;
-
-	UnlitTextureShader();
-
-	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
-};
-
-class UnlitTextureInstancedShader : public Shader
-{
-public:
-
-	unsigned int viewId;
-	unsigned int projectionId;
-
-	UnlitTextureInstancedShader();
-
-	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
 };
 
 class SkyboxShader : public Shader
 {
 public:
-
-	unsigned int viewId;
-	unsigned int projectionId;
-	unsigned int modelId;
-
-	unsigned int textureId;
-
 	SkyboxShader();
-
-	void SetUniforms(Scene * scene, Transform * transform, Material * material) override;
 };

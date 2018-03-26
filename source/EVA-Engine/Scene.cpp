@@ -22,7 +22,7 @@ void Scene::Render()
 		if(materials[0][0]->material->enableInstancing)
 		{
 			// Set material / shader
-			materials[0][0]->material->shader->SetUniforms(materials[0][0]->gameObject->scene, nullptr, materials[0][0]->material.get());
+			materials[0][0]->material->Activate(materials[0][0]->gameObject->scene, nullptr);
 
 			// For each mesh
 			for (auto& meshes : materials)
