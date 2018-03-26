@@ -5,16 +5,15 @@
 #include "Scene.hpp"
 #include "OBJLoader.hpp"
 
-Mesh::Mesh(const std::vector<Vertex>& vertices)
+Mesh::Mesh(const std::vector<Vertex>& vertices) :
+		vao(0), vbo(0), ebo(0), ibo(0), instanceCount(0), isStatic(false), vertices(vertices)
 {
-	this->vertices = vertices;
 	Create();
 }
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, const std::string& name)
+Mesh::Mesh(const std::vector<Vertex>& vertices, const std::string& name) :
+		vao(0), vbo(0), ebo(0), ibo(0), instanceCount(0), isStatic(false), name(name), vertices(vertices)
 {
-	this->name = name;
-	this->vertices = vertices;
 	Create();
 }
 
@@ -71,7 +70,11 @@ void Mesh::Draw() const
 
 void Mesh::SetIbo(const std::vector<glm::mat4>& models)
 {
-	glGenBuffers(1, &ibo);
+	instanceCount = models.size();
+
+	if(ibo == 0)
+		glGenBuffers(1, &ibo);
+
 	glBindBuffer(GL_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::mat4), &models[0], GL_STATIC_DRAW);
 
@@ -95,15 +98,15 @@ void Mesh::SetIbo(const std::vector<glm::mat4>& models)
 	glBindVertexArray(0);
 }
 
-void Mesh::DrawInstanced(const int count) const
+void Mesh::DrawInstanced() const
 {
 	// Draw
 	glBindVertexArray(vao);
 
 	if (!faceIndices.empty())
-		glDrawElementsInstanced(GL_TRIANGLES, faceIndices.size(), GL_UNSIGNED_INT, nullptr, count);
+		glDrawElementsInstanced(GL_TRIANGLES, faceIndices.size(), GL_UNSIGNED_INT, nullptr, instanceCount);
 	else
-		glDrawArraysInstanced(GL_TRIANGLES, 0, this->vertices.size(), count);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, this->vertices.size(), instanceCount);
 
 	// Reset
 	glBindVertexArray(0);

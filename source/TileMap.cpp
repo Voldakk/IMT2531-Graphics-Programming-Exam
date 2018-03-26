@@ -6,16 +6,15 @@
 #include "EVA-Engine/MeshRenderer.hpp"
 #include "EVA-Engine/Scene.hpp"
 
-TileMap::TileMap(GameObject* gameObject) : Component(gameObject)
+TileMap::TileMap(GameObject* gameObject) : Component(gameObject),
+	width(0), height(0)
 {
-	width = 0;
-	height = 0;
-
 	// Load meshes
 	auto meshes = Mesh::LoadMultiple("./assets/tiles/tile.obj");
 
 	for (const auto& mesh : meshes)
 	{
+		mesh->isStatic = true;
 		meshMap[mesh->name] = mesh;
 	}
 
@@ -74,8 +73,6 @@ void TileMap::ReadFile(const char* path)
 
 			tiles.push_back(row);
 		}
-		int a = 0;
-		a++;
 
 		CreateMesh();
 	}

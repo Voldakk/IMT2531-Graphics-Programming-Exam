@@ -18,27 +18,6 @@ struct Vertex
 class Mesh
 {
 
-public:
-
-	std::string name;
-
-	bool isStatic = false;
-	int instanceCount = 0;
-
-	explicit Mesh(const std::vector<Vertex>& vertices);
-	explicit Mesh(const std::vector<Vertex>& vertices, const std::string& name);
-
-	void Create();
-	void Draw() const;
-	void SetIbo(const std::vector<glm::mat4>& models);
-	void DrawInstanced(int count) const;
-
-	bool HasIbo() const;
-
-	static std::shared_ptr<Mesh> Load(const std::string& path);
-	static std::vector<std::shared_ptr<Mesh>> LoadMultiple(const std::string& path);
-	static std::shared_ptr<Mesh> Primitive(PrimitiveType type);
-
 protected:
 
 	std::vector<Vertex> vertices;
@@ -48,4 +27,27 @@ protected:
 	unsigned int vbo{};
 	unsigned int ebo{};
 	unsigned int ibo{};
+
+	unsigned int instanceCount;
+
+public:
+
+	std::string name;
+
+	bool isStatic;
+
+	explicit Mesh(const std::vector<Vertex>& vertices);
+	explicit Mesh(const std::vector<Vertex>& vertices, const std::string& name);
+
+	void Create();
+
+	void Draw() const;
+	void DrawInstanced() const;
+
+	void SetIbo(const std::vector<glm::mat4>& models);
+	bool HasIbo() const;
+
+	static std::shared_ptr<Mesh> Load(const std::string& path);
+	static std::vector<std::shared_ptr<Mesh>> LoadMultiple(const std::string& path);
+	static std::shared_ptr<Mesh> Primitive(PrimitiveType type);
 };
