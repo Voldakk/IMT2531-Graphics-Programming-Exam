@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.1)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(projectname EVA-Engine)
+set(projectname EVA)
 
 project(${projectname})
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
@@ -41,7 +41,7 @@ if(WINDOWS)
 endif(WINDOWS)
 
 file(GLOB SOURCES
-    source/* source/EVA-Engine/*
+    source/* EVA/*
 )
 
 add_executable(main ${SOURCES})
@@ -58,6 +58,7 @@ include_directories(${PROJECT_SOURCE_DIR}/glfw/include/)
 include_directories(${PROJECT_SOURCE_DIR}/SOIL/src/)
 include_directories(${PROJECT_SOURCE_DIR}/glm/)
 include_directories(${PROJECT_SOURCE_DIR}/glew/include/)
+include_directories(${PROJECT_SOURCE_DIR}/EVA/include/)
 
 if(WINDOWS)
 	include_directories(${PROJECT_SOURCE_DIR}/glew/include/)

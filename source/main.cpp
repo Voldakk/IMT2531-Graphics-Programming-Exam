@@ -1,13 +1,13 @@
-#include "EVA-Engine/SceneManager.hpp"
-#include "EVA-Engine/Application.hpp"
+#include "EVA.hpp"
+#include "EVA/SceneManager.hpp"
 
 #include "Game.hpp"
 
 int main()
 {
-	Application::Init("Pacman");
-	SceneManager::CreateScene<Game>();
-	Application::Run();
+	EVA::Application::Init("Pacman");
+	EVA::SceneManager::CreateScene<Game>();
+	EVA::Application::Run();
 
 	return 0;
 }

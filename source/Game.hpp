@@ -1,8 +1,8 @@
 #pragma once
 
-#include "EVA-Engine/Scene.hpp"
+#include "EVA.hpp"
 
-class Game : public Scene
+class Game : public EVA::Scene
 {
 public:
 

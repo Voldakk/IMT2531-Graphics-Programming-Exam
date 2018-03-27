@@ -5,40 +5,35 @@
 #include <string>
 #include <memory>
 
+#include "EVA.hpp"
+#include "EVA/Graphics.hpp"
 
-#include "EVA-Engine/Component.hpp"
-#include "EVA-Engine/Mesh.hpp"
-#include "EVA-Engine/Material.hpp"
+enum TileType { Floor, Wall };
 
-class TileMap : public Component
+class TileMap : public EVA::Component
 {
-public:
-
-	enum TileType { Floor, Wall };
-
-	explicit TileMap(GameObject * gameObject);
-
-	void ReadFile(const char * path);
-
-	int Width() const
-	{
-		return width;
-	}
-
-	int Height() const
-	{
-		return height;
-	}
 
 private:
 
-	int width;
-	int height;
+	int m_Width;
+	int m_Height;
 
-	std::vector<std::vector<TileType>> tiles;
+	std::vector<std::vector<TileType>> m_Tiles;
 
-	std::map<std::string, std::shared_ptr<Mesh>> meshMap;
-	std::shared_ptr<Material> material;
+	std::map<std::string, std::shared_ptr<EVA::Mesh>> m_MeshMap;
+	std::shared_ptr<EVA::Material> m_Material;
+
+public:
+
+	explicit TileMap(EVA::GameObject * gameObject);
+
+	void ReadFile(const char * path);
+
+	inline int Width() const { return m_Width; }
+
+    inline int Height() const { return m_Height; }
+
+private:
 	
 	void CreateMesh();
 };

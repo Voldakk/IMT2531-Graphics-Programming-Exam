@@ -2,36 +2,32 @@
 
 #include <fstream>
 
-#include "EVA-Engine/GameObject.hpp"
-#include "EVA-Engine/MeshRenderer.hpp"
-#include "EVA-Engine/Scene.hpp"
-
-TileMap::TileMap(GameObject* gameObject) : Component(gameObject),
-	width(0), height(0)
+TileMap::TileMap(EVA::GameObject* gameObject) : Component(gameObject),
+	m_Width(0), m_Height(0)
 {
 	// Load meshes
-	auto meshes = Mesh::LoadMultiple("./assets/tiles/tile.obj");
+	auto meshes = EVA::Mesh::LoadMultiple("./assets/tiles/tile.obj");
 
 	for (const auto& mesh : meshes)
 	{
-		mesh->isStatic = true;
-		meshMap[mesh->name] = mesh;
+		mesh->m_IsStatic = true;
+		m_MeshMap[mesh->m_Name] = mesh;
 	}
 
 	// Shaders
-	const auto standardInstancedShader = std::make_shared<StandardInstancedShader>();
+	const auto standardInstancedShader = std::make_shared<EVA::StandardInstancedShader>();
 
 	// Materials
-	material = std::make_shared<Material>();
-	material->AddTexture(TextureType::Diffuse, "./assets/uv.png");
-	material->shader = standardInstancedShader;
-	material->enableInstancing = true;
+	m_Material = std::make_shared<EVA::Material>();
+	m_Material->AddTexture(EVA::TextureType::Diffuse, "./assets/uv.png");
+	m_Material->m_Shader = standardInstancedShader;
+	m_Material->m_EnableInstancing = true;
 }
 
 void TileMap::ReadFile(const char* path)
 {
 	// Clear the map
-	tiles.clear();
+	m_Tiles.clear();
 
 	//	Opens the file
 	std::ifstream mapFile;
@@ -41,16 +37,16 @@ void TileMap::ReadFile(const char* path)
 	if (mapFile.good())
 	{
 		//	Reads the width and height
-		mapFile >> width;
-		mapFile >> height;
+		mapFile >> m_Width;
+		mapFile >> m_Height;
 		mapFile.ignore();
 
 		// For each row
-		for (auto y = 0; y < height; y++)
+		for (auto y = 0; y < m_Height; y++)
 		{
 			std::vector<TileType> row;
 
-			for (auto x = 0; x < width; x++)
+			for (auto x = 0; x < m_Width; x++)
 			{
 				char c = mapFile.get();
 
@@ -71,7 +67,7 @@ void TileMap::ReadFile(const char* path)
 				mapFile.ignore();
 			}
 
-			tiles.push_back(row);
+			m_Tiles.push_back(row);
 		}
 
 		CreateMesh();
@@ -84,34 +80,34 @@ void TileMap::ReadFile(const char* path)
 
 void TileMap::CreateMesh()
 {
-	for (auto y = 0; y < height - 1; ++y)
+	for (auto y = 0; y < m_Height - 1; ++y)
 	{
-		for (auto x = 0; x < width - 1; ++x)
+		for (auto x = 0; x < m_Width - 1; ++x)
 		{
 			// Find the config
 			auto config = 0;
 
-			if (tiles[y][x] == TileType::Wall)
+			if (m_Tiles[y][x] == TileType::Wall)
 				config += 1;
-			if (tiles[y][x + 1] == TileType::Wall)
+			if (m_Tiles[y][x + 1] == TileType::Wall)
 				config += 2;
-			if (tiles[y + 1][x] == TileType::Wall)
+			if (m_Tiles[y + 1][x] == TileType::Wall)
 				config += 4;
-			if (tiles[y + 1][x + 1] == TileType::Wall)
+			if (m_Tiles[y + 1][x + 1] == TileType::Wall)
 				config += 8;
 
 			// Get the mesh
-			const auto mesh = meshMap[std::to_string(config)];
+			const auto mesh = m_MeshMap[std::to_string(config)];
 
 			// If we found a mesh
 			if (mesh != nullptr)
 			{
 				// Create a GameObject and a MeshRenderer to display the mesh
-				auto go = gameObject->scene->CreateGameObject();
-				go->transform->SetPosition({ x * 2.0f, 0.0f, y * 2.0f });
+				auto go = m_GameObject->GetScene()->CreateGameObject();
+				go->GetTransform()->SetPosition({ x * 2.0f, 0.0f, y * 2.0f });
 
-				auto mr = go->AddComponent<MeshRenderer>();
-				mr->Set(mesh, material);
+				auto mr = go->AddComponent<EVA::MeshRenderer>();
+				mr->Set(mesh, m_Material);
 			}
 		}
 	}
