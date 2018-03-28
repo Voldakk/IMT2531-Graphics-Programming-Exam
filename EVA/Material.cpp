@@ -41,8 +41,7 @@ namespace EVA
 	void Material::SetMaterialUniforms(Scene *scene)
 	{
 		// Material
-		m_Shader->SetUniform1f("materialShininess", m_MaterialShininess);
-		m_Shader->SetUniform3fv("materialSpecularColor", m_MaterialSpecularColor);
+		m_Shader->SetUniform1f("material.shininess", m_MaterialShininess);
 
 		// Textures
 		SetTextures();
@@ -126,7 +125,7 @@ namespace EVA
 			}
 
 			// Set the sampler to the correct texture unit
-			m_Shader->SetUniform1i(name, i);
+			m_Shader->SetUniform1i("material." + name, i);
 
 			// Bind the texture
 			glBindTexture(GL_TEXTURE_2D, m_Textures[i].id);
