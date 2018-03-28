@@ -97,6 +97,7 @@ namespace EVA
 		unsigned int specularNr = 1;
 		unsigned int normalNr = 1;
 		unsigned int heightNr = 1;
+		unsigned int emissionNr = 1;
 
 		for (unsigned int i = 0; i < m_Textures.size(); i++)
 		{
@@ -119,6 +120,9 @@ namespace EVA
 					break;
 				case TextureType::Height:
 					name = "texture_height" + std::to_string(heightNr++);
+					break;
+				case TextureType::Emission:
+					name = "texture_emission" + std::to_string(emissionNr++);
 					break;
 				default:
 					break;

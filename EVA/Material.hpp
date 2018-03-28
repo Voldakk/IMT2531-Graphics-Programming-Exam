@@ -11,6 +11,20 @@
 namespace EVA
 {
 
+	// Different texture types
+	enum TextureType
+	{
+		Diffuse, Specular, Normal, Height, Emission
+	};
+
+	// Struct for holding texture info
+	struct Texture
+	{
+		unsigned int id;
+		TextureType type;
+		std::string path;
+	};
+
 	class Scene;
 
 	class Transform;
@@ -30,7 +44,6 @@ namespace EVA
 		bool m_EnableInstancing = false;
 
 		float m_MaterialShininess = 1000.0f;
-		glm::vec3 m_MaterialSpecularColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
 		Material();
 

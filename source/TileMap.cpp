@@ -20,6 +20,7 @@ TileMap::TileMap(EVA::GameObject *gameObject) : Component(gameObject),
     m_Material = std::make_shared<EVA::Material>();
     m_Material->AddTexture(EVA::TextureType::Diffuse, "./assets/container2.png");
     m_Material->AddTexture(EVA::TextureType::Specular, "./assets/container2_specular.png");
+    //m_Material->AddTexture(EVA::TextureType::Emission, "./assets/matrix.png");
     m_Material->m_Shader = standardInstancedShader;
 }
 

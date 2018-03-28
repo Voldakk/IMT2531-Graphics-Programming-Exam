@@ -7,7 +7,7 @@
 namespace EVA
 {
 
-// A helper class used to load images from file to GL textures
+	// A helper class used to load images from file to GL textures
 	class TextureManager
 	{
 
@@ -21,20 +21,6 @@ namespace EVA
 		static GLuint GetTexture(const std::string &path);
 
 		static GLuint GetTextureCubemap(const std::string &folderPath, const std::string &fileType);
-	};
-
-// Different texture types
-	enum TextureType
-	{
-		Diffuse, Specular, Normal, Height
-	};
-
-// Struct for holding texture info
-	struct Texture
-	{
-		unsigned int id;
-		TextureType type;
-		std::string path;
 	};
 
 }

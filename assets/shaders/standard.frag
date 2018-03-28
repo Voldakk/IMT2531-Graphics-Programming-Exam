@@ -8,6 +8,7 @@ uniform struct Material
 {
    sampler2D texture_diffuse1;
    sampler2D texture_specular1;
+   sampler2D texture_emission1;
    float shininess;
 
 } material;
@@ -71,9 +72,10 @@ void main()
 
     vec4 diffuseMap = texture(material.texture_diffuse1, fragTexCoord);
     vec4 specularMap = texture(material.texture_specular1, fragTexCoord);
+    vec4 emissionMap = texture(material.texture_emission1, fragTexCoord);
 
     // Linear color (color before gamma correction)
-    vec3 linearColor = vec3(0);
+    vec3 linearColor = emissionMap.rgb;
     for(int i = 0; i < numLights; ++i)
     {
         linearColor += ApplyLight(allLights[i], normal, surfacePos, surfaceToCamera, diffuseMap.rgb, specularMap.rgb);
