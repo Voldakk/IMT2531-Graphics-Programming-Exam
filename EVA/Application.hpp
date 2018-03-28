@@ -12,9 +12,9 @@
 namespace EVA
 {
 
-    const int MAX_FPS = 200;                                        // The max fps the game can run at
-    const int WINDOW_WIDTH = 1664;                                    // The window's width in pixels
-    const int WINDOW_HEIGHT = 936;                                    // The window's height in pixels
+    const int MAX_FPS = 2000;
+    const int WINDOW_WIDTH = 1664;
+    const int WINDOW_HEIGHT = 936;
     const glm::vec4 CLEAR_COLOR = glm::vec4{0.5f, 0.5f, 0.5f, 1.0f};
 
     const bool LOG_FPS = true;

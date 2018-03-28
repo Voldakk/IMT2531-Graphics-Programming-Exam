@@ -10,18 +10,16 @@ TileMap::TileMap(EVA::GameObject *gameObject) : Component(gameObject),
 
     for (const auto &mesh : meshes)
     {
-        mesh->m_IsStatic = true;
         m_MeshMap[mesh->m_Name] = mesh;
     }
 
     // Shaders
-    const auto standardInstancedShader = std::make_shared<EVA::StandardInstancedShader>();
+    const auto standardInstancedShader = std::make_shared<EVA::StandardShader>();
 
     // Materials
     m_Material = std::make_shared<EVA::Material>();
     m_Material->AddTexture(EVA::TextureType::Diffuse, "./assets/uv.png");
     m_Material->m_Shader = standardInstancedShader;
-    m_Material->m_EnableInstancing = true;
 }
 
 void TileMap::ReadFile(const char *path)

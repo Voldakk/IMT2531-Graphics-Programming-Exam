@@ -13,9 +13,9 @@ namespace EVA
 
 	void Scene::Render()
 	{
-		if (skybox != nullptr)
+		if (m_skybox != nullptr)
 		{
-			skybox->Render();
+			m_skybox->Render();
 		}
 
 		for (auto &materials : m_MeshRenderers)
@@ -71,6 +71,15 @@ namespace EVA
 		m_GameObjects.push_back(gameObject);
 
 		return gameObject;
+	}
+
+	std::shared_ptr<Light> Scene::CreateLight()
+	{
+		auto light = std::make_shared<Light>();
+
+		m_lights.push_back(light);
+
+		return light;
 	}
 
 	void Scene::RegisterMeshRenderer(MeshRenderer *meshRenderer)

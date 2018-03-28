@@ -71,9 +71,9 @@ namespace EVA
         const auto pitch = m_GameObject->GetTransform()->rotation.x;
         const auto yaw = m_GameObject->GetTransform()->rotation.y;
 
-        m_Front.x = static_cast<float>(cos(yaw) * cos(pitch));
-        m_Front.y = static_cast<float>(sin(pitch));
-        m_Front.z = static_cast<float>(sin(yaw) * cos(pitch));
+        m_Front.x = std::cos(yaw) * std::cos(pitch);
+        m_Front.y = std::sin(pitch);
+        m_Front.z = std::sin(yaw) * std::cos(pitch);
         m_Front = glm::normalize(m_Front);
 
         m_Right = glm::normalize(glm::cross(m_Front, {0.0f, 1.0f, 0.0f}));

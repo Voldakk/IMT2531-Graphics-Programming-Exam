@@ -20,17 +20,15 @@ namespace EVA
 
 		std::vector<std::vector<std::vector<MeshRenderer *>>> m_MeshRenderers;
 		std::vector<std::shared_ptr<GameObject>> m_GameObjects;
+		std::vector<std::shared_ptr<Light>> m_lights;
 
 	public:
 
 		/// <summary>Shared pointer to itself</summary>
-		std::shared_ptr<Scene> self;
+		std::shared_ptr<Scene> m_self;
 
 		/// <summary></summary>
-		Light light;
-
-		/// <summary></summary>
-		std::unique_ptr<Skybox> skybox;
+		std::unique_ptr<Skybox> m_skybox;
 
 		/// <summary>Allows the user to close the menu by pressing escape</summary>
 		/// <param name="deltaTime">The time in seconds between frames</param>
@@ -43,7 +41,13 @@ namespace EVA
 		std::shared_ptr<GameObject> CreateGameObject();
 
 		/// <summary></summary>
+		std::shared_ptr<Light> CreateLight();
+
+		/// <summary></summary>
 		void RegisterMeshRenderer(MeshRenderer *meshRenderer);
+
+        /// <summary></summary>
+		std::vector<std::shared_ptr<Light>> GetLights() { return m_lights; }
 	};
 
 }
