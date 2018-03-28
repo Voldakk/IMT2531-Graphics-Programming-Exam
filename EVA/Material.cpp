@@ -58,11 +58,37 @@ namespace EVA
 			return;
 
 		// Lights
-		m_Shader->SetUniform3fv("light.position", scene->light.Position);
-		m_Shader->SetUniform3fv("light.intensities", scene->light.Color);
+		m_Shader->SetUniform3fv("light.color", scene->light.Color);
 
-		m_Shader->SetUniform1f("light.attenuation", scene->light.Attenuation);
 		m_Shader->SetUniform1f("light.ambientCoefficient", scene->light.AmbientCoefficient);
+
+        glm::vec4 front;
+        float pitch, yaw;
+
+		switch (scene->light.Type)
+		{
+
+			case Light::Directional:
+                pitch = glm::radians(scene->light.Rotation.x);
+                yaw = glm::radians(scene->light.Rotation.y);
+
+                front.x = static_cast<float>(cos(yaw) * cos(pitch));
+                front.y = static_cast<float>(sin(pitch));
+                front.z = static_cast<float>(sin(yaw) * cos(pitch));
+                front.w = 0.0f;
+
+				m_Shader->SetUniform4fv("light.position", front);
+				break;
+
+			case Light::Point:
+				m_Shader->SetUniform4fv("light.position", glm::vec4(scene->light.Position, 1.0f));
+				m_Shader->SetUniform1f("light.attenuation", scene->light.Attenuation);
+				break;
+		}
+
+
+
+
 	}
 
 	void Material::SetObjectUniforms(Transform *transform)

@@ -5,9 +5,9 @@
 
 int main()
 {
-	EVA::Application::Init("Pacman");
-	EVA::SceneManager::CreateScene<Game>();
-	EVA::Application::Run();
+    EVA::Application::Init("Pacman");
+    EVA::SceneManager::CreateScene<Game>();
+    EVA::Application::Run();
 
-	return 0;
+    return 0;
 }

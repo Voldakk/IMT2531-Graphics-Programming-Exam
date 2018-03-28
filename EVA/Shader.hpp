@@ -31,6 +31,8 @@ namespace EVA
 
 		void SetUniform3fv(std::string name, glm::vec3 value);
 
+		void SetUniform4fv(std::string name, glm::vec4 value);
+
 		void SetUniformMatrix4fv(std::string name, glm::mat4 value);
 
 	private:
