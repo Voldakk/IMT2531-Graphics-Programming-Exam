@@ -8,20 +8,23 @@ namespace EVA
 
 	Material *Material::m_ActiveMaterial;
 
-	unsigned int Material::textureBlack;
+	unsigned int Material::textureDefaultDiffuse;
+	unsigned int Material::textureDefaultSpecular;
+	unsigned int Material::textureDefaultNormal;
+	unsigned int Material::textureDefaultEmission;
 
 	Material::Material() = default;
 
 	void Material::SetTexture(const TextureType type, const char *path)
 	{
-		Texture t = {0, type, path};
+		Texture t = { 0, type, path };
 		t.id = TextureManager::GetTexture(t.path);
 		SetTexture(t);
 	}
 
 	void Material::SetTexture(const TextureType type, const unsigned int id)
 	{
-		const Texture t = {id, type, ""};
+		const Texture t = { id, type, "" };
 		SetTexture(t);
 	}
 
@@ -29,22 +32,22 @@ namespace EVA
 	{
 		switch (texture.type)
 		{
-		case Diffuse: 
+		case Diffuse:
 			textureDiffuse = texture;
 			break;
-		case Specular: 
+		case Specular:
 			textureSpecular = texture;
 			break;
-		case Normal: 
+		case Normal:
 			textureNormal = texture;
 			break;
-		case Height: 
+		case Height:
 			textureHeight = texture;
 			break;
-		case Emission: 
+		case Emission:
 			textureEmission = texture;
 			break;
-		default: 
+		default:
 			break;
 		}
 	}
@@ -91,23 +94,23 @@ namespace EVA
 		{
 			const auto lightNum = "allLights[" + std::to_string(i) + "].";
 
-            shader->SetUniform3fv(lightNum + "color", lights[i]->Color);
-            shader->SetUniform1f(lightNum + "ambientCoefficient", lights[i]->AmbientCoefficient);
+			shader->SetUniform3fv(lightNum + "color", lights[i]->Color);
+			shader->SetUniform1f(lightNum + "ambientCoefficient", lights[i]->AmbientCoefficient);
 
-            switch (lights[i]->Type)
-            {
+			switch (lights[i]->Type)
+			{
 
-                case LightType::Directional:
+			case LightType::Directional:
 
 
-                    shader->SetUniform4fv(lightNum + "position", lights[i]->GetDirection());
-                    break;
+				shader->SetUniform4fv(lightNum + "position", lights[i]->GetDirection());
+				break;
 
-                case LightType::Point:
-                    shader->SetUniform4fv(lightNum + "position", glm::vec4(lights[i]->Position, 1.0f));
-                    shader->SetUniform1f(lightNum + "attenuation", lights[i]->Attenuation);
-                    break;
-            }
+			case LightType::Point:
+				shader->SetUniform4fv(lightNum + "position", glm::vec4(lights[i]->Position, 1.0f));
+				shader->SetUniform1f(lightNum + "attenuation", lights[i]->Attenuation);
+				break;
+			}
 		}
 	}
 
@@ -126,47 +129,50 @@ namespace EVA
 		if (textureDiffuse.id != 0)
 			glBindTexture(GL_TEXTURE_2D, textureDiffuse.id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureBlack);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultDiffuse);
 
-		// Diffuse
+		// Specular
 		glActiveTexture(GL_TEXTURE1);
 		shader->SetUniform1i("material.texture_specular", 1);
 
 		if (textureSpecular.id != 0)
 			glBindTexture(GL_TEXTURE_2D, textureSpecular.id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureBlack);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular);
 
-		// Diffuse
+		// Normal
 		glActiveTexture(GL_TEXTURE2);
 		shader->SetUniform1i("material.texture_normal", 2);
 
 		if (textureNormal.id != 0)
 			glBindTexture(GL_TEXTURE_2D, textureNormal.id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureBlack);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultNormal);
 
-		// Diffuse
-		glActiveTexture(GL_TEXTURE3);
-		shader->SetUniform1i("material.texture_height", 3);
-
-		if (textureHeight.id != 0)
-			glBindTexture(GL_TEXTURE_2D, textureHeight.id);
-		else
-			glBindTexture(GL_TEXTURE_2D, textureBlack);
-
-		// Diffuse
+		// Emission
 		glActiveTexture(GL_TEXTURE4);
 		shader->SetUniform1i("material.texture_emission", 4);
 
 		if (textureEmission.id != 0)
 			glBindTexture(GL_TEXTURE_2D, textureEmission.id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureBlack);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultEmission);
+
+		// Height
+		glActiveTexture(GL_TEXTURE3);
+		shader->SetUniform1i("material.texture_height", 3);
+
+		if (textureHeight.id != 0)
+			glBindTexture(GL_TEXTURE_2D, textureHeight.id);
+		else
+			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular);
 	}
 
 	void Material::Init()
 	{
-		textureBlack = TextureManager::GetTexture("./assets/textures/black.png");
+		textureDefaultDiffuse = TextureManager::GetTexture("./assets/textures/default_diffuse.png");
+		textureDefaultSpecular = TextureManager::GetTexture("./assets/textures/default_specular.png");
+		textureDefaultNormal = TextureManager::GetTexture("./assets/textures/default_normal.png");
+		textureDefaultEmission = TextureManager::GetTexture("./assets/textures/default_emission.png");
 	}
 }

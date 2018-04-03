@@ -30,8 +30,8 @@ namespace EVA
 				for (auto &meshes : materials)
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->GetMesh()->m_IsStatic ||
-						(meshes[0]->GetMesh()->m_IsStatic && !meshes[0]->GetMesh()->HasIbo()))
+					if (!meshes[0]->GetMesh()->isStatic ||
+						(meshes[0]->GetMesh()->isStatic && !meshes[0]->GetMesh()->HasIbo()))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;

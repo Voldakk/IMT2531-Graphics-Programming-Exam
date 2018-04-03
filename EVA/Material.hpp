@@ -14,13 +14,13 @@ namespace EVA
 	// Different texture types
 	enum TextureType
 	{
-		Diffuse, Specular, Normal, Height, Emission
+		Diffuse, Specular, Normal, Emission, Height
 	};
 
 	// Struct for holding texture info
 	struct Texture
 	{
-		unsigned int id;
+		unsigned int id{};
 		TextureType type;
 		std::string path;
 	};
@@ -38,7 +38,10 @@ namespace EVA
 
 	public:
 
-		static unsigned int textureBlack;
+		static unsigned int textureDefaultDiffuse;
+		static unsigned int textureDefaultSpecular;
+		static unsigned int textureDefaultNormal;
+		static unsigned int textureDefaultEmission;
 
 		std::shared_ptr<Shader> shader;
 

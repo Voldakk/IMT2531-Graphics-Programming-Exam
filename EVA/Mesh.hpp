@@ -16,9 +16,11 @@ namespace EVA
 
 	struct Vertex
 	{
-		glm::vec3 Position;
-		glm::vec3 Normal;
-		glm::vec2 TexCoords;
+		glm::vec3 position;
+		glm::vec3 normal;
+		glm::vec2 texCoords;
+		glm::vec3 tangent;
+		glm::vec3 bitangent;
 	};
 
 	class Mesh
@@ -39,12 +41,12 @@ namespace EVA
 
 	public:
 
-		std::string m_Name;
-		bool m_IsStatic;
+		std::string name;
+		bool isStatic;
 
-		explicit Mesh(const std::vector<Vertex> &vertices);
+		explicit Mesh(std::vector<Vertex> vertices);
 
-		explicit Mesh(const std::vector<Vertex> &vertices, const std::string &name);
+		explicit Mesh(std::vector<Vertex> vertices, std::string name);
 
 		void Create();
 
@@ -61,6 +63,8 @@ namespace EVA
 		static std::vector<std::shared_ptr<Mesh>> LoadMultiple(const std::string &path);
 
 		static std::shared_ptr<Mesh> Primitive(PrimitiveType type);
+
+		void CalculateBt();
 	};
 
 }

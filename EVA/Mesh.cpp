@@ -1,4 +1,5 @@
 #include "Mesh.hpp"
+#include <utility>
 
 #include "GL/glew.h"
 
@@ -8,16 +9,18 @@
 namespace EVA
 {
 
-	Mesh::Mesh(const std::vector<Vertex> &vertices) :
-			m_Vao(0), m_Vbo(0), m_Ebo(0), m_Ibo(0), m_InstanceCount(0), m_IsStatic(false), m_Vertices(vertices)
+	Mesh::Mesh(std::vector<Vertex> vertices) :
+			m_Vertices(std::move(vertices)), m_Vao(0), m_Vbo(0), m_Ebo(0), m_Ibo(0), m_InstanceCount(0), isStatic(false)
 	{
+		CalculateBt();
 		Create();
 	}
 
-	Mesh::Mesh(const std::vector<Vertex> &vertices, const std::string &name) :
-			m_Vao(0), m_Vbo(0), m_Ebo(0), m_Ibo(0), m_InstanceCount(0), m_IsStatic(false), m_Name(name),
-			m_Vertices(vertices)
+	Mesh::Mesh(std::vector<Vertex> vertices, std::string name) :
+			m_Vertices(std::move(vertices)), m_Vao(0), m_Vbo(0), m_Ebo(0), m_Ibo(0), m_InstanceCount(0), name(std::move(name)),
+			isStatic(false)
 	{
+		CalculateBt();
 		Create();
 	}
 
@@ -49,11 +52,19 @@ namespace EVA
 
 		// Vertex normals
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, Normal));
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, normal));
 
 		// Vertex texture coords
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, TexCoords));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, texCoords));
+
+		// Vertex tangent
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, tangent));
+
+		// Vertex bitangent
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, bitangent));
 
 		glBindVertexArray(0);
 	}
@@ -128,8 +139,8 @@ namespace EVA
 		auto meshes = OBJLoader::Load(path.c_str());
 		if (!meshes.empty())
 			return meshes[0];
-		else
-			return nullptr;
+			
+		return nullptr;
 	}
 
 	std::vector<std::shared_ptr<Mesh>> Mesh::LoadMultiple(const std::string &path)
@@ -183,6 +194,40 @@ namespace EVA
 		}
 
 		return Load(path);
+	}
+
+	void Mesh::CalculateBt()
+	{
+		glm::vec3 tangent;
+		glm::vec3 bitangent;
+
+		for (unsigned int i = 0; i < m_Vertices.size(); i += 3)
+		{
+			const auto edge1 = m_Vertices[i+1].position - m_Vertices[i + 0].position;
+			const auto edge2 = m_Vertices[i + 2].position - m_Vertices[i + 0].position;
+			const auto deltaUv1 = m_Vertices[i + 1].texCoords - m_Vertices[i + 0].texCoords;
+			const auto deltaUv2 = m_Vertices[i + 2].texCoords - m_Vertices[i + 0].texCoords;
+
+			const auto f = 1.0f / (deltaUv1.x * deltaUv2.y - deltaUv2.x * deltaUv1.y);
+
+			tangent.x = f * (deltaUv2.y * edge1.x - deltaUv1.y * edge2.x);
+			tangent.y = f * (deltaUv2.y * edge1.y - deltaUv1.y * edge2.y);
+			tangent.z = f * (deltaUv2.y * edge1.z - deltaUv1.y * edge2.z);
+			tangent = glm::normalize(tangent);
+
+			bitangent.x = f * (-deltaUv2.x * edge1.x + deltaUv1.x * edge2.x);
+			bitangent.y = f * (-deltaUv2.x * edge1.y + deltaUv1.x * edge2.y);
+			bitangent.z = f * (-deltaUv2.x * edge1.z + deltaUv1.x * edge2.z);
+			bitangent = glm::normalize(bitangent);
+
+			m_Vertices[i + 0].tangent = tangent;
+			m_Vertices[i + 1].tangent = tangent;
+			m_Vertices[i + 2].tangent = tangent;
+
+			m_Vertices[i + 0].bitangent = bitangent;
+			m_Vertices[i + 1].bitangent = bitangent;
+			m_Vertices[i + 2].bitangent = bitangent;
+		}
 	}
 
 }
