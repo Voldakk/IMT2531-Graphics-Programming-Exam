@@ -18,10 +18,10 @@ TileMap::TileMap(EVA::GameObject *gameObject) : Component(gameObject),
 
     // Materials
     m_Material = std::make_shared<EVA::Material>();
-    m_Material->AddTexture(EVA::TextureType::Diffuse, "./assets/container2.png");
-    m_Material->AddTexture(EVA::TextureType::Specular, "./assets/container2_specular.png");
-    //m_Material->AddTexture(EVA::TextureType::Emission, "./assets/matrix.png");
-    m_Material->m_Shader = standardInstancedShader;
+    m_Material->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/container2.png");
+    m_Material->SetTexture(EVA::TextureType::Specular, "./assets/textures/container2_specular.png");
+    m_Material->SetTexture(EVA::TextureType::Emission, "./assets/textures/matrix.png");
+    m_Material->shader = standardInstancedShader;
 }
 
 void TileMap::ReadFile(const char *path)

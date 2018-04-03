@@ -1,6 +1,7 @@
 #include "TextureManager.hpp"
 
 #include "SOIL.h"
+#include <iostream>
 
 namespace EVA
 {
@@ -12,6 +13,8 @@ namespace EVA
 		// Return the id if the texture's already loaded
 		if (m_Textures.count(path))
 			return m_Textures[path];
+
+		std::cout << "TextureManager::GetTexture" << path.c_str() << "\n";
 
 		// Create texture
 		GLuint texture;

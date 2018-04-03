@@ -42,6 +42,9 @@ namespace EVA
 
         // Input
         Input::SetWindow(m_Window);
+
+		// Material stuff
+		Material::Init();
     }
 
     bool Application::CreateWindow(const std::string &title)

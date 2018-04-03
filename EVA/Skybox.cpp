@@ -19,10 +19,10 @@ namespace EVA
 
 		// Material
 		m_Material = std::make_unique<Material>();
-		m_Material->AddTexture(TextureType::Diffuse, m_Texture);
+		m_Material->SetTexture(TextureType::Diffuse, m_Texture);
 
 		// Shader
-		m_Material->m_Shader = std::make_shared<SkyboxShader>();
+		m_Material->shader = std::make_shared<SkyboxShader>();
 
 		// Mesh
 		m_Mesh = Mesh::Primitive(PrimitiveType::CubeInverted);

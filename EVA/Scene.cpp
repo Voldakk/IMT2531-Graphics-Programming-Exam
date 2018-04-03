@@ -21,7 +21,7 @@ namespace EVA
 		for (auto &materials : m_MeshRenderers)
 		{
 			// If he material should use GPU instancing
-			if (materials[0][0]->GetMaterial()->m_EnableInstancing)
+			if (materials[0][0]->GetMaterial()->enableInstancing)
 			{
 				// Set material / shader
 				materials[0][0]->GetMaterial()->Activate(this, nullptr);

@@ -1,4 +1,4 @@
-#version 150
+#version 150 core
 
 // Camera
 uniform vec3 cameraPosition;
@@ -6,9 +6,9 @@ uniform vec3 cameraPosition;
 // Material settings
 uniform struct Material
 {
-   sampler2D texture_diffuse1;
-   sampler2D texture_specular1;
-   sampler2D texture_emission1;
+   sampler2D texture_diffuse;
+   sampler2D texture_specular;
+   sampler2D texture_emission;
    float shininess;
 
 } material;
@@ -38,12 +38,10 @@ out vec4 finalColor;
 vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseMap, vec3 specularMap)
 {
     float attenuation = 1.0;
-    vec3 surfaceToLight;
-    if(light.position.w == 0.0) // Directional light
-    {
-        surfaceToLight = normalize(light.position.xyz);
-    }
-    else // Point light
+    vec3 surfaceToLight = normalize(light.position.xyz);;
+
+	// Point light
+    if(light.position.w == 1.0)
     {
         surfaceToLight = normalize(light.position.xyz - surfacePos);
         float distanceToLight = length(light.position.xyz - surfacePos);
@@ -61,7 +59,7 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
     float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess);
     vec3 specular = spec * specularMap.rgb * light.color;
 
-    return ambient + attenuation*(diffuse + specular);
+    return attenuation * (ambient + diffuse + specular);
 }
 
 void main()
@@ -70,15 +68,16 @@ void main()
     vec3 surfacePos = vec3(model * vec4(fragVert, 1));
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
 
-    vec4 diffuseMap = texture(material.texture_diffuse1, fragTexCoord);
-    vec4 specularMap = texture(material.texture_specular1, fragTexCoord);
-    vec4 emissionMap = texture(material.texture_emission1, fragTexCoord);
+    vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord);
+    vec3 specularMap = texture(material.texture_specular, fragTexCoord).rgb;
+    vec3 emissionMap = texture(material.texture_emission, fragTexCoord).rgb;
 
-    // Linear color (color before gamma correction)
-    vec3 linearColor = emissionMap.rgb;
+	// Emission
+    vec3 linearColor = emissionMap;
+
     for(int i = 0; i < numLights; ++i)
     {
-        linearColor += ApplyLight(allLights[i], normal, surfacePos, surfaceToCamera, diffuseMap.rgb, specularMap.rgb);
+        linearColor += ApplyLight(allLights[i], normal, surfacePos, surfaceToCamera, diffuseMap.rgb, specularMap);
     }
     
     // Final color (after gamma correction)

@@ -34,30 +34,41 @@ namespace EVA
 
 	private:
 
-		static Material *m_ActiveMaterial;
+		static Material* m_ActiveMaterial;
 
 	public:
 
-		std::shared_ptr<Shader> m_Shader;
-		std::vector<Texture> m_Textures;
+		static unsigned int textureBlack;
 
-		bool m_EnableInstancing = false;
+		std::shared_ptr<Shader> shader;
 
-		float m_MaterialShininess = 1000.0f;
+		Texture textureDiffuse;
+		Texture textureSpecular;
+		Texture textureNormal;
+		Texture textureEmission;
+		Texture textureHeight;
+
+		bool enableInstancing = false;
+
+		float materialShininess = 1000.0f;
 
 		Material();
 
-		void AddTexture(TextureType type, const char *path);
+		void SetTexture(TextureType type, const char *path);
 
-		void AddTexture(TextureType type, unsigned int id);
+		void SetTexture(TextureType type, unsigned int id);
 
-		void Activate(Scene *scene, Transform *transform);
+		void SetTexture(Texture texture);
 
-		void SetMaterialUniforms(Scene *scene);
+		void Activate(Scene* scene, Transform* transform);
 
-		void SetObjectUniforms(Transform *transform);
+		void SetMaterialUniforms(Scene* scene);
 
-		void SetTextures();
+		void SetObjectUniforms(Transform* transform) const;
+
+		void SetTextures() const;
+
+		static void Init();
 
 	};
 

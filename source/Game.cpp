@@ -28,8 +28,8 @@ Game::Game()
     tileMap->ReadFile("./assets/levels/level1.txt");
 
     // Position the camera
-    goCamera->GetTransform()->SetPosition({tileMap->Width(), 20.0f, 0.0f});
-    goCamera->GetTransform()->SetRotation({0.0f, glm::radians(90.0f), 0.0f});
+    goCamera->GetTransform()->SetPosition({tileMap->Width(), 5.0f, 20.0f});
+    goCamera->GetTransform()->SetRotation({0.0f, glm::radians(-90.0f), 0.0f});
 }
 
 

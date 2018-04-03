@@ -8,19 +8,45 @@ namespace EVA
 
 	Material *Material::m_ActiveMaterial;
 
+	unsigned int Material::textureBlack;
+
 	Material::Material() = default;
 
-	void Material::AddTexture(const TextureType type, const char *path)
+	void Material::SetTexture(const TextureType type, const char *path)
 	{
 		Texture t = {0, type, path};
 		t.id = TextureManager::GetTexture(t.path);
-		m_Textures.push_back(t);
+		SetTexture(t);
 	}
 
-	void Material::AddTexture(const TextureType type, const unsigned int id)
+	void Material::SetTexture(const TextureType type, const unsigned int id)
 	{
 		const Texture t = {id, type, ""};
-		m_Textures.push_back(t);
+		SetTexture(t);
+	}
+
+	void Material::SetTexture(const Texture texture)
+	{
+		switch (texture.type)
+		{
+		case Diffuse: 
+			textureDiffuse = texture;
+			break;
+		case Specular: 
+			textureSpecular = texture;
+			break;
+		case Normal: 
+			textureNormal = texture;
+			break;
+		case Height: 
+			textureHeight = texture;
+			break;
+		case Emission: 
+			textureEmission = texture;
+			break;
+		default: 
+			break;
+		}
 	}
 
 	void Material::Activate(Scene *scene, Transform *transform)
@@ -29,7 +55,7 @@ namespace EVA
 		{
 			m_ActiveMaterial = this;
 
-			m_Shader->Bind();
+			shader->Bind();
 
 			SetMaterialUniforms(scene);
 		}
@@ -41,17 +67,17 @@ namespace EVA
 	void Material::SetMaterialUniforms(Scene *scene)
 	{
 		// Material
-		m_Shader->SetUniform1f("material.shininess", m_MaterialShininess);
+		shader->SetUniform1f("material.shininess", materialShininess);
 
 		// Textures
 		SetTextures();
 
 		// Camera
-		m_Shader->SetUniform3fv("cameraPosition", Application::m_MainCamera->GetGameObject()->GetTransform()->position);
+		shader->SetUniform3fv("cameraPosition", Application::m_MainCamera->GetGameObject()->GetTransform()->position);
 
 		// View and projection
-		m_Shader->SetUniformMatrix4fv("view", Application::m_MainCamera->GetViewMatrix());
-		m_Shader->SetUniformMatrix4fv("projection", Application::GetPerspectiveMatrix());
+		shader->SetUniformMatrix4fv("view", Application::m_MainCamera->GetViewMatrix());
+		shader->SetUniformMatrix4fv("projection", Application::GetPerspectiveMatrix());
 
 		if (scene == nullptr)
 			return;
@@ -59,14 +85,14 @@ namespace EVA
 		// Lights
 
 		auto lights = scene->GetLights();
-		m_Shader->SetUniform1i("numLights", lights.size());
+		shader->SetUniform1i("numLights", lights.size());
 
 		for (unsigned int i = 0; i < lights.size(); ++i)
 		{
-            std::string lightNum = "allLights[" + std::to_string(i) + "].";
+			const auto lightNum = "allLights[" + std::to_string(i) + "].";
 
-            m_Shader->SetUniform3fv(lightNum + "color", lights[i]->Color);
-            m_Shader->SetUniform1f(lightNum + "ambientCoefficient", lights[i]->AmbientCoefficient);
+            shader->SetUniform3fv(lightNum + "color", lights[i]->Color);
+            shader->SetUniform1f(lightNum + "ambientCoefficient", lights[i]->AmbientCoefficient);
 
             switch (lights[i]->Type)
             {
@@ -74,66 +100,73 @@ namespace EVA
                 case LightType::Directional:
 
 
-                    m_Shader->SetUniform4fv(lightNum + "position", lights[i]->GetDirection());
+                    shader->SetUniform4fv(lightNum + "position", lights[i]->GetDirection());
                     break;
 
                 case LightType::Point:
-                    m_Shader->SetUniform4fv(lightNum + "position", glm::vec4(lights[i]->Position, 1.0f));
-                    m_Shader->SetUniform1f(lightNum + "attenuation", lights[i]->Attenuation);
+                    shader->SetUniform4fv(lightNum + "position", glm::vec4(lights[i]->Position, 1.0f));
+                    shader->SetUniform1f(lightNum + "attenuation", lights[i]->Attenuation);
                     break;
             }
 		}
 	}
 
-	void Material::SetObjectUniforms(Transform *transform)
+	void Material::SetObjectUniforms(Transform *transform) const
 	{
 		// Position
-		m_Shader->SetUniformMatrix4fv("model", transform->GetModelMatrix());
+		shader->SetUniformMatrix4fv("model", transform->GetModelMatrix());
 	}
 
-	void Material::SetTextures()
+	void Material::SetTextures() const
 	{
-		unsigned int diffuseNr = 1;
-		unsigned int specularNr = 1;
-		unsigned int normalNr = 1;
-		unsigned int heightNr = 1;
-		unsigned int emissionNr = 1;
+		// Diffuse
+		glActiveTexture(GL_TEXTURE0);
+		shader->SetUniform1i("material.texture_diffuse", 0);
 
-		for (unsigned int i = 0; i < m_Textures.size(); i++)
-		{
-			// Activate the texture
-			glActiveTexture(GL_TEXTURE0 + i);
+		if (textureDiffuse.id != 0)
+			glBindTexture(GL_TEXTURE_2D, textureDiffuse.id);
+		else
+			glBindTexture(GL_TEXTURE_2D, textureBlack);
 
-			// Find the name based on the texture type
-			std::string name;
+		// Diffuse
+		glActiveTexture(GL_TEXTURE1);
+		shader->SetUniform1i("material.texture_specular", 1);
 
-			switch (m_Textures[i].type)
-			{
-				case TextureType::Diffuse:
-					name = "texture_diffuse" + std::to_string(diffuseNr++);
-					break;
-				case TextureType::Specular:
-					name = "texture_specular" + std::to_string(specularNr++);
-					break;
-				case TextureType::Normal:
-					name = "texture_normal" + std::to_string(normalNr++);
-					break;
-				case TextureType::Height:
-					name = "texture_height" + std::to_string(heightNr++);
-					break;
-				case TextureType::Emission:
-					name = "texture_emission" + std::to_string(emissionNr++);
-					break;
-				default:
-					break;
-			}
+		if (textureSpecular.id != 0)
+			glBindTexture(GL_TEXTURE_2D, textureSpecular.id);
+		else
+			glBindTexture(GL_TEXTURE_2D, textureBlack);
 
-			// Set the sampler to the correct texture unit
-			m_Shader->SetUniform1i("material." + name, i);
+		// Diffuse
+		glActiveTexture(GL_TEXTURE2);
+		shader->SetUniform1i("material.texture_normal", 2);
 
-			// Bind the texture
-			glBindTexture(GL_TEXTURE_2D, m_Textures[i].id);
-		}
+		if (textureNormal.id != 0)
+			glBindTexture(GL_TEXTURE_2D, textureNormal.id);
+		else
+			glBindTexture(GL_TEXTURE_2D, textureBlack);
+
+		// Diffuse
+		glActiveTexture(GL_TEXTURE3);
+		shader->SetUniform1i("material.texture_height", 3);
+
+		if (textureHeight.id != 0)
+			glBindTexture(GL_TEXTURE_2D, textureHeight.id);
+		else
+			glBindTexture(GL_TEXTURE_2D, textureBlack);
+
+		// Diffuse
+		glActiveTexture(GL_TEXTURE4);
+		shader->SetUniform1i("material.texture_emission", 4);
+
+		if (textureEmission.id != 0)
+			glBindTexture(GL_TEXTURE_2D, textureEmission.id);
+		else
+			glBindTexture(GL_TEXTURE_2D, textureBlack);
 	}
 
+	void Material::Init()
+	{
+		textureBlack = TextureManager::GetTexture("./assets/textures/black.png");
+	}
 }
