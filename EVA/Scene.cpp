@@ -13,9 +13,9 @@ namespace EVA
 
 	void Scene::Render()
 	{
-		if (m_skybox != nullptr)
+		if (skybox != nullptr)
 		{
-			m_skybox->Render();
+			skybox->Render();
 		}
 
 		for (auto &materials : m_MeshRenderers)

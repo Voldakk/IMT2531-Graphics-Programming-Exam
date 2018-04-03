@@ -10,7 +10,6 @@ namespace EVA
 
 	class Shader
 	{
-	private:
 
 		unsigned int m_ShaderId;
 		std::unordered_map<std::string, int> m_UniformLocationMap;

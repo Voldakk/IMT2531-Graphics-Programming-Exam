@@ -10,12 +10,12 @@ namespace EVA
 
     Camera::Camera(GameObject *gameObject) : Component(gameObject)
     {
-        m_Fov = 90.0f;
-        m_Near = 0.1f;
-        m_Far = 1000.0f;
+        fov = 90.0f;
+        near = 0.1f;
+        far = 1000.0f;
 
-        m_MouseSensitivity = 0.5f;
-        m_MovementSpeed = 5.0f;
+        mouseSensitivity = 0.5f;
+        movementSpeed = 5.0f;
 
         UpdateDirections();
     }
@@ -26,19 +26,19 @@ namespace EVA
         auto position = m_GameObject->GetTransform()->localPosition;
 
         if (Input::Key(GLFW_KEY_W)) // Front
-            position += m_Front * m_MovementSpeed * deltaTime;
+            position += m_Front * movementSpeed * deltaTime;
         if (Input::Key(GLFW_KEY_S))    // Back
-            position -= m_Front * m_MovementSpeed * deltaTime;
+            position -= m_Front * movementSpeed * deltaTime;
 
         if (Input::Key(GLFW_KEY_D))    // Right
-            position += m_Right * m_MovementSpeed * deltaTime;
+            position += m_Right * movementSpeed * deltaTime;
         if (Input::Key(GLFW_KEY_A))    // Left
-            position -= m_Right * m_MovementSpeed * deltaTime;
+            position -= m_Right * movementSpeed * deltaTime;
 
         if (Input::Key(GLFW_KEY_SPACE)) // Up
-            position += m_Up * m_MovementSpeed * deltaTime;
+            position += m_Up * movementSpeed * deltaTime;
         if (Input::Key(GLFW_KEY_LEFT_SHIFT)) // Down
-            position -= m_Up * m_MovementSpeed * deltaTime;
+            position -= m_Up * movementSpeed * deltaTime;
 
         m_GameObject->GetTransform()->SetPosition(position);
 
@@ -46,7 +46,7 @@ namespace EVA
         auto rotation = m_GameObject->GetTransform()->localRotation;
 
         const auto mouseMovement = Input::MouseMovement();
-        rotation += glm::vec3(-mouseMovement.y, mouseMovement.x, 0) * m_MouseSensitivity * deltaTime;
+        rotation += glm::vec3(-mouseMovement.y, mouseMovement.x, 0) * mouseSensitivity * deltaTime;
 
         if (rotation.x < glm::radians(-89.0f))
             rotation.x = glm::radians(-89.0f);

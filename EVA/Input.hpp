@@ -12,8 +12,6 @@ namespace EVA
 	class Input
 	{
 
-	private:
-
 		static GLFWwindow *m_Window;
 		static std::map<int, int> m_KeyStates;
 		static glm::vec2 m_Scroll;

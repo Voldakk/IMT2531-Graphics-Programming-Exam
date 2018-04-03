@@ -76,10 +76,10 @@ namespace EVA
 		SetTextures();
 
 		// Camera
-		shader->SetUniform3fv("cameraPosition", Application::m_MainCamera->GetGameObject()->GetTransform()->position);
+		shader->SetUniform3fv("cameraPosition", Application::mainCamera->GetGameObject()->GetTransform()->position);
 
 		// View and projection
-		shader->SetUniformMatrix4fv("view", Application::m_MainCamera->GetViewMatrix());
+		shader->SetUniformMatrix4fv("view", Application::mainCamera->GetViewMatrix());
 		shader->SetUniformMatrix4fv("projection", Application::GetPerspectiveMatrix());
 
 		if (scene == nullptr)
@@ -94,10 +94,10 @@ namespace EVA
 		{
 			const auto lightNum = "allLights[" + std::to_string(i) + "].";
 
-			shader->SetUniform3fv(lightNum + "color", lights[i]->Color);
-			shader->SetUniform1f(lightNum + "ambientCoefficient", lights[i]->AmbientCoefficient);
+			shader->SetUniform3fv(lightNum + "color", lights[i]->color);
+			shader->SetUniform1f(lightNum + "ambientCoefficient", lights[i]->ambientCoefficient);
 
-			switch (lights[i]->Type)
+			switch (lights[i]->type)
 			{
 
 			case LightType::Directional:
@@ -107,8 +107,8 @@ namespace EVA
 				break;
 
 			case LightType::Point:
-				shader->SetUniform4fv(lightNum + "position", glm::vec4(lights[i]->Position, 1.0f));
-				shader->SetUniform1f(lightNum + "attenuation", lights[i]->Attenuation);
+				shader->SetUniform4fv(lightNum + "position", glm::vec4(lights[i]->position, 1.0f));
+				shader->SetUniform1f(lightNum + "attenuation", lights[i]->attenuation);
 				break;
 			}
 		}

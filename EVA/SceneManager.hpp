@@ -14,8 +14,6 @@ namespace EVA
 	class SceneManager
 	{
 
-	private:
-
 		static std::vector<std::shared_ptr<Scene>> m_Scenes;
 
 	public:

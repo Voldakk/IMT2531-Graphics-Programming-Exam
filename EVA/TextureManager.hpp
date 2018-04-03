@@ -11,7 +11,6 @@ namespace EVA
 	class TextureManager
 	{
 
-	private:
 		static std::map<std::string, GLuint> m_Textures;
 
 	public:

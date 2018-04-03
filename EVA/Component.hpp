@@ -13,8 +13,10 @@ namespace EVA
         GameObject *m_GameObject;
 
     public:
+	    
+	    explicit Component(GameObject *gameObject);
 
-        Component(GameObject *gameObject);
+		virtual ~Component() = default;
 
         virtual void Update(float deltaTime);
 

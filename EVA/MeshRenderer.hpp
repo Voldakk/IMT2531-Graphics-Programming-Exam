@@ -12,7 +12,6 @@ namespace EVA
 
 	class MeshRenderer : public Component
 	{
-	private:
 
 		std::shared_ptr<Mesh> m_Mesh;
 		std::shared_ptr<Material> m_Material;

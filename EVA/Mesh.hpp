@@ -26,8 +26,6 @@ namespace EVA
 	class Mesh
 	{
 
-	private:
-
 		std::vector<Vertex> m_Vertices;
 		std::vector<unsigned int> m_FaceIndices;
 

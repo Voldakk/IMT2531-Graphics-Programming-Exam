@@ -14,8 +14,6 @@ namespace EVA
 	class Transform : public Component
 	{
 
-	private:
-
 		glm::mat4 m_Model;
 
 		std::shared_ptr<Transform> m_Parent;

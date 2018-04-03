@@ -14,8 +14,6 @@ namespace EVA
     class GameObject
     {
 
-    private:
-
         Scene *m_Scene{};
         std::shared_ptr<Transform> m_Transform;
         std::vector<std::shared_ptr<Component>> m_Components;

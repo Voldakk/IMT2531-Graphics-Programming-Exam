@@ -38,7 +38,7 @@ namespace EVA
 
 	void Skybox::Render() const
 	{
-		m_Transform->SetPosition(Application::m_MainCamera->GetGameObject()->GetTransform()->position);
+		m_Transform->SetPosition(Application::mainCamera->GetGameObject()->GetTransform()->position);
 		m_Material->Activate(nullptr, m_Transform.get());
 
 		glDepthMask(GL_FALSE);

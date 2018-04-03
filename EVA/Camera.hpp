@@ -12,8 +12,6 @@ namespace EVA
     class Camera : public Component
     {
 
-    private:
-
         glm::mat4 m_ViewMatrix;
 
         glm::vec3 m_Front;
@@ -22,12 +20,12 @@ namespace EVA
 
     public:
 
-        float m_Fov;
-        float m_Near;
-        float m_Far;
+        float fov;
+        float near;
+        float far;
 
-        float m_MouseSensitivity;
-        float m_MovementSpeed;
+        float mouseSensitivity;
+        float movementSpeed;
 
         explicit Camera(GameObject *gameObject);
 

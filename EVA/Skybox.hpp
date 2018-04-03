@@ -17,8 +17,6 @@ namespace EVA
 	class Skybox
 	{
 
-	private:
-
 		unsigned int m_Texture;
 
 		std::shared_ptr<Mesh> m_Mesh;

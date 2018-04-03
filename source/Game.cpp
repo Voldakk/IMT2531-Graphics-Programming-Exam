@@ -5,22 +5,22 @@
 Game::Game()
 {
     // Skybox
-    m_skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
+    skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
 
     // A directional light that fits the skybox
     auto directionalLight = CreateLight();
-    directionalLight->Type = EVA::LightType::Directional;
+    directionalLight->type = EVA::LightType::Directional;
     directionalLight->SetRotation({ 30.0f, -90.0});
 
     auto pointLight = CreateLight();
-    pointLight->Type = EVA::LightType::Point;
-    pointLight->Position = { 11.0f, 1.0f, 10.0f };
-    pointLight->Color = { 10.0f, 0.0f, 0.0f };
-    pointLight->Attenuation = 0.5f;
+    pointLight->type = EVA::LightType::Point;
+    pointLight->position = { 11.0f, 1.0f, 10.0f };
+    pointLight->color = { 10.0f, 0.0f, 0.0f };
+    pointLight->attenuation = 0.5f;
 
     // Camera
     auto goCamera = CreateGameObject();
-    EVA::Application::m_MainCamera = goCamera->AddComponent<EVA::Camera>();
+    EVA::Application::mainCamera = goCamera->AddComponent<EVA::Camera>();
 
     // Tilemap
     auto tileMapGo = CreateGameObject();

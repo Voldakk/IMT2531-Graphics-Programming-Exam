@@ -13,7 +13,7 @@
 namespace EVA
 {
 
-    std::shared_ptr<Camera> Application::m_MainCamera;
+    std::shared_ptr<Camera> Application::mainCamera;
     std::shared_ptr<Camera> Application::m_DefaultCamera;
 
     GameObject Application::m_DefaultCameraObject(nullptr);
@@ -31,7 +31,7 @@ namespace EVA
 
         // Camera
         m_DefaultCamera = m_DefaultCameraObject.AddComponent<Camera>();
-        m_MainCamera = m_DefaultCamera;
+        mainCamera = m_DefaultCamera;
 
         glfwSetWindowSizeCallback(m_Window, WindowResizeCallback);
 
@@ -90,7 +90,7 @@ namespace EVA
         }
 
         glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GL_TRUE);
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
 
         // Set OpenGL options
         glEnable(GL_DEPTH_TEST);
@@ -172,10 +172,10 @@ namespace EVA
             m_OrthographicProjection = glm::ortho(-1.0f, 1.0f, -(float) m_WindowSize.y / (float) m_WindowSize.x,
                                                   (float) m_WindowSize.y / (float) m_WindowSize.x, -1.0f, 1.0f);
 
-        if (m_MainCamera != nullptr)
-            m_PerspectiveProjection = glm::perspective(glm::radians(m_MainCamera->m_Fov),
+        if (mainCamera != nullptr)
+            m_PerspectiveProjection = glm::perspective(glm::radians(mainCamera->fov),
                                                        (float) m_WindowSize.x / (float) m_WindowSize.y,
-                                                       m_MainCamera->m_Near, m_MainCamera->m_Far);
+                                                       mainCamera->near, mainCamera->far);
     }
 
     void Application::Exit()

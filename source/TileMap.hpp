@@ -16,8 +16,6 @@ enum TileType
 class TileMap : public EVA::Component
 {
 
-private:
-
     int m_Width;
     int m_Height;
 

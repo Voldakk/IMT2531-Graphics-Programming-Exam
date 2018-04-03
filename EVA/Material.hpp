@@ -32,8 +32,6 @@ namespace EVA
 	class Material
 	{
 
-	private:
-
 		static Material* m_ActiveMaterial;
 
 	public:
@@ -43,13 +41,13 @@ namespace EVA
 		static unsigned int textureDefaultNormal;
 		static unsigned int textureDefaultEmission;
 
-		std::shared_ptr<Shader> shader;
-
 		Texture textureDiffuse;
 		Texture textureSpecular;
 		Texture textureNormal;
 		Texture textureEmission;
 		Texture textureHeight;
+
+		std::shared_ptr<Shader> shader;
 
 		bool enableInstancing = false;
 
