@@ -14,7 +14,6 @@ layout (location = 4) in vec3 vertBitangent;
 out vec3 fragVert;
 out vec2 fragTexCoord;
 out vec3 fragNormal;
-
 out mat3 fragTBN;
 
 out vec4 fragPosLightSpace;

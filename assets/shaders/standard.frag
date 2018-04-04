@@ -30,9 +30,7 @@ uniform struct Light
 in vec3 fragVert;
 in vec2 fragTexCoord;
 in vec3 fragNormal;
-
 in mat3 fragTBN;
-
 uniform mat4 model;
 
 // Shadow

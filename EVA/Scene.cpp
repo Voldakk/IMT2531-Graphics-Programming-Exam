@@ -14,6 +14,7 @@ namespace EVA
 	unsigned int depthMap;
 
 	Material shadowMaterial;
+	Material shadowMaterialInstanced;
 
 	Scene::Scene()
 	{
@@ -36,8 +37,8 @@ namespace EVA
 		glReadBuffer(GL_NONE);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		const auto shadowShader = std::make_shared<Shader>("shadow.vert", "shadow.frag");
-		shadowMaterial.shader = shadowShader;
+		shadowMaterial.shader = std::make_shared<Shader>("shadow.vert", "shadow.frag");
+		shadowMaterialInstanced.shader = std::make_shared<Shader>("shadow_instanced.vert", "shadow_instanced.frag");
 	}
 
 	void Scene::Update(const float deltaTime)
@@ -131,7 +132,7 @@ namespace EVA
 		m_MeshRenderers.push_back(materials);
 	}
 
-	void Scene::RenderScene(glm::mat4 lightSpaceMatrix)
+	void Scene::RenderScene(const glm::mat4 lightSpaceMatrix)
 	{
 		if (skybox != nullptr)
 		{
@@ -190,18 +191,16 @@ namespace EVA
 		}
 	}
 
-	void Scene::RenderShadowMap(glm::mat4 lightSpaceMatrix)
+	void Scene::RenderShadowMap(const glm::mat4 lightSpaceMatrix)
 	{
-		shadowMaterial.Activate(this, nullptr);
-		shadowMaterial.shader->SetUniformMatrix4fv("lightSpaceMatrix", lightSpaceMatrix);
-
 		for (auto &materials : m_MeshRenderers)
 		{
 			// If he material should use GPU instancing
 			if (materials[0][0]->GetMaterial()->enableInstancing)
 			{
 				// Set material / shader
-				shadowMaterial.Activate(this, nullptr);
+				shadowMaterialInstanced.Activate(this, nullptr);
+				shadowMaterialInstanced.shader->SetUniformMatrix4fv("lightSpaceMatrix", lightSpaceMatrix);
 
 				// For each mesh
 				for (auto &meshes : materials)
@@ -236,6 +235,7 @@ namespace EVA
 					{
 						// Render the mesh at the MeshRenderers position
 						shadowMaterial.Activate(this, meshRenderer->GetGameObject()->GetTransform().get());
+						shadowMaterial.shader->SetUniformMatrix4fv("lightSpaceMatrix", lightSpaceMatrix);
 						meshRenderer->GetMesh()->Draw();
 					}
 				}
