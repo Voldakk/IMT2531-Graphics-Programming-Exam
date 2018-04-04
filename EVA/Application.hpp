@@ -54,6 +54,9 @@ namespace EVA
         static inline glm::mat4 GetOrthographicMatrix()
         { return m_OrthographicProjection; }
 
+		static inline glm::ivec2 GetWindowSize()
+		{ return m_WindowSize; }
+
     private:
 
         /// <summary>Creates a window and OpenGL context</summary>

@@ -47,6 +47,9 @@ namespace EVA
 		case Emission:
 			textureEmission = texture;
 			break;
+		case ShadowMap:
+			textureShadowMap = texture;
+			break;
 		default:
 			break;
 		}
@@ -150,8 +153,8 @@ namespace EVA
 			glBindTexture(GL_TEXTURE_2D, textureDefaultNormal);
 
 		// Emission
-		glActiveTexture(GL_TEXTURE4);
-		shader->SetUniform1i("material.texture_emission", 4);
+		glActiveTexture(GL_TEXTURE3);
+		shader->SetUniform1i("material.texture_emission", 3);
 
 		if (textureEmission.id != 0)
 			glBindTexture(GL_TEXTURE_2D, textureEmission.id);
@@ -159,13 +162,22 @@ namespace EVA
 			glBindTexture(GL_TEXTURE_2D, textureDefaultEmission);
 
 		// Height
-		glActiveTexture(GL_TEXTURE3);
-		shader->SetUniform1i("material.texture_height", 3);
+		glActiveTexture(GL_TEXTURE4);
+		shader->SetUniform1i("material.texture_height", 4);
 
 		if (textureHeight.id != 0)
 			glBindTexture(GL_TEXTURE_2D, textureHeight.id);
 		else
 			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular);
+
+		// Shadwo map
+		glActiveTexture(GL_TEXTURE5);
+		shader->SetUniform1i("shadowMap", 5);
+
+		if (textureShadowMap.id != 0)
+			glBindTexture(GL_TEXTURE_2D, textureShadowMap.id);
+		else
+			glBindTexture(GL_TEXTURE_2D, textureDefaultDiffuse);
 	}
 
 	void Material::Init()

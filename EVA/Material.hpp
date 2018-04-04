@@ -14,7 +14,7 @@ namespace EVA
 	// Different texture types
 	enum TextureType
 	{
-		Diffuse, Specular, Normal, Emission, Height
+		Diffuse, Specular, Normal, Emission, Height, ShadowMap
 	};
 
 	// Struct for holding texture info
@@ -46,6 +46,7 @@ namespace EVA
 		Texture textureNormal;
 		Texture textureEmission;
 		Texture textureHeight;
+		Texture textureShadowMap;
 
 		std::shared_ptr<Shader> shader;
 

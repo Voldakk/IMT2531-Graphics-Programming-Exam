@@ -27,15 +27,55 @@ uniform struct Light
 } allLights[MAX_LIGHTS];
 
 // Model
+in vec3 fragVert;
 in vec2 fragTexCoord;
 in vec3 fragNormal;
-in vec3 fragVert;
+
 in mat3 fragTBN;
 
 uniform mat4 model;
 
+// Shadow
+uniform sampler2D shadowMap;
+in vec4 fragPosLightSpace;
+
 // Out color
 out vec4 finalColor;
+
+float ShadowCalculation(vec3 normal, vec3 lightDir)
+{
+	// Perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+
+    // Transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+
+    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+
+    // Get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+
+    // Check whether current frag pos is in shadow
+    float bias = max(0.01 * (1.0 - dot(normal, lightDir)), 0.005);
+	
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+		}    
+	}
+	shadow /= 9.0;
+
+	if(projCoords.z > 1.0)
+        shadow = 0.0;
+
+    return shadow;
+}
 
 vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseMap, vec3 specularMap)
 {
@@ -61,13 +101,14 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
     float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess);
     vec3 specular = spec * specularMap.rgb * light.color;
 
-    return attenuation * (ambient + diffuse + specular);
+	float shadow = ShadowCalculation(normal, surfaceToLight);
+    return attenuation * ambient + (1.0 - shadow) * (attenuation * ( diffuse + specular));
 }
 
 void main()
 {
     vec3 normal = normalize(transpose(inverse(mat3(model))) * fragNormal);
-    vec3 surfacePos = vec3(model * vec4(fragVert, 1));
+    vec3 surfacePos = fragVert;
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
 
     vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord);

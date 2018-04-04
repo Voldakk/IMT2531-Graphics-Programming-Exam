@@ -28,6 +28,8 @@ namespace EVA
 		/// <summary></summary>
 		std::unique_ptr<Skybox> skybox;
 
+		Scene();
+
 		virtual ~Scene() = default;
 
 		/// <summary>Allows the user to close the menu by pressing escape</summary>
@@ -48,6 +50,11 @@ namespace EVA
 
         /// <summary></summary>
 		std::vector<std::shared_ptr<Light>> GetLights() { return m_lights; }
+
+	private:
+
+		void RenderScene(glm::mat4 lightSpaceMatrix);
+		void RenderShadowMap(glm::mat4 lightSpaceMatrix);
 	};
 
 }

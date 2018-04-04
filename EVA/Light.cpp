@@ -2,6 +2,8 @@
 
 void EVA::Light::SetRotation(glm::vec2 rotation)
 {
+	m_Rotation = rotation;
+
     float pitch = glm::radians(rotation.x);
     float yaw = glm::radians(rotation.y);
 
