@@ -1,14 +1,9 @@
 .vscode/
 .vs/
 .idea/
-cmake-build-debug/
-CMakeSettings.json
 
 build/
-dll/
-glew/
-glfw/
-glm/
-SOIL/
+cmake-build-debug/
+CMakeSettings.json
 
 *.blend1

@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "glm/glm/glm.hpp"
+#include "glm/glm.hpp"
 
 namespace EVA
 {

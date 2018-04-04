@@ -1,16 +1,10 @@
-#CMAKE FOR GLFW, GLEW, GLM, SOIL
+#CMAKE FOR GLFW, GLEW, GLM
 cmake_minimum_required(VERSION 3.1)
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(projectname EVA)
+# Project name
+project(EVA)
 
-project(${projectname})
-set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
-
-message( "system name is: " ${CMAKE_SYSTEM} )
-message( "system processor is: " ${CMAKE_SYSTEM_PROCESSOR} )
-
+# System type
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	SET( LINUX 1)
 	SET( APPLE 0)
@@ -21,57 +15,90 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	SET( WINDOWS 1)
 endif()
 
+# Set GLFW options
+set(GLFW_BUILD_EXAMPLES OFF) 
+set(GLFW_BUILD_TESTS OFF)
+set(GLFW_BUILD_DOCS OFF)
+
+# Find packages
 find_package(OpenGL REQUIRED)
 
 if(APPLE OR LINUX)
 	find_package(GLEW REQUIRED)
 endif(APPLE OR LINUX)
 
-set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL "turn off build examples") 
-add_subdirectory(glfw)
+# Link GLFW and GLEW directories
+add_subdirectory(dependencies/glfw)
 link_directories(${PROJECT_BINARY_DIR})
 link_directories(${GLFW_BINARY_DIR})
 
-add_subdirectory(SOIL)
-link_directories(${PROJECT_BINARY_DIR})
-link_directories(${SOIL_BINARY_DIR})
-
 if(WINDOWS)
-	link_directories(${PROJECT_SOURCE_DIR}/glew/lib/)
+	link_directories(${PROJECT_SOURCE_DIR}/dependencies/glew/lib/)
 endif(WINDOWS)
 
+# Main executeable
 file(GLOB SOURCES
-    source/* EVA/*
+    source/* 
+	EVA/*
+	dependencies/stb-image/*
 )
 
 add_executable(main ${SOURCES})
 
+set_target_properties(
+    main
+    PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
+# Link and include
+target_link_libraries(
+	main 
+	glfw 
+	${GLFW_LIBRARIES}
+) 
+
+target_include_directories(
+    main 
+	PRIVATE ${PROJECT_SOURCE_DIR}/EVA/include
+	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glew/include
+	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glfw/include
+	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glm
+	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/stb-image
+)
+
 if(WINDOWS)
-	target_link_libraries(main glfw glew32 SOIL ${GLFW_LIBRARIES}  ${SOIL_LIBRARIES}) 
+	target_link_libraries(
+		main 
+		glew32
+	) 
+	
+	target_include_directories(
+		main 
+		PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glew/include
+	)
+
+	file(
+		COPY  ${PROJECT_SOURCE_DIR}/dependencies/dll/glew32.dll 
+		DESTINATION ${PROJECT_BINARY_DIR}/bin
+	)
 else()
-	target_link_libraries(main glfw SOIL ${GLEW_LIBRARY} ${GLFW_LIBRARIES}  ${SOIL_LIBRARIES}) 
+	target_link_libraries(
+		main 
+		${GLEW_LIBRARY}
+	) 
 endif(WINDOWS)
 
-include_directories(${PROJECT_SOURCE_DIR}/include/)
-include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/glfw/include/)
-include_directories(${PROJECT_SOURCE_DIR}/SOIL/src/)
-include_directories(${PROJECT_SOURCE_DIR}/glm/)
-include_directories(${PROJECT_SOURCE_DIR}/glew/include/)
-include_directories(${PROJECT_SOURCE_DIR}/EVA/include/)
-
-if(WINDOWS)
-	include_directories(${PROJECT_SOURCE_DIR}/glew/include/)
-	file(COPY  ${PROJECT_SOURCE_DIR}/dll/glew32.dll DESTINATION ${PROJECT_BINARY_DIR}/bin)
-endif(WINDOWS)
-
+# Apple
 if(APPLE)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${GLEW_INCLUDE_DIRS}")
+	set(
+		CMAKE_CXX_FLAGS 
+		"${CMAKE_CXX_FLAGS} -I${GLEW_INCLUDE_DIRS}"
+	)
 endif(APPLE)
 
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY LINK_DIRECTORIES)
-foreach(dir ${dirs})
-	message(STATUS "dir='${dir}'")
-endforeach()
-
+# Copy assets
 file(COPY  ${PROJECT_SOURCE_DIR}/assets DESTINATION ${PROJECT_BINARY_DIR}/bin)

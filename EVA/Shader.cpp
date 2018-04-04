@@ -1,7 +1,7 @@
 #include "Shader.hpp"
 
 #include "GL/glew.h"
-#include "glm/glm/gtc/type_ptr.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include "Shaderload.hpp"
 

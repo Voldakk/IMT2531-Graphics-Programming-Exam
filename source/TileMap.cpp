@@ -15,9 +15,9 @@ TileMap::TileMap(EVA::GameObject *gameObject) : Component(gameObject),
 
     // Material
     m_Material = std::make_shared<EVA::Material>();
-    m_Material->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/Wall 2_Dif.jpg");
-	m_Material->SetTexture(EVA::TextureType::Specular, "./assets/textures/Wall 2_Ref.jpg");
-	m_Material->SetTexture(EVA::TextureType::Normal, "./assets/textures/Wall 2_Nor.jpg");
+    m_Material->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/Cement 1/Cement 1_Dif.jpg");
+	m_Material->SetTexture(EVA::TextureType::Specular, "./assets/textures/Cement 1/Cement 1_Ref.jpg");
+	m_Material->SetTexture(EVA::TextureType::Normal, "./assets/textures/Cement 1/Cement 1_Nor.jpg");
     m_Material->shader = std::make_shared<EVA::StandardShader>();
 }
 

@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-#include "glm/glm/glm.hpp"
+#include "glm/glm.hpp"
 
 #include "Shader.hpp"
 #include "TextureManager.hpp"
