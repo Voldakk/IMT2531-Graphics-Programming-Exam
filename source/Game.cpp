@@ -8,15 +8,17 @@ Game::Game()
     skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
 
     // A directional light that fits the skybox
-    auto directionalLight = CreateLight();
-    directionalLight->type = EVA::LightType::Directional;
+    auto directionalLight = CreateLight(EVA::LightType::Directional, true);
     directionalLight->SetRotation({ 30.0f, -80.0});
 
-    /*auto pointLight = CreateLight();
-    pointLight->type = EVA::LightType::Point;
+    auto pointLight = CreateLight(EVA::LightType::Point);
     pointLight->position = { 11.0f, 1.0f, 10.0f };
     pointLight->color = { 10.0f, 0.0f, 0.0f };
-    pointLight->attenuation = 0.5f;*/
+    pointLight->attenuation = 0.5f;
+
+	//auto directionalLight2 = CreateLight(EVA::LightType::Directional, true);
+	//directionalLight2->SetRotation({ 30.0f, 80.0 });
+	//directionalLight2->color = glm::vec3(0.2f);
 
     // Tilemap
     auto tileMapGo = CreateGameObject();

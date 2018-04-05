@@ -18,7 +18,7 @@ namespace EVA
 
 		std::vector<std::vector<std::vector<MeshRenderer *>>> m_MeshRenderers;
 		std::vector<std::shared_ptr<GameObject>> m_GameObjects;
-		std::vector<std::shared_ptr<Light>> m_lights;
+		std::vector<std::shared_ptr<Light>> m_Lights;
 
 	public:
 
@@ -43,13 +43,13 @@ namespace EVA
 		std::shared_ptr<GameObject> CreateGameObject();
 
 		/// <summary></summary>
-		std::shared_ptr<Light> CreateLight();
+		std::shared_ptr<Light> CreateLight(LightType type, const bool shadows = false, const unsigned int shadowSize = 4096);
 
 		/// <summary></summary>
 		void RegisterMeshRenderer(MeshRenderer *meshRenderer);
 
         /// <summary></summary>
-		std::vector<std::shared_ptr<Light>> GetLights() { return m_lights; }
+		std::vector<std::shared_ptr<Light>> GetLights() { return m_Lights; }
 
 	private:
 

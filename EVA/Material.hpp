@@ -3,10 +3,7 @@
 #include <vector>
 #include <memory>
 
-#include "glm/glm.hpp"
-
 #include "Shader.hpp"
-#include "TextureManager.hpp"
 
 namespace EVA
 {
@@ -64,7 +61,7 @@ namespace EVA
 
 		void Activate(Scene* scene, Transform* transform);
 
-		void SetMaterialUniforms(Scene* scene);
+		void SetMaterialUniforms(Scene* scene) const;
 
 		void SetObjectUniforms(Transform* transform) const;
 

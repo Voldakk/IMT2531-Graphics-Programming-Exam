@@ -1,14 +1,66 @@
 #include "Light.hpp"
 
-void EVA::Light::SetRotation(glm::vec2 rotation)
+#include "GL/glew.h"
+#include "glm/gtc/matrix_transform.inl"
+#include "Application.hpp"
+
+EVA::Light::Light(const LightType type, const bool shadows, const unsigned int shadowSize)
+{
+	m_Type = type;
+	m_Shadows = shadows;
+	m_ShadowSize = shadowSize;
+
+	if(!shadows)
+		return;;
+
+	glGenFramebuffers(1, &m_DepthMapFb);
+
+	glGenTextures(1, &m_DepthMap);
+	glBindTexture(GL_TEXTURE_2D, m_DepthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+		m_ShadowSize, m_ShadowSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_DepthMapFb);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void EVA::Light::SetRotation(const glm::vec2 rotation)
 {
 	m_Rotation = rotation;
 
-    float pitch = glm::radians(rotation.x);
-    float yaw = glm::radians(rotation.y);
+	const auto pitch = glm::radians(rotation.x);
+	const auto yaw = glm::radians(rotation.y);
 
     m_Direction.x = std::cos(yaw) * std::cos(pitch);
     m_Direction.y = std::sin(pitch);
     m_Direction.z = std::sin(yaw) * std::cos(pitch);
     m_Direction.w = 0.0f;
+}
+
+glm::mat4 EVA::Light::GetLightSpaceMatrix()
+{
+
+	const auto nearPlane = 1.0f;
+	const auto farPlane = 100.0f;
+	const auto lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, nearPlane, farPlane);
+
+	const auto lightDirection = -glm::normalize(glm::vec3(GetDirection()));
+	const auto cameraPosition = Application::mainCamera->GetGameObject()->GetTransform()->position;
+
+
+	const auto lightView = glm::lookAt(
+		glm::vec3(cameraPosition - lightDirection * (farPlane / 2)),
+		glm::vec3(cameraPosition),
+		glm::vec3(0.0f, 1.0f, 0.0f));
+
+	return lightProjection * lightView;
 }

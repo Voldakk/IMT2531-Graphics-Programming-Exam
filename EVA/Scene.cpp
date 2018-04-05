@@ -7,36 +7,11 @@
 
 namespace EVA
 {
-	unsigned int depthMapFBO;
-
-	const unsigned int SHADOW_SIZE = 4096;
-
-	unsigned int depthMap;
-
 	Material shadowMaterial;
 	Material shadowMaterialInstanced;
 
 	Scene::Scene()
 	{
-		glGenFramebuffers(1, &depthMapFBO);
-
-		glGenTextures(1, &depthMap);
-		glBindTexture(GL_TEXTURE_2D, depthMap);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-			SHADOW_SIZE, SHADOW_SIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-		glDrawBuffer(GL_NONE);
-		glReadBuffer(GL_NONE);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 		shadowMaterial.shader = std::make_shared<Shader>("shadow.vert", "shadow.frag");
 		shadowMaterialInstanced.shader = std::make_shared<Shader>("shadow_instanced.vert", "shadow_instanced.frag");
 	}
@@ -51,34 +26,29 @@ namespace EVA
 
 	void Scene::Render()
 	{
-		const auto nearPlane = 1.0f;
-		const auto farPlane = 100.0f;
-		const auto lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, nearPlane, farPlane);
-
-		const auto lightDirection = -glm::normalize(glm::vec3(m_lights[0]->GetDirection()));
-		const auto cameraPosition = Application::mainCamera->GetGameObject()->GetTransform()->position;
-		
-
-		const auto lightView = glm::lookAt(
-			glm::vec3(cameraPosition - lightDirection * (farPlane/2)),
-			glm::vec3(cameraPosition),
-			glm::vec3(0.0f, 1.0f, 0.0f));
-
-		const auto lightSpaceMatrix = lightProjection * lightView;
-
-		// Shadow map
-		glViewport(0, 0, SHADOW_SIZE, SHADOW_SIZE);
-		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-		glClear(GL_DEPTH_BUFFER_BIT);
-		RenderShadowMap(lightSpaceMatrix);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		for (auto& light : m_Lights)
+		{
+			if (light->GetType() == LightType::Directional)
+			{
+				// Shadow map
+				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
+				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
+				glClear(GL_DEPTH_BUFFER_BIT);
+				RenderShadowMap(light->GetLightSpaceMatrix());
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			}
+			else
+			{
+				
+			}
+		}
 
 		// Scene
 		const auto ws = Application::GetWindowSize();
 		glViewport(0, 0, ws.x, ws.y);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glBindTexture(GL_TEXTURE_2D, depthMap);
-		RenderScene(lightSpaceMatrix);
+		glBindTexture(GL_TEXTURE_2D, m_Lights[0]->GetDepthMap());
+		RenderScene(m_Lights[0]->GetLightSpaceMatrix());
 	}
 
 	std::shared_ptr<GameObject> Scene::CreateGameObject()
@@ -90,11 +60,11 @@ namespace EVA
 		return gameObject;
 	}
 
-	std::shared_ptr<Light> Scene::CreateLight()
+	std::shared_ptr<Light> Scene::CreateLight(LightType type, const bool shadows, const unsigned int shadowSize)
 	{
-		auto light = std::make_shared<Light>();
+		auto light = std::make_shared<Light>(type, shadows, shadowSize);
 
-		m_lights.push_back(light);
+		m_Lights.push_back(light);
 
 		return light;
 	}
@@ -145,9 +115,7 @@ namespace EVA
 			if (materials[0][0]->GetMaterial()->enableInstancing)
 			{
 				// Set material / shader
-				materials[0][0]->GetMaterial()->SetTexture(TextureType::ShadowMap, depthMap);
 				materials[0][0]->GetMaterial()->Activate(this, nullptr);
-				materials[0][0]->GetMaterial()->shader->SetUniformMatrix4fv("lightSpaceMatrix", lightSpaceMatrix);
 
 				// For each mesh
 				for (auto &meshes : materials)
@@ -181,10 +149,7 @@ namespace EVA
 					for (auto &meshRenderer : meshes)
 					{
 						// Render the mesh at the MeshRenderers position
-						meshRenderer->GetMaterial()->SetTexture(TextureType::ShadowMap, depthMap);
-						meshRenderer->GetMaterial()->Activate(this, meshRenderer->GetGameObject()->GetTransform().get());
-						meshRenderer->GetMaterial()->shader->SetUniformMatrix4fv("lightSpaceMatrix", lightSpaceMatrix);
-						meshRenderer->GetMesh()->Draw();
+						meshRenderer->Render();
 					}
 				}
 			}

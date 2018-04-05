@@ -2,6 +2,7 @@
 
 #include "Scene.hpp"
 #include "Application.hpp"
+#include "TextureManager.hpp"
 
 namespace EVA
 {
@@ -70,7 +71,7 @@ namespace EVA
 			SetObjectUniforms(transform);
 	}
 
-	void Material::SetMaterialUniforms(Scene *scene)
+	void Material::SetMaterialUniforms(Scene *scene) const
 	{
 		// Material
 		shader->SetUniform1f("material.shininess", materialShininess);
@@ -93,6 +94,8 @@ namespace EVA
 		auto lights = scene->GetLights();
 		shader->SetUniform1i("numLights", lights.size());
 
+		auto shadowNum = 0;
+
 		for (unsigned int i = 0; i < lights.size(); ++i)
 		{
 			const auto lightNum = "allLights[" + std::to_string(i) + "].";
@@ -100,19 +103,31 @@ namespace EVA
 			shader->SetUniform3fv(lightNum + "color", lights[i]->color);
 			shader->SetUniform1f(lightNum + "ambientCoefficient", lights[i]->ambientCoefficient);
 
-			switch (lights[i]->type)
+			switch (lights[i]->GetType())
 			{
 
 			case LightType::Directional:
 
-
 				shader->SetUniform4fv(lightNum + "position", lights[i]->GetDirection());
+				
 				break;
 
 			case LightType::Point:
+
 				shader->SetUniform4fv(lightNum + "position", glm::vec4(lights[i]->position, 1.0f));
 				shader->SetUniform1f(lightNum + "attenuation", lights[i]->attenuation);
+
 				break;
+			}
+
+			if(lights[i]->Shadows())
+			{
+				glActiveTexture(GL_TEXTURE5 + shadowNum);
+				glBindTexture(GL_TEXTURE_2D, lights[i]->GetDepthMap());
+				shader->SetUniform1i(lightNum + "shadowMap", 5 + shadowNum);
+				shader->SetUniformMatrix4fv(lightNum + "lightSpaceMatrix", lights[i]->GetLightSpaceMatrix());
+
+				shadowNum++;
 			}
 		}
 	}

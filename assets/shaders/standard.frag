@@ -23,8 +23,12 @@ uniform struct Light
    vec3 color;
    float attenuation;
    float ambientCoefficient;
+   sampler2D shadowMap;
+   mat4 lightSpaceMatrix;
 
 } allLights[MAX_LIGHTS];
+
+in vec4 allFragPosLightSpace [MAX_LIGHTS];
 
 // Model
 in vec3 fragVert;
@@ -33,14 +37,10 @@ in vec3 fragNormal;
 in mat3 fragTBN;
 uniform mat4 model;
 
-// Shadow
-uniform sampler2D shadowMap;
-in vec4 fragPosLightSpace;
-
 // Out color
 out vec4 finalColor;
 
-float ShadowCalculation(vec3 normal, vec3 lightDir)
+float ShadowCalculation(vec3 normal, vec3 lightDir, sampler2D shadowMap, vec4 fragPosLightSpace)
 {
 	// Perform perspective divide
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -75,7 +75,7 @@ float ShadowCalculation(vec3 normal, vec3 lightDir)
     return shadow;
 }
 
-vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseMap, vec3 specularMap)
+vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseMap, vec3 specularMap, vec4 fragPosLightSpace)
 {
     float attenuation = 1.0;
     vec3 surfaceToLight = normalize(light.position.xyz);;
@@ -99,7 +99,7 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
     float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess);
     vec3 specular = spec * specularMap.rgb * light.color;
 
-	float shadow = ShadowCalculation(normal, surfaceToLight);
+	float shadow = ShadowCalculation(normal, surfaceToLight, light.shadowMap, fragPosLightSpace);
     return attenuation * ambient + (1.0 - shadow) * (attenuation * ( diffuse + specular));
 }
 
@@ -124,7 +124,7 @@ void main()
 
     for(int i = 0; i < numLights; ++i)
     {
-        linearColor += ApplyLight(allLights[i], normal, surfacePos, surfaceToCamera, diffuseMap.rgb, specularMap);
+        linearColor += ApplyLight(allLights[i], normal, surfacePos, surfaceToCamera, diffuseMap.rgb, specularMap, allFragPosLightSpace[i]);
     }
     
     // Final color (after gamma correction)

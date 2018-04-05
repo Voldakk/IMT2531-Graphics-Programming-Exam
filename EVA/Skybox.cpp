@@ -8,6 +8,7 @@
 #include "Material.hpp"
 #include "Transform.hpp"
 #include "Application.hpp"
+#include "TextureManager.hpp"
 
 namespace EVA
 {
