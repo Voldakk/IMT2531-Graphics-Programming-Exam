@@ -11,14 +11,14 @@ Game::Game()
     auto directionalLight = CreateLight(EVA::LightType::Directional, true);
     directionalLight->SetRotation({ 30.0f, -80.0});
 
-    auto pointLight = CreateLight(EVA::LightType::Point);
+    auto pointLight = CreateLight(EVA::LightType::Point, true, 128);
     pointLight->position = { 11.0f, 1.0f, 10.0f };
     pointLight->color = { 10.0f, 0.0f, 0.0f };
     pointLight->attenuation = 0.5f;
 
-	//auto directionalLight2 = CreateLight(EVA::LightType::Directional, true);
-	//directionalLight2->SetRotation({ 30.0f, 80.0 });
-	//directionalLight2->color = glm::vec3(0.2f);
+	/*auto directionalLight2 = CreateLight(EVA::LightType::Directional, true);
+	directionalLight2->SetRotation({ 30.0f, 80.0 });
+	directionalLight2->color = glm::vec3(0.2f);*/
 
     // Tilemap
     auto tileMapGo = CreateGameObject();
@@ -38,9 +38,15 @@ Game::Game()
 	const auto sphereMesh = EVA::Mesh::Primitive(EVA::PrimitiveType::Sphere);
 
 	auto goS = CreateGameObject();
-	goS->GetTransform()->SetPosition({ tileMap->Width(), 1.0f, 35.0f });
-	goS->GetTransform()->SetScale( glm::vec3(0.5f));
+	goS->GetTransform()->SetPosition({ 11.4f, 0.5f, 7.0f });
+	goS->GetTransform()->SetScale(glm::vec3(0.5f));
 	auto mr = goS->AddComponent<EVA::MeshRenderer>();
+	mr->Set(sphereMesh, m);
+
+	goS = CreateGameObject();
+	goS->GetTransform()->SetPosition({ 11.0f, 0.5f, 8.2f });
+	goS->GetTransform()->SetScale(glm::vec3(0.5f));
+	mr = goS->AddComponent<EVA::MeshRenderer>();
 	mr->Set(sphereMesh, m);
 }
 

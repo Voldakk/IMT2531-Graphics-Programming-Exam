@@ -48,13 +48,14 @@ namespace EVA
 		/// <summary></summary>
 		void RegisterMeshRenderer(MeshRenderer *meshRenderer);
 
-        /// <summary></summary>
+		/// <summary></summary>
 		std::vector<std::shared_ptr<Light>> GetLights() { return m_Lights; }
 
 	private:
 
 		void RenderScene(glm::mat4 lightSpaceMatrix);
 		void RenderShadowMap(glm::mat4 lightSpaceMatrix);
+		void RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, glm::vec3 lightPos, float farPlane);
 	};
 
 }

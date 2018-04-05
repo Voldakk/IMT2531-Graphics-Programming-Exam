@@ -26,6 +26,7 @@ uniform struct Light
    float ambientCoefficient;
    sampler2D shadowMap;
    mat4 lightSpaceMatrix;
+   float farPlane;
 
 } allLights[MAX_LIGHTS];
 

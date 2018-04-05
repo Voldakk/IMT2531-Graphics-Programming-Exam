@@ -7,13 +7,19 @@
 
 namespace EVA
 {
-	Material shadowMaterial;
-	Material shadowMaterialInstanced;
+	ShadowMaterial shadowMaterial;
+	ShadowMaterial shadowMaterialInstanced;
+
+	ShadowMaterial shadowMaterialCube;
+	ShadowMaterial shadowMaterialCubeInstanced;
 
 	Scene::Scene()
 	{
 		shadowMaterial.shader = std::make_shared<Shader>("shadow.vert", "shadow.frag");
-		shadowMaterialInstanced.shader = std::make_shared<Shader>("shadow_instanced.vert", "shadow_instanced.frag");
+		shadowMaterialInstanced.shader = std::make_shared<Shader>("shadow_instanced.vert", "shadow.frag");
+	
+		shadowMaterialCube.shader = std::make_shared<Shader>("shadow_cube.vert", "shadow_cube.geom", "shadow_cube.frag");
+		shadowMaterialCubeInstanced.shader = std::make_shared<Shader>("shadow_cube_instanced.vert", "shadow_cube.geom", "shadow_cube.frag");
 	}
 
 	void Scene::Update(const float deltaTime)
@@ -30,16 +36,23 @@ namespace EVA
 		{
 			if (light->GetType() == LightType::Directional)
 			{
-				// Shadow map
 				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
 				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
 				glClear(GL_DEPTH_BUFFER_BIT);
+
 				RenderShadowMap(light->GetLightSpaceMatrix());
+
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			}
 			else
 			{
+				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
+				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
+				glClear(GL_DEPTH_BUFFER_BIT);
 				
+				RenderShadowCubeMap(light->GetShadowTransforms(), light->position, light->pointFarPlane);
+
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			}
 		}
 
@@ -160,12 +173,12 @@ namespace EVA
 	{
 		for (auto &materials : m_MeshRenderers)
 		{
-			// If he material should use GPU instancing
+			// If the material should use GPU instancing
 			if (materials[0][0]->GetMaterial()->enableInstancing)
 			{
 				// Set material / shader
 				shadowMaterialInstanced.Activate(this, nullptr);
-				shadowMaterialInstanced.shader->SetUniformMatrix4fv("lightSpaceMatrix", lightSpaceMatrix);
+				shadowMaterialInstanced.shader->SetUniformMatrix4Fv("lightSpaceMatrix", lightSpaceMatrix);
 
 				// For each mesh
 				for (auto &meshes : materials)
@@ -192,6 +205,9 @@ namespace EVA
 			}
 			else // If not
 			{
+				shadowMaterial.Activate(this, nullptr);
+				shadowMaterial.shader->SetUniformMatrix4Fv("lightSpaceMatrix", lightSpaceMatrix);
+
 				// For each mesh
 				for (auto &meshes : materials)
 				{
@@ -199,8 +215,71 @@ namespace EVA
 					for (auto &meshRenderer : meshes)
 					{
 						// Render the mesh at the MeshRenderers position
-						shadowMaterial.Activate(this, meshRenderer->GetGameObject()->GetTransform().get());
-						shadowMaterial.shader->SetUniformMatrix4fv("lightSpaceMatrix", lightSpaceMatrix);
+						shadowMaterial.SetObjectUniforms(meshRenderer->GetGameObject()->GetTransform().get());
+						meshRenderer->GetMesh()->Draw();
+					}
+				}
+			}
+		}
+	}
+
+	void Scene::RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, const glm::vec3 lightPos, const float farPlane)
+	{
+		for (auto &materials : m_MeshRenderers)
+		{
+			// If the material should use GPU instancing
+			if (materials[0][0]->GetMaterial()->enableInstancing)
+			{
+				// Set material / shader
+				shadowMaterialCubeInstanced.Activate(this, nullptr);
+				shadowMaterialCubeInstanced.shader->SetUniform3Fv("lightPos", lightPos);
+				shadowMaterialCubeInstanced.shader->SetUniform1F("farPlane", farPlane);
+				for (unsigned int i = 0; i < shadowMatrices.size(); ++i)
+				{
+					shadowMaterialCubeInstanced.shader->SetUniformMatrix4Fv("shadowMatrices[" + std::to_string(i) + "]", shadowMatrices[i]);
+				}
+
+				// For each mesh
+				for (auto &meshes : materials)
+				{
+					// If the mesh isn't static or the static mesh is missing the ibo
+					if (!meshes[0]->GetMesh()->isStatic ||
+						(meshes[0]->GetMesh()->isStatic && !meshes[0]->GetMesh()->HasIbo()))
+					{
+						// Get the model matrices from all the objects
+						std::vector<glm::mat4> models;
+						models.reserve(meshes.size());
+
+						for (auto &meshRenderer : meshes)
+						{
+							models.push_back(meshRenderer->GetGameObject()->GetTransform()->GetModelMatrix());
+						}
+						// Set the mesh ibo
+						meshes[0]->GetMesh()->SetIbo(models);
+					}
+
+					// Draw the mesh
+					meshes[0]->GetMesh()->DrawInstanced();
+				}
+			}
+			else // If not
+			{
+				shadowMaterialCube.Activate(this, nullptr);
+				shadowMaterialCube.shader->SetUniform3Fv("lightPos", lightPos);
+				shadowMaterialCube.shader->SetUniform1F("farPlane", farPlane);
+				for (unsigned int i = 0; i < shadowMatrices.size(); ++i)
+				{
+					shadowMaterialCube.shader->SetUniformMatrix4Fv("shadowMatrices[" + std::to_string(i) + "]", shadowMatrices[i]);
+				}
+
+				// For each mesh
+				for (auto &meshes : materials)
+				{
+					// For each MeshRenderer that use the mesh
+					for (auto &meshRenderer : meshes)
+					{
+						// Render the mesh at the MeshRenderers position
+						shadowMaterialCube.SetObjectUniforms(meshRenderer->GetGameObject()->GetTransform().get());
 						meshRenderer->GetMesh()->Draw();
 					}
 				}

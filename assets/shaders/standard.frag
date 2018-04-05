@@ -25,8 +25,11 @@ uniform struct Light
    float ambientCoefficient;
    sampler2D shadowMap;
    mat4 lightSpaceMatrix;
+   float farPlane;
 
 } allLights[MAX_LIGHTS];
+
+uniform samplerCube shadowCubeMap;
 
 in vec4 allFragPosLightSpace [MAX_LIGHTS];
 
@@ -75,18 +78,59 @@ float ShadowCalculation(vec3 normal, vec3 lightDir, sampler2D shadowMap, vec4 fr
     return shadow;
 }
 
-vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseMap, vec3 specularMap, vec4 fragPosLightSpace)
+vec3 sampleOffsetDirections[20] = vec3[]
+(
+   vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
+   vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1),
+   vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0),
+   vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
+   vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
+); 
+
+float ShadowCubeCalculation(vec3 normal, vec3 fragPos, vec3 lightPos, float farPlane)
+{
+    // Get vector between fragment position and light position
+    vec3 fragToLight = fragPos - lightPos;
+
+    // Now get current linear depth as the length between the fragment and light position
+    float currentDepth = length(fragToLight);
+
+	float shadow = 0.0;
+	float bias   = 0.15;
+	int samples  = 20;
+	float viewDistance = length(cameraPosition - fragPos);
+	float diskRadius = 0.05;
+	for(int i = 0; i < samples; ++i)
+	{
+		float closestDepth = texture(shadowCubeMap, fragToLight + sampleOffsetDirections[i] * diskRadius).r;
+		closestDepth *= farPlane;   // Undo mapping [0;1]
+		if(currentDepth - bias > closestDepth)
+			shadow += 1.0;
+	}
+	shadow /= float(samples);  
+
+    return shadow;
+} 
+
+vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseMap, vec3 specularMap, int lightIndex)
 {
     float attenuation = 1.0;
     vec3 surfaceToLight = normalize(light.position.xyz);;
+	float shadow = 0;
 
 	// Point light
     if(light.position.w == 1.0)
     {
         surfaceToLight = normalize(light.position.xyz - surfacePos);
         float distanceToLight = length(light.position.xyz - surfacePos);
-        attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
+        attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 4));
+
+		shadow = ShadowCubeCalculation(normal, surfacePos, light.position.xyz, light.farPlane);
     }
+	else
+	{
+		shadow = ShadowCalculation(normal, surfaceToLight, light.shadowMap, allFragPosLightSpace[lightIndex]);
+	}
 
     // Ambient
     vec3 ambient = light.ambientCoefficient * diffuseMap.rgb * light.color;
@@ -99,7 +143,6 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
     float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess);
     vec3 specular = spec * specularMap.rgb * light.color;
 
-	float shadow = ShadowCalculation(normal, surfaceToLight, light.shadowMap, fragPosLightSpace);
     return attenuation * ambient + (1.0 - shadow) * (attenuation * ( diffuse + specular));
 }
 
@@ -124,7 +167,7 @@ void main()
 
     for(int i = 0; i < numLights; ++i)
     {
-        linearColor += ApplyLight(allLights[i], normal, surfacePos, surfaceToCamera, diffuseMap.rgb, specularMap, allFragPosLightSpace[i]);
+        linearColor += ApplyLight(allLights[i], normal, surfacePos, surfaceToCamera, diffuseMap.rgb, specularMap, i);
     }
     
     // Final color (after gamma correction)

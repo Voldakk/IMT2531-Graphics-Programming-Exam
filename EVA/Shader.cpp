@@ -8,9 +8,14 @@
 namespace EVA
 {
 
-	Shader::Shader(std::string vertexPath, std::string fragmentPath)
+	Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 	{
 		m_ShaderId = ShaderLoad::CreateProgram(vertexPath.c_str(), fragmentPath.c_str());
+	}
+
+	Shader::Shader(const std::string& vertexPath, const std::string& geomertyPath, const std::string& fragmentPath)
+	{
+		m_ShaderId = ShaderLoad::CreateProgram(vertexPath.c_str(), geomertyPath.c_str(), fragmentPath.c_str());
 	}
 
 	Shader::~Shader()
@@ -18,42 +23,42 @@ namespace EVA
 		glDeleteProgram(m_ShaderId);
 	}
 
-	int Shader::GetUniformLocation(std::string name)
+	int Shader::GetUniformLocation(const std::string& name)
 	{
 		if (m_UniformLocationMap.find(name) != m_UniformLocationMap.end())
 			return m_UniformLocationMap[name];
 
-		int location = glGetUniformLocation(m_ShaderId, name.c_str());
+		const auto location = glGetUniformLocation(m_ShaderId, name.c_str());
 		m_UniformLocationMap[name] = location;
 		return location;
 	}
 
-	void Shader::SetUniform1i(std::string name, int value)
+	void Shader::SetUniform1I(const std::string& name, const int value)
 	{
 		glUniform1i(GetUniformLocation(name), value);
 	}
 
-	void Shader::SetUniform1f(std::string name, float value)
+	void Shader::SetUniform1F(const std::string& name, const float value)
 	{
 		glUniform1f(GetUniformLocation(name), value);
 	}
 
-	void Shader::SetUniform3fv(std::string name, glm::vec3 value)
+	void Shader::SetUniform3Fv(const std::string& name, glm::vec3 value)
 	{
 		glUniform3fv(GetUniformLocation(name), 1, value_ptr(value));
 	}
 
-	void Shader::SetUniform4fv(std::string name, glm::vec4 value)
+	void Shader::SetUniform4Fv(const std::string& name, glm::vec4 value)
 	{
 		glUniform4fv(GetUniformLocation(name), 1, value_ptr(value));
 	}
 
-	void Shader::SetUniformMatrix4fv(std::string name, glm::mat4 value)
+	void Shader::SetUniformMatrix4Fv(const std::string& name, glm::mat4 value)
 	{
 		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr(value));
 	}
 
-	void Shader::Bind()
+	void Shader::Bind() const
 	{
 		glUseProgram(m_ShaderId);
 	}

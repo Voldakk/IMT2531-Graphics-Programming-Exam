@@ -1,14 +1,69 @@
 #include "Shaderload.hpp"
 
+#include <vector>
 #include <fstream>
 #include <iostream>
 
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
 namespace EVA
 {
 
 	const std::string SHADER_PATH = "./assets/shaders/";
+
+	GLuint ShaderLoad::CreateProgram(const char *pathVertShader, const char *pathFragShader)
+	{
+		// Load and compile the vertex and fragment shaders
+		const auto vertexShader = LoadAndCompileShader((SHADER_PATH + pathVertShader).c_str(), GL_VERTEX_SHADER);
+		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH + pathFragShader).c_str(), GL_FRAGMENT_SHADER);
+
+		// Create a program object and attach the two shaders we have compiled, the program object contains
+		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
+		const auto shaderProgram = glCreateProgram();
+		glAttachShader(shaderProgram, vertexShader);
+		glAttachShader(shaderProgram, fragmentShader);
+
+		// Now that the fragment and vertex shader has been attached, we no longer need these two separate objects and should delete them.
+		// The attachment to the shader program will keep them alive, as long as we keep the shaderProgram.
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+
+		// Link the different shaders that are bound to this program, this creates a final shader that
+		// we can use to render geometry with.
+		glLinkProgram(shaderProgram);
+		glUseProgram(shaderProgram);
+
+		return shaderProgram;
+	}
+
+	GLuint ShaderLoad::CreateProgram(const char *pathVertShader, const char *pathGeomShader, const char *pathFragShader)
+	{
+		// Load and compile the vertex and fragment shaders
+		const auto vertexShader =   LoadAndCompileShader((SHADER_PATH + pathVertShader).c_str(), GL_VERTEX_SHADER);
+		const auto geometryShader = LoadAndCompileShader((SHADER_PATH + pathGeomShader).c_str(), GL_GEOMETRY_SHADER);
+		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH + pathFragShader).c_str(), GL_FRAGMENT_SHADER);
+
+		// Create a program object and attach the two shaders we have compiled, the program object contains
+		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
+		const auto shaderProgram = glCreateProgram();
+		glAttachShader(shaderProgram, vertexShader);
+		glAttachShader(shaderProgram, geometryShader);
+		glAttachShader(shaderProgram, fragmentShader);
+
+		// Now that the fragment and vertex shader has been attached, we no longer need these two separate objects and should delete them.
+		// The attachment to the shader program will keep them alive, as long as we keep the shaderProgram.
+		glDeleteShader(vertexShader);
+		glDeleteShader(geometryShader);
+		glDeleteShader(fragmentShader);
+
+		// Link the different shaders that are bound to this program, this creates a final shader that
+		// we can use to render geometry with.
+		glLinkProgram(shaderProgram);
+		glUseProgram(shaderProgram);
+
+		return shaderProgram;
+	}
 
 	void ShaderLoad::ReadShaderSource(const char *fname, std::vector<char> &buffer)
 	{
@@ -68,30 +123,4 @@ namespace EVA
 		}
 		return shader;
 	}
-
-	GLuint ShaderLoad::CreateProgram(const char *pathVertShader, const char *pathFragShader)
-	{
-		// Load and compile the vertex and fragment shaders
-		const auto vertexShader = LoadAndCompileShader((SHADER_PATH + pathVertShader).c_str(), GL_VERTEX_SHADER);
-		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH + pathFragShader).c_str(), GL_FRAGMENT_SHADER);
-
-		// Create a program object and attach the two shaders we have compiled, the program object contains
-		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
-		const auto shaderProgram = glCreateProgram();
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-
-		// Now that the fragment and vertex shader has been attached, we no longer need these two separate objects and should delete them.
-		// The attachment to the shader program will keep them alive, as long as we keep the shaderProgram.
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-
-		// Link the different shaders that are bound to this program, this creates a final shader that
-		// we can use to render geometry with.
-		glLinkProgram(shaderProgram);
-		glUseProgram(shaderProgram);
-
-		return shaderProgram;
-	}
-
 }

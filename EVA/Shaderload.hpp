@@ -7,17 +7,27 @@
 namespace EVA
 {
 
-// A helper class for reading and compiling shaders
+	// A helper class for reading and compiling shaders
 	class ShaderLoad
 	{
+
 	public:
+
 		/// <summary>Creates a shader program from the provided shader files</summary>
 		/// <param name="pathVertShader">The path to the vertex shader</param>  
 		/// <param name="pathFragShader">The path to the fragment shader</param>  
 		/// <returns>A reference to the shader program</returns>  
 		static GLuint CreateProgram(const char *pathVertShader, const char *pathFragShader);
 
+		/// <summary>Creates a shader program from the provided shader files</summary>
+		/// <param name="pathVertShader">The path to the vertex shader</param>  
+		/// <param name="pathGeomShader">The path to the geometry shader</param>  
+		/// <param name="pathFragShader">The path to the fragment shader</param>  
+		/// <returns>A reference to the shader program</returns>  
+		static GLuint CreateProgram(const char *pathVertShader, const char *pathGeomShader, const char *pathFragShader);
+
 	private:
+
 		/// <summary>Reads the file and stores the content in the provided buffer</summary>
 		/// <param name="fname">The path to the file</param>  
 		/// <param name="buffer">The buffer the contents of the file should be read to</param>  

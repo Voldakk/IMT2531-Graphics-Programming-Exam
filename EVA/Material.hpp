@@ -11,7 +11,7 @@ namespace EVA
 	// Different texture types
 	enum TextureType
 	{
-		Diffuse, Specular, Normal, Emission, Height, ShadowMap
+		Diffuse, Specular, Normal, Emission, Height
 	};
 
 	// Struct for holding texture info
@@ -43,7 +43,6 @@ namespace EVA
 		Texture textureNormal;
 		Texture textureEmission;
 		Texture textureHeight;
-		Texture textureShadowMap;
 
 		std::shared_ptr<Shader> shader;
 
@@ -51,7 +50,7 @@ namespace EVA
 
 		float materialShininess = 1000.0f;
 
-		Material();
+		Material() = default;
 
 		void SetTexture(TextureType type, const char *path);
 
@@ -61,9 +60,9 @@ namespace EVA
 
 		void Activate(Scene* scene, Transform* transform);
 
-		void SetMaterialUniforms(Scene* scene) const;
+		virtual void SetMaterialUniforms(Scene* scene) const;
 
-		void SetObjectUniforms(Transform* transform) const;
+		virtual void SetObjectUniforms(Transform* transform) const;
 
 		void SetTextures() const;
 
@@ -71,4 +70,10 @@ namespace EVA
 
 	};
 
+	class ShadowMaterial : public Material
+	{
+	public:
+		void SetMaterialUniforms(Scene* scene) const override;
+		void SetObjectUniforms(Transform* transform) const override;
+	};
 }

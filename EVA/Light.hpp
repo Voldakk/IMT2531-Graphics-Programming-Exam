@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glm/glm.hpp"
+#include <vector>
 
 namespace EVA
 {
@@ -29,6 +30,12 @@ namespace EVA
 
 	public:
 
+		const float directionalNearPlane = 1.0f;
+		const float directionalFarPlane = 100.0f;
+
+		const float pointNearPlane = 1.0f;
+		const float pointFarPlane = 25.0f;
+
 		// Common
 		glm::vec3 color = glm::vec3(1.0f);
 		float ambientCoefficient = 0.005f;
@@ -51,6 +58,8 @@ namespace EVA
 		inline unsigned int GetDepthMapFb() const { return m_DepthMapFb; }
 		inline unsigned int GetDepthMap() const { return m_DepthMap; }
 		inline float GetShadwoSize() const { return m_ShadowSize; }
+
+		std::vector<glm::mat4> GetShadowTransforms() const;
 	};
 
 }
