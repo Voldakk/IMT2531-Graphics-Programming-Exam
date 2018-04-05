@@ -112,7 +112,7 @@ namespace EVA
 					shadowNum++;
 				}
 			}
-			else
+			else if (lights[i]->GetType() == LightType::Point)
 			{
 				shader->SetUniform4Fv(lightNum + "position", glm::vec4(lights[i]->position, 1.0f));
 				shader->SetUniform1F(lightNum + "attenuation", lights[i]->attenuation);
@@ -125,6 +125,10 @@ namespace EVA
 					shader->SetUniform1F(lightNum + "farPlane", lights[i]->pointFarPlane);
 
 					shadowNum++;
+				}
+				else
+				{
+					shader->SetUniform1F(lightNum + "farPlane", -1.0f);
 				}
 			}
 		}

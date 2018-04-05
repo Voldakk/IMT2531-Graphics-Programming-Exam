@@ -34,7 +34,7 @@ namespace EVA
 	{
 		for (auto& light : m_Lights)
 		{
-			if (light->GetType() == LightType::Directional)
+			if (light->GetType() == LightType::Directional && light->Shadows())
 			{
 				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
 				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
@@ -44,7 +44,7 @@ namespace EVA
 
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			}
-			else
+			else if (light->GetType() == LightType::Point && light->Shadows())
 			{
 				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
 				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
@@ -61,7 +61,7 @@ namespace EVA
 		glViewport(0, 0, ws.x, ws.y);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindTexture(GL_TEXTURE_2D, m_Lights[0]->GetDepthMap());
-		RenderScene(m_Lights[0]->GetLightSpaceMatrix());
+		RenderScene();
 	}
 
 	std::shared_ptr<GameObject> Scene::CreateGameObject()
@@ -115,7 +115,7 @@ namespace EVA
 		m_MeshRenderers.push_back(materials);
 	}
 
-	void Scene::RenderScene(const glm::mat4 lightSpaceMatrix)
+	void Scene::RenderScene()
 	{
 		if (skybox != nullptr)
 		{

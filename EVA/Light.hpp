@@ -53,7 +53,7 @@ namespace EVA
 		inline LightType GetType()		const { return m_Type; }
 		inline glm::vec4 GetDirection() const { return m_Direction; }
 
-		glm::mat4 GetLightSpaceMatrix();
+		glm::mat4 GetLightSpaceMatrix() const;
 		inline bool Shadows() const { return m_Shadows; }
 		inline unsigned int GetDepthMapFb() const { return m_DepthMapFb; }
 		inline unsigned int GetDepthMap() const { return m_DepthMap; }

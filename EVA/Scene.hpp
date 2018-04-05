@@ -53,7 +53,7 @@ namespace EVA
 
 	private:
 
-		void RenderScene(glm::mat4 lightSpaceMatrix);
+		void RenderScene();
 		void RenderShadowMap(glm::mat4 lightSpaceMatrix);
 		void RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, glm::vec3 lightPos, float farPlane);
 	};

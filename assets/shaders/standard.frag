@@ -125,7 +125,7 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
         float distanceToLight = length(light.position.xyz - surfacePos);
         attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 4));
 
-		shadow = ShadowCubeCalculation(normal, surfacePos, light.position.xyz, light.farPlane);
+		//shadow = ShadowCubeCalculation(normal, surfacePos, light.position.xyz, light.farPlane);
     }
 	else
 	{

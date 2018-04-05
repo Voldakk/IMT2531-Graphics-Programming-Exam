@@ -72,7 +72,7 @@ void EVA::Light::SetRotation(const glm::vec2 rotation)
     m_Direction.w = 0.0f;
 }
 
-glm::mat4 EVA::Light::GetLightSpaceMatrix()
+glm::mat4 EVA::Light::GetLightSpaceMatrix() const
 {
 	const auto lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, directionalNearPlane, directionalFarPlane);
 
