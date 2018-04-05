@@ -5,8 +5,106 @@
 
 namespace EVA
 {
+	std::shared_ptr<Mesh> OBJLoader::LoadSingle(const char* path)
+	{
+		std::vector<unsigned int> finVertIdx, finUvIdx, finNormIdx;
 
-	std::vector<std::shared_ptr<Mesh>> OBJLoader::Load(const char *path)
+		std::vector<glm::vec3> tmpVert;
+		std::vector<glm::vec2> tmpUv;
+		std::vector<glm::vec3> tmpNorms;
+
+		FILE *file = fopen(path, "r");
+
+		if (file == nullptr)
+		{
+			printf("OBJLoader::Load - Unable to open file: %s", path);
+			return nullptr;
+		}
+
+		char symb[100];
+		char buffer[1000];
+		std::string name;
+
+		while (true)
+		{
+			const auto res = fscanf(file, "%s", symb);
+
+			if (res == EOF)
+			{
+				break;
+			}
+
+			if (strcmp(symb, "o") == 0)
+			{
+				// Read the name of the new mesh
+				fscanf(file, "%s", &buffer);
+				name = buffer;
+				std::cout << "OBJLoader::Load - Loading object: " << name << std::endl;
+			}
+			else if (strcmp(symb, "v") == 0)
+			{
+				glm::vec3 vertex;
+				fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+				tmpVert.push_back(vertex);
+			}
+			else if (strcmp(symb, "vt") == 0)
+			{
+				glm::vec2 uv;
+				fscanf(file, "%f %f\n", &uv.x, &uv.y);
+				tmpUv.push_back(uv);
+			}
+			else if (strcmp(symb, "vn") == 0)
+			{
+				glm::vec3 normal;
+				fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+				tmpNorms.push_back(normal);
+			}
+			else if (strcmp(symb, "f") == 0)
+			{
+				unsigned int vertIdx[3], uvIdx[3], nnIdx[3];
+
+				const auto suc = fscanf(file,
+					"%d/%d/%d %d/%d/%d %d/%d/%d\n",
+					&vertIdx[0], &uvIdx[0], &nnIdx[0],
+					&vertIdx[1], &uvIdx[1], &nnIdx[1],
+					&vertIdx[2], &uvIdx[2], &nnIdx[2]);
+
+				if (suc != 9)
+				{
+					printf("Wrong format for face specification.");
+					fclose(file);
+					return nullptr;
+				}
+				finVertIdx.push_back(vertIdx[0]);
+				finVertIdx.push_back(vertIdx[1]);
+				finVertIdx.push_back(vertIdx[2]);
+
+				finUvIdx.push_back(uvIdx[0]);
+				finUvIdx.push_back(uvIdx[1]);
+				finUvIdx.push_back(uvIdx[2]);
+
+				finNormIdx.push_back(nnIdx[0]);
+				finNormIdx.push_back(nnIdx[1]);
+				finNormIdx.push_back(nnIdx[2]);
+
+			}
+			else
+			{
+				//discard
+				fgets(buffer, 1000, file);
+			}
+		}
+
+		fclose(file);
+
+		// Save the current mesh
+		if (!tmpVert.empty())
+			return CreateMesh(name, tmpVert, tmpUv, tmpNorms, finVertIdx, finUvIdx, finNormIdx);
+
+		return nullptr;
+	}
+
+	std::vector<std::shared_ptr<Mesh>> OBJLoader::LoadMultiple(const char *path)
 	{
 		std::vector<std::shared_ptr<Mesh>> meshes;
 		std::vector<std::shared_ptr<Mesh>> empty;

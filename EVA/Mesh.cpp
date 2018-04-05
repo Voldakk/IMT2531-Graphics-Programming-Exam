@@ -136,21 +136,17 @@ namespace EVA
 
 	std::shared_ptr<Mesh> Mesh::Load(const std::string &path)
 	{
-		auto meshes = OBJLoader::Load(path.c_str());
-		if (!meshes.empty())
-			return meshes[0];
-			
-		return nullptr;
+		return OBJLoader::LoadSingle(path.c_str());
 	}
 
 	std::vector<std::shared_ptr<Mesh>> Mesh::LoadMultiple(const std::string &path)
 	{
-		return OBJLoader::Load(path.c_str());
+		return OBJLoader::LoadMultiple(path.c_str());
 	}
 
 	std::shared_ptr<Mesh> Mesh::Primitive(const PrimitiveType type)
 	{
-		std::string path = "./assets/primitives/";
+		std::string path = "./assets/models/primitives/";
 
 		switch (type)
 		{

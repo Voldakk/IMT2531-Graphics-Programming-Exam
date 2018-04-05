@@ -12,7 +12,8 @@ namespace EVA
 	{
 	public:
 
-		static std::vector<std::shared_ptr<Mesh>> Load(const char *path);
+		static std::shared_ptr<Mesh> LoadSingle(const char *path);
+		static std::vector<std::shared_ptr<Mesh>> LoadMultiple(const char *path);
 
 	private:
 

@@ -6,7 +6,7 @@ TileMap::TileMap(EVA::GameObject *gameObject) : Component(gameObject),
                                                 m_Width(0), m_Height(0)
 {
     // Load meshes
-    auto meshes = EVA::Mesh::LoadMultiple("./assets/tiles/tile.obj");
+    auto meshes = EVA::Mesh::LoadMultiple("./assets/models/tile.obj");
 
     for (const auto &mesh : meshes)
     {
