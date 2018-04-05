@@ -6,4 +6,3 @@ build/
 cmake-build-debug/
 CMakeSettings.json
 
-*.blend1
