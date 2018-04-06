@@ -1,6 +1,6 @@
 #include "Ghost.hpp"
 
-Ghost::Ghost(EVA::GameObject* gameObject) : Component(gameObject)
+Ghost::Ghost(EVA::GameObject* gameObject, glm::vec3 color) : Component(gameObject)
 {
 	const auto shader = std::make_shared<EVA::StandardShader>();
 
@@ -12,6 +12,8 @@ Ghost::Ghost(EVA::GameObject* gameObject) : Component(gameObject)
 	m_BodyMaterial->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/ghost/ghost_body_diffuse.png");
 	m_BodyMaterial->SetTexture(EVA::TextureType::Specular, "./assets/textures/ghost/ghost_body_specular.png");
 	m_BodyMaterial->SetTexture(EVA::TextureType::Normal, "./assets/textures/ghost/ghost_body_normal.png");
+
+	m_BodyMaterial->tintDiffuse = glm::vec4(color, 1.0f);
 
 	auto bodyMr = m_GameObject->AddComponent<EVA::MeshRenderer>();
 	bodyMr->Set(m_Mesh[1], m_BodyMaterial);

@@ -20,12 +20,12 @@ namespace EVA
 
     public:
 
-        GameObject(Scene *scene);
+	    explicit GameObject(Scene *scene);
 
         void Update(float deltaTime);
 
-        template<class T>
-        std::shared_ptr<T> AddComponent();
+        template<class T, typename... Args>
+        std::shared_ptr<T> AddComponent(Args... args);
 
         void SetParent(GameObject *newParent);
 
@@ -40,15 +40,18 @@ namespace EVA
 
         inline std::shared_ptr<Transform> GetTransform() const
         { return m_Transform; }
+
+		inline void SetPosition(const glm::vec3 newPosition) const { m_Transform->SetPosition(newPosition); }
+		inline void SetRotation(const glm::vec3 newRotation) const { m_Transform->SetRotation(newRotation); }
+		inline void SetScale(const glm::vec3 newScale) const { m_Transform->SetScale(newScale); }
     };
 
-    template<class T>
-    std::shared_ptr<T> GameObject::AddComponent()
+    template<class T, typename... Args>
+    std::shared_ptr<T> GameObject::AddComponent(Args... args)
     {
-        std::shared_ptr<T> component = std::make_shared<T>(this);
+        std::shared_ptr<T> component = std::make_shared<T>(this, args...);
         m_Components.push_back(component);
 
         return component;
     }
-
 }

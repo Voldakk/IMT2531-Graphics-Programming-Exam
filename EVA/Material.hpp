@@ -44,6 +44,8 @@ namespace EVA
 		Texture textureEmission;
 		Texture textureHeight;
 
+		glm::vec4 tintDiffuse = glm::vec4(1.0f);
+
 		std::shared_ptr<Shader> shader;
 
 		bool enableInstancing = false;

@@ -10,6 +10,8 @@ uniform struct Material
    sampler2D texture_specular;
    sampler2D texture_emission;
    sampler2D texture_normal;
+
+   vec4 tint_diffuse;
    float shininess;
 
 } material;
@@ -152,7 +154,7 @@ void main()
     vec3 surfacePos = fragVert;
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
 
-    vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord);
+    vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord) * material.tint_diffuse;
     vec3 specularMap = texture(material.texture_specular, fragTexCoord).rgb;
     vec3 emissionMap = texture(material.texture_emission, fragTexCoord).rgb;
 

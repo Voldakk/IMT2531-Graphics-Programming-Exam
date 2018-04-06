@@ -9,5 +9,5 @@ class Ghost : public EVA::Component
 	std::shared_ptr<EVA::Material> m_EyeMaterial;
 
 public:
-	explicit Ghost(EVA::GameObject* gameObject);
+	explicit Ghost(EVA::GameObject* gameObject, glm::vec3 color);
 };
