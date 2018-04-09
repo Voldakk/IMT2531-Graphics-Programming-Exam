@@ -1,7 +1,7 @@
 #include "Light.hpp"
 
 #include "GL/glew.h"
-#include "glm/gtc/matrix_transform.inl"
+#include "glm/gtc/matrix_transform.hpp"
 #include "Application.hpp"
 
 EVA::Light::Light(const LightType type, const bool shadows, const unsigned int shadowSize)
