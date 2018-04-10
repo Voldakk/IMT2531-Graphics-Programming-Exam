@@ -77,7 +77,7 @@ namespace EVA
 		// Load files
 		stbi_set_flip_vertically_on_load(false);
 
-		std::string sideNames[] = {"xpos", "xneg", "ypos", "yneg", "zpos", "zneg"};
+		std::string sideNames[] = {"left", "right", "up", "down", "front", "back"};
 
 		unsigned int sideIds[] =
 		{

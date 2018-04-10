@@ -46,6 +46,8 @@ void TileMap::ReadFile(const char *path)
 			teleporters.emplace_back(-1, -1);
 		}
 
+		m_Tiles.resize(m_Height);
+
 		// For each row
 		for (auto y = 0; y < m_Height; y++)
 		{
@@ -93,7 +95,7 @@ void TileMap::ReadFile(const char *path)
 				mapFile.ignore();
 			}
 
-			m_Tiles.push_back(row);
+			m_Tiles[m_Height - 1 - y] = row;
 		}
 
 		CreateMesh();
@@ -114,13 +116,13 @@ void TileMap::CreateMesh()
 			auto config = 0;
 
 			if (m_Tiles[y][x] == TileType::Wall)
-				config += 1;
-			if (m_Tiles[y][x + 1] == TileType::Wall)
-				config += 2;
-			if (m_Tiles[y + 1][x] == TileType::Wall)
 				config += 4;
-			if (m_Tiles[y + 1][x + 1] == TileType::Wall)
+			if (m_Tiles[y][x + 1] == TileType::Wall)
 				config += 8;
+			if (m_Tiles[y + 1][x] == TileType::Wall)
+				config += 1;
+			if (m_Tiles[y + 1][x + 1] == TileType::Wall)
+				config += 2;
 
 			// Get the mesh
 			const auto mesh = m_MeshMap[std::to_string(config)];

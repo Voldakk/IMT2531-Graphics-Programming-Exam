@@ -30,6 +30,11 @@ namespace EVA
 		glm::quat m_Orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 		glm::vec3 m_Scale = glm::vec3(1.0f);
 
+		glm::vec3 m_Forward;
+		glm::vec3 m_Right;
+		glm::vec3 m_Up;
+
+
 	public:
 
 		// Public read only fields
@@ -42,6 +47,10 @@ namespace EVA
 		const glm::vec3& position = m_Position;
 		const glm::quat& orientation = m_Orientation;
 		const glm::vec3& scale = m_Scale;
+
+		const glm::vec3& forward = m_Forward;
+		const glm::vec3& right = m_Right;
+		const glm::vec3& up = m_Up;
 
 		/**
 		 * \brief 

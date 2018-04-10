@@ -3,7 +3,6 @@
 #include "GL/glew.h"
 
 #include "Application.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 
 namespace EVA
 {
@@ -57,10 +56,6 @@ namespace EVA
 		}
 
 		// Scene
-		const auto ws = Application::GetWindowSize();
-		glViewport(0, 0, ws.x, ws.y);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glBindTexture(GL_TEXTURE_2D, m_Lights[0]->GetDepthMap());
 		RenderScene();
 	}
 
@@ -117,6 +112,10 @@ namespace EVA
 
 	void Scene::RenderScene()
 	{
+		const auto ws = Application::GetWindowSize();
+		glViewport(0, 0, ws.x, ws.y);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		if (skybox != nullptr)
 		{
 			skybox->Render();

@@ -85,13 +85,18 @@ namespace EVA
 		m_ModelMatrix = m_Parent == nullptr ? glm::mat4() : m_Parent->modelMatrix;
 
 		// Position
-		m_ModelMatrix = glm::translate(m_ModelMatrix, m_LocalPosition);
+		m_ModelMatrix = glm::translate(m_ModelMatrix, m_LocalPosition * glm::vec3(-1.0f, 1.0f, 1.0f));
 
 		// Orientation
 		m_ModelMatrix = m_ModelMatrix * glm::toMat4(m_LocalOrientation);
 
 		// Scale
 		m_ModelMatrix = glm::scale(m_ModelMatrix, m_LocalScale);
+
+		// Directions
+		m_Forward = glm::normalize(ZAXIS * orientation);
+		m_Right = glm::normalize(XAXIS * orientation);
+		m_Up = glm::normalize(YAXIS * orientation);
 
 		// Update the children
 		for (auto child : m_Children)

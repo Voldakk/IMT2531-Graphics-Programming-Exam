@@ -4,6 +4,7 @@
 
 #include "Input.hpp"
 #include "GameObject.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 namespace EVA
 {
@@ -17,30 +18,67 @@ namespace EVA
         mouseSensitivity = 50.0f;
         movementSpeed = 5.0f;
 
+		m_Transform = m_GameObject->transform.get();
+
         UpdateDirections();
     }
 
     void Camera::Update(const float deltaTime)
     {
         // Movement
-        auto position = m_GameObject->transform->localPosition;
+		glm::vec3 movement;
 
-        if (Input::Key(GLFW_KEY_W)) // Front
-            position += m_Front * movementSpeed * deltaTime;
-        if (Input::Key(GLFW_KEY_S))    // Back
-            position -= m_Front * movementSpeed * deltaTime;
+		// Front
+        if (Input::Key(GLFW_KEY_W))
+        {
+			movement.x -= m_Transform->forward.x;
+			movement.y += m_Transform->forward.y;
+			movement.z += m_Transform->forward.z;
+        }
 
-        if (Input::Key(GLFW_KEY_D))    // Right
-            position += m_Right * movementSpeed * deltaTime;
-        if (Input::Key(GLFW_KEY_A))    // Left
-            position -= m_Right * movementSpeed * deltaTime;
+        // Back
+        if (Input::Key(GLFW_KEY_S))
+        {
+			movement.x -= -m_Transform->forward.x;
+			movement.y += -m_Transform->forward.y;
+			movement.z += -m_Transform->forward.z;
+        }
 
-        if (Input::Key(GLFW_KEY_SPACE)) // Up
-            position += m_Up * movementSpeed * deltaTime;
-        if (Input::Key(GLFW_KEY_LEFT_SHIFT)) // Down
-            position -= m_Up * movementSpeed * deltaTime;
 
-        m_GameObject->transform->SetPosition(position);
+		// Right
+        if (Input::Key(GLFW_KEY_D))
+        {
+			movement.x += m_Transform->right.x;
+			movement.y += m_Transform->right.y;
+			movement.z -= m_Transform->right.z;
+        }
+
+		// Left
+        if (Input::Key(GLFW_KEY_A))
+		{
+			movement.x += -m_Transform->right.x;
+			movement.y += -m_Transform->right.y;
+			movement.z -= -m_Transform->right.z;
+		}
+
+
+		// Up
+		if (Input::Key(GLFW_KEY_SPACE))
+		{
+			movement.x -= m_Transform->up.x;
+			movement.y += m_Transform->up.y;
+			movement.z += m_Transform->up.z;
+		}
+
+		// Down
+		if (Input::Key(GLFW_KEY_LEFT_SHIFT))
+		{
+			movement.x -= -m_Transform->up.x;
+			movement.y += -m_Transform->up.y;
+			movement.z += -m_Transform->up.z;
+		}
+
+		m_Transform->Translate(movement * movementSpeed * deltaTime);
 
         // Look
         const auto mouseMovement = Input::MouseMovement();
@@ -49,9 +87,13 @@ namespace EVA
 
 		// Clamp
 		m_Pitch = glm::clamp(m_Pitch, -89.0f, 89.0f);
+		if (m_Yaw < 0.0f)
+			m_Yaw += 360.0f;
+		else if (m_Yaw > 360.0f)
+			m_Yaw -= 360.0f;
 
-		m_GameObject->transform->SetOrientation(YAXIS, m_Yaw);
-		m_GameObject->transform->Rotate(XAXIS, m_Pitch);
+		m_Transform->SetOrientation(YAXIS, m_Yaw);
+		m_Transform->Rotate(XAXIS, m_Pitch);
 
         // Update view
         UpdateDirections();
@@ -64,14 +106,11 @@ namespace EVA
 
     void Camera::UpdateDirections()
     {
-        const auto position = m_GameObject->transform->position;
+		// Orientation
 
-		const auto orientation = m_GameObject->transform->orientation;
+	    const auto tp = m_Transform->position;
+	    const auto position = glm::vec3(-tp.x, tp.y, tp.z);
 
-		m_Front = glm::normalize(ZAXIS * orientation);
-        m_Right = glm::normalize(-XAXIS * orientation);
-        m_Up = glm::normalize(YAXIS * orientation);
-
-        m_ViewMatrix = glm::lookAt(position, position + m_Front, m_Up);
+		m_ViewMatrix = glm::lookAt(position, position + m_Transform->forward, m_Transform->up);
     }
 }
