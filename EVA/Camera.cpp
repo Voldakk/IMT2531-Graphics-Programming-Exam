@@ -14,7 +14,7 @@ namespace EVA
         near = 0.1f;
         far = 1000.0f;
 
-        mouseSensitivity = 0.5f;
+        mouseSensitivity = 50.0f;
         movementSpeed = 5.0f;
 
         UpdateDirections();
@@ -48,7 +48,7 @@ namespace EVA
 		m_Yaw += mouseMovement.x * mouseSensitivity * deltaTime;
 
 		// Clamp
-		m_Pitch = glm::clamp(m_Pitch, glm::radians(-89.0f), glm::radians(89.0f));
+		m_Pitch = glm::clamp(m_Pitch, -89.0f, 89.0f);
 
 		m_GameObject->transform->SetOrientation(YAXIS, m_Yaw);
 		m_GameObject->transform->Rotate(XAXIS, m_Pitch);

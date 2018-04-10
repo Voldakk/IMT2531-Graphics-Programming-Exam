@@ -34,7 +34,7 @@ namespace EVA
 
 	void Transform::Rotate(const glm::vec3 axis, const float angle)
 	{
-		m_LocalOrientation = glm::angleAxis(angle, axis) * m_LocalOrientation;
+		m_LocalOrientation = glm::angleAxis(glm::radians(angle), axis) * m_LocalOrientation;
 		UpdateModelMatrix();
 	}
 
@@ -46,7 +46,7 @@ namespace EVA
 
 	void Transform::SetOrientation(const glm::vec3 axis, const float angle)
 	{
-		m_LocalOrientation = glm::angleAxis(angle, axis);
+		m_LocalOrientation = glm::angleAxis(glm::radians(angle), axis);
 		UpdateModelMatrix();
 	}
 
