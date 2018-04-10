@@ -11,12 +11,14 @@ namespace EVA
 
     class Camera : public Component
     {
-
-        glm::mat4 m_ViewMatrix;
+		float m_Pitch = 0.0f;
+		float m_Yaw = 0.0f;
 
         glm::vec3 m_Front;
         glm::vec3 m_Right;
         glm::vec3 m_Up;
+
+		glm::mat4 m_ViewMatrix;
 
     public:
 

@@ -30,8 +30,6 @@ namespace EVA
 
 		Scene();
 
-		virtual ~Scene() = default;
-
 		/// <summary>Allows the user to close the menu by pressing escape</summary>
 		/// <param name="deltaTime">The time in seconds between frames</param>
 		virtual void Update(float deltaTime);
@@ -49,7 +47,7 @@ namespace EVA
 		void RegisterMeshRenderer(MeshRenderer *meshRenderer);
 
 		/// <summary></summary>
-		std::vector<std::shared_ptr<Light>> GetLights() { return m_Lights; }
+		std::vector<std::shared_ptr<Light>> GetLights() const { return m_Lights; }
 
 	private:
 

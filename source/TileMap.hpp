@@ -10,33 +10,38 @@
 
 enum TileType
 {
-    Floor, Wall
+	Floor, Wall, Teleporter, GhostFloor, GhostDoor
 };
 
 class TileMap : public EVA::Component
 {
 
-    int m_Width;
-    int m_Height;
+	int m_Width;
+	int m_Height;
 
-    std::vector<std::vector<TileType>> m_Tiles;
+	std::vector<std::vector<TileType>> m_Tiles;
 
-    std::map<std::string, std::shared_ptr<EVA::Mesh>> m_MeshMap;
-    std::shared_ptr<EVA::Material> m_Material;
+	std::map<std::string, std::shared_ptr<EVA::Mesh>> m_MeshMap;
+	std::shared_ptr<EVA::Material> m_Material;
+
+	std::vector<glm::ivec2> teleporters;
+	std::map<unsigned  int, glm::ivec2> teleporterMap;
+
+	std::map<unsigned int, glm::ivec2> uniqueTiles;
 
 public:
 
-    explicit TileMap(EVA::GameObject *gameObject);
+	explicit TileMap(EVA::GameObject *gameObject);
 
-    void ReadFile(const char *path);
+	void ReadFile(const char *path);
 
-    inline int Width() const
-    { return m_Width; }
+	inline int Width() const { return m_Width; }
 
-    inline int Height() const
-    { return m_Height; }
+	inline int Height() const { return m_Height; }
+
+	glm::vec3 GetUniqueTilePosition(unsigned int tile);
 
 private:
 
-    void CreateMesh();
+	void CreateMesh();
 };

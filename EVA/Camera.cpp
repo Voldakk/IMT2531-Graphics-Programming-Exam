@@ -23,7 +23,7 @@ namespace EVA
     void Camera::Update(const float deltaTime)
     {
         // Movement
-        auto position = m_GameObject->GetTransform()->localPosition;
+        auto position = m_GameObject->transform->localPosition;
 
         if (Input::Key(GLFW_KEY_W)) // Front
             position += m_Front * movementSpeed * deltaTime;
@@ -40,20 +40,18 @@ namespace EVA
         if (Input::Key(GLFW_KEY_LEFT_SHIFT)) // Down
             position -= m_Up * movementSpeed * deltaTime;
 
-        m_GameObject->GetTransform()->SetPosition(position);
+        m_GameObject->transform->SetPosition(position);
 
         // Look
-        auto rotation = m_GameObject->GetTransform()->localRotation;
-
         const auto mouseMovement = Input::MouseMovement();
-        rotation += glm::vec3(-mouseMovement.y, mouseMovement.x, 0) * mouseSensitivity * deltaTime;
+		m_Pitch += -mouseMovement.y * mouseSensitivity * deltaTime;
+		m_Yaw += mouseMovement.x * mouseSensitivity * deltaTime;
 
-        if (rotation.x < glm::radians(-89.0f))
-            rotation.x = glm::radians(-89.0f);
-        else if (rotation.x > glm::radians(89.0f))
-            rotation.x = glm::radians(89.0f);
+		// Clamp
+		m_Pitch = glm::clamp(m_Pitch, glm::radians(-89.0f), glm::radians(89.0f));
 
-        m_GameObject->GetTransform()->SetRotation(rotation);
+		m_GameObject->transform->SetOrientation(YAXIS, m_Yaw);
+		m_GameObject->transform->Rotate(XAXIS, m_Pitch);
 
         // Update view
         UpdateDirections();
@@ -66,20 +64,14 @@ namespace EVA
 
     void Camera::UpdateDirections()
     {
-        const auto position = m_GameObject->GetTransform()->position;
+        const auto position = m_GameObject->transform->position;
 
-        const auto pitch = m_GameObject->GetTransform()->rotation.x;
-        const auto yaw = m_GameObject->GetTransform()->rotation.y;
+		const auto orientation = m_GameObject->transform->orientation;
 
-        m_Front.x = std::cos(yaw) * std::cos(pitch);
-        m_Front.y = std::sin(pitch);
-        m_Front.z = std::sin(yaw) * std::cos(pitch);
-        m_Front = glm::normalize(m_Front);
-
-        m_Right = glm::normalize(glm::cross(m_Front, {0.0f, 1.0f, 0.0f}));
-        m_Up = glm::normalize(glm::cross(m_Right, m_Front));
+		m_Front = glm::normalize(ZAXIS * orientation);
+        m_Right = glm::normalize(-XAXIS * orientation);
+        m_Up = glm::normalize(YAXIS * orientation);
 
         m_ViewMatrix = glm::lookAt(position, position + m_Front, m_Up);
     }
-
 }

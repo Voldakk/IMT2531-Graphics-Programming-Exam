@@ -76,7 +76,7 @@ namespace EVA
 		SetTextures();
 
 		// Camera
-		shader->SetUniform3Fv("cameraPosition", Application::mainCamera->GetGameObject()->GetTransform()->position);
+		shader->SetUniform3Fv("cameraPosition", Application::mainCamera->GetGameObject()->transform->position);
 
 		// View and projection
 		shader->SetUniformMatrix4Fv("view", Application::mainCamera->GetViewMatrix());
@@ -138,7 +138,7 @@ namespace EVA
 	void Material::SetObjectUniforms(Transform *transform) const
 	{
 		// Position
-		shader->SetUniformMatrix4Fv("model", transform->GetModelMatrix());
+		shader->SetUniformMatrix4Fv("model", transform->modelMatrix);
 	}
 
 	void Material::SetTextures() const
@@ -205,6 +205,6 @@ namespace EVA
 	void ShadowMaterial::SetObjectUniforms(Transform* transform) const
 	{
 		// Position
-		shader->SetUniformMatrix4Fv("model", transform->GetModelMatrix());
+		shader->SetUniformMatrix4Fv("model", transform->modelMatrix);
 	}
 }

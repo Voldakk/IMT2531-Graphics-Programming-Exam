@@ -143,7 +143,7 @@ namespace EVA
 
 						for (auto &meshRenderer : meshes)
 						{
-							models.push_back(meshRenderer->GetGameObject()->GetTransform()->GetModelMatrix());
+							models.push_back(meshRenderer->GetGameObject()->transform->modelMatrix);
 						}
 						// Set the mesh ibo
 						meshes[0]->GetMesh()->SetIbo(models);
@@ -193,7 +193,7 @@ namespace EVA
 
 						for (auto &meshRenderer : meshes)
 						{
-							models.push_back(meshRenderer->GetGameObject()->GetTransform()->GetModelMatrix());
+							models.push_back(meshRenderer->GetGameObject()->transform->modelMatrix);
 						}
 						// Set the mesh ibo
 						meshes[0]->GetMesh()->SetIbo(models);
@@ -215,7 +215,7 @@ namespace EVA
 					for (auto &meshRenderer : meshes)
 					{
 						// Render the mesh at the MeshRenderers position
-						shadowMaterial.SetObjectUniforms(meshRenderer->GetGameObject()->GetTransform().get());
+						shadowMaterial.SetObjectUniforms(meshRenderer->GetGameObject()->transform.get());
 						meshRenderer->GetMesh()->Draw();
 					}
 				}
@@ -252,7 +252,7 @@ namespace EVA
 
 						for (auto &meshRenderer : meshes)
 						{
-							models.push_back(meshRenderer->GetGameObject()->GetTransform()->GetModelMatrix());
+							models.push_back(meshRenderer->GetGameObject()->transform->modelMatrix);
 						}
 						// Set the mesh ibo
 						meshes[0]->GetMesh()->SetIbo(models);
@@ -279,7 +279,7 @@ namespace EVA
 					for (auto &meshRenderer : meshes)
 					{
 						// Render the mesh at the MeshRenderers position
-						shadowMaterialCube.SetObjectUniforms(meshRenderer->GetGameObject()->GetTransform().get());
+						shadowMaterialCube.SetObjectUniforms(meshRenderer->GetGameObject()->transform.get());
 						meshRenderer->GetMesh()->Draw();
 					}
 				}

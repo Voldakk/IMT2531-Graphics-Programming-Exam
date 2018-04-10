@@ -1,6 +1,7 @@
 #include "Transform.hpp"
 
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 #include "GameObject.hpp"
 
@@ -15,56 +16,84 @@ namespace EVA
 
 	void Transform::Translate(const glm::vec3 offset)
 	{
-		localPosition += offset;
+		m_LocalPosition += offset;
 		UpdateModelMatrix();
 	}
 
 	void Transform::SetPosition(const glm::vec3 newPosition)
 	{
-		localPosition = newPosition;
+		m_LocalPosition = newPosition;
 		UpdateModelMatrix();
 	}
 
-	void Transform::Rotate(const glm::vec3 offset)
+	void Transform::Rotate(const glm::quat offset)
 	{
-		localRotation += offset;
+		m_LocalOrientation = offset * m_LocalOrientation;
 		UpdateModelMatrix();
 	}
 
-	void Transform::SetRotation(const glm::vec3 newRotation)
+	void Transform::Rotate(const glm::vec3 axis, const float angle)
 	{
-		localRotation = newRotation;
+		m_LocalOrientation = glm::angleAxis(angle, axis) * m_LocalOrientation;
 		UpdateModelMatrix();
 	}
 
-	void Transform::Scale(const glm::vec3 offset)
+	void Transform::SetOrientation(const glm::quat newOrientation)
 	{
-		localScale += offset;
+		m_LocalOrientation = newOrientation;
+		UpdateModelMatrix();
+	}
+
+	void Transform::SetOrientation(const glm::vec3 axis, const float angle)
+	{
+		m_LocalOrientation = glm::angleAxis(angle, axis);
+		UpdateModelMatrix();
+	}
+
+	void Transform::Scale(const glm::vec3 amount)
+	{
+		m_LocalScale += amount;
+		UpdateModelMatrix();
+	}
+
+	void Transform::Scale(const float amount)
+	{
+		m_LocalScale += glm::vec3(amount);
 		UpdateModelMatrix();
 	}
 
 	void Transform::SetScale(const glm::vec3 newScale)
 	{
-		localScale = newScale;
+		m_LocalScale = newScale;
+		UpdateModelMatrix();
+	}
+
+	void Transform::SetScale(const float newScale)
+	{
+		m_LocalScale = glm::vec3(newScale);
 		UpdateModelMatrix();
 	}
 
 	void Transform::UpdateModelMatrix()
 	{
-		rotation = m_Parent == nullptr ? localRotation : m_Parent->rotation + localRotation;
-		scale = m_Parent == nullptr ? localScale : m_Parent->scale * localScale;
-		position = m_Parent == nullptr ? localPosition : glm::vec3(
-				m_Parent->GetModelMatrix() * glm::vec4(localPosition, 1.0f));
+		// Updates the world position, orientation and scale
+		m_Position = m_Parent == nullptr ? m_LocalPosition : glm::vec3(m_Parent->modelMatrix * glm::vec4(m_LocalPosition, 1.0f));
+		m_Orientation = m_Parent == nullptr ? m_LocalOrientation : m_LocalOrientation * m_Parent->m_Orientation;
+		m_Scale = m_Parent == nullptr ? m_LocalScale : m_Parent->m_Scale * m_LocalScale;
+		
+		// Parent
+		m_ModelMatrix = m_Parent == nullptr ? glm::mat4() : m_Parent->modelMatrix;
 
-		m_Model = m_Parent == nullptr ? glm::mat4() : m_Parent->GetModelMatrix();
-		m_Model = glm::translate(m_Model, localPosition);
+		// Position
+		m_ModelMatrix = glm::translate(m_ModelMatrix, m_LocalPosition);
 
-		m_Model = glm::rotate(m_Model, localRotation.y, glm::vec3(0, 1, 0));
-		m_Model = glm::rotate(m_Model, localRotation.x, glm::vec3(1, 0, 0));
-		m_Model = glm::rotate(m_Model, localRotation.z, glm::vec3(0, 0, 1));
+		// Orientation
+		m_ModelMatrix = m_ModelMatrix * glm::toMat4(m_LocalOrientation);
 
-		m_Model = glm::scale(m_Model, localScale);
+		// Scale
+		m_ModelMatrix = glm::scale(m_ModelMatrix, m_LocalScale);
 
+		// Update the children
 		for (auto child : m_Children)
 		{
 			child->UpdateModelMatrix();
@@ -74,7 +103,7 @@ namespace EVA
 	void Transform::SetParent(GameObject *newParent)
 	{
 		if (newParent != nullptr)
-			SetParent(newParent->GetTransform());
+			SetParent(newParent->transform);
 	}
 
 	void Transform::SetParent(std::shared_ptr<Transform> newParent)
@@ -112,7 +141,7 @@ namespace EVA
 	unsigned int Transform::GetChildIndex(GameObject *child) const
 	{
 		if (m_GameObject != nullptr)
-			return GetChildIndex(m_GameObject->GetTransform().get());
+			return GetChildIndex(m_GameObject->transform.get());
 		return -1;
 	}
 
