@@ -35,8 +35,7 @@ Game::Game()
 
 	// Pacman
 	pacman = CreateGameObject();
-	pacman->AddComponent<Pacman>();
-	pacman->transform->SetPosition({ 0.0f, 0.0f, 0.0f });
+	pacman->AddComponent<Pacman>(tileMap);
 
 	// Ghosts
 	glm::vec3 colors[] = { { 1.0f, 0.0f, 0.0f }, { 0.85f, 0.35f, 0.85f }, { 0.5f, 0.9f, 0.9f }, { 0.95f, 0.8f, 0.3f } };

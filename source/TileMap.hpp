@@ -15,7 +15,6 @@ enum TileType
 
 class TileMap : public EVA::Component
 {
-
 	int m_Width;
 	int m_Height;
 
@@ -40,6 +39,11 @@ public:
 	inline int Height() const { return m_Height; }
 
 	glm::vec3 GetUniqueTilePosition(unsigned int tile);
+
+	glm::ivec2 TileIndex(glm::vec3 worldPosition) const;
+
+	TileType GetTileType(glm::ivec2 tileIndex);
+	TileType GetTileType(glm::vec3 worldPosition);
 
 private:
 
