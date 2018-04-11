@@ -3,8 +3,6 @@
 #include <utility>
 
 #include "EVA/Input.hpp"
-#include "glm/gtx/compatibility.hpp"
-#include <iostream>
 
 Pacman::Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap) : Component(gameObject), m_TileMap(std::move(tileMap))
 {
@@ -23,9 +21,12 @@ Pacman::Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap) : 
 	mr->Set(m_Mesh, m_Material);
 
 	// Default values
-	m_CurrentDirection = glm::vec3(0.0f);
-	m_InputDirection = Up;
+	m_TargetTile.x = -1;
 	m_MovementSpeed = 2.0f;
+
+	m_InputDirection = Right;
+	m_CurrentDirection = glm::ivec2(0, 1);
+	m_GameObject->transform->SetOrientation(EVA::YAXIS, -90.0f);
 
 	m_GameObject->transform->SetPosition(m_TileMap->GetUniqueTilePosition('P'));
 	m_GameObject->transform->SetScale(glm::vec3(0.8f));
@@ -33,45 +34,106 @@ Pacman::Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap) : 
 
 void Pacman::Update(const float deltaTime)
 {
+	// Get the current tile
+	m_CurrentTile = m_TileMap->GetTileIndex(m_GameObject->transform->position);
+
 	// Input
-	if (EVA::Input::Key(GLFW_KEY_UP)) // Front
-		m_InputDirection = Up;
-	if (EVA::Input::Key(GLFW_KEY_DOWN)) // Back
-		m_InputDirection = Down;
+	if (EVA::Input::Key(GLFW_KEY_UP))
+		m_InputDirection = Direction::Up;
+	if (EVA::Input::Key(GLFW_KEY_DOWN))
+		m_InputDirection = Direction::Down;
 
-	if (EVA::Input::Key(GLFW_KEY_RIGHT)) // Right
-		m_InputDirection = Right;
-	if (EVA::Input::Key(GLFW_KEY_LEFT)) // Left
-		m_InputDirection = Left;
-	
-	switch (m_InputDirection) 
-	{ 
-	case Up: 
-		m_CurrentDirection = { 0.0f, 0.0f, 1.0f };
-		m_GameObject->transform->SetOrientation(EVA::YAXIS, 0.0f);
-		break;
+	if (EVA::Input::Key(GLFW_KEY_RIGHT))
+		m_InputDirection = Direction::Right;
+	if (EVA::Input::Key(GLFW_KEY_LEFT))
+		m_InputDirection = Direction::Left;
 
-	case Down: 
-		m_CurrentDirection = { 0.0f, 0.0f, -1.0f };
-		m_GameObject->transform->SetOrientation(EVA::YAXIS, 180.0f);
-		break;
+	// If it's time to select a new target tile
+	if (m_TargetTile.x == -1)
+	{
+		glm::ivec2 possibleTarget;
 
-	case Right:
-		m_CurrentDirection = { 1.0f, 0.0f, 0.0f };
-		m_GameObject->transform->SetOrientation(EVA::YAXIS, -90.0f);
-		break;
+		// Select a possible target based on the player input
+		switch (m_InputDirection)
+		{
+		case Up:
+			possibleTarget = m_CurrentTile + glm::ivec2(0, 1);
+			break;
 
-	case Left: 
-		m_CurrentDirection = { -1.0f, 0.0f, 0.0f };
-		m_GameObject->transform->SetOrientation(EVA::YAXIS, 90.0f);
-		break;
+		case Down: 
+			possibleTarget = m_CurrentTile + glm::ivec2(0, -1);
+			break;
 
-	default: 
-		break;
+		case Right: 
+			possibleTarget = m_CurrentTile + glm::ivec2(1, 0);
+			break;
+
+		case Left: 
+			possibleTarget = m_CurrentTile + glm::ivec2(-1, 0);
+			break;
+
+		default: 
+			break;;
+		}
+
+		// The possible target is traversable by pacman
+		if (m_TileMap->GetTileType(possibleTarget) == TileType::Floor)
+		{
+			// Set the target and direction
+			m_TargetTile = possibleTarget;
+			m_CurrentDirection = possibleTarget - m_CurrentTile;
+
+			// Rotate pacman to face the way he is moving
+			switch (m_InputDirection) 
+			{ 
+			case Up: 
+				m_GameObject->transform->SetOrientation(EVA::YAXIS, 0.0f);
+				break;
+			case Down: 
+				m_GameObject->transform->SetOrientation(EVA::YAXIS, 180.0f);
+				break;
+			case Right: 
+				m_GameObject->transform->SetOrientation(EVA::YAXIS, -90.0f);
+				break;
+			case Left: 
+				m_GameObject->transform->SetOrientation(EVA::YAXIS, 90.0f);
+				break;
+			}
+		}
+		// If it's not traversable
+		else
+		{
+			// Try to continue in the current direction
+			m_TargetTile = m_CurrentTile + m_CurrentDirection;
+		}
 	}
-	
-	// Move
-	m_GameObject->transform->Translate(m_CurrentDirection * m_MovementSpeed * deltaTime);
 
-	std::cout << "Tile: " << m_TileMap->GetTileType(m_GameObject->transform->position) << "\n";
+	// Return if the target tile isn't traversable
+	const auto nextTile = m_TileMap->GetTileType(m_TargetTile);
+	if (nextTile != TileType::Floor)
+	{
+		m_TargetTile.x = -1;
+		return;
+	}
+
+	// Find the direction and distance pacman should move
+	const auto targetTilePos = m_TileMap->GetTilePosition(m_TargetTile);
+	const auto direction = glm::normalize(targetTilePos - m_GameObject->transform->position);
+	const auto distToTile = glm::distance(m_GameObject->transform->position, targetTilePos);
+
+	// The maximum distance pacman can move this frame
+	const auto maxDistance = m_MovementSpeed * deltaTime;
+
+	// Make sure to not overshoot
+	if (maxDistance > distToTile)
+	{
+		m_GameObject->transform->SetPosition(targetTilePos);
+
+		// Reset the target tile
+		m_TargetTile = glm::ivec2(-1);
+	}
+	else
+	{
+		m_GameObject->transform->Translate(direction * maxDistance);
+	}	
 }

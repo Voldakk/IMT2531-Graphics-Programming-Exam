@@ -11,8 +11,11 @@ class Pacman : public EVA::Component
 	std::shared_ptr<EVA::Material> m_Material;
 	std::shared_ptr<TileMap> m_TileMap;
 
-	glm::vec3 m_CurrentDirection;
+	glm::ivec2 m_CurrentTile;
+	glm::ivec2 m_TargetTile;
+
 	Direction m_InputDirection;
+	glm::ivec2 m_CurrentDirection;
 
 	float m_MovementSpeed;
 
