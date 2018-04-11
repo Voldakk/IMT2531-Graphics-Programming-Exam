@@ -26,16 +26,16 @@ Pacman::Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap) : 
 
 	m_InputDirection = Right;
 	m_CurrentDirection = glm::ivec2(0, 1);
-	m_GameObject->transform->SetOrientation(EVA::YAXIS, -90.0f);
+	m_Transform->SetOrientation(EVA::YAXIS, -90.0f);
 
-	m_GameObject->transform->SetPosition(m_TileMap->GetUniqueTilePosition('P'));
-	m_GameObject->transform->SetScale(glm::vec3(0.8f));
+	m_Transform->SetPosition(m_TileMap->GetUniqueTilePosition('P'));
+	m_Transform->SetScale(glm::vec3(0.8f));
 }
 
 void Pacman::Update(const float deltaTime)
 {
 	// Get the current tile
-	m_CurrentTile = m_TileMap->GetTileIndex(m_GameObject->transform->position);
+	m_CurrentTile = m_TileMap->GetTileIndex(m_Transform->position);
 
 	// Input
 	if (EVA::Input::Key(GLFW_KEY_UP))
@@ -87,16 +87,16 @@ void Pacman::Update(const float deltaTime)
 			switch (m_InputDirection) 
 			{ 
 			case Up: 
-				m_GameObject->transform->SetOrientation(EVA::YAXIS, 0.0f);
+				m_Transform->SetOrientation(EVA::YAXIS, 0.0f);
 				break;
 			case Down: 
-				m_GameObject->transform->SetOrientation(EVA::YAXIS, 180.0f);
+				m_Transform->SetOrientation(EVA::YAXIS, 180.0f);
 				break;
 			case Right: 
-				m_GameObject->transform->SetOrientation(EVA::YAXIS, -90.0f);
+				m_Transform->SetOrientation(EVA::YAXIS, -90.0f);
 				break;
 			case Left: 
-				m_GameObject->transform->SetOrientation(EVA::YAXIS, 90.0f);
+				m_Transform->SetOrientation(EVA::YAXIS, 90.0f);
 				break;
 			}
 		}
@@ -118,8 +118,8 @@ void Pacman::Update(const float deltaTime)
 
 	// Find the direction and distance pacman should move
 	const auto targetTilePos = m_TileMap->GetTilePosition(m_TargetTile);
-	const auto direction = glm::normalize(targetTilePos - m_GameObject->transform->position);
-	const auto distToTile = glm::distance(m_GameObject->transform->position, targetTilePos);
+	const auto direction = glm::normalize(targetTilePos - m_Transform->position);
+	const auto distToTile = glm::distance(m_Transform->position, targetTilePos);
 
 	// The maximum distance pacman can move this frame
 	const auto maxDistance = m_MovementSpeed * deltaTime;
@@ -127,13 +127,13 @@ void Pacman::Update(const float deltaTime)
 	// Make sure to not overshoot
 	if (maxDistance > distToTile)
 	{
-		m_GameObject->transform->SetPosition(targetTilePos);
+		m_Transform->SetPosition(targetTilePos);
 
 		// Reset the target tile
 		m_TargetTile = glm::ivec2(-1);
 	}
 	else
 	{
-		m_GameObject->transform->Translate(direction * maxDistance);
+		m_Transform->Translate(direction * maxDistance);
 	}	
 }

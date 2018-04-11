@@ -4,7 +4,6 @@
 
 #include "Input.hpp"
 #include "GameObject.hpp"
-#include "glm/gtx/quaternion.hpp"
 
 namespace EVA
 {
@@ -17,8 +16,6 @@ namespace EVA
 
         mouseSensitivity = 50.0f;
         movementSpeed = 5.0f;
-
-		m_Transform = m_GameObject->transform.get();
 
         UpdateDirections();
     }

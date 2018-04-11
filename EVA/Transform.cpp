@@ -1,7 +1,7 @@
 #include "Transform.hpp"
 
-#include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 #include "GameObject.hpp"
 
@@ -145,8 +145,8 @@ namespace EVA
 
 	unsigned int Transform::GetChildIndex(GameObject *child) const
 	{
-		if (m_GameObject != nullptr)
-			return GetChildIndex(m_GameObject->transform.get());
+		if (child != nullptr)
+			return GetChildIndex(child->transform.get());
 		return -1;
 	}
 

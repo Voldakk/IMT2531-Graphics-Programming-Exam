@@ -3,7 +3,6 @@
 #include "glm/glm.hpp"
 
 #include "Component.hpp"
-#include "Transform.hpp"
 
 namespace EVA
 {
@@ -16,8 +15,6 @@ namespace EVA
 		float m_Yaw = 0.0f;
 
 		glm::mat4 m_ViewMatrix;
-
-		Transform* m_Transform;
 
     public:
 

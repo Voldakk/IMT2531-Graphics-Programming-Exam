@@ -1,11 +1,12 @@
 #pragma once
 
-#include "glm/glm.hpp"
-
-#include "Component.hpp"
 #include <vector>
 #include <memory>
+
+#include "glm/glm.hpp"
 #include "glm/gtc/quaternion.hpp"
+
+#include "Component.hpp"
 
 namespace EVA
 {

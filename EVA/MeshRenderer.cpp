@@ -19,7 +19,7 @@ namespace EVA
 
 	void MeshRenderer::Render()
 	{
-		m_Material->Activate(m_GameObject->GetScene(), m_GameObject->transform.get());
+		m_Material->Activate(m_GameObject->GetScene(), m_Transform);
 		m_Mesh->Draw();
 	}
 

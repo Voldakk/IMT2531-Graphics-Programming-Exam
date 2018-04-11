@@ -3,14 +3,16 @@
 namespace EVA
 {
 
-    class GameObject;
+	class GameObject;
+	class Transform;
 
     class Component
     {
 
     protected:
 
-        GameObject *m_GameObject;
+        GameObject* m_GameObject;
+		Transform* m_Transform;
 
     public:
 	    
