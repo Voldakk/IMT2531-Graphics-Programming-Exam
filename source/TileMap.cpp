@@ -157,7 +157,7 @@ void TileMap::CreateMesh()
 			if (mesh != nullptr)
 			{
 				// Create a GameObject and a MeshRenderer to display the mesh
-				auto go = m_GameObject->GetScene()->CreateGameObject();
+				auto go = scene->CreateGameObject();
 				go->transform->SetPosition({ x+1, 0.0f, y+1 });
 				go->transform->SetScale(glm::vec3(0.5f));
 				auto mr = go->AddComponent<EVA::MeshRenderer>();
@@ -165,6 +165,8 @@ void TileMap::CreateMesh()
 			}
 		}
 	}
+
+	
 }
 
 glm::vec3 TileMap::GetUniqueTilePosition(const unsigned int tile)
@@ -193,7 +195,7 @@ TileType TileMap::GetTileType(const glm::vec3 worldPosition)
 	return GetTileType(GetTileIndex(worldPosition));
 }
 
-glm::vec3 TileMap::GetTilePosition(const glm::ivec2 tileIndex)
+glm::vec3 TileMap::GetTilePosition(const glm::ivec2 tileIndex) const
 {
 	return glm::vec3(tileIndex.x + 0.5f, 0.0f, tileIndex.y + 0.5f);
 }

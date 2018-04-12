@@ -1,12 +1,14 @@
 #include "GameObject.hpp"
+#include <utility>
 
 #include "Scene.hpp"
 
 namespace EVA
 {
-    GameObject::GameObject(Scene *scene): m_Scene(scene)
+    GameObject::GameObject(Scene* scene): m_Scene(scene)
 	{
 	    m_Transform = std::make_shared<Transform>(this);
+		m_Transform->m_Transform = m_Transform.get();
     }
 
 	void GameObject::Update(const float deltaTime)

@@ -18,21 +18,15 @@ namespace EVA
 
 	public:
 
+		// Public read only fields
+		const std::shared_ptr<Mesh>& mesh = m_Mesh;
+		const std::shared_ptr<Material>& material = m_Material;
+
 		explicit MeshRenderer(GameObject *gameObject);
 
-		void Set(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
+		void Set(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material);
 
-		void Render();
-
-		inline std::shared_ptr<Mesh> GetMesh()
-		{
-			return m_Mesh;
-		}
-
-		inline std::shared_ptr<Material> GetMaterial()
-		{
-			return m_Material;
-		}
+		void Render() const;
 	};
 
 }

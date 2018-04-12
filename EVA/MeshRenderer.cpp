@@ -10,16 +10,16 @@ namespace EVA
 
 	}
 
-	void MeshRenderer::Set(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material)
+	void MeshRenderer::Set(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material)
 	{
 		this->m_Mesh = mesh;
 		this->m_Material = material;
-		m_GameObject->GetScene()->RegisterMeshRenderer(this);
+		scene->RegisterMeshRenderer(this);
 	}
 
-	void MeshRenderer::Render()
+	void MeshRenderer::Render() const
 	{
-		m_Material->Activate(m_GameObject->GetScene(), m_Transform);
+		m_Material->Activate(scene.Get(), transform.Get());
 		m_Mesh->Draw();
 	}
 

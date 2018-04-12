@@ -77,7 +77,7 @@ glm::mat4 EVA::Light::GetLightSpaceMatrix() const
 	const auto lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, directionalNearPlane, directionalFarPlane);
 
 	const auto lightDirection = -glm::normalize(glm::vec3(GetDirection()));
-	const auto cameraPosition = Application::mainCamera->GetGameObject()->transform->position;
+	const auto cameraPosition = Application::mainCamera->transform->position;
 
 
 	const auto lightView = glm::lookAt(

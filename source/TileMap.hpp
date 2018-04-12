@@ -44,7 +44,7 @@ public:
 	TileType GetTileType(glm::ivec2 tileIndex);
 	TileType GetTileType(glm::vec3 worldPosition);
 
-	glm::vec3 GetTilePosition(glm::ivec2 tileIndex);
+	glm::vec3 GetTilePosition(glm::ivec2 tileIndex) const;
 
 private:
 

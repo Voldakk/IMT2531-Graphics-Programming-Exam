@@ -3,10 +3,8 @@
 #include "TileMap.hpp"
 #include "Ghost.hpp"
 #include "Pacman.hpp"
-#include "../EVA/TextureManager.hpp"
-
-std::shared_ptr<EVA::GameObject> pacman;
-std::shared_ptr<EVA::GameObject> ghost;
+#include "EVA/SceneManager.hpp"
+#include "EVA/Graphics.hpp"
 
 Game::Game()
 {
@@ -34,7 +32,7 @@ Game::Game()
 	camera->transform->SetPosition({ 0.0f, 3.0f, -2.0f });
 
 	// Pacman
-	pacman = CreateGameObject();
+	auto pacman = CreateGameObject();
 	pacman->AddComponent<Pacman>(tileMap);
 
 	// Ghosts
@@ -42,7 +40,7 @@ Game::Game()
 
 	for (unsigned int i = 0; i < 4; ++i)
 	{
-		ghost = CreateGameObject();
+		auto ghost = CreateGameObject();
 		ghost->AddComponent<Ghost>(colors[i]);
 		ghost->transform->SetPosition({ (i + 1) * 2.0f, 1.0f, 0.0f });
 	}

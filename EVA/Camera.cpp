@@ -28,54 +28,54 @@ namespace EVA
 		// Front
         if (Input::Key(GLFW_KEY_W))
         {
-			movement.x -= m_Transform->forward.x;
-			movement.y += m_Transform->forward.y;
-			movement.z += m_Transform->forward.z;
+			movement.x -= transform->forward.x;
+			movement.y += transform->forward.y;
+			movement.z += transform->forward.z;
         }
 
         // Back
         if (Input::Key(GLFW_KEY_S))
         {
-			movement.x -= -m_Transform->forward.x;
-			movement.y += -m_Transform->forward.y;
-			movement.z += -m_Transform->forward.z;
+			movement.x -= -transform->forward.x;
+			movement.y += -transform->forward.y;
+			movement.z += -transform->forward.z;
         }
 
 
 		// Right
         if (Input::Key(GLFW_KEY_D))
         {
-			movement.x += m_Transform->right.x;
-			movement.y += m_Transform->right.y;
-			movement.z -= m_Transform->right.z;
+			movement.x += transform->right.x;
+			movement.y += transform->right.y;
+			movement.z -= transform->right.z;
         }
 
 		// Left
         if (Input::Key(GLFW_KEY_A))
 		{
-			movement.x += -m_Transform->right.x;
-			movement.y += -m_Transform->right.y;
-			movement.z -= -m_Transform->right.z;
+			movement.x += -transform->right.x;
+			movement.y += -transform->right.y;
+			movement.z -= -transform->right.z;
 		}
 
 
 		// Up
 		if (Input::Key(GLFW_KEY_SPACE))
 		{
-			movement.x -= m_Transform->up.x;
-			movement.y += m_Transform->up.y;
-			movement.z += m_Transform->up.z;
+			movement.x -= transform->up.x;
+			movement.y += transform->up.y;
+			movement.z += transform->up.z;
 		}
 
 		// Down
 		if (Input::Key(GLFW_KEY_LEFT_SHIFT))
 		{
-			movement.x -= -m_Transform->up.x;
-			movement.y += -m_Transform->up.y;
-			movement.z += -m_Transform->up.z;
+			movement.x -= -transform->up.x;
+			movement.y += -transform->up.y;
+			movement.z += -transform->up.z;
 		}
 
-		m_Transform->Translate(movement * movementSpeed * deltaTime);
+		transform->Translate(movement * movementSpeed * deltaTime);
 
         // Look
         const auto mouseMovement = Input::MouseMovement();
@@ -89,8 +89,8 @@ namespace EVA
 		else if (m_Yaw > 360.0f)
 			m_Yaw -= 360.0f;
 
-		m_Transform->SetOrientation(YAXIS, m_Yaw);
-		m_Transform->Rotate(XAXIS, m_Pitch);
+		transform->SetOrientation(YAXIS, m_Yaw);
+		transform->Rotate(XAXIS, m_Pitch);
 
         // Update view
         UpdateDirections();
@@ -105,9 +105,9 @@ namespace EVA
     {
 		// Orientation
 
-	    const auto tp = m_Transform->position;
+	    const auto tp = transform->position;
 	    const auto position = glm::vec3(-tp.x, tp.y, tp.z);
 
-		m_ViewMatrix = glm::lookAt(position, position + m_Transform->forward, m_Transform->up);
+		m_ViewMatrix = glm::lookAt(position, position + transform->forward, transform->up);
     }
 }

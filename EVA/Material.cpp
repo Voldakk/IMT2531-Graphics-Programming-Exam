@@ -76,7 +76,7 @@ namespace EVA
 		SetTextures();
 
 		// Camera
-		shader->SetUniform3Fv("cameraPosition", Application::mainCamera->GetGameObject()->transform->position);
+		shader->SetUniform3Fv("cameraPosition", Application::mainCamera->transform->position);
 
 		// View and projection
 		shader->SetUniformMatrix4Fv("view", Application::mainCamera->GetViewMatrix());

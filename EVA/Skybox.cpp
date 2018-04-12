@@ -40,7 +40,7 @@ namespace EVA
 	void Skybox::Render() const
 	{
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_Texture);
-		m_Transform->SetPosition(Application::mainCamera->GetGameObject()->transform->position);
+		m_Transform->SetPosition(Application::mainCamera->transform->position);
 		m_Material->Activate(nullptr, m_Transform.get());
 
 		glDepthMask(GL_FALSE);

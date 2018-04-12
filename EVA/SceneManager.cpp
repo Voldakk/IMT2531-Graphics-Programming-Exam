@@ -12,12 +12,21 @@ namespace EVA
 			Input::Clear();
 
 			std::cout << "SceneManager::LoadScene - Loading scene: " << typeid(*scene).name() << " \n";
-			scene->self = scene;
 			m_Scenes.push_back(scene);
 		}
 	}
 
 	void SceneManager::UnloadScene(const std::shared_ptr<Scene> &scene)
+	{
+		const auto i = GetIndex(scene);
+		if (i != -1)
+		{
+			std::cout << "SceneManager::UnloadScene - Unloading scene: " << typeid(*scene).name() << " \n";
+			m_Scenes.erase(m_Scenes.begin() + i);
+		}
+	}
+
+	void SceneManager::UnloadScene(Scene* scene)
 	{
 		const auto i = GetIndex(scene);
 		if (i != -1)
@@ -63,13 +72,18 @@ namespace EVA
 		return -1;
 	}
 
+	int SceneManager::GetIndex(const Scene* scene)
+	{
+		for (size_t i = 0; i < m_Scenes.size(); i++)
+		{
+			if (scene == m_Scenes[i].get())
+				return i;
+		}
+		return -1;
+	}
+
 	void SceneManager::ClearScenes()
 	{
-		for (auto &scene : m_Scenes)
-		{
-			scene->self.reset();
-		}
-
 		m_Scenes.clear();
 	}
 

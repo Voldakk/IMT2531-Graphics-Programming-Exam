@@ -22,9 +22,6 @@ namespace EVA
 
 	public:
 
-		/// <summary>Shared pointer to itself</summary>
-		std::shared_ptr<Scene> self;
-
 		/// <summary></summary>
 		std::unique_ptr<Skybox> skybox;
 
@@ -41,7 +38,7 @@ namespace EVA
 		std::shared_ptr<GameObject> CreateGameObject();
 
 		/// <summary></summary>
-		std::shared_ptr<Light> CreateLight(LightType type, const bool shadows = false, const unsigned int shadowSize = 4096);
+		std::shared_ptr<Light> CreateLight(LightType type, bool shadows = false, unsigned int shadowSize = 4096);
 
 		/// <summary></summary>
 		void RegisterMeshRenderer(MeshRenderer *meshRenderer);

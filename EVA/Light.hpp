@@ -57,7 +57,7 @@ namespace EVA
 		inline bool Shadows() const { return m_Shadows; }
 		inline unsigned int GetDepthMapFb() const { return m_DepthMapFb; }
 		inline unsigned int GetDepthMap() const { return m_DepthMap; }
-		inline float GetShadwoSize() const { return m_ShadowSize; }
+		inline unsigned int GetShadwoSize() const { return m_ShadowSize; }
 
 		std::vector<glm::mat4> GetShadowTransforms() const;
 	};

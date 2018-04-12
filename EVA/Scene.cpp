@@ -81,11 +81,11 @@ namespace EVA
 	{
 		for (auto &materials : m_MeshRenderers)
 		{
-			if (materials[0][0]->GetMaterial() == meshRenderer->GetMaterial())
+			if (materials[0][0]->material == meshRenderer->material)
 			{
 				for (auto &meshes : materials)
 				{
-					if (meshes[0]->GetMesh() == meshRenderer->GetMesh())
+					if (meshes[0]->mesh == meshRenderer->mesh)
 					{
 						meshes.push_back(meshRenderer);
 						return;
@@ -124,17 +124,17 @@ namespace EVA
 		for (auto &materials : m_MeshRenderers)
 		{
 			// If he material should use GPU instancing
-			if (materials[0][0]->GetMaterial()->enableInstancing)
+			if (materials[0][0]->material->enableInstancing)
 			{
 				// Set material / shader
-				materials[0][0]->GetMaterial()->Activate(this, nullptr);
+				materials[0][0]->material->Activate(this, nullptr);
 
 				// For each mesh
 				for (auto &meshes : materials)
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->GetMesh()->isStatic ||
-						(meshes[0]->GetMesh()->isStatic && !meshes[0]->GetMesh()->HasIbo()))
+					if (!meshes[0]->mesh->isStatic ||
+						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasIbo()))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -142,14 +142,14 @@ namespace EVA
 
 						for (auto &meshRenderer : meshes)
 						{
-							models.push_back(meshRenderer->GetGameObject()->transform->modelMatrix);
+							models.push_back(meshRenderer->transform->modelMatrix);
 						}
 						// Set the mesh ibo
-						meshes[0]->GetMesh()->SetIbo(models);
+						meshes[0]->mesh->SetIbo(models);
 					}
 
 					// Draw the mesh
-					meshes[0]->GetMesh()->DrawInstanced();
+					meshes[0]->mesh->DrawInstanced();
 				}
 			}
 			else // If not
@@ -173,7 +173,7 @@ namespace EVA
 		for (auto &materials : m_MeshRenderers)
 		{
 			// If the material should use GPU instancing
-			if (materials[0][0]->GetMaterial()->enableInstancing)
+			if (materials[0][0]->material->enableInstancing)
 			{
 				// Set material / shader
 				shadowMaterialInstanced.Activate(this, nullptr);
@@ -183,8 +183,8 @@ namespace EVA
 				for (auto &meshes : materials)
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->GetMesh()->isStatic ||
-						(meshes[0]->GetMesh()->isStatic && !meshes[0]->GetMesh()->HasIbo()))
+					if (!meshes[0]->mesh->isStatic ||
+						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasIbo()))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -192,14 +192,14 @@ namespace EVA
 
 						for (auto &meshRenderer : meshes)
 						{
-							models.push_back(meshRenderer->GetGameObject()->transform->modelMatrix);
+							models.push_back(meshRenderer->transform->modelMatrix);
 						}
 						// Set the mesh ibo
-						meshes[0]->GetMesh()->SetIbo(models);
+						meshes[0]->mesh->SetIbo(models);
 					}
 
 					// Draw the mesh
-					meshes[0]->GetMesh()->DrawInstanced();
+					meshes[0]->mesh->DrawInstanced();
 				}
 			}
 			else // If not
@@ -214,8 +214,8 @@ namespace EVA
 					for (auto &meshRenderer : meshes)
 					{
 						// Render the mesh at the MeshRenderers position
-						shadowMaterial.SetObjectUniforms(meshRenderer->GetGameObject()->transform.get());
-						meshRenderer->GetMesh()->Draw();
+						shadowMaterial.SetObjectUniforms(meshRenderer->transform.Get());
+						meshRenderer->mesh->Draw();
 					}
 				}
 			}
@@ -227,7 +227,7 @@ namespace EVA
 		for (auto &materials : m_MeshRenderers)
 		{
 			// If the material should use GPU instancing
-			if (materials[0][0]->GetMaterial()->enableInstancing)
+			if (materials[0][0]->material->enableInstancing)
 			{
 				// Set material / shader
 				shadowMaterialCubeInstanced.Activate(this, nullptr);
@@ -242,8 +242,8 @@ namespace EVA
 				for (auto &meshes : materials)
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->GetMesh()->isStatic ||
-						(meshes[0]->GetMesh()->isStatic && !meshes[0]->GetMesh()->HasIbo()))
+					if (!meshes[0]->mesh->isStatic ||
+						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasIbo()))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -251,14 +251,14 @@ namespace EVA
 
 						for (auto &meshRenderer : meshes)
 						{
-							models.push_back(meshRenderer->GetGameObject()->transform->modelMatrix);
+							models.push_back(meshRenderer->transform->modelMatrix);
 						}
 						// Set the mesh ibo
-						meshes[0]->GetMesh()->SetIbo(models);
+						meshes[0]->mesh->SetIbo(models);
 					}
 
 					// Draw the mesh
-					meshes[0]->GetMesh()->DrawInstanced();
+					meshes[0]->mesh->DrawInstanced();
 				}
 			}
 			else // If not
@@ -278,8 +278,8 @@ namespace EVA
 					for (auto &meshRenderer : meshes)
 					{
 						// Render the mesh at the MeshRenderers position
-						shadowMaterialCube.SetObjectUniforms(meshRenderer->GetGameObject()->transform.get());
-						meshRenderer->GetMesh()->Draw();
+						shadowMaterialCube.SetObjectUniforms(meshRenderer->transform.Get());
+						meshRenderer->mesh->Draw();
 					}
 				}
 			}

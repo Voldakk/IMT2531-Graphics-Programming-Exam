@@ -6,3 +6,4 @@
 #include "../../Shader.hpp"
 #include "../../Light.hpp"
 #include "../../Scene.hpp"
+#include "../../TextureManager.hpp"
