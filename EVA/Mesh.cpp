@@ -1,7 +1,6 @@
 #include "Mesh.hpp"
-#include <utility>
 
-#include "GL/glew.h"
+#include <utility>
 
 #include "Scene.hpp"
 #include "OBJLoader.hpp"
@@ -10,15 +9,14 @@ namespace EVA
 {
 
 	Mesh::Mesh(std::vector<Vertex> vertices) :
-			m_Vertices(std::move(vertices)), m_Vao(0), m_Vbo(0), m_Ebo(0), m_Ibo(0), m_InstanceCount(0), isStatic(false)
+			m_Vertices(std::move(vertices)), m_InstanceCount(0), isStatic(false)
 	{
 		CalculateBt();
 		Create();
 	}
 
 	Mesh::Mesh(std::vector<Vertex> vertices, std::string name) :
-			m_Vertices(std::move(vertices)), m_Vao(0), m_Vbo(0), m_Ebo(0), m_Ibo(0), m_InstanceCount(0), name(std::move(name)),
-			isStatic(false)
+			m_Vertices(std::move(vertices)), m_InstanceCount(0), isStatic(false), name(std::move(name))
 	{
 		CalculateBt();
 		Create();
@@ -26,112 +24,91 @@ namespace EVA
 
 	void Mesh::Create()
 	{
-		// Create VAO, VBO and EBO
-		glGenVertexArrays(1, &m_Vao);
-		glGenBuffers(1, &m_Vbo);
-		glGenBuffers(1, &m_Ebo);
+		m_Va = std::make_unique<VertexArray>();
+		m_Vb = std::make_unique<VertexBuffer>(&m_Vertices[0], m_Vertices.size() * sizeof(Vertex));
 
-		// Bind the VAO and VBO
-		glBindVertexArray(m_Vao);
-		glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
-
-		// Buffer vertices
-		glBufferData(GL_ARRAY_BUFFER, m_Vertices.size() * sizeof(Vertex), &m_Vertices[0], GL_STATIC_DRAW);
-
-		// Bind EBO and buffer face indices
 		if (!m_FaceIndices.empty())
-		{
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_FaceIndices.size() * sizeof(unsigned int), &m_FaceIndices[0],
-						 GL_STATIC_DRAW);
-		}
+			m_Ib = std::make_unique<IndexBuffer>(&m_FaceIndices[0], m_FaceIndices.size());
 
-		// Vertex positions
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) nullptr);
+		VertexBufferLayout layout;
+		layout.Push<float>(3); // Position
+		layout.Push<float>(3); // Normal
+		layout.Push<float>(2); // TexCoords
+		layout.Push<float>(3); // Tangent
+		layout.Push<float>(3); // Bitangent
 
-		// Vertex normals
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, normal));
+		m_Va->AddBuffer(*m_Vb, layout);
 
-		// Vertex texture coords
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, texCoords));
-
-		// Vertex tangent
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, tangent));
-
-		// Vertex bitangent
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, bitangent));
-
-		glBindVertexArray(0);
+		m_Va->Unbind();
+		m_Vb->Unbind();
+		if (m_Ib)
+			m_Ib->Unbind();
 	}
 
 	void Mesh::Draw() const
 	{
 		// Draw
-		glBindVertexArray(m_Vao);
+		m_Va->Bind();
 
-		if (!m_FaceIndices.empty())
-			glDrawElements(GL_TRIANGLES, m_FaceIndices.size(), GL_UNSIGNED_INT, nullptr);
+		if(m_Ib) 
+		{
+			m_Ib->Bind();
+			glDrawElements(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr); 
+			m_Ib->Unbind();
+		}
 		else
 			glDrawArrays(GL_TRIANGLES, 0, this->m_Vertices.size());
 
-		// Reset
-		glBindVertexArray(0);
-		glActiveTexture(GL_TEXTURE0);
+		m_Va->Unbind();
 	}
 
-	void Mesh::SetIbo(const std::vector<glm::mat4> &models)
+	void Mesh::SetMbo(const std::vector<glm::mat4> &models)
 	{
 		m_InstanceCount = models.size();
 
-		if (m_Ibo == 0)
-			glGenBuffers(1, &m_Ibo);
+		m_Va->Bind();
 
-		glBindBuffer(GL_ARRAY_BUFFER, m_Ibo);
-		glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::mat4), &models[0], GL_STATIC_DRAW);
+		if(m_Mb)
+		{
+			m_Mb->BufferData(&models[0], models.size() * sizeof(glm::mat4));
+		}
+		else
+		{
+			m_Mb = std::make_unique<VertexBuffer>(&models[0], models.size() * sizeof(glm::mat4));
 
-		glBindVertexArray(m_Vao);
-		// vertex Attributes
-		const GLsizei vec4Size = sizeof(glm::vec4);
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) 0);
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) (vec4Size));
-		glEnableVertexAttribArray(7);
-		glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) (2 * vec4Size));
-		glEnableVertexAttribArray(8);
-		glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) (3 * vec4Size));
+			VertexBufferLayout layout;
+			layout.Push<float>(4, 1); // Model matrix
+			layout.Push<float>(4, 1); // Model matrix
+			layout.Push<float>(4, 1); // Model matrix
+			layout.Push<float>(4, 1); // Model matrix
 
-		glVertexAttribDivisor(5, 1);
-		glVertexAttribDivisor(6, 1);
-		glVertexAttribDivisor(7, 1);
-		glVertexAttribDivisor(8, 1);
+			m_Va->AddBuffer(*m_Mb, layout);
+		}
 
-		glBindVertexArray(0);
+		m_Mb->Unbind();
+		m_Va->Unbind();
 	}
 
 	void Mesh::DrawInstanced() const
 	{
 		// Draw
-		glBindVertexArray(m_Vao);
+		m_Va->Bind();
 
 		if (!m_FaceIndices.empty())
-			glDrawElementsInstanced(GL_TRIANGLES, m_FaceIndices.size(), GL_UNSIGNED_INT, nullptr, m_InstanceCount);
+		{
+			m_Ib->Bind();
+			glDrawElementsInstanced(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr, m_InstanceCount);
+			m_Ib->Unbind();
+		}
 		else
 			glDrawArraysInstanced(GL_TRIANGLES, 0, this->m_Vertices.size(), m_InstanceCount);
 
-		// Reset
-		glBindVertexArray(0);
-		glActiveTexture(GL_TEXTURE0);
+		m_Va->Unbind();
 	}
 
-	bool Mesh::HasIbo() const
+	bool Mesh::HasMbo() const
 	{
-		return m_Ibo != 0;
+		return m_Mb != nullptr;
 	}
 
 	std::shared_ptr<Mesh> Mesh::Load(const std::string &path)

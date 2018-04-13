@@ -6,6 +6,8 @@
 
 #include "glm/glm.hpp"
 
+#include "EVA/OpenGL.hpp"
+
 namespace EVA
 {
 
@@ -29,18 +31,18 @@ namespace EVA
 		std::vector<Vertex> m_Vertices;
 		std::vector<unsigned int> m_FaceIndices;
 
-		unsigned int m_Vao{};
-		unsigned int m_Vbo{};
-		unsigned int m_Ebo{};
-		unsigned int m_Ibo{};
-
 		unsigned int m_InstanceCount;
+
+		std::unique_ptr<VertexArray> m_Va;
+		std::unique_ptr<VertexBuffer> m_Vb;
+		std::unique_ptr<IndexBuffer> m_Ib;
+		std::unique_ptr<VertexBuffer> m_Mb;
 
 
 	public:
 
-		std::string name;
 		bool isStatic;
+		std::string name;
 
 		explicit Mesh(std::vector<Vertex> vertices);
 
@@ -52,9 +54,9 @@ namespace EVA
 
 		void DrawInstanced() const;
 
-		void SetIbo(const std::vector<glm::mat4> &models);
+		void SetMbo(const std::vector<glm::mat4> &models);
 
-		bool HasIbo() const;
+		bool HasMbo() const;
 
 		static std::shared_ptr<Mesh> Load(const std::string &path);
 

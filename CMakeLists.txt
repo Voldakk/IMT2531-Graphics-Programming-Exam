@@ -40,6 +40,7 @@ endif(WINDOWS)
 file(GLOB SOURCES
     source/* 
 	EVA/*
+	EVA/*/*
 	dependencies/stb-image/*
 )
 

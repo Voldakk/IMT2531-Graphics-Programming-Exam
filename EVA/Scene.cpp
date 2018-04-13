@@ -134,7 +134,7 @@ namespace EVA
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
 					if (!meshes[0]->mesh->isStatic ||
-						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasIbo()))
+						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -145,7 +145,7 @@ namespace EVA
 							models.push_back(meshRenderer->transform->modelMatrix);
 						}
 						// Set the mesh ibo
-						meshes[0]->mesh->SetIbo(models);
+						meshes[0]->mesh->SetMbo(models);
 					}
 
 					// Draw the mesh
@@ -184,7 +184,7 @@ namespace EVA
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
 					if (!meshes[0]->mesh->isStatic ||
-						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasIbo()))
+						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -195,7 +195,7 @@ namespace EVA
 							models.push_back(meshRenderer->transform->modelMatrix);
 						}
 						// Set the mesh ibo
-						meshes[0]->mesh->SetIbo(models);
+						meshes[0]->mesh->SetMbo(models);
 					}
 
 					// Draw the mesh
@@ -243,7 +243,7 @@ namespace EVA
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
 					if (!meshes[0]->mesh->isStatic ||
-						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasIbo()))
+						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -254,7 +254,7 @@ namespace EVA
 							models.push_back(meshRenderer->transform->modelMatrix);
 						}
 						// Set the mesh ibo
-						meshes[0]->mesh->SetIbo(models);
+						meshes[0]->mesh->SetMbo(models);
 					}
 
 					// Draw the mesh
