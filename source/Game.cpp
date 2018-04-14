@@ -1,13 +1,19 @@
 #include "Game.hpp"
 
+#include "EVA/Graphics.hpp"
+#include "EVA/SceneManager.hpp"
+#include "EVA/ResourceManagers.hpp"
+
 #include "TileMap.hpp"
 #include "Ghost.hpp"
 #include "Pacman.hpp"
-#include "EVA/SceneManager.hpp"
-#include "EVA/Graphics.hpp"
 
 Game::Game()
 {
+	// Shaders
+	EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
+	EVA::ShaderManager::CreateOrGetShader("standard_instanced", "standard_instanced.vert", "standard_instanced.frag");
+
 	// Skybox
 	skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
 	//skybox = std::make_unique<EVA::Skybox>("./assets/testsky/", ".png");

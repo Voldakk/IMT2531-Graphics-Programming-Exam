@@ -3,6 +3,7 @@
 #include "GL/glew.h"
 
 #include "Application.hpp"
+#include "ShaderManager.hpp"
 
 namespace EVA
 {
@@ -14,11 +15,11 @@ namespace EVA
 
 	Scene::Scene()
 	{
-		shadowMaterial.shader = std::make_shared<Shader>("shadow.vert", "shadow.frag");
-		shadowMaterialInstanced.shader = std::make_shared<Shader>("shadow_instanced.vert", "shadow.frag");
+		shadowMaterial.shader = ShaderManager::CreateOrGetShader("scene_shadow", "shadow.vert", "shadow.frag");
+		shadowMaterialInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_instanced", "shadow_instanced.vert", "shadow.frag");
 	
-		shadowMaterialCube.shader = std::make_shared<Shader>("shadow_cube.vert", "shadow_cube.geom", "shadow_cube.frag");
-		shadowMaterialCubeInstanced.shader = std::make_shared<Shader>("shadow_cube_instanced.vert", "shadow_cube.geom", "shadow_cube.frag");
+		shadowMaterialCube.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube", "shadow_cube.vert", "shadow_cube.frag", "shadow_cube.geom");
+		shadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");
 	}
 
 	void Scene::Update(const float deltaTime)

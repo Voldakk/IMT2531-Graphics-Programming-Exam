@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+#include "EVA/ResourceManagers.hpp"
+
 TileMap::TileMap(EVA::GameObject *gameObject) : Component(gameObject),
 m_Width(0), m_Height(0)
 {
@@ -20,7 +22,7 @@ m_Width(0), m_Height(0)
 	m_Material->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/Cement 1/Cement 1_Dif.jpg");
 	m_Material->SetTexture(EVA::TextureType::Specular, "./assets/textures/Cement 1/Cement 1_Ref.jpg");
 	m_Material->SetTexture(EVA::TextureType::Normal, "./assets/textures/Cement 1/Cement 1_Nor.jpg");
-	m_Material->shader = std::make_shared<EVA::StandardInstancedShader>();
+	m_Material->shader = EVA::ShaderManager::GetShader("standard_instanced");
 }
 
 void TileMap::ReadFile(const char *path)

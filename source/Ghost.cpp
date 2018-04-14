@@ -1,8 +1,9 @@
 #include "Ghost.hpp"
+#include "EVA/ResourceManagers.hpp"
 
 Ghost::Ghost(EVA::GameObject* gameObject, const glm::vec3 color) : Component(gameObject)
 {
-	const auto shader = std::make_shared<EVA::StandardShader>();
+	const auto shader = EVA::ShaderManager::GetShader("standard");
 
 	m_Mesh = EVA::Mesh::LoadMultiple("./assets/models/ghost.obj");
 

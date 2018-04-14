@@ -1,21 +1,16 @@
 #include "Shader.hpp"
+#include <utility>
 
 #include "GL/glew.h"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "Shaderload.hpp"
-
 namespace EVA
 {
 
-	Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
+	Shader::Shader(const unsigned int shaderId) 
+		: m_ShaderId(shaderId)
 	{
-		m_ShaderId = ShaderLoad::CreateProgram(vertexPath.c_str(), fragmentPath.c_str());
-	}
 
-	Shader::Shader(const std::string& vertexPath, const std::string& geomertyPath, const std::string& fragmentPath)
-	{
-		m_ShaderId = ShaderLoad::CreateProgram(vertexPath.c_str(), geomertyPath.c_str(), fragmentPath.c_str());
 	}
 
 	Shader::~Shader()
@@ -67,20 +62,4 @@ namespace EVA
 	{
 		glUseProgram(0);
 	}
-
-    StandardShader::StandardShader() : Shader("standard.vert", "standard.frag")
-	{
-
-	}
-
-	StandardInstancedShader::StandardInstancedShader() : Shader("standard_instanced.vert", "standard_instanced.frag")
-	{
-
-	}
-
-	SkyboxShader::SkyboxShader() : Shader("skybox.vert", "skybox.frag")
-	{
-
-	}
-
 }

@@ -1,4 +1,4 @@
-#include "Shaderload.hpp"
+#include "ShaderManager.hpp"
 
 #include <vector>
 #include <fstream>
@@ -12,7 +12,43 @@ namespace EVA
 
 	const std::string SHADER_PATH = "./assets/shaders/";
 
-	GLuint ShaderLoad::CreateProgram(const char *pathVertShader, const char *pathFragShader)
+	std::map<std::string, std::shared_ptr<Shader>> ShaderManager::m_Shaders;
+
+	std::shared_ptr<Shader> ShaderManager::CreateOrGetShader(const std::string& name, const std::string& vertPath, const std::string& fragPath)
+	{
+		if (m_Shaders.count(name))
+			return m_Shaders[name];
+
+		auto shaderId = CreateProgram(vertPath.c_str(), fragPath.c_str());
+		const auto shader = std::make_shared<Shader>(shaderId);
+		
+		m_Shaders[name] = shader;
+
+		return shader;
+	}
+
+	std::shared_ptr<Shader> ShaderManager::CreateOrGetShader(const std::string& name, const std::string& vertPath, const std::string& fragPath, const std::string& geomPath)
+	{
+		if (m_Shaders.count(name))
+			return m_Shaders[name];
+
+		auto shaderId = CreateProgram(vertPath.c_str(), fragPath.c_str(), geomPath.c_str());
+		const auto shader = std::make_shared<Shader>(shaderId);
+
+		m_Shaders[name] = shader;
+
+		return shader;
+	}
+
+	std::shared_ptr<Shader> ShaderManager::GetShader(const std::string& name)
+	{
+		if (m_Shaders.count(name))
+			return m_Shaders[name];
+
+		return nullptr;
+	}
+
+	unsigned int ShaderManager::CreateProgram(const char *pathVertShader, const char *pathFragShader)
 	{
 		// Load and compile the vertex and fragment shaders
 		const auto vertexShader = LoadAndCompileShader((SHADER_PATH + pathVertShader).c_str(), GL_VERTEX_SHADER);
@@ -37,25 +73,25 @@ namespace EVA
 		return shaderProgram;
 	}
 
-	GLuint ShaderLoad::CreateProgram(const char *pathVertShader, const char *pathGeomShader, const char *pathFragShader)
+	unsigned int ShaderManager::CreateProgram(const char *pathVertShader, const char *pathFragShader, const char *pathGeomShader)
 	{
 		// Load and compile the vertex and fragment shaders
 		const auto vertexShader =   LoadAndCompileShader((SHADER_PATH + pathVertShader).c_str(), GL_VERTEX_SHADER);
-		const auto geometryShader = LoadAndCompileShader((SHADER_PATH + pathGeomShader).c_str(), GL_GEOMETRY_SHADER);
 		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH + pathFragShader).c_str(), GL_FRAGMENT_SHADER);
+		const auto geometryShader = LoadAndCompileShader((SHADER_PATH + pathGeomShader).c_str(), GL_GEOMETRY_SHADER);
 
 		// Create a program object and attach the two shaders we have compiled, the program object contains
 		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
 		const auto shaderProgram = glCreateProgram();
 		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, geometryShader);
 		glAttachShader(shaderProgram, fragmentShader);
+		glAttachShader(shaderProgram, geometryShader);
 
 		// Now that the fragment and vertex shader has been attached, we no longer need these two separate objects and should delete them.
 		// The attachment to the shader program will keep them alive, as long as we keep the shaderProgram.
 		glDeleteShader(vertexShader);
-		glDeleteShader(geometryShader);
 		glDeleteShader(fragmentShader);
+		glDeleteShader(geometryShader);
 
 		// Link the different shaders that are bound to this program, this creates a final shader that
 		// we can use to render geometry with.
@@ -65,7 +101,7 @@ namespace EVA
 		return shaderProgram;
 	}
 
-	void ShaderLoad::ReadShaderSource(const char *fname, std::vector<char> &buffer)
+	void ShaderManager::ReadShaderSource(const char *fname, std::vector<char> &buffer)
 	{
 		std::ifstream in;
 		in.open(fname, std::ios::binary);
@@ -93,7 +129,7 @@ namespace EVA
 		}
 	}
 
-	GLuint ShaderLoad::LoadAndCompileShader(const char *fname, const GLenum shaderType)
+	unsigned int ShaderManager::LoadAndCompileShader(const char *fname, const GLenum shaderType)
 	{
 		std::cout << "ShaderLoad::LoadAndCompileShader - " << fname << "\n";
 

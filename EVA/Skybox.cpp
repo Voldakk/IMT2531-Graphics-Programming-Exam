@@ -9,6 +9,7 @@
 #include "Transform.hpp"
 #include "Application.hpp"
 #include "TextureManager.hpp"
+#include "ShaderManager.hpp"
 
 namespace EVA
 {
@@ -23,7 +24,7 @@ namespace EVA
 		m_Material->SetTexture(TextureType::Diffuse, m_Texture);
 
 		// Shader
-		m_Material->shader = std::make_shared<SkyboxShader>();
+		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
 
 		// Mesh
 		m_Mesh = Mesh::Primitive(PrimitiveType::CubeInverted);

@@ -16,8 +16,7 @@ namespace EVA
 
 	public:
 
-		Shader(const std::string& vertexPath, const std::string& fragmentPath);
-		Shader(const std::string& vertexPath, const std::string& geomertyPath, const std::string& fragmentPath);
+		explicit Shader(const unsigned int shaderId);
 
 		~Shader();
 
@@ -40,23 +39,4 @@ namespace EVA
 		int GetUniformLocation(const std::string& name);
 
 	};
-
-	class StandardShader : public Shader
-	{
-	public:
-		StandardShader();
-	};
-
-	class StandardInstancedShader : public Shader
-	{
-	public:
-		StandardInstancedShader();
-	};
-
-	class SkyboxShader : public Shader
-	{
-	public:
-		SkyboxShader();
-	};
-
 }
