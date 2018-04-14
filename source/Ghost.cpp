@@ -5,7 +5,7 @@ Ghost::Ghost(EVA::GameObject* gameObject, const glm::vec3 color) : Component(gam
 {
 	const auto shader = EVA::ShaderManager::GetShader("standard");
 
-	m_Mesh = EVA::Mesh::LoadMultiple("./assets/models/ghost.obj");
+	m_Model = EVA::ModelManager::LoadModel("./assets/models/ghost.obj");
 
 	// Body
 	m_BodyMaterial= std::make_shared<EVA::Material>();
@@ -17,7 +17,7 @@ Ghost::Ghost(EVA::GameObject* gameObject, const glm::vec3 color) : Component(gam
 	m_BodyMaterial->tintDiffuse = glm::vec4(color, 1.0f);
 
 	auto bodyMr = gameObject->AddComponent<EVA::MeshRenderer>();
-	bodyMr->Set(m_Mesh[1], m_BodyMaterial);
+	bodyMr->Set(m_Model->GetMesh("ghost_body"), m_BodyMaterial);
 
 	// Eyes
 	m_EyeMaterial = std::make_shared<EVA::Material>();
@@ -27,5 +27,5 @@ Ghost::Ghost(EVA::GameObject* gameObject, const glm::vec3 color) : Component(gam
 	m_EyeMaterial->SetTexture(EVA::TextureType::Normal, "./assets/textures/ghost/ghost_eyes_normal.png");
 
 	auto eyeMr = gameObject->AddComponent<EVA::MeshRenderer>();
-	eyeMr->Set(m_Mesh[0], m_EyeMaterial);
+	eyeMr->Set(m_Model->GetMesh("ghost_eyes"), m_EyeMaterial);
 }

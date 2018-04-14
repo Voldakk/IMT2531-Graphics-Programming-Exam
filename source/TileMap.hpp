@@ -2,7 +2,6 @@
 
 #include <map>
 #include <vector>
-#include <string>
 #include <memory>
 
 #include "EVA.hpp"
@@ -20,7 +19,7 @@ class TileMap : public EVA::Component
 
 	std::vector<std::vector<TileType>> m_Tiles;
 
-	std::map<std::string, std::shared_ptr<EVA::Mesh>> m_MeshMap;
+	std::shared_ptr<EVA::Model> m_Model;
 	std::shared_ptr<EVA::Material> m_Material;
 
 	std::vector<glm::ivec2> m_Teleporters;

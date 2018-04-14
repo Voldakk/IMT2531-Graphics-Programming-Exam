@@ -3,22 +3,21 @@
 #include <utility>
 
 #include "Scene.hpp"
-#include "OBJLoader.hpp"
 
 namespace EVA
 {
 
-	Mesh::Mesh(std::vector<Vertex> vertices) :
-			m_Vertices(std::move(vertices)), m_InstanceCount(0), isStatic(false)
+	Mesh::Mesh(std::vector<Vertex> vertices, std::string name) 
+		: m_Vertices(std::move(vertices)), m_InstanceCount(0), isStatic(false), name(std::move(name))
 	{
-		CalculateBt();
+		//CalculateBt();
 		Create();
 	}
 
-	Mesh::Mesh(std::vector<Vertex> vertices, std::string name) :
-			m_Vertices(std::move(vertices)), m_InstanceCount(0), isStatic(false), name(std::move(name))
+	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> faceIndices, std::string name)
+		: m_Vertices(std::move(vertices)), m_FaceIndices(std::move(faceIndices)) , m_InstanceCount(0), isStatic(false), name(std::move(name))
 	{
-		CalculateBt();
+		//CalculateBt();
 		Create();
 	}
 
@@ -110,97 +109,4 @@ namespace EVA
 	{
 		return m_Mb != nullptr;
 	}
-
-	std::shared_ptr<Mesh> Mesh::Load(const std::string &path)
-	{
-		return OBJLoader::LoadSingle(path.c_str());
-	}
-
-	std::vector<std::shared_ptr<Mesh>> Mesh::LoadMultiple(const std::string &path)
-	{
-		return OBJLoader::LoadMultiple(path.c_str());
-	}
-
-	std::shared_ptr<Mesh> Mesh::Primitive(const PrimitiveType type)
-	{
-		std::string path = "./assets/models/primitives/";
-
-		switch (type)
-		{
-			case Circle:
-				path += "circle.obj";
-				break;
-			case Cone:
-				path += "cone.obj";
-				break;
-			case Cube:
-				path += "cube.obj";
-				break;
-			case CubeInverted:
-				path += "cube_inverted.obj";
-				break;
-			case Cylinder:
-				path += "cylinder.obj";
-				break;
-			case Monkey:
-				path += "monkey_low.obj";
-				break;
-			case MonkeyHigh:
-				path += "monkey_high.obj";
-				break;
-			case Icosphere:
-				path += "icosphere.obj";
-				break;
-			case Plane:
-				path += "plane.obj";
-				break;
-			case Sphere:
-				path += "sphere.obj";
-				break;
-			case Torus:
-				path += "torus.obj";
-				break;
-				// Default to cube
-			default:
-				path += "cube.obj";
-				break;
-		}
-
-		return Load(path);
-	}
-
-	void Mesh::CalculateBt()
-	{
-		glm::vec3 tangent;
-		glm::vec3 bitangent;
-
-		for (unsigned int i = 0; i < m_Vertices.size(); i += 3)
-		{
-			const auto edge1 = m_Vertices[i+1].position - m_Vertices[i + 0].position;
-			const auto edge2 = m_Vertices[i + 2].position - m_Vertices[i + 0].position;
-			const auto deltaUv1 = m_Vertices[i + 1].texCoords - m_Vertices[i + 0].texCoords;
-			const auto deltaUv2 = m_Vertices[i + 2].texCoords - m_Vertices[i + 0].texCoords;
-
-			const auto f = 1.0f / (deltaUv1.x * deltaUv2.y - deltaUv2.x * deltaUv1.y);
-
-			tangent.x = f * (deltaUv2.y * edge1.x - deltaUv1.y * edge2.x);
-			tangent.y = f * (deltaUv2.y * edge1.y - deltaUv1.y * edge2.y);
-			tangent.z = f * (deltaUv2.y * edge1.z - deltaUv1.y * edge2.z);
-			tangent = glm::normalize(tangent);
-
-			bitangent.x = f * (-deltaUv2.x * edge1.x + deltaUv1.x * edge2.x);
-			bitangent.y = f * (-deltaUv2.x * edge1.y + deltaUv1.x * edge2.y);
-			bitangent.z = f * (-deltaUv2.x * edge1.z + deltaUv1.x * edge2.z);
-			bitangent = glm::normalize(bitangent);
-
-			m_Vertices[i + 0].tangent = tangent;
-			m_Vertices[i + 1].tangent = tangent;
-			m_Vertices[i + 2].tangent = tangent;
-
-			m_Vertices[i + 0].bitangent = bitangent;
-			m_Vertices[i + 1].bitangent = bitangent;
-			m_Vertices[i + 2].bitangent = bitangent;
-		}
-	}
-
 }

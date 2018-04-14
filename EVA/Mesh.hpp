@@ -11,11 +11,6 @@
 namespace EVA
 {
 
-	enum PrimitiveType
-	{
-		Circle, Cone, Cube, CubeInverted, Cylinder, Icosphere, Monkey, MonkeyHigh, Plane, Sphere, Torus
-	};
-
 	struct Vertex
 	{
 		glm::vec3 position;
@@ -38,15 +33,14 @@ namespace EVA
 		std::unique_ptr<IndexBuffer> m_Ib;
 		std::unique_ptr<VertexBuffer> m_Mb;
 
-
 	public:
 
 		bool isStatic;
 		std::string name;
 
-		explicit Mesh(std::vector<Vertex> vertices);
+		explicit Mesh(std::vector<Vertex> vertices, std::string name = "");
 
-		explicit Mesh(std::vector<Vertex> vertices, std::string name);
+		explicit Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> faceIndices, std::string name = "");
 
 		void Create();
 
@@ -57,14 +51,6 @@ namespace EVA
 		void SetMbo(const std::vector<glm::mat4> &models);
 
 		bool HasMbo() const;
-
-		static std::shared_ptr<Mesh> Load(const std::string &path);
-
-		static std::vector<std::shared_ptr<Mesh>> LoadMultiple(const std::string &path);
-
-		static std::shared_ptr<Mesh> Primitive(PrimitiveType type);
-
-		void CalculateBt();
 	};
 
 }

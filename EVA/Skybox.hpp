@@ -6,12 +6,9 @@
 namespace EVA
 {
 
-	class Mesh;
-
+	class Model;
 	class Shader;
-
 	class Material;
-
 	class Transform;
 
 	class Skybox
@@ -19,7 +16,7 @@ namespace EVA
 
 		unsigned int m_Texture;
 
-		std::shared_ptr<Mesh> m_Mesh;
+		std::shared_ptr<Model> m_Model;
 		std::unique_ptr<Material> m_Material;
 		std::unique_ptr<Transform> m_Transform;
 

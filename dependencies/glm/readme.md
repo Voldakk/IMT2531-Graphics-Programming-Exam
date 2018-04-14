@@ -1,4 +1,4 @@
-#CHANGES
+# CHANGES
 
 04.04.18 Eivind Vold Aunebakk 
 Removed test/ doc/ util/

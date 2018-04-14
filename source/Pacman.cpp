@@ -8,7 +8,7 @@
 Pacman::Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap) : Component(gameObject), m_TileMap(std::move(tileMap))
 {
 	// Mesh
-	m_Mesh = EVA::Mesh::Load("./assets/models/pacman.obj");
+	m_Model = EVA::ModelManager::LoadModel("./assets/models/pacman.obj");
 
 	// Material
 	m_Material = std::make_shared<EVA::Material>();
@@ -19,7 +19,10 @@ Pacman::Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap) : 
 
 	// Mesh renderer
 	auto mr = gameObject->AddComponent<EVA::MeshRenderer>();
-	mr->Set(m_Mesh, m_Material);
+	mr->Set(m_Model->GetMesh(0), m_Material);
+
+	mr = gameObject->AddComponent<EVA::MeshRenderer>();
+	mr->Set(m_Model->GetMesh(1), m_Material);
 
 	// Default values
 	m_TargetTile.x = -1;

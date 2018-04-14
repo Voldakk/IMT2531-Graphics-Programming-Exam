@@ -4,16 +4,16 @@
 
 #include "EVA/ResourceManagers.hpp"
 
-TileMap::TileMap(EVA::GameObject *gameObject) : Component(gameObject),
-m_Width(0), m_Height(0)
+TileMap::TileMap(EVA::GameObject *gameObject) 
+	: Component(gameObject), m_Width(0), m_Height(0)
 {
 	// Load meshes
-	auto meshes = EVA::Mesh::LoadMultiple("./assets/models/tile.obj");
+	m_Model = EVA::ModelManager::LoadModel("./assets/models/tile.obj");
 
-	for (const auto &mesh : meshes)
+
+	for (unsigned int i = 0; i < m_Model->MeshCount(); ++i)
 	{
-		mesh->isStatic = true;
-		m_MeshMap[mesh->name] = mesh;
+		m_Model->GetMesh(i)->isStatic = true;
 	}
 
 	// Material
@@ -153,7 +153,7 @@ void TileMap::CreateMesh()
 				config += 2;
 
 			// Get the mesh
-			const auto mesh = m_MeshMap[std::to_string(config)];
+			const auto mesh = m_Model->GetMesh(std::to_string(config));
 
 			// If we found a mesh
 			if (mesh != nullptr)
@@ -167,8 +167,6 @@ void TileMap::CreateMesh()
 			}
 		}
 	}
-
-	
 }
 
 glm::vec3 TileMap::GetUniqueTilePosition(const unsigned int tile)

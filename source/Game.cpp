@@ -49,6 +49,7 @@ Game::Game()
 		auto ghost = CreateGameObject();
 		ghost->AddComponent<Ghost>(colors[i]);
 		ghost->transform->SetPosition({ (i + 1) * 2.0f, 1.0f, 0.0f });
+		ghost->transform->SetOrientation(EVA::YAXIS, i * 90.0f);
 	}
 
 	// Axis

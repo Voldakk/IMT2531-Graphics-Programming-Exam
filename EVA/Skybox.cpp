@@ -4,7 +4,7 @@
 
 #include "GL/glew.h"
 
-#include "Mesh.hpp"
+#include "ModelManager.hpp"
 #include "Material.hpp"
 #include "Transform.hpp"
 #include "Application.hpp"
@@ -27,7 +27,7 @@ namespace EVA
 		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
 
 		// Mesh
-		m_Mesh = Mesh::Primitive(PrimitiveType::CubeInverted);
+		m_Model = ModelManager::Primitive(PrimitiveType::CubeInverted);
 
 		// Transform
 		m_Transform = std::make_unique<Transform>(nullptr);
@@ -45,7 +45,7 @@ namespace EVA
 		m_Material->Activate(nullptr, m_Transform.get());
 
 		glDepthMask(GL_FALSE);
-		m_Mesh->Draw();
+		m_Model->GetMesh(0)->Draw();
 		glDepthMask(GL_TRUE);
 	}
 
