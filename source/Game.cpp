@@ -5,7 +5,7 @@
 #include "EVA/ResourceManagers.hpp"
 
 #include "TileMap.hpp"
-#include "Ghost.hpp"
+#include "GhostVariations.hpp"
 #include "Pacman.hpp"
 
 Game::Game()
@@ -23,23 +23,32 @@ Game::Game()
 	directionalLight->directionalShadowDistance = 25.0f;
 
 	// Tilemap
-	auto tileMapGo = CreateGameObject();
-	tileMap = tileMapGo->AddComponent<TileMap>();
+	tileMap = CreateGameObject()->AddComponent<TileMap>();
 	tileMap->ReadFile("./assets/levels/level1.txt");
 
 	// Camera
-	auto camera = CreateGameObject();
-	EVA::Application::mainCamera = camera->AddComponent<EVA::Camera>();
+	auto camera = CreateGameObject()->AddComponent<EVA::Camera>();
 	camera->transform->SetPosition({ 0.0f, 3.0f, -2.0f });
+	EVA::Application::mainCamera = camera;
 
 	// Pacman
-	auto pacmanGo = CreateGameObject();
-	pacman = pacmanGo->AddComponent<Pacman>(tileMap);
+	pacman = CreateGameObject()->AddComponent<Pacman>(tileMap);
 
-	// Ghosts
-	auto ghostGo = CreateGameObject();
-	auto ghost = ghostGo->AddComponent<Ghost>(this);
-	ghost->Reset();
+	// Shadow
+	const auto shadow = CreateGameObject()->AddComponent<GhostShadow>(this);
+	ghosts.push_back(shadow);
+
+	//Speedy
+	const auto speedy = CreateGameObject()->AddComponent<GhostSpeedy>(this);
+	ghosts.push_back(speedy);
+
+	// Bashful
+	const auto bashful = CreateGameObject()->AddComponent<GhostBashful>(this, shadow);
+	ghosts.push_back(bashful);
+
+	// Pokey
+	const auto pokey = CreateGameObject()->AddComponent<GhostPokey>(this);
+	ghosts.push_back(pokey);
 }
 
 void Game::Update(const float deltaTime)

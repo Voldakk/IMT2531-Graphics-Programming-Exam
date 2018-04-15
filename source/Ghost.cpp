@@ -3,17 +3,16 @@
 #include "EVA/ResourceManagers.hpp"
 
 #include "Game.hpp"
-#include <iostream>
 
-Ghost::Ghost(EVA::GameObject* gameObject, Game* game) 
-: Component(gameObject), m_TileMap(game->tileMap), m_Pacman(game->pacman)
+Ghost::Ghost(EVA::GameObject* gameObject, Game* game)
+	: Component(gameObject), m_Direction(Direction::Up), m_State(GhostState::Chase), m_TileMap(game->tileMap), m_Pacman(game->pacman)
 {
 	const auto shader = EVA::ShaderManager::GetShader("standard");
 
 	m_Model = EVA::ModelManager::LoadModel("./assets/models/ghost.obj");
 
 	// Body
-	m_BodyMaterial= std::make_shared<EVA::Material>();
+	m_BodyMaterial = std::make_shared<EVA::Material>();
 	m_BodyMaterial->shader = shader;
 	m_BodyMaterial->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/ghost/ghost_body_diffuse.png");
 	m_BodyMaterial->SetTexture(EVA::TextureType::Specular, "./assets/textures/ghost/ghost_body_specular.png");
@@ -31,6 +30,8 @@ Ghost::Ghost(EVA::GameObject* gameObject, Game* game)
 
 	auto eyeMr = gameObject->AddComponent<EVA::MeshRenderer>();
 	eyeMr->Set(m_Model->GetMesh("ghost_eyes"), m_EyeMaterial);
+
+	Reset();
 }
 
 void Ghost::Update(const float deltaTime)
@@ -42,7 +43,6 @@ void Ghost::Update(const float deltaTime)
 	if (m_TargetTile.x == -1)
 	{
 		m_Direction = ChooseDirection(FindPossibleDirections());
-		std::cout << "Dir: " << m_Direction << "\n";
 		const auto possibleTarget = m_CurrentTile + DirectionToVector(m_Direction);
 
 		// The possible target is traversable by pacman
@@ -111,7 +111,6 @@ void Ghost::Update(const float deltaTime)
 void Ghost::Reset()
 {
 	m_State = GhostState::Chase;
-	m_ScatterTile = m_TileMap->GetUniqueTile('S');
 
 	m_CurrentTile = m_TileMap->GetUniqueTile('G');
 	transform->SetPosition(m_TileMap->GetUniqueTilePosition('G'));
@@ -204,7 +203,7 @@ Ghost::Direction Ghost::ChooseDirection(const std::vector<Ghost::Direction>& dir
 		switch (m_State)
 		{
 		case Chase:
-			return DirectionToTarget(directions, m_Pacman->currentTile);
+			return ChooseChaseTarget(directions);
 
 		case Scatter:
 			return DirectionToTarget(directions, m_ScatterTile);
@@ -257,4 +256,9 @@ Ghost::Direction Ghost::DirectionToTarget(const std::vector<Ghost::Direction>& d
 	}
 
 	return minDir;
+}
+
+void Ghost::SetColor(const glm::vec3 newColor) const
+{
+	m_BodyMaterial->tintDiffuse = glm::vec4(newColor, 1.0f);
 }
