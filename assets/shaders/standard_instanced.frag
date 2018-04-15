@@ -158,9 +158,9 @@ void main()
     vec3 specularMap = texture(material.texture_specular, fragTexCoord).rgb;
     vec3 emissionMap = texture(material.texture_emission, fragTexCoord).rgb;
 
-	// obtain normal from normal map in range [0,1]
+	// Obtain normal from normal map in range [0,1]
     normal = texture(material.texture_normal, fragTexCoord).rgb;
-    // transform normal vector to range [-1,1]
+    // Transform normal vector to range [-1,1]
     normal = normalize(normal * 2.0 - 1.0);   
 	normal = normalize(fragTBN * normal); 
 

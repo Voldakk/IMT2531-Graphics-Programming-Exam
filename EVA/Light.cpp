@@ -8,7 +8,7 @@ EVA::Light::Light(const LightType type, const bool shadows, const unsigned int s
 {
 	m_Type = type;
 	m_Shadows = shadows;
-	m_ShadowSize = shadowSize;
+	m_ShadowMapSize = shadowSize;
 
 	if(!shadows)
 		return;;
@@ -18,7 +18,7 @@ EVA::Light::Light(const LightType type, const bool shadows, const unsigned int s
 		glGenTextures(1, &m_DepthMap);
 		glBindTexture(GL_TEXTURE_2D, m_DepthMap);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-			m_ShadowSize, m_ShadowSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+			m_ShadowMapSize, m_ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -42,7 +42,7 @@ EVA::Light::Light(const LightType type, const bool shadows, const unsigned int s
 
 		for (unsigned int i = 0; i < 6; ++i)
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
-				m_ShadowSize, m_ShadowSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+				m_ShadowMapSize, m_ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -57,6 +57,12 @@ EVA::Light::Light(const LightType type, const bool shadows, const unsigned int s
 		glReadBuffer(GL_NONE);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
+}
+
+void EVA::Light::SetPosition(const glm::vec3 newPosition)
+{
+	m_Position = newPosition;
+	m_Position.x *= -1;
 }
 
 void EVA::Light::SetRotation(const glm::vec2 rotation)
@@ -74,15 +80,16 @@ void EVA::Light::SetRotation(const glm::vec2 rotation)
 
 glm::mat4 EVA::Light::GetLightSpaceMatrix() const
 {
-	const auto lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, directionalNearPlane, directionalFarPlane);
+	const auto lightProjection = glm::ortho(-directionalShadowDistance, directionalShadowDistance, -directionalShadowDistance, directionalShadowDistance, directionalNearPlane, directionalFarPlane);
 
 	const auto lightDirection = -glm::normalize(glm::vec3(GetDirection()));
-	const auto cameraPosition = Application::mainCamera->transform->position;
+	auto cameram_Position = Application::mainCamera->transform->position;
+	cameram_Position.x *= -1.0f;
 
 
 	const auto lightView = glm::lookAt(
-		glm::vec3(cameraPosition - lightDirection * (directionalFarPlane / 2)),
-		glm::vec3(cameraPosition),
+		glm::vec3(cameram_Position - lightDirection * (directionalFarPlane / 2)),
+		glm::vec3(cameram_Position),
 		glm::vec3(0.0f, 1.0f, 0.0f));
 
 	return lightProjection * lightView;
@@ -93,12 +100,12 @@ std::vector<glm::mat4> EVA::Light::GetShadowTransforms() const
 	const auto shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, pointNearPlane, pointFarPlane);
 
 	std::vector<glm::mat4> shadowTransforms;
-	shadowTransforms.push_back(shadowProj * glm::lookAt(position, position + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
-	shadowTransforms.push_back(shadowProj * glm::lookAt(position, position + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
-	shadowTransforms.push_back(shadowProj * glm::lookAt(position, position + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
-	shadowTransforms.push_back(shadowProj * glm::lookAt(position, position + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
-	shadowTransforms.push_back(shadowProj * glm::lookAt(position, position + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
-	shadowTransforms.push_back(shadowProj * glm::lookAt(position, position + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(m_Position, m_Position + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(m_Position, m_Position + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(m_Position, m_Position + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(m_Position, m_Position + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(m_Position, m_Position + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
+	shadowTransforms.push_back(shadowProj * glm::lookAt(m_Position, m_Position + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
 
 	return shadowTransforms;
 }

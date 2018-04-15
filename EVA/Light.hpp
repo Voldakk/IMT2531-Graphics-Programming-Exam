@@ -21,32 +21,37 @@ namespace EVA
 		glm::vec4 m_Direction;
 		glm::vec2 m_Rotation = { 30.0f, 0.0f };
 
+		// Point light
+		glm::vec3 m_Position;
+
 		// Shadows
 		bool m_Shadows;
 		unsigned int m_DepthMapFb{};
 		unsigned int m_DepthMap{};
-		unsigned int m_ShadowSize;
-
+		unsigned int m_ShadowMapSize;
 
 	public:
 
 		const float directionalNearPlane = 1.0f;
 		const float directionalFarPlane = 100.0f;
 
-		const float pointNearPlane = 1.0f;
+		const float pointNearPlane = 0.1f;
 		const float pointFarPlane = 25.0f;
+
+		float directionalShadowDistance = 20.0f;
 
 		// Common
 		glm::vec3 color = glm::vec3(1.0f);
 		float ambientCoefficient = 0.005f;
 
 		// Point light
-		glm::vec3 position;
+		const glm::vec3& position = m_Position;
 		float attenuation = 0.2f;
 
 		// Constructor
 		explicit Light(LightType type, bool shadows, unsigned int shadowSize);
 
+		void SetPosition(glm::vec3 newPosition);
 		void SetRotation(glm::vec2 rotation);
 
 		// Get stuff
@@ -57,7 +62,7 @@ namespace EVA
 		inline bool Shadows() const { return m_Shadows; }
 		inline unsigned int GetDepthMapFb() const { return m_DepthMapFb; }
 		inline unsigned int GetDepthMap() const { return m_DepthMap; }
-		inline unsigned int GetShadwoSize() const { return m_ShadowSize; }
+		inline unsigned int GetShadwoSize() const { return m_ShadowMapSize; }
 
 		std::vector<glm::mat4> GetShadowTransforms() const;
 	};

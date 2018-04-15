@@ -86,7 +86,6 @@ namespace EVA
 			return;
 
 		// Lights
-
 		auto lights = scene->GetLights();
 		shader->SetUniform1I("numLights", lights.size());
 
