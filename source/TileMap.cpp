@@ -89,14 +89,26 @@ void TileMap::ReadFile(const char *path)
 		for (auto x = 0; x < m_Width; x++)
 		{
 			const auto t = level[y][x];
+			m_UniqueTiles[t] = glm::ivec2(x, y);
 
 			switch (t)
 			{
+			case 'D':
+				row.push_back(TileType::GhostDoor);
+				break;
+
+			case 'H':
+				row.push_back(TileType::GhostFloor);
+				break;
+
+			case 'G':
+				row.push_back(TileType::GhostSpawn);
+				break;
+
 			case 'S':
 			case 'B':
 			case 'C':
 			case 'I':
-				m_UniqueTiles[t] = glm::ivec2(x, y);
 			case '#':
 				row.push_back(TileType::Wall);
 				break;
@@ -121,7 +133,6 @@ void TileMap::ReadFile(const char *path)
 
 			default:
 				row.push_back(TileType::Floor);
-				m_UniqueTiles[t] = glm::ivec2(x, y);
 				break;
 			}
 
@@ -172,6 +183,11 @@ void TileMap::CreateMesh()
 glm::vec3 TileMap::GetUniqueTilePosition(const unsigned int tile)
 {
 	return glm::vec3(m_UniqueTiles[tile].x + 0.5f, 0.0f, m_UniqueTiles[tile].y + 0.5f);
+}
+
+glm::ivec2 TileMap::GetUniqueTile(const unsigned tile)
+{
+	return m_UniqueTiles[tile];
 }
 
 glm::ivec2 TileMap::GetTileIndex(const glm::vec3 worldPosition) const

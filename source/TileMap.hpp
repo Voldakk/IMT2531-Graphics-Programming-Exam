@@ -6,10 +6,11 @@
 
 #include "EVA.hpp"
 #include "EVA/Graphics.hpp"
+#include "Ghost.hpp"
 
 enum TileType
 {
-	Floor, Wall, Teleporter, GhostFloor, GhostDoor
+	Floor, Wall, Teleporter, GhostFloor, GhostDoor, GhostSpawn
 };
 
 class TileMap : public EVA::Component
@@ -37,6 +38,7 @@ public:
 	void ReadFile(const char *path);
 
 	glm::vec3 GetUniqueTilePosition(unsigned int tile);
+	glm::ivec2 GetUniqueTile(unsigned int tile);
 
 	glm::ivec2 GetTileIndex(glm::vec3 worldPosition) const;
 

@@ -22,6 +22,9 @@ class Pacman : public EVA::Component
 
 public:
 
+	glm::ivec2& currentTile = m_CurrentTile;
+	glm::ivec2& currentDirection = m_CurrentDirection;
+
 	explicit Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap);
 	void Update(float deltaTime) override;
 };
