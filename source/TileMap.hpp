@@ -6,7 +6,10 @@
 
 #include "EVA.hpp"
 #include "EVA/Graphics.hpp"
+
 #include "Ghost.hpp"
+
+class Game;
 
 enum TileType
 {
@@ -28,26 +31,78 @@ class TileMap : public EVA::Component
 
 	std::map<unsigned int, glm::ivec2> m_UniqueTiles;
 
+	Game* m_Game;
+
 public:
 
 	const int& width = m_Width;
 	const int& height = m_Height;
 
-	explicit TileMap(EVA::GameObject *gameObject);
+	/**
+	 * \brief 
+	 * \param gameObject The GameObject the pellet is attaced to
+	 * \param game The game scene
+	 */
+	explicit TileMap(EVA::GameObject *gameObject, Game* game);
 
+	/**
+	 * \brief Reads a level from the specified file
+	 * \param path The path to the file
+	 */
 	void ReadFile(const char *path);
 
+	/**
+	 * \brief Gets the world position of a tile with the given symbol
+	 * \param tile The tile symbol
+	 * \return The world position
+	 */
 	glm::vec3 GetUniqueTilePosition(const unsigned int tile);
+
+	/**
+	 * \brief Gets the tile index of a tile with the given symbol
+	 * \param tile The tile symbol
+	 * \return The tile index
+	 */
 	glm::ivec2 GetUniqueTile(const unsigned tile);
 
+	/**
+	 * \brief Gets the corresponding tile index from a world psoition
+	 * \param worldPosition The world position
+	 * \return The tile index
+	 */
 	glm::ivec2 GetTileIndex(glm::vec3 worldPosition) const;
 
+	/**
+	 * \brief Gets the tile type of the tile at the given index
+	 * \param tileIndex The tile index
+	 * \return The tile type
+	 */
 	TileType GetTileType(glm::ivec2 tileIndex);
+
+	/**
+	 * \brief gets the tile type of the tile located in the given world position
+	 * \param worldPosition The world position
+	 * \return The tile type
+	 */
 	TileType GetTileType(glm::vec3 worldPosition);
 
+	/**
+	 * \brief Gets the world position of the tile in the given index
+	 * \param tileIndex The tile index
+	 * \return The world position
+	 */
 	static glm::vec3 GetTilePosition(glm::ivec2 tileIndex);
 
 private:
 
+	/**
+	 * \brief Creates all the meshes representing the tile map
+	 */
 	void CreateMesh();
+
+	/**
+	 * \brief Places a pellet on the given tile
+	 * \param tilePosition The tile index
+	 */
+	void PlacePellet(glm::ivec2 tilePosition) const;
 };

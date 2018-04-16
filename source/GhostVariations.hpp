@@ -54,11 +54,11 @@ private:
 */
 class GhostBashful : public Ghost
 {
-	std::weak_ptr<GhostShadow> m_Shadow;
+	GhostShadow* m_Shadow;
 
 public:
 
-	GhostBashful(EVA::GameObject* gameObject, Game* game, std::weak_ptr<GhostShadow> shadow) : Ghost(gameObject, game), m_Shadow(std::move(shadow))
+	GhostBashful(EVA::GameObject* gameObject, Game* game, GhostShadow* shadow) : Ghost(gameObject, game), m_Shadow(shadow)
 	{
 		SetColor({ 0.5f, 0.9f, 0.9f });
 		m_ScatterTile = game->tileMap->GetUniqueTile('I');
@@ -68,10 +68,10 @@ private:
 
 	Direction ChooseChaseTarget(const std::vector<Ghost::Direction>& directions) const override
 	{
-		if (const auto s = m_Shadow.lock())
+		if (m_Shadow != nullptr)
 		{
 			const auto pacmanFront = m_Pacman->currentTile + m_Pacman->currentDirection * 2;
-			const auto shadowToPacmanFront = pacmanFront - s->currentTile;
+			const auto shadowToPacmanFront = pacmanFront - m_Shadow->currentTile;
 
 			return DirectionToTarget(directions, pacmanFront + shadowToPacmanFront);
 		}

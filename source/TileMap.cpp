@@ -4,8 +4,11 @@
 
 #include "EVA/ResourceManagers.hpp"
 
-TileMap::TileMap(EVA::GameObject *gameObject) 
-	: Component(gameObject), m_Width(0), m_Height(0)
+#include "Game.hpp"
+#include "Pellet.hpp"
+
+TileMap::TileMap(EVA::GameObject *gameObject, Game* game)
+	: Component(gameObject), m_Width(0), m_Height(0), m_Game(game)
 {
 	// Load meshes
 	m_Model = EVA::ModelManager::LoadModel("./assets/models/tile.obj");
@@ -128,6 +131,7 @@ void TileMap::ReadFile(const char *path)
 				break;
 
 			case '.':
+				PlacePellet({ x, y });
 				row.push_back(TileType::Floor);
 				break;
 
@@ -193,6 +197,11 @@ void TileMap::CreateMesh()
 			}
 		}
 	}
+}
+
+void TileMap::PlacePellet(const glm::ivec2 tilePosition) const
+{
+	scene->CreateGameObject()->AddComponent<Pellet>(m_Game, tilePosition);	
 }
 
 glm::vec3 TileMap::GetUniqueTilePosition(const unsigned int tile)

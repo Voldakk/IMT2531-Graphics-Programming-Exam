@@ -36,6 +36,7 @@ namespace EVA
 	public:
 
 		bool isStatic;
+		bool isDirty;
 		std::string name;
 
 		explicit Mesh(std::vector<Vertex> vertices, std::string name = "");

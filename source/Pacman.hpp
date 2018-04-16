@@ -10,7 +10,7 @@ class Pacman : public EVA::Component
 
 	std::shared_ptr<EVA::Model> m_Model;
 	std::shared_ptr<EVA::Material> m_Material;
-	std::shared_ptr<TileMap> m_TileMap;
+	TileMap* m_TileMap;
 
 	glm::ivec2 m_CurrentTile;
 	glm::ivec2 m_TargetTile;
@@ -25,6 +25,6 @@ public:
 	glm::ivec2& currentTile = m_CurrentTile;
 	glm::ivec2& currentDirection = m_CurrentDirection;
 
-	explicit Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap);
+	explicit Pacman(EVA::GameObject* gameObject, TileMap* tileMap);
 	void Update(float deltaTime) override;
 };

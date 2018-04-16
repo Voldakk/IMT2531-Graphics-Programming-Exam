@@ -23,10 +23,21 @@ namespace EVA
 		const ConstPointer<GameObject> gameObject = &m_GameObject;
 		const ConstPointer<Transform> transform = &m_Transform;
 	    
+	    /**
+	     * \brief Constructor. gets the refferences to the scene and the transform on the game object
+	     * \param gameObject The GameObject the component is attaced to
+	     */
 	    explicit Component(GameObject *gameObject);
 
+	    /**
+		 * \brief Destructor
+		 */
 		virtual ~Component() = default;
 
+		/**
+		* \brief Runs every frame
+		* \param deltaTime The time in seconds between frames
+		*/
         virtual void Update(float deltaTime);
     };
 

@@ -17,13 +17,13 @@ class Game : public EVA::Scene
 	int m_CurrentWave;
 	float m_WaveTimer;
 
+	unsigned int m_Score;
 
 public:
 
-	std::shared_ptr<Pacman> pacman;
-	std::shared_ptr<TileMap> tileMap;
-
-	std::vector<std::shared_ptr<Ghost>> ghosts;
+	TileMap * tileMap;
+	Pacman* pacman;
+	std::vector<Ghost*> ghosts;
 
 	/**
      * \brief Setups the game scene
@@ -41,4 +41,10 @@ public:
 	 * \return The current wave
 	 */
 	Wave CurrentWave() { return m_Waves[m_CurrentWave]; }
+
+	/**
+	 * \brief Adds score to the player
+	 * \param amount The amount to add
+	 */
+	void AddScore(unsigned int amount);
 };

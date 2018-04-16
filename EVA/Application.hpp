@@ -23,7 +23,7 @@ namespace EVA
     class Application
     {
 
-        static std::shared_ptr<Camera> m_DefaultCamera;
+        static Camera* m_DefaultCamera;
 
         static GameObject m_DefaultCameraObject;
 
@@ -35,7 +35,7 @@ namespace EVA
 
     public:
 
-        static std::shared_ptr<Camera> mainCamera;
+        static Camera* mainCamera;
 
         /// <summary>Initializes the application</summary>
         static void Init(const std::string &title);

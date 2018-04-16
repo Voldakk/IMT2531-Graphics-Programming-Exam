@@ -10,6 +10,11 @@ namespace EVA
 
 	}
 
+	MeshRenderer::~MeshRenderer()
+	{
+		scene->RemoveMeshRenderer(this);
+	}
+
 	void MeshRenderer::Set(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material)
 	{
 		this->m_Mesh = mesh;

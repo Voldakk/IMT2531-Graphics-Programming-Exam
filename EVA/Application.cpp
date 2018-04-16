@@ -13,8 +13,8 @@
 namespace EVA
 {
 
-    std::shared_ptr<Camera> Application::mainCamera;
-    std::shared_ptr<Camera> Application::m_DefaultCamera;
+    Camera* Application::mainCamera;
+	Camera* Application::m_DefaultCamera;
 
     GameObject Application::m_DefaultCameraObject(nullptr);
 

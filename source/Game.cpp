@@ -9,6 +9,7 @@
 #include "Pacman.hpp"
 
 #include <iostream>
+#include "Pellet.hpp"
 
 Game::Game()
 {
@@ -23,11 +24,12 @@ Game::Game()
 
 	// A directional light that fits the skybox
 	auto directionalLight = CreateLight(EVA::LightType::Directional, true);
-	directionalLight->SetRotation({ 30.0f, -80.0 });
+	directionalLight->SetRotation({ 60.0f, -80.0 });
 	directionalLight->directionalShadowDistance = 25.0f;
 
 	// Tilemap
-	tileMap = CreateGameObject()->AddComponent<TileMap>();
+	Pellet::Init();
+	tileMap = CreateGameObject()->AddComponent<TileMap>(this);
 	tileMap->ReadFile("./assets/levels/level1.txt");
 
 	// Camera
@@ -71,6 +73,9 @@ Game::Game()
 		ghost->SetState(CurrentWave().state);
 	}
 	std::cout << "New wave: " << (CurrentWave().state == GhostState::Scatter ? "Scatter" : "Chase") << ", time: " << CurrentWave().time << "\n";
+
+	// Score
+	m_Score = 0;
 }
 
 void Game::Update(const float deltaTime)
@@ -89,4 +94,10 @@ void Game::Update(const float deltaTime)
 
 		std::cout << "New wave: " << (CurrentWave().state == GhostState::Scatter ? "Scatter" : "Chase") << ", time: " << CurrentWave().time << "\n";
 	}
+}
+
+void Game::AddScore(const unsigned int amount)
+{
+	m_Score += amount;
+	std::cout << "Score: " << m_Score << "\n";
 }

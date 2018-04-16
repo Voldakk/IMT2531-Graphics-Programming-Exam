@@ -49,8 +49,8 @@ protected:
 
 	// Other game elements
 	Game* m_Game;
-	std::shared_ptr<TileMap> m_TileMap;
-	std::shared_ptr<Pacman> m_Pacman;
+	TileMap* m_TileMap;
+	Pacman* m_Pacman;
 
 	// The tile the ghost targets while in the scatter state
 	glm::ivec2 m_ScatterTile;

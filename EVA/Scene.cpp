@@ -24,10 +24,25 @@ namespace EVA
 
 	void Scene::Update(const float deltaTime)
 	{
+		// Update
 		for (auto &gameObject : m_GameObjects)
 		{
 			gameObject->Update(deltaTime);
 		}
+
+		// Destroy
+		for (auto gameObject : m_DestroyQueue)
+		{
+			for (unsigned int i = 0; i < m_GameObjects.size(); ++i)
+			{
+				if (m_GameObjects[i].get() == gameObject)
+				{
+					m_GameObjects.erase(m_GameObjects.begin() + i);
+					break;;
+				}
+			}
+		}
+		m_DestroyQueue.clear();
 	}
 
 	void Scene::Render()
@@ -69,6 +84,14 @@ namespace EVA
 		return gameObject;
 	}
 
+	void Scene::DestroyGameObject(GameObject* gameObject)
+	{
+		if (gameObject == nullptr)
+			return;
+
+		m_DestroyQueue.push_back(gameObject);
+	}
+
 	std::shared_ptr<Light> Scene::CreateLight(LightType type, const bool shadows, const unsigned int shadowSize)
 	{
 		auto light = std::make_shared<Light>(type, shadows, shadowSize);
@@ -80,7 +103,10 @@ namespace EVA
 
 	void Scene::RegisterMeshRenderer(MeshRenderer *meshRenderer)
 	{
-		for (auto &materials : m_MeshRenderers)
+		if (meshRenderer == nullptr)
+			return;
+
+		for (auto &materials : m_Materials)
 		{
 			if (materials[0][0]->material == meshRenderer->material)
 			{
@@ -108,7 +134,42 @@ namespace EVA
 		std::vector<std::vector<MeshRenderer *>> materials;
 		materials.push_back(meshes);
 
-		m_MeshRenderers.push_back(materials);
+		m_Materials.push_back(materials);
+	}
+
+	void Scene::RemoveMeshRenderer(MeshRenderer* removeMeshRenderer)
+	{
+		if(removeMeshRenderer == nullptr)
+			return;
+
+		for (unsigned int materialIndex = 0; materialIndex < m_Materials.size(); materialIndex++)
+		{
+			auto& material = m_Materials[materialIndex];
+			if (material[0][0]->material == removeMeshRenderer->material)
+			{
+				for (unsigned int meshIndex = 0; meshIndex < material.size(); meshIndex++)
+				{
+					auto& mesh = material[meshIndex];
+					for (unsigned int meshRendererIndex = 0; meshRendererIndex < mesh.size(); meshRendererIndex++)
+					{
+						const auto& meshRenderer = mesh[meshRendererIndex];
+						if (meshRenderer == removeMeshRenderer)
+						{
+							mesh.erase(mesh.begin() + meshRendererIndex);
+							if (mesh.empty())
+							{
+								material.erase(material.begin() + meshIndex);
+								if (material.empty())
+								{
+									m_Materials.erase(m_Materials.begin() + materialIndex);
+								}
+							}
+							return;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	void Scene::RenderScene()
@@ -122,19 +183,19 @@ namespace EVA
 			skybox->Render();
 		}
 
-		for (auto &materials : m_MeshRenderers)
+		for (auto &material : m_Materials)
 		{
 			// If he material should use GPU instancing
-			if (materials[0][0]->material->enableInstancing)
+			if (material[0][0]->material->enableInstancing)
 			{
 				// Set material / shader
-				materials[0][0]->material->Activate(this, nullptr);
+				material[0][0]->material->Activate(this, nullptr);
 
 				// For each mesh
-				for (auto &meshes : materials)
+				for (auto &meshes : material)
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->mesh->isStatic ||
+					if (!meshes[0]->mesh->isStatic || meshes[0]->mesh->isDirty ||
 						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
 					{
 						// Get the model matrices from all the objects
@@ -147,6 +208,8 @@ namespace EVA
 						}
 						// Set the mesh ibo
 						meshes[0]->mesh->SetMbo(models);
+
+						meshes[0]->mesh->isDirty = false;
 					}
 
 					// Draw the mesh
@@ -156,7 +219,7 @@ namespace EVA
 			else // If not
 			{
 				// For each mesh
-				for (auto &meshes : materials)
+				for (auto &meshes : material)
 				{
 					// For each MeshRenderer that use the mesh
 					for (auto &meshRenderer : meshes)
@@ -171,7 +234,7 @@ namespace EVA
 
 	void Scene::RenderShadowMap(const glm::mat4 lightSpaceMatrix)
 	{
-		for (auto &materials : m_MeshRenderers)
+		for (auto &materials : m_Materials)
 		{
 			// If the material should use GPU instancing
 			if (materials[0][0]->material->enableInstancing)
@@ -184,7 +247,7 @@ namespace EVA
 				for (auto &meshes : materials)
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->mesh->isStatic ||
+					if (!meshes[0]->mesh->isStatic || meshes[0]->mesh->isDirty ||
 						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
 					{
 						// Get the model matrices from all the objects
@@ -197,6 +260,8 @@ namespace EVA
 						}
 						// Set the mesh ibo
 						meshes[0]->mesh->SetMbo(models);
+
+						meshes[0]->mesh->isDirty = false;
 					}
 
 					// Draw the mesh
@@ -225,7 +290,7 @@ namespace EVA
 
 	void Scene::RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, const glm::vec3 lightPos, const float farPlane)
 	{
-		for (auto &materials : m_MeshRenderers)
+		for (auto &materials : m_Materials)
 		{
 			// If the material should use GPU instancing
 			if (materials[0][0]->material->enableInstancing)
@@ -243,7 +308,7 @@ namespace EVA
 				for (auto &meshes : materials)
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->mesh->isStatic ||
+					if (!meshes[0]->mesh->isStatic || meshes[0]->mesh->isDirty ||
 						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
 					{
 						// Get the model matrices from all the objects
@@ -256,6 +321,8 @@ namespace EVA
 						}
 						// Set the mesh ibo
 						meshes[0]->mesh->SetMbo(models);
+
+						meshes[0]->mesh->isDirty = false;
 					}
 
 					// Draw the mesh

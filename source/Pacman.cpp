@@ -5,7 +5,7 @@
 #include "EVA/Input.hpp"
 #include "EVA/ResourceManagers.hpp"
 
-Pacman::Pacman(EVA::GameObject* gameObject, std::shared_ptr<TileMap> tileMap) : Component(gameObject), m_TileMap(std::move(tileMap))
+Pacman::Pacman(EVA::GameObject* gameObject, TileMap* tileMap) : Component(gameObject), m_TileMap(tileMap)
 {
 	// Mesh
 	m_Model = EVA::ModelManager::LoadModel("./assets/models/pacman.obj");

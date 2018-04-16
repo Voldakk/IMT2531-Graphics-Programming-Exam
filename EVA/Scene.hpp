@@ -16,9 +16,11 @@ namespace EVA
 	class Scene
 	{
 
-		std::vector<std::vector<std::vector<MeshRenderer *>>> m_MeshRenderers;
+		std::vector<std::vector<std::vector<MeshRenderer *>>> m_Materials;
 		std::vector<std::shared_ptr<GameObject>> m_GameObjects;
 		std::vector<std::shared_ptr<Light>> m_Lights;
+
+		std::vector<GameObject*> m_DestroyQueue;
 
 	public:
 
@@ -27,29 +29,76 @@ namespace EVA
 
 		Scene();
 
-		/// <summary>Allows the user to close the menu by pressing escape</summary>
-		/// <param name="deltaTime">The time in seconds between frames</param>
+		
+		/**
+		 * \brief Runs every frame
+		 * \param deltaTime The time in seconds between frames
+		 */
 		virtual void Update(float deltaTime);
 
-		/// <summary>Render all scene elements to the screen</summary>
+		/**
+		 * \brief Render all scene elements to the screen
+		 */
 		virtual void Render();
 
-		/// <summary></summary>
+		/**
+		 * \brief 
+		 * \return 
+		 */
 		std::shared_ptr<GameObject> CreateGameObject();
 
-		/// <summary></summary>
+		/**
+		* \brief
+		* \param gameObject
+		*/
+		void DestroyGameObject(GameObject * gameObject);
+
+		/**
+		 * \brief 
+		 * \param type 
+		 * \param shadows 
+		 * \param shadowSize 
+		 * \return 
+		 */
 		std::shared_ptr<Light> CreateLight(LightType type, bool shadows = false, unsigned int shadowSize = 4096);
 
-		/// <summary></summary>
+		/**
+		* \brief
+		* \param meshRenderer
+		*/
 		void RegisterMeshRenderer(MeshRenderer *meshRenderer);
 
-		/// <summary></summary>
+		/**
+		* \brief
+		* \param meshRenderer
+		*/
+		void RemoveMeshRenderer(MeshRenderer *meshRenderer);
+
+		/**
+		 * \brief 
+		 * \return 
+		 */
 		std::vector<std::shared_ptr<Light>> GetLights() const { return m_Lights; }
 
 	private:
 
+		/**
+		 * \brief 
+		 */
 		void RenderScene();
+
+		/**
+		 * \brief 
+		 * \param lightSpaceMatrix 
+		 */
 		void RenderShadowMap(glm::mat4 lightSpaceMatrix);
+
+		/**
+		 * \brief 
+		 * \param shadowMatrices 
+		 * \param lightPos 
+		 * \param farPlane 
+		 */
 		void RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, glm::vec3 lightPos, float farPlane);
 	};
 

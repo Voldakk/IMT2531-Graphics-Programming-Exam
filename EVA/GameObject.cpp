@@ -1,5 +1,4 @@
 #include "GameObject.hpp"
-#include <utility>
 
 #include "Scene.hpp"
 
@@ -29,4 +28,8 @@ namespace EVA
         m_Transform->SetParent(newParent->m_Transform);
     }
 
+	void GameObject::Destroy()
+	{
+		scene->DestroyGameObject(this);
+	}
 }
