@@ -147,6 +147,11 @@ void TileMap::ReadFile(const char *path)
 
 void TileMap::CreateMesh()
 {
+	auto ghostDoorMat = std::make_shared<EVA::Material>();
+	ghostDoorMat->tintDiffuse = glm::vec4(0.5f, 0.0f, 0.8f, 0.5f);
+	ghostDoorMat->shader = EVA::ShaderManager::GetShader("standard_transparent");
+	const auto cubeMesh = EVA::ModelManager::Primitive(EVA::PrimitiveType::Cube)->GetMesh(0);
+
 	for (auto y = 0; y < m_Height - 1; ++y)
 	{
 		for (auto x = 0; x < m_Width - 1; ++x)
@@ -175,6 +180,16 @@ void TileMap::CreateMesh()
 				go->transform->SetScale(glm::vec3(0.5f));
 				auto mr = go->AddComponent<EVA::MeshRenderer>();
 				mr->Set(mesh, m_Material);
+			}
+
+			if(m_Tiles[y][x] == TileType::GhostDoor)
+			{
+				// Create a GameObject and a MeshRenderer to display the mesh
+				auto go = scene->CreateGameObject();
+				go->transform->SetPosition({ x + 0.5f, 0.0f, y + 0.5f });
+				go->transform->SetScale(glm::vec3(0.5f));
+				auto mr = go->AddComponent<EVA::MeshRenderer>();
+				mr->Set(cubeMesh, ghostDoorMat);
 			}
 		}
 	}
@@ -211,7 +226,7 @@ TileType TileMap::GetTileType(const glm::vec3 worldPosition)
 	return GetTileType(GetTileIndex(worldPosition));
 }
 
-glm::vec3 TileMap::GetTilePosition(const glm::ivec2 tileIndex) const
+glm::vec3 TileMap::GetTilePosition(const glm::ivec2 tileIndex)
 {
 	return glm::vec3(tileIndex.x + 0.5f, 0.0f, tileIndex.y + 0.5f);
 }

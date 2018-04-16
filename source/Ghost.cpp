@@ -110,7 +110,7 @@ void Ghost::Update(const float deltaTime)
 
 void Ghost::Reset()
 {
-	m_State = GhostState::Chase;
+	m_State = GhostState::Scatter;
 
 	m_CurrentTile = m_TileMap->GetUniqueTile('G');
 	transform->SetPosition(m_TileMap->GetUniqueTilePosition('G'));

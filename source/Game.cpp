@@ -14,6 +14,8 @@ Game::Game()
 	EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
 	EVA::ShaderManager::CreateOrGetShader("standard_instanced", "standard_instanced.vert", "standard_instanced.frag");
 
+	EVA::ShaderManager::CreateOrGetShader("standard_transparent", "standard.vert", "standard.frag");
+
 	// Skybox
 	skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
 

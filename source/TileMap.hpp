@@ -37,15 +37,15 @@ public:
 
 	void ReadFile(const char *path);
 
-	glm::vec3 GetUniqueTilePosition(unsigned int tile);
-	glm::ivec2 GetUniqueTile(unsigned int tile);
+	glm::vec3 GetUniqueTilePosition(const unsigned int tile);
+	glm::ivec2 GetUniqueTile(const unsigned tile);
 
 	glm::ivec2 GetTileIndex(glm::vec3 worldPosition) const;
 
 	TileType GetTileType(glm::ivec2 tileIndex);
 	TileType GetTileType(glm::vec3 worldPosition);
 
-	glm::vec3 GetTilePosition(glm::ivec2 tileIndex) const;
+	static glm::vec3 GetTilePosition(glm::ivec2 tileIndex);
 
 private:
 
