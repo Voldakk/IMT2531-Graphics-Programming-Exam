@@ -10,9 +10,11 @@ class Pellet : public EVA::Component
 	static std::shared_ptr<EVA::Mesh> m_Mesh;
 	static std::shared_ptr<EVA::Material> m_Material;
 
-	Game* m_Game;
 	glm::ivec2 m_Tile;
 
+protected:
+
+	Game* m_Game;
 	unsigned int m_Score = 10;
 
 public:
@@ -34,10 +36,25 @@ public:
 	/**
 	 * \brief Called when the pellet is picked up
 	 */
-	void OnPickup() const;
+	virtual void OnPickup();
 
 	/**
 	 * \brief Loads the pellet mesh and material
 	 */
 	static void Init();
+};
+
+class Energizer : public Pellet
+{
+	unsigned int m_Score = 50;
+	float time = 8.0f;
+
+public:
+	Energizer(EVA::GameObject* gameObject, Game* game, const glm::ivec2& tile)
+		: Pellet(gameObject, game, tile)
+	{
+		Pellet::m_Score = m_Score;
+	}
+
+	void OnPickup() override;
 };

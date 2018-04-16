@@ -131,7 +131,12 @@ void TileMap::ReadFile(const char *path)
 				break;
 
 			case '.':
-				PlacePellet({ x, y });
+				scene->CreateGameObject()->AddComponent<Pellet>(m_Game, glm::ivec2(x, y));
+				row.push_back(TileType::Floor);
+				break;
+
+			case 'E':
+				scene->CreateGameObject()->AddComponent<Energizer>(m_Game, glm::ivec2(x, y));
 				row.push_back(TileType::Floor);
 				break;
 
@@ -197,11 +202,6 @@ void TileMap::CreateMesh()
 			}
 		}
 	}
-}
-
-void TileMap::PlacePellet(const glm::ivec2 tilePosition) const
-{
-	scene->CreateGameObject()->AddComponent<Pellet>(m_Game, tilePosition);	
 }
 
 glm::vec3 TileMap::GetUniqueTilePosition(const unsigned int tile)

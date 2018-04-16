@@ -9,7 +9,7 @@ std::shared_ptr<EVA::Mesh> Pellet::m_Mesh;
 std::shared_ptr<EVA::Material> Pellet::m_Material;
 
 Pellet::Pellet(EVA::GameObject* gameObject, Game* game, const glm::ivec2 tile) 
-	: Component(gameObject), m_Game(game), m_Tile(tile)
+	: Component(gameObject), m_Tile(tile), m_Game(game)
 {
 	auto mr = gameObject->AddComponent<EVA::MeshRenderer>();
 	mr->Set(m_Mesh, m_Material);
@@ -29,7 +29,7 @@ void Pellet::Update(const float deltaTime)
 	}
 }
 
-void Pellet::OnPickup() const
+void Pellet::OnPickup()
 {
 	m_Game->AddScore(m_Score);
 }
@@ -44,4 +44,10 @@ void Pellet::Init()
 	m_Material->enableInstancing = true;
 	m_Material->tintDiffuse = { 1.0f, 1.0f, 0.0f, 1.0f };
 	m_Material->shader = EVA::ShaderManager::GetShader("standard_instanced");
+}
+
+void Energizer::OnPickup()
+{
+	Pellet::OnPickup();
+	m_Game->ActivateEnergizer(time);
 }

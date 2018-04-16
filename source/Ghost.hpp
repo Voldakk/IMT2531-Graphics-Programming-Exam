@@ -43,6 +43,8 @@ private:
 	// The ghosts current state
 	GhostState m_State;
 
+	glm::vec3 m_Color;
+
 protected: 
 
 	glm::ivec2 m_CurrentTile;
@@ -57,7 +59,8 @@ protected:
 
 public:
 
-	glm::ivec2& currentTile = m_CurrentTile;
+	const glm::ivec2& currentTile = m_CurrentTile;
+	const GhostState& state = m_State;
 
 	/**
 	 * \brief Constructor. Loads the model and setsup the materials. Calls Reset()
@@ -82,6 +85,17 @@ public:
 	 * \param newState The new state
 	 */
 	void SetState(GhostState newState);
+
+	/**
+	 * \brief Sets the state to the current wave state
+	 */
+	void ResetState();
+
+	/**
+	 * \brief Sets the ghost's body material color
+	 * \param color The new color
+	 */
+	void SetMaterialColor(glm::vec3 color) const;
 
 private:
 
@@ -130,8 +144,8 @@ protected:
 	virtual Direction ChooseChaseTarget(const std::vector<Ghost::Direction>& directions) const = 0;
 
 	/**
-	 * \brief Sets the ghost's material color
+	 * \brief Sets the ghost's color
 	 * \param newColor The new color
 	 */
-	void SetColor(glm::vec3 newColor) const;
+	void SetColor(glm::vec3 newColor);
 };

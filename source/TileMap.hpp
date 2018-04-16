@@ -99,10 +99,4 @@ private:
 	 * \brief Creates all the meshes representing the tile map
 	 */
 	void CreateMesh();
-
-	/**
-	 * \brief Places a pellet on the given tile
-	 * \param tilePosition The tile index
-	 */
-	void PlacePellet(glm::ivec2 tilePosition) const;
 };

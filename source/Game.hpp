@@ -14,10 +14,15 @@ class Game : public EVA::Scene
 		float time;
 	};
 	std::vector<Wave> m_Waves;
-	int m_CurrentWave;
-	float m_WaveTimer;
+	int m_CurrentWave = 0;
+	float m_WaveTimer = 0.0f;
 
-	unsigned int m_Score;
+	unsigned int m_Score = 0;
+
+	// Energizer
+	bool m_activeEnergizer = false;
+	float m_EnergizerTimer = 0.0f;
+	float time = 0.0f;
 
 public:
 
@@ -47,4 +52,9 @@ public:
 	 * \param amount The amount to add
 	 */
 	void AddScore(unsigned int amount);
+
+	/**
+	 * \brief 
+	 */
+	void ActivateEnergizer(float time);
 };

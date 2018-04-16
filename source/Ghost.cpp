@@ -39,14 +39,17 @@ void Ghost::Update(const float deltaTime)
 	// Get the current tile
 	m_CurrentTile = m_TileMap->GetTileIndex(transform->position);
 
+	if (m_State == GhostState::Dead && m_CurrentTile == m_TileMap->GetUniqueTile('G'))
+		Reset();
+
 	// If it's time to select a new target tile
 	if (m_TargetTile.x == -1)
 	{
 		m_Direction = ChooseDirection(FindPossibleDirections());
 		const auto possibleTarget = m_CurrentTile + DirectionToVector(m_Direction);
 
-		// The possible target is traversable by pacman
-		if (m_TileMap->GetTileType(possibleTarget) == TileType::Floor)
+		// The possible target is traversable
+		if (m_TileMap->GetTileType(possibleTarget) != TileType::Wall)
 		{
 			// Set the target and direction
 			m_TargetTile = possibleTarget;
@@ -86,7 +89,7 @@ void Ghost::Update(const float deltaTime)
 	}
 
 	// Find the direction and distance pacman should move
-	const auto targetTilePos = m_TileMap->GetTilePosition(m_TargetTile);
+	const auto targetTilePos = TileMap::GetTilePosition(m_TargetTile);
 	const auto direction = glm::normalize(targetTilePos - transform->position);
 	const auto distToTile = glm::distance(transform->position, targetTilePos);
 
@@ -110,7 +113,7 @@ void Ghost::Update(const float deltaTime)
 
 void Ghost::Reset()
 {
-	m_State = GhostState::Scatter;
+	SetState(m_Game->CurrentWave().state);
 
 	m_CurrentTile = m_TileMap->GetUniqueTile('G');
 	transform->SetPosition(m_TileMap->GetUniqueTilePosition('G'));
@@ -122,6 +125,21 @@ void Ghost::Reset()
 void Ghost::SetState(const GhostState newState)
 {
 	m_State = newState;
+
+	if (m_State == GhostState::Dead)
+		SetMaterialColor(glm::vec3(0.8f));
+	else if (m_State == GhostState::Scatter || m_State == GhostState::Chase)
+		SetMaterialColor(m_Color);
+}
+
+void Ghost::ResetState()
+{
+	SetState(m_Game->CurrentWave().state);
+}
+
+void Ghost::SetMaterialColor(const glm::vec3 color) const
+{
+	m_BodyMaterial->tintDiffuse = glm::vec4(color, 1.0f);
 }
 
 glm::ivec2 Ghost::DirectionToVector(const Direction direction)
@@ -214,7 +232,10 @@ Ghost::Direction Ghost::ChooseDirection(const std::vector<Ghost::Direction>& dir
 			return DirectionToTarget(directions, m_ScatterTile);
 
 		case Frightened:
-			return directions[rand() % directions.size()];
+			if (directions.empty())
+				return Direction::Up;
+			else
+				return directions[rand() % directions.size()];
 
 		case Dead:
 		default:
@@ -263,7 +284,8 @@ Ghost::Direction Ghost::DirectionToTarget(const std::vector<Ghost::Direction>& d
 	return minDir;
 }
 
-void Ghost::SetColor(const glm::vec3 newColor) const
+void Ghost::SetColor(const glm::vec3 newColor)
 {
+	m_Color = newColor;
 	m_BodyMaterial->tintDiffuse = glm::vec4(newColor, 1.0f);
 }
