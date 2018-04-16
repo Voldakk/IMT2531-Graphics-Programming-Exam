@@ -5,7 +5,7 @@
 #include "Game.hpp"
 
 Ghost::Ghost(EVA::GameObject* gameObject, Game* game)
-	: Component(gameObject), m_Direction(Direction::Up), m_State(GhostState::Chase), m_TileMap(game->tileMap), m_Pacman(game->pacman)
+	: Component(gameObject), m_Direction(Direction::Up), m_State(GhostState::Chase), m_Game(game), m_TileMap(game->tileMap), m_Pacman(game->pacman)
 {
 	const auto shader = EVA::ShaderManager::GetShader("standard");
 
@@ -117,6 +117,11 @@ void Ghost::Reset()
 
 	m_Direction = Direction::Up;
 	m_CurrentDirection = DirectionToVector(m_Direction);
+}
+
+void Ghost::SetState(const GhostState newState)
+{
+	m_State = newState;
 }
 
 glm::ivec2 Ghost::DirectionToVector(const Direction direction)

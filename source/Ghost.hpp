@@ -48,6 +48,7 @@ protected:
 	glm::ivec2 m_CurrentTile;
 
 	// Other game elements
+	Game* m_Game;
 	std::shared_ptr<TileMap> m_TileMap;
 	std::shared_ptr<Pacman> m_Pacman;
 
@@ -75,6 +76,12 @@ public:
 	 * \brief Resets the ghost to it's original state
 	 */
 	void Reset();
+
+	/**
+	 * \brief Sets the ghost's state
+	 * \param newState The new state
+	 */
+	void SetState(GhostState newState);
 
 private:
 

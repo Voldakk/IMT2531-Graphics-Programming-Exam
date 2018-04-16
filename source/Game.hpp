@@ -8,13 +8,22 @@
 
 class Game : public EVA::Scene
 {
+	struct Wave
+	{
+		GhostState state;
+		float time;
+	};
+	std::vector<Wave> m_Waves;
+	int m_CurrentWave;
+	float m_WaveTimer;
+
+
 public:
 
 	std::shared_ptr<Pacman> pacman;
 	std::shared_ptr<TileMap> tileMap;
 
 	std::vector<std::shared_ptr<Ghost>> ghosts;
-
 
 	/**
      * \brief Setups the game scene
@@ -26,4 +35,10 @@ public:
 	* \param deltaTime The time in seconds between frames
 	*/
     void Update(float deltaTime) override;
+
+	/**
+	 * \brief Gets the current wave
+	 * \return The current wave
+	 */
+	Wave CurrentWave() { return m_Waves[m_CurrentWave]; }
 };

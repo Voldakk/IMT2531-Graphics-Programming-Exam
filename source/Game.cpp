@@ -8,6 +8,8 @@
 #include "GhostVariations.hpp"
 #include "Pacman.hpp"
 
+#include <iostream>
+
 Game::Game()
 {
 	// Shaders
@@ -51,9 +53,40 @@ Game::Game()
 	// Pokey
 	const auto pokey = CreateGameObject()->AddComponent<GhostPokey>(this);
 	ghosts.push_back(pokey);
+
+	// Waves
+	m_Waves.push_back({ GhostState::Scatter, 7.0f });
+	m_Waves.push_back({ GhostState::Chase,  20.0f });
+	m_Waves.push_back({ GhostState::Scatter, 7.0f });
+	m_Waves.push_back({ GhostState::Chase,  20.0f });
+	m_Waves.push_back({ GhostState::Scatter, 5.0f });
+	m_Waves.push_back({ GhostState::Chase,  20.0f });
+	m_Waves.push_back({ GhostState::Scatter, 5.0f });
+	m_Waves.push_back({ GhostState::Chase,   0.0f });
+
+	m_WaveTimer = 0.0f;
+	m_CurrentWave = 0;
+	for (auto& ghost : ghosts)
+	{
+		ghost->SetState(CurrentWave().state);
+	}
+	std::cout << "New wave: " << (CurrentWave().state == GhostState::Scatter ? "Scatter" : "Chase") << ", time: " << CurrentWave().time << "\n";
 }
 
 void Game::Update(const float deltaTime)
 {
 	Scene::Update(deltaTime);
+
+	m_WaveTimer += deltaTime;
+	if(m_WaveTimer >= CurrentWave().time && m_CurrentWave < m_Waves.size() - 1)
+	{
+		m_CurrentWave++;
+		m_WaveTimer = 0.0f;
+		for (auto& ghost : ghosts)
+		{
+			ghost->SetState(CurrentWave().state);
+		}
+
+		std::cout << "New wave: " << (CurrentWave().state == GhostState::Scatter ? "Scatter" : "Chase") << ", time: " << CurrentWave().time << "\n";
+	}
 }
