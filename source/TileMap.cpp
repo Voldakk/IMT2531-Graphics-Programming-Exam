@@ -13,10 +13,9 @@ TileMap::TileMap(EVA::GameObject *gameObject, Game* game)
 	// Load meshes
 	m_Model = EVA::ModelManager::LoadModel("./assets/models/tile.obj");
 
-
 	for (unsigned int i = 0; i < m_Model->MeshCount(); ++i)
 	{
-		m_Model->GetMesh(i)->isStatic = true;
+		m_Model->GetMesh(i)->SetStatic(true);
 	}
 
 	// Material

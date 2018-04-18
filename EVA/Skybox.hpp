@@ -24,8 +24,6 @@ namespace EVA
 
 		Skybox(const std::string &folderPath, const std::string &fileType);
 
-		~Skybox();
-
 		void Render() const;
 	};
 

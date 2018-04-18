@@ -33,11 +33,6 @@ namespace EVA
 		m_Transform = std::make_unique<Transform>(nullptr);
 	}
 
-	Skybox::~Skybox()
-	{
-		glDeleteTextures(1, &m_Texture);
-	}
-
 	void Skybox::Render() const
 	{
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_Texture);

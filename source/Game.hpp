@@ -45,7 +45,7 @@ public:
 	 * \brief Gets the current wave
 	 * \return The current wave
 	 */
-	Wave CurrentWave() { return m_Waves[m_CurrentWave]; }
+	Wave CurrentWave();
 
 	/**
 	 * \brief Adds score to the player

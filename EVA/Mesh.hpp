@@ -33,10 +33,12 @@ namespace EVA
 		std::unique_ptr<IndexBuffer> m_Ib;
 		std::unique_ptr<VertexBuffer> m_Mb;
 
+		bool m_IsStatic = false;
+
 	public:
 
-		bool isStatic;
-		bool isDirty;
+		const bool& isStatic = m_IsStatic;
+		bool isDirty = true;
 		std::string name;
 
 		explicit Mesh(std::vector<Vertex> vertices, std::string name = "");
@@ -52,6 +54,8 @@ namespace EVA
 		void SetMbo(const std::vector<glm::mat4> &models);
 
 		bool HasMbo() const;
+
+		void SetStatic(bool state);
 	};
 
 }

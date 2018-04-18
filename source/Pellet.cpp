@@ -38,7 +38,7 @@ void Pellet::Init()
 {
 	// Pellets
 	m_Mesh = EVA::ModelManager::Primitive(EVA::PrimitiveType::Sphere)->GetMesh(0);
-	m_Mesh->isStatic = true;
+	m_Mesh->SetStatic(true);
 
 	m_Material = std::make_shared<EVA::Material>();
 	m_Material->enableInstancing = true;
@@ -49,5 +49,5 @@ void Pellet::Init()
 void Energizer::OnPickup()
 {
 	Pellet::OnPickup();
-	m_Game->ActivateEnergizer(time);
+	m_Game->ActivateEnergizer(m_Time);
 }

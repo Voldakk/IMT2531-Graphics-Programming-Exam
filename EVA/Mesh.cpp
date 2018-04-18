@@ -8,14 +8,14 @@ namespace EVA
 {
 
 	Mesh::Mesh(std::vector<Vertex> vertices, std::string name) 
-		: m_Vertices(std::move(vertices)), m_InstanceCount(0), isStatic(false), name(std::move(name))
+		: m_Vertices(std::move(vertices)), m_InstanceCount(0), name(std::move(name))
 	{
 		//CalculateBt();
 		Create();
 	}
 
 	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> faceIndices, std::string name)
-		: m_Vertices(std::move(vertices)), m_FaceIndices(std::move(faceIndices)) , m_InstanceCount(0), isStatic(false), name(std::move(name))
+		: m_Vertices(std::move(vertices)), m_FaceIndices(std::move(faceIndices)) , m_InstanceCount(0), name(std::move(name))
 	{
 		//CalculateBt();
 		Create();
@@ -108,5 +108,13 @@ namespace EVA
 	bool Mesh::HasMbo() const
 	{
 		return m_Mb != nullptr;
+	}
+
+	void Mesh::SetStatic(const bool state)
+	{
+		m_IsStatic = state;
+
+		if (m_IsStatic)
+			isDirty = true;
 	}
 }

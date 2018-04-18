@@ -47,7 +47,7 @@ public:
 class Energizer : public Pellet
 {
 	unsigned int m_Score = 50;
-	float time = 8.0f;
+	float m_Time = 8.0f;
 
 public:
 	Energizer(EVA::GameObject* gameObject, Game* game, const glm::ivec2& tile)

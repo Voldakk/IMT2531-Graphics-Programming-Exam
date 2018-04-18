@@ -77,6 +77,9 @@ void Game::Update(const float deltaTime)
 {
 	Scene::Update(deltaTime);
 
+	if (EVA::Input::KeyDown(GLFW_KEY_ENTER))
+		EVA::SceneManager::ChangeScene<Game>();
+
 	// Waves
 	m_WaveTimer += deltaTime;
 	if(m_WaveTimer >= CurrentWave().time && m_CurrentWave < m_Waves.size() - 1)
@@ -147,6 +150,14 @@ void Game::Update(const float deltaTime)
 			}
 		}
 	}
+}
+
+Game::Wave Game::CurrentWave()
+{
+	if(m_CurrentWave >= 0 && m_CurrentWave < m_Waves.size())
+		return m_Waves[m_CurrentWave];
+
+	return {};
 }
 
 void Game::AddScore(const unsigned int amount)
