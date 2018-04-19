@@ -37,11 +37,6 @@ public:
 	 * \brief Called when the pellet is picked up
 	 */
 	virtual void OnPickup();
-
-	/**
-	 * \brief Loads the pellet mesh and material
-	 */
-	static void Init();
 };
 
 class Energizer : public Pellet
@@ -50,11 +45,7 @@ class Energizer : public Pellet
 	float m_Time = 8.0f;
 
 public:
-	Energizer(EVA::GameObject* gameObject, Game* game, const glm::ivec2& tile)
-		: Pellet(gameObject, game, tile)
-	{
-		Pellet::m_Score = m_Score;
-	}
+	Energizer(EVA::GameObject* gameObject, Game* game, const glm::ivec2& tile);
 
 	void OnPickup() override;
 };

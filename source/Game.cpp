@@ -44,7 +44,6 @@ Game::Game()
 	std::cout << "New wave: " << (CurrentWave().state == GhostState::Scatter ? "Scatter" : "Chase") << ", time: " << CurrentWave().time << "\n";
 
 	// Tilemap
-	Pellet::Init();
 	tileMap = CreateGameObject()->AddComponent<TileMap>(this);
 	tileMap->ReadFile("./assets/levels/level1.txt");
 
