@@ -7,6 +7,7 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "Text.hpp"
 #include "Input.hpp"
 #include "SceneManager.hpp"
 
@@ -45,6 +46,9 @@ namespace EVA
 
 		// Material stuff
 		Material::Init();
+
+		// Text
+		Text::Init();
     }
 
     bool Application::CreateWindow(const std::string &title)

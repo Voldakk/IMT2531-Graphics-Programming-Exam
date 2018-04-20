@@ -38,6 +38,7 @@ if(WINDOWS)
 	link_directories(${ASSIMP_BINARY_DIR})
 
 	link_directories(${PROJECT_SOURCE_DIR}/dependencies/glew/lib/)
+	link_directories(${PROJECT_SOURCE_DIR}/dependencies/freetype/lib/)
 endif(WINDOWS)
 
 # Main executeable
@@ -66,6 +67,8 @@ target_link_libraries(
 	${GLFW_LIBRARIES}
 	assimp
 	${ASSIMP_LIBRARIES}
+	freetype
+	${FREETYPE_LIBRARIES}
 ) 
 
 target_include_directories(
@@ -77,6 +80,7 @@ target_include_directories(
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/stb-image
 	PRIVATE ${ASSIMP_INCLUDE_DIRS}
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/assimp/include/
+	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/freetype/include/
 )
 
 if(WINDOWS)
@@ -92,6 +96,10 @@ if(WINDOWS)
 
 	file(
 		COPY  ${PROJECT_SOURCE_DIR}/dependencies/dll/glew32.dll 
+		DESTINATION ${PROJECT_BINARY_DIR}/bin
+	)
+	file(
+		COPY  ${PROJECT_SOURCE_DIR}/dependencies/freetype/bin/freetype6.dll
 		DESTINATION ${PROJECT_BINARY_DIR}/bin
 	)
 else()
