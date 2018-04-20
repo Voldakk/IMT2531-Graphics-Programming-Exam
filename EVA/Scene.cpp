@@ -4,6 +4,7 @@
 
 #include "Application.hpp"
 #include "ShaderManager.hpp"
+#include "Text.hpp"
 
 namespace EVA
 {
@@ -73,6 +74,9 @@ namespace EVA
 
 		// Scene
 		RenderScene();
+
+		// Text
+		Text::RenderText("This is sample text", -0.4f, 0.9f, 0.002f, glm::vec3(1.0f, 0.0f, 0.0f));
 	}
 
 	std::shared_ptr<GameObject> Scene::CreateGameObject()

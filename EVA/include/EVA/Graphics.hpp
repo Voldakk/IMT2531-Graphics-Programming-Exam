@@ -8,3 +8,4 @@
 #include "../../Light.hpp"
 #include "../../Scene.hpp"
 #include "../../Skybox.hpp"
+#include "../../Text.hpp"
