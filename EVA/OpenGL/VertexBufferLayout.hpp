@@ -14,7 +14,7 @@ namespace EVA
 		unsigned char normalized;
 		unsigned int divisor;
 
-		static unsigned int VertexBufferElement::GetSizeOfType(const unsigned type)
+		static unsigned int GetSizeOfType(const unsigned type)
 		{
 			switch (type)
 			{
@@ -40,27 +40,6 @@ namespace EVA
 
 		template<typename T>
 		void Push(const unsigned int count, const unsigned int divisor = 0){};
-
-		template<>
-		void Push<float>(const unsigned int count, const unsigned int divisor)
-		{
-			m_Elements.push_back({ GL_FLOAT, count, GL_FALSE, divisor });
-			m_Stride += count * VertexBufferElement::GetSizeOfType(GL_FLOAT);
-		}
-
-		template<>
-		void Push<unsigned int>(const unsigned int count, const unsigned int divisor)
-		{
-			m_Elements.push_back({ GL_UNSIGNED_INT, count, GL_FALSE, divisor });
-			m_Stride += count * VertexBufferElement::GetSizeOfType(GL_UNSIGNED_INT);
-		}
-
-		template<>
-		void Push<unsigned char>(const unsigned int count, const unsigned int divisor)
-		{
-			m_Elements.push_back({ GL_UNSIGNED_BYTE, count, GL_TRUE, divisor });
-			m_Stride += count * VertexBufferElement::GetSizeOfType(GL_UNSIGNED_BYTE);
-		}
 
 		inline unsigned int GetStride() const { return m_Stride; }
 

@@ -32,6 +32,10 @@ add_subdirectory(dependencies/glfw)
 link_directories(${PROJECT_BINARY_DIR})
 link_directories(${GLFW_BINARY_DIR})
 
+add_subdirectory(dependencies/assimp)
+link_directories(${PROJECT_BINARY_DIR})
+link_directories(${ASSIMP_BINARY_DIR})
+
 if(WINDOWS)
 	add_subdirectory(dependencies/assimp)
 	link_directories(${PROJECT_BINARY_DIR})
@@ -78,7 +82,6 @@ target_include_directories(
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glfw/include
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glm
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/stb-image
-	PRIVATE ${ASSIMP_INCLUDE_DIRS}
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/assimp/include/
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/freetype/include/
 )
