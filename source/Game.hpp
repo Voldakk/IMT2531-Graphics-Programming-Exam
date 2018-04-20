@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EVA.hpp"
+#include "EVA/UI.hpp"
 
 #include "Pacman.hpp"
 #include "TileMap.hpp"
@@ -20,13 +21,16 @@ class Game : public EVA::Scene
 	unsigned int m_Score = 0;
 
 	// Energizer
-	bool m_activeEnergizer = false;
+	bool m_ActiveEnergizer = false;
 	float m_EnergizerTimer = 0.0f;
-	float time = 0.0f;
+	float m_Time = 0.0f;
+
+	// UI
+	EVA::Label* m_ScoreLabel;
 
 public:
 
-	TileMap * tileMap;
+	TileMap* tileMap;
 	Pacman* pacman;
 	std::vector<Ghost*> ghosts;
 

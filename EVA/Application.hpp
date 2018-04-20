@@ -31,7 +31,8 @@ namespace EVA
         static GLFWwindow *m_Window;
 
         static glm::mat4 m_OrthographicProjection;
-        static glm::mat4 m_PerspectiveProjection;
+		static glm::mat4 m_PerspectiveProjection;
+		static glm::mat4 m_ScreenSpaceProjection;
 
     public:
 
@@ -53,6 +54,9 @@ namespace EVA
         /// <summary>Gets the orthographic projection matrix for the current window size</summary>
         static inline glm::mat4 GetOrthographicMatrix()
         { return m_OrthographicProjection; }
+
+		static inline glm::mat4 GetScreenSpaceMatrix()
+		{ return m_ScreenSpaceProjection; }
 
 		static inline glm::ivec2 GetWindowSize()
 		{ return m_WindowSize; }

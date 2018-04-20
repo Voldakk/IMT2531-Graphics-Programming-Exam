@@ -4,10 +4,10 @@
 #include <memory>
 
 #include "Light.hpp"
-
 #include "GameObject.hpp"
 #include "Skybox.hpp"
 #include "MeshRenderer.hpp"
+#include "UI/UiElement.hpp"
 
 namespace EVA
 {
@@ -21,6 +21,8 @@ namespace EVA
 		std::vector<std::shared_ptr<Light>> m_Lights;
 
 		std::vector<GameObject*> m_DestroyQueue;
+
+		std::vector<std::shared_ptr<UiElement>> m_UiElements;
 
 	public:
 
@@ -70,15 +72,18 @@ namespace EVA
 
 		/**
 		* \brief
-		* \param meshRenderer
+		* \param removeMeshRenderer
 		*/
-		void RemoveMeshRenderer(MeshRenderer *meshRenderer);
+		void RemoveMeshRenderer(MeshRenderer *removeMeshRenderer);
 
 		/**
 		 * \brief 
 		 * \return 
 		 */
 		std::vector<std::shared_ptr<Light>> GetLights() const { return m_Lights; }
+
+		template<class T, typename... Args>
+		T* CreateUiElement(Args... args);
 
 	private:
 
@@ -100,6 +105,17 @@ namespace EVA
 		 * \param farPlane 
 		 */
 		void RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, glm::vec3 lightPos, float farPlane);
+
+		void RenderUi();
 	};
 
+	template <class T, typename... Args>
+	T* Scene::CreateUiElement(Args... args)
+	{
+		auto uiElement = std::make_shared<T>(args...);
+
+		m_UiElements.push_back(uiElement);
+
+		return uiElement.get();
+	}
 }

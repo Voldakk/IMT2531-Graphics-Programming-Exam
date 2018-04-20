@@ -4,10 +4,9 @@
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
-#include "glm/gtc/matrix_transform.hpp"
 
-#include "ShaderManager.hpp"
-#include "Application.hpp"
+#include "../ShaderManager.hpp"
+#include "../Application.hpp"
 
 namespace EVA
 {
@@ -15,10 +14,6 @@ namespace EVA
 	std::map<GLchar, Text::Character> Text::m_Characters;
 
 	std::shared_ptr<Shader> Text::m_Shader;
-	std::unique_ptr<VertexArray> Text::m_Va;
-	std::unique_ptr<VertexBuffer> Text::m_Vb;
-
-	glm::mat4 Text::m_Projection;
 
 	void Text::Init()
 	{
@@ -43,6 +38,7 @@ namespace EVA
 				std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
 				continue;
 			}
+
 			// Generate texture
 			GLuint texture;
 			glGenTextures(1, &texture);
@@ -58,11 +54,13 @@ namespace EVA
 				GL_UNSIGNED_BYTE,
 				face->glyph->bitmap.buffer
 			);
+
 			// Set texture options
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 			// Now store character for later use
 			Character character = {
 				texture,
@@ -76,6 +74,11 @@ namespace EVA
 		FT_Done_Face(face);
 		FT_Done_FreeType(ft);
 
+		m_Shader = EVA::ShaderManager::CreateOrGetShader("text", "text.vert", "text.frag");
+	}
+
+	Text::Text()
+	{
 		// VAO and VBO
 		m_Va = std::make_unique<VertexArray>();
 		m_Vb = std::make_unique<VertexBuffer>(sizeof(GLfloat) * 6 * 4, GL_DYNAMIC_DRAW);
@@ -84,18 +87,14 @@ namespace EVA
 		layout.Push<float>(4); // Position and uv
 
 		m_Va->AddBuffer(*m_Vb, layout);
-
-		m_Shader = EVA::ShaderManager::CreateOrGetShader("text", "text.vert", "text.frag");
-
-		m_Projection = Application::GetOrthographicMatrix();
 	}
 
-	void Text::RenderText(std::string text, GLfloat x, const GLfloat y, const GLfloat scale, const glm::vec3 color)
+	void Text::Render(std::string text, GLfloat x, const float y, const float scale, const glm::vec3 color) const
 	{
 		// Activate corresponding render state	
 		m_Shader->Bind();
 		m_Shader->SetUniform3Fv("textColor", color);
-		m_Shader->SetUniformMatrix4Fv("projection", m_Projection);
+		m_Shader->SetUniformMatrix4Fv("projection", Application::GetScreenSpaceMatrix());
 		glActiveTexture(GL_TEXTURE0);
 
 		m_Va->Bind();
@@ -135,5 +134,45 @@ namespace EVA
 		}
 		m_Va->Unbind();
 		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	void Text::GetSize(std::string text, const float scale) const
+	{
+		float x = 0;
+		float y = 0;
+
+		for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
+		{
+			const auto ch = m_Characters[*c];
+
+			const auto xpos = x + ch.bearing.x * scale;
+			const auto ypos = y - (ch.size.y - ch.bearing.y) * scale;
+
+			const auto w = ch.size.x * scale;
+			const auto h = ch.size.y * scale;
+
+			// Update VBO for each character
+			GLfloat vertices[6][4] = {
+				{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos,     ypos,       0.0, 1.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+			{ xpos + w, ypos + h,   1.0, 0.0 }
+			};
+
+			// Render glyph texture over quad
+			glBindTexture(GL_TEXTURE_2D, ch.textureId);
+
+			// Update content of VBO memory
+			m_Vb->BufferData(vertices, sizeof(vertices));
+
+			// Render quad
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+
+			// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+			x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+		}
 	}
 }

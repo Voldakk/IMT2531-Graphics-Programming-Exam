@@ -4,7 +4,6 @@
 
 #include "Application.hpp"
 #include "ShaderManager.hpp"
-#include "Text.hpp"
 
 namespace EVA
 {
@@ -75,8 +74,8 @@ namespace EVA
 		// Scene
 		RenderScene();
 
-		// Text
-		Text::RenderText("This is sample text", -0.4f, 0.9f, 0.002f, glm::vec3(1.0f, 0.0f, 0.0f));
+		// UI
+		RenderUi();
 	}
 
 	std::shared_ptr<GameObject> Scene::CreateGameObject()
@@ -143,7 +142,7 @@ namespace EVA
 
 	void Scene::RemoveMeshRenderer(MeshRenderer* removeMeshRenderer)
 	{
-		if(removeMeshRenderer == nullptr)
+		if (removeMeshRenderer == nullptr)
 			return;
 
 		for (unsigned int materialIndex = 0; materialIndex < m_Materials.size(); materialIndex++)
@@ -355,6 +354,14 @@ namespace EVA
 					}
 				}
 			}
+		}
+	}
+
+	void Scene::RenderUi()
+	{
+		for (const auto& uiElement : m_UiElements)
+		{
+			uiElement->Render();
 		}
 	}
 }

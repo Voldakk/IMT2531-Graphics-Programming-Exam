@@ -1,15 +1,15 @@
 #include "Game.hpp"
 
+#include <iostream>
+
 #include "EVA/Graphics.hpp"
 #include "EVA/SceneManager.hpp"
 #include "EVA/ResourceManagers.hpp"
+#include "EVA/UI.hpp"
 
 #include "TileMap.hpp"
 #include "GhostVariations.hpp"
 #include "Pacman.hpp"
-
-#include <iostream>
-#include "Pellet.hpp"
 
 Game::Game()
 {
@@ -70,6 +70,10 @@ Game::Game()
 	// Pokey
 	const auto pokey = CreateGameObject()->AddComponent<GhostPokey>(this);
 	ghosts.push_back(pokey);
+
+	// UI
+	m_ScoreLabel = CreateUiElement<EVA::Label>("Score: " + std::to_string(m_Score));
+	m_ScoreLabel->position = { 20.0f, 20.0f };
 }
 
 void Game::Update(const float deltaTime)
@@ -97,13 +101,13 @@ void Game::Update(const float deltaTime)
 	}
 
 	// Energizer
-	if(m_activeEnergizer)
+	if(m_ActiveEnergizer)
 	{
 		m_EnergizerTimer -= deltaTime;
 		if(m_EnergizerTimer <= 0)
 		{
-			m_activeEnergizer = false;
-			time = 0.0f;
+			m_ActiveEnergizer = false;
+			m_Time = 0.0f;
 
 			for (auto& ghost : ghosts)
 			{
@@ -115,7 +119,7 @@ void Game::Update(const float deltaTime)
 		}
 		else
 		{
-			time += deltaTime;
+			m_Time += deltaTime;
 
 			for (auto& ghost : ghosts)
 			{
@@ -123,7 +127,7 @@ void Game::Update(const float deltaTime)
 					continue;
 
 				if(m_EnergizerTimer <= 2.0f)
-					ghost->SetMaterialColor(glm::vec3(glm::vec2(glm::sin(time * 10.0f) + 0.5f), 1.0f));
+					ghost->SetMaterialColor(glm::vec3(glm::vec2(glm::sin(m_Time * 10.0f) + 0.5f), 1.0f));
 				else
 					ghost->SetMaterialColor(glm::vec3(0.0f, 0.0f, 1.0f));
 			}
@@ -162,13 +166,13 @@ Game::Wave Game::CurrentWave()
 void Game::AddScore(const unsigned int amount)
 {
 	m_Score += amount;
-	std::cout << "Score: " << m_Score << "\n";
+	m_ScoreLabel->SetText("Score: " + std::to_string(m_Score));
 }
 
 void Game::ActivateEnergizer(const float time)
 {
 	m_EnergizerTimer = time;
-	m_activeEnergizer = true;
+	m_ActiveEnergizer = true;
 
 	for (auto& ghost : ghosts)
 	{

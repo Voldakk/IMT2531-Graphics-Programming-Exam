@@ -7,7 +7,7 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "Text.hpp"
+#include "UI/Text.hpp"
 #include "Input.hpp"
 #include "SceneManager.hpp"
 
@@ -23,7 +23,8 @@ namespace EVA
     GLFWwindow *Application::m_Window;
 
     glm::mat4 Application::m_OrthographicProjection;
-    glm::mat4 Application::m_PerspectiveProjection;
+	glm::mat4 Application::m_PerspectiveProjection;
+	glm::mat4 Application::m_ScreenSpaceProjection;
 
     void Application::Init(const std::string &title)
     {
@@ -161,7 +162,7 @@ namespace EVA
         glfwTerminate();
     }
 
-    void Application::WindowResizeCallback(GLFWwindow *window, int width, int height)
+    void Application::WindowResizeCallback(GLFWwindow *window, const int width, const int height)
     {
         m_WindowSize = glm::ivec2(width, height);
 
@@ -180,6 +181,8 @@ namespace EVA
             m_PerspectiveProjection = glm::perspective(glm::radians(mainCamera->fov),
                                                        (float) m_WindowSize.x / (float) m_WindowSize.y,
                                                        mainCamera->near, mainCamera->far);
+
+		m_ScreenSpaceProjection = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
     }
 
     void Application::Exit()
