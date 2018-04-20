@@ -1,5 +1,11 @@
 #include "VertexBufferLayout.hpp"
 
+template <typename T>
+void EVA::VertexBufferLayout::Push(const unsigned count, const unsigned divisor)
+{
+
+}
+
 template<>
 void EVA::VertexBufferLayout::Push<unsigned char>(const unsigned int count, const unsigned int divisor)
 {

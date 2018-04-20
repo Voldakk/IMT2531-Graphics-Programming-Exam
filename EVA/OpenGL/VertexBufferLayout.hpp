@@ -39,7 +39,7 @@ namespace EVA
 		~VertexBufferLayout() = default;
 
 		template<typename T>
-		void Push(const unsigned int count, const unsigned int divisor = 0){};
+		void Push(const unsigned int count, const unsigned int divisor = 0);
 
 		inline unsigned int GetStride() const { return m_Stride; }
 

@@ -37,10 +37,6 @@ link_directories(${PROJECT_BINARY_DIR})
 link_directories(${ASSIMP_BINARY_DIR})
 
 if(WINDOWS)
-	add_subdirectory(dependencies/assimp)
-	link_directories(${PROJECT_BINARY_DIR})
-	link_directories(${ASSIMP_BINARY_DIR})
-
 	link_directories(${PROJECT_SOURCE_DIR}/dependencies/glew/lib/)
 	link_directories(${PROJECT_SOURCE_DIR}/dependencies/freetype/lib/)
 endif(WINDOWS)
