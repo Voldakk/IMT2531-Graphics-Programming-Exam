@@ -28,8 +28,10 @@ namespace EVA
 
 		void SetUniform1F(const std::string& name, float value);
 
-		void SetUniform3Fv(const std::string& name, glm::vec3 value);
+		void SetUniform2Fv(const std::string& name, glm::vec2 value);
 
+		void SetUniform3Fv(const std::string& name, glm::vec3 value);
+		
 		void SetUniform4Fv(const std::string& name, glm::vec4 value);
 
 		void SetUniformMatrix4Fv(const std::string& name, glm::mat4 value);

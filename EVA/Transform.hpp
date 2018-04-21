@@ -19,6 +19,7 @@ namespace EVA
 	class Transform : public Component
 	{
 		glm::mat4 m_ModelMatrix;
+		glm::mat4 m_ModelMatrix2D;
 
 		std::shared_ptr<Transform> m_Parent;
 		std::vector<Transform *> m_Children;
@@ -40,6 +41,7 @@ namespace EVA
 
 		// Public read only fields
 		const glm::mat4& modelMatrix = m_ModelMatrix;
+		const glm::mat4& modelMatrix2D = m_ModelMatrix2D;
 
 		const glm::vec3& localPosition = m_LocalPosition;
 		const glm::quat& localOrientation = m_LocalOrientation;
@@ -60,16 +62,29 @@ namespace EVA
 		explicit Transform(GameObject *gameObject);
 
 		/**
-		 * \brief Translates the transform by the given offset
-		 * \param offset The amount the transform should be translated
-		 */
+		* \brief Translates the transform by the given offset
+		* \param offset The amount the transform should be translated
+		*/
 		void Translate(glm::vec3 offset);
 
 		/**
-		 * \brief Sets the transfrom's position
-		 * \param newPosition The new position
-		 */
+		* \brief Translates the transform by the given offset
+		* \param offset The amount the transform should be translated
+		*/
+		void Translate(glm::vec2 offset);
+
+		/**
+		* \brief Sets the transfrom's position
+		* \param newPosition The new position
+		*/
 		void SetPosition(glm::vec3 newPosition);
+
+
+		/**
+		* \brief Sets the transfrom's position
+		* \param newPosition The new position
+		*/
+		void SetPosition(glm::vec2 newPosition);
 
 		/**
 		 * \brief Rotates the transform by the given offset
@@ -78,11 +93,17 @@ namespace EVA
 		void Rotate(glm::quat offset);
 
 		/**
-		 * \brief Rotates the transform around an axis
-		 * \param axis The axis to rotate around
-		 * \param angle The angle in degrees
-		 */
+		* \brief Rotates the transform around an axis
+		* \param axis The axis to rotate around
+		* \param angle The angle in degrees
+		*/
 		void Rotate(glm::vec3 axis, float angle);
+
+		/**
+		* \brief Rotates the transform around the Z axis
+		* \param angle The angle in degrees
+		*/
+		void Rotate(float angle);
 
 		/**
 		 * \brief Sets the transform's orientation
@@ -91,11 +112,17 @@ namespace EVA
 		void SetOrientation(glm::quat newOrientation);
 
 		/**
-		 * \brief Sets the transform's orientation defined by a rotation around an axis
-		 * \param axis The axis to rotate around
-		 * \param angle The angle in degrees
-		 */
+		* \brief Sets the transform's orientation defined by a rotation around an axis
+		* \param axis The axis to rotate around
+		* \param angle The angle in degrees
+		*/
 		void SetOrientation(glm::vec3 axis, float angle);
+
+		/**
+		* \brief Sets the transform's orientation defined by a rotation around the Z axis
+		* \param angle The angle in degrees
+		*/
+		void SetOrientation(float angle);
 
 		/**
 		 * \brief Scales the transform by a given amount on each axis
@@ -143,14 +170,14 @@ namespace EVA
 		 * \param child The child
 		 * \return The child's index
 		 */
-		unsigned int GetChildIndex(Transform *child) const;
+		int GetChildIndex(Transform *child) const;
 
 		/**
 		* \brief Gets the child's index in the transforms list of children
 		* \param child The child
 		* \return The child's index
 		*/
-		unsigned int GetChildIndex(GameObject *child) const;
+		int GetChildIndex(GameObject *child) const;
 	};
 
 }

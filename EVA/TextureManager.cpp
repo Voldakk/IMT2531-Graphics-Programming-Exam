@@ -1,21 +1,21 @@
 #include "TextureManager.hpp"
 
 #include <iostream>
-
+#include "GL/glew.h"
 #include "stb_image.h"
 
 namespace EVA
 {
-	std::map<std::string, GLuint> TextureManager::m_Textures;
+	std::map<std::string, unsigned int> TextureManager::m_Textures;
 
-	GLuint TextureManager::GetTexture(const std::string &path)
+	unsigned int TextureManager::GetTexture(const std::string &path)
 	{
 		// Return the id if the texture's already loaded
 		if (m_Textures.count(path))
 			return m_Textures[path];
 
 		// The new texture id
-		GLuint texture = 0;
+		unsigned int texture = 0;
 
 		// Load the image
 		stbi_set_flip_vertically_on_load(true);
@@ -56,7 +56,7 @@ namespace EVA
 		return texture;
 	}
 
-	GLuint TextureManager::GetTextureCubemap(const std::string &folderPath, const std::string &fileType)
+	unsigned int TextureManager::GetTextureCubemap(const std::string &folderPath, const std::string &fileType)
 	{
 		// Return the id if the texture's already loaded
 		if (m_Textures.count(folderPath + fileType))
@@ -86,7 +86,7 @@ namespace EVA
 				GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
 		};
 
-		for (size_t i = 0; i < 6; i++)
+		for (unsigned int i = 0; i < 6; i++)
 		{
 			auto fullPath = folderPath + sideNames[i];
 			fullPath.append(fileType);

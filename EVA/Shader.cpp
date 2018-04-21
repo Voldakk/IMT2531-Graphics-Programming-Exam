@@ -38,6 +38,11 @@ namespace EVA
 		glUniform1f(GetUniformLocation(name), value);
 	}
 
+	void Shader::SetUniform2Fv(const std::string& name, glm::vec2 value)
+	{
+		glUniform2fv(GetUniformLocation(name), 1, value_ptr(value));
+	}
+
 	void Shader::SetUniform3Fv(const std::string& name, glm::vec3 value)
 	{
 		glUniform3fv(GetUniformLocation(name), 1, value_ptr(value));

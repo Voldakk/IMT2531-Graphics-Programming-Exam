@@ -20,9 +20,21 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
+	void Transform::Translate(const glm::vec2 offset)
+	{
+		m_LocalPosition += glm::vec3(offset, 0.0f);
+		UpdateModelMatrix();
+	}
+
 	void Transform::SetPosition(const glm::vec3 newPosition)
 	{
 		m_LocalPosition = newPosition;
+		UpdateModelMatrix();
+	}
+
+	void Transform::SetPosition(const glm::vec2 newPosition)
+	{
+		m_LocalPosition = glm::vec3(newPosition, 0.0f);
 		UpdateModelMatrix();
 	}
 
@@ -38,6 +50,12 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
+	void Transform::Rotate(const float angle)
+	{
+		m_LocalOrientation = glm::angleAxis(glm::radians(angle), ZAXIS) * m_LocalOrientation;
+		UpdateModelMatrix();
+	}
+
 	void Transform::SetOrientation(const glm::quat newOrientation)
 	{
 		m_LocalOrientation = newOrientation;
@@ -47,6 +65,12 @@ namespace EVA
 	void Transform::SetOrientation(const glm::vec3 axis, const float angle)
 	{
 		m_LocalOrientation = glm::angleAxis(glm::radians(angle), axis);
+		UpdateModelMatrix();
+	}
+
+	void Transform::SetOrientation(const float angle)
+	{
+		m_LocalOrientation = glm::angleAxis(glm::radians(angle), ZAXIS);
 		UpdateModelMatrix();
 	}
 
@@ -83,15 +107,19 @@ namespace EVA
 		
 		// Parent
 		m_ModelMatrix = m_Parent == nullptr ? glm::mat4() : m_Parent->modelMatrix;
+		m_ModelMatrix2D = m_Parent == nullptr ? glm::mat4() : m_Parent->modelMatrix2D;
 
 		// Position
 		m_ModelMatrix = glm::translate(m_ModelMatrix, m_LocalPosition * glm::vec3(-1.0f, 1.0f, 1.0f));
+		m_ModelMatrix2D = glm::translate(m_ModelMatrix2D, m_LocalPosition);
 
 		// Orientation
 		m_ModelMatrix = m_ModelMatrix * glm::toMat4(m_LocalOrientation);
+		m_ModelMatrix2D = m_ModelMatrix2D * glm::toMat4(m_LocalOrientation);
 
 		// Scale
 		m_ModelMatrix = glm::scale(m_ModelMatrix, m_LocalScale);
+		m_ModelMatrix2D = glm::scale(m_ModelMatrix2D, m_LocalScale);
 
 		// Directions
 		m_Forward = glm::normalize(ZAXIS * orientation);
@@ -133,7 +161,7 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
-	unsigned int Transform::GetChildIndex(Transform *child) const
+	int Transform::GetChildIndex(Transform *child) const
 	{
 		for (unsigned int i = 0; i < m_Children.size(); i++)
 		{
@@ -143,7 +171,7 @@ namespace EVA
 		return -1;
 	}
 
-	unsigned int Transform::GetChildIndex(GameObject *child) const
+	int Transform::GetChildIndex(GameObject *child) const
 	{
 		if (child != nullptr)
 			return GetChildIndex(child->transform.get());

@@ -169,18 +169,20 @@ namespace EVA
         glViewport(0, 0, width, height);
 
         // Projection matrices
-        if (m_WindowSize.x > m_WindowSize.y)
-            m_OrthographicProjection = glm::ortho(-(float) m_WindowSize.x / (float) m_WindowSize.y,
-                                                  (float) m_WindowSize.x / (float) m_WindowSize.y, -1.0f, 1.0f, -1.0f,
-                                                  1.0f);
-        else
-            m_OrthographicProjection = glm::ortho(-1.0f, 1.0f, -(float) m_WindowSize.y / (float) m_WindowSize.x,
-                                                  (float) m_WindowSize.y / (float) m_WindowSize.x, -1.0f, 1.0f);
+        m_OrthographicProjection = glm::ortho(
+		-(float) m_WindowSize.x / (float) m_WindowSize.y,
+		(float) m_WindowSize.x / (float) m_WindowSize.y, 
+		-1.0f, 1.0f, 
+		-1.0f, 1.0f);
 
-        if (mainCamera != nullptr)
-            m_PerspectiveProjection = glm::perspective(glm::radians(mainCamera->fov),
-                                                       (float) m_WindowSize.x / (float) m_WindowSize.y,
-                                                       mainCamera->near, mainCamera->far);
+		if (mainCamera != nullptr)
+		{
+			m_PerspectiveProjection = glm::perspective(
+				glm::radians(mainCamera->fov),
+				(float)m_WindowSize.x / (float)m_WindowSize.y,
+				mainCamera->near,
+				mainCamera->far);
+		}
 
 		m_ScreenSpaceProjection = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
     }
