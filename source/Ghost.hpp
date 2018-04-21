@@ -20,7 +20,7 @@ enum GhostState
 	Dead
 };
 
-class Ghost : public EVA::Component
+class Ghost : public EVA::Component, public EVA::IUpdateComponent
 {
 public:
 

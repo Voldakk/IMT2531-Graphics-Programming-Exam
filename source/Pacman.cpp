@@ -1,7 +1,5 @@
 #include "Pacman.hpp"
 
-#include <utility>
-
 #include "EVA/Input.hpp"
 #include "EVA/ResourceManagers.hpp"
 

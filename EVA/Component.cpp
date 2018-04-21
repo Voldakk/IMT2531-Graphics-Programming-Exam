@@ -19,9 +19,4 @@ namespace EVA
 			}
 		}
     }
-
-    void Component::Update(float deltaTime)
-    {
-
-    }
 }

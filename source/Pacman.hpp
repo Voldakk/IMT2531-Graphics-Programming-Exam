@@ -4,10 +4,10 @@
 
 #include "TileMap.hpp"
 
-class Pacman : public EVA::Component
+class Pacman : public EVA::Component, public EVA::IUpdateComponent
 {
 	enum Direction { Up, Down, Right, Left };
-
+	
 	std::shared_ptr<EVA::Model> m_Model;
 	std::shared_ptr<EVA::Material> m_Material;
 	TileMap* m_TileMap;

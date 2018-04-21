@@ -33,12 +33,28 @@ namespace EVA
 		 * \brief Destructor
 		 */
 		virtual ~Component() = default;
+    };
+
+	class IUpdateComponent
+	{
+
+	public:
 
 		/**
 		* \brief Runs every frame
 		* \param deltaTime The time in seconds between frames
 		*/
-        virtual void Update(float deltaTime);
-    };
+		virtual void Update(float deltaTime) = 0;
+	};
+
+	class IRenderComponent
+	{
+
+	public:
+		/**
+		* \brief Called after Update. Used to render game elements to the screen
+		*/
+		virtual void Render() = 0;
+	};
 
 }

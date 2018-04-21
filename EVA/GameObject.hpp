@@ -18,7 +18,9 @@ namespace EVA
 		Scene* m_Scene;
         std::shared_ptr<Transform> m_Transform;
 
-        std::vector<std::shared_ptr<Component>> m_Components;
+		std::vector<std::shared_ptr<Component>> m_Components;
+		std::vector<IUpdateComponent*> m_UpdateComponents;
+		std::vector<IRenderComponent*> m_RenderComponents;
 
     public:
 
@@ -36,7 +38,12 @@ namespace EVA
 		* \brief Runs every frame
 		* \param deltaTime The time in seconds between frames
 		*/
-        void Update(float deltaTime);
+		void Update(float deltaTime);
+
+		/**
+		* \brief Called after Update. Used to render game elements to the screen
+		*/
+		void Render();
 
 	    /**
          * \brief Adds a component of the given type to the game object
@@ -71,6 +78,16 @@ namespace EVA
     {
         std::shared_ptr<T> component = std::make_shared<T>(this, args...);
         m_Components.push_back(component);
+
+		// Update
+		const auto uc = dynamic_cast<IUpdateComponent*>(component.get());
+		if (uc != nullptr)
+			m_UpdateComponents.push_back(uc);
+
+		// Render
+		const auto rc = dynamic_cast<IRenderComponent*>(component.get());
+		if (rc != nullptr)
+			m_RenderComponents.push_back(rc);
 
         return component.get();
     }

@@ -4,7 +4,7 @@
 
 class Game;
 
-class Pellet : public EVA::Component
+class Pellet : public EVA::Component, public EVA::IUpdateComponent
 {
 
 	static std::shared_ptr<EVA::Mesh> m_Mesh;

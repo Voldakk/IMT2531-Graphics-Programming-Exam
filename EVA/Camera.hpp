@@ -9,7 +9,7 @@ namespace EVA
 
     class GameObject;
 
-    class Camera : public Component
+    class Camera : public Component, public IUpdateComponent
     {
 		float m_Pitch = 0.0f;
 		float m_Yaw = 0.0f;

@@ -12,13 +12,21 @@ namespace EVA
 
 	void GameObject::Update(const float deltaTime)
     {
-        for (auto &component : m_Components)
+        for (auto &component : m_UpdateComponents)
         {
             component->Update(deltaTime);
         }
     }
 
-    void GameObject::SetParent(GameObject *newParent) const
+	void GameObject::Render()
+	{
+		for (auto &component : m_RenderComponents)
+		{
+			component->Render();
+		}
+	}
+
+	void GameObject::SetParent(GameObject *newParent) const
     {
         m_Transform->SetParent(newParent->m_Transform);
     }

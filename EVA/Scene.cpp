@@ -76,6 +76,12 @@ namespace EVA
 
 		// UI
 		RenderUi();
+
+		// Render components
+		for (auto &gameObject : m_GameObjects)
+		{
+			gameObject->Render();
+		}
 	}
 
 	std::shared_ptr<GameObject> Scene::CreateGameObject()
