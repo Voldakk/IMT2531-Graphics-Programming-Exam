@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glm/glm.hpp"
+#include "glm/gtx/extended_min_max.inl"
 
 namespace EVA
 {
@@ -10,6 +11,9 @@ namespace EVA
 		glm::vec2 min;
 		glm::vec2 max;
 
+		BoundingBox(const float minX, const float maxX, const float minY, const float maxY)
+			: min(minX, minY), max(maxX, maxY) {}
+
 		inline float Width() const
 		{
 			return max.x - min.x;
@@ -18,6 +22,11 @@ namespace EVA
 		inline float Height() const
 		{
 			return max.y - min.y;
+		}
+
+		inline glm::vec2 Size() const
+		{
+			return glm::vec2(max.x - min.x, max.y - min.y);
 		}
 
 		inline glm::vec2 Right() const

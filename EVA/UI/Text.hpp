@@ -8,9 +8,11 @@
 
 #include "../Shader.hpp"
 #include "EVA/OpenGL.hpp"
+#include "BoundingBox.hpp"
 
 namespace EVA
 {
+	const unsigned int FONT_SIZE = 100;
 
 	class Text
 	{
@@ -48,7 +50,7 @@ namespace EVA
 		 */
 		void Render(std::string text, float x, float y, float scale, glm::vec3 color) const;
 
-		void GetSize(std::string text, float scale) const;
+		BoundingBox GetSize(std::string text, float scale) const;
 	};
 
 }

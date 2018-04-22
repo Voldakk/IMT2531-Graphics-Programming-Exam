@@ -2,5 +2,10 @@
 
 #include "../../UI/UiElement.hpp"
 #include "../../UI/BoundingBox.hpp"
-#include "../../UI/Label.hpp"
+
 #include "../../UI/Text.hpp"
+#include "../../UI/SpriteRenderer.hpp"
+
+#include "../../UI/Layout.hpp"
+#include "../../UI/Label.hpp"
+#include "../../UI/Button.hpp"

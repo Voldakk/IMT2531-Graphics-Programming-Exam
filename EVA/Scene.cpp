@@ -47,6 +47,10 @@ namespace EVA
 
 	void Scene::Render()
 	{
+		// Clear
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Shadows 
 		for (auto& light : m_Lights)
 		{
 			if (light->GetType() == LightType::Directional && light->Shadows())
@@ -74,14 +78,14 @@ namespace EVA
 		// Scene
 		RenderScene();
 
-		// UI
-		RenderUi();
-
 		// Render components
 		for (auto &gameObject : m_GameObjects)
 		{
 			gameObject->Render();
 		}
+
+		// UI
+		RenderUi();
 	}
 
 	std::shared_ptr<GameObject> Scene::CreateGameObject()
@@ -185,7 +189,6 @@ namespace EVA
 	{
 		const auto ws = Application::GetWindowSize();
 		glViewport(0, 0, ws.x, ws.y);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (skybox != nullptr)
 		{
@@ -365,9 +368,11 @@ namespace EVA
 
 	void Scene::RenderUi()
 	{
-		for (const auto& uiElement : m_UiElements)
+		glDepthMask(GL_FALSE);
+		for (auto uiElement : m_UiElements)
 		{
 			uiElement->Render();
 		}
+		glDepthMask(GL_TRUE);
 	}
 }

@@ -15,7 +15,7 @@ class Game : public EVA::Scene
 		float time;
 	};
 	std::vector<Wave> m_Waves;
-	int m_CurrentWave = 0;
+	unsigned int m_CurrentWave = 0;
 	float m_WaveTimer = 0.0f;
 
 	unsigned int m_Score = 0;

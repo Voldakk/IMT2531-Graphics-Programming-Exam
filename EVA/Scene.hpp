@@ -112,10 +112,8 @@ namespace EVA
 	template <class T, typename... Args>
 	T* Scene::CreateUiElement(Args... args)
 	{
-		auto uiElement = std::make_shared<T>(args...);
-
-		m_UiElements.push_back(uiElement);
-
-		return uiElement.get();
+		auto element = std::make_shared<T>(args...);
+		m_UiElements.push_back(element);
+		return element.get();
 	}
 }

@@ -3,7 +3,7 @@
 namespace EVA
 {
 
-	UiElement::UiElement()
+	UiElement::UiElement() : m_BoundingBox(0.0f, 0.0f, 0.0f, 0.0f)
 	{
 		m_Parent = nullptr;
 	}
@@ -20,12 +20,22 @@ namespace EVA
 		m_Parent = newParent;
 
 		if (m_Parent != nullptr)
-			m_Parent->m_Children.push_back(this);
+			m_Parent->AddChild(this);
 	}
 
-	void UiElement::SetParent(const std::shared_ptr<UiElement>& newParent)
+	void UiElement::AddChild(UiElement* newChild)
 	{
-		SetParent(newParent.get());
+		if(newChild == nullptr)
+			return;
+		m_Children.push_back(newChild);
+		newChild->m_Parent = this;
+
+		OnChildredUpdated();
+	}
+
+	void UiElement::OnChildredUpdated()
+	{
+
 	}
 
 	int UiElement::GetIndexOfChild(UiElement *child) const
@@ -44,5 +54,16 @@ namespace EVA
 			return m_Children[index];
 
 		return nullptr;
+	}
+
+	void UiElement::SetPosition(const glm::vec2 newPosition)
+	{
+		m_Position = newPosition;
+		UpdateBoundingBox();
+	}
+
+	void UiElement::UpdateBoundingBox()
+	{
+
 	}
 }

@@ -26,7 +26,7 @@ namespace EVA
 		if (FT_New_Face(ft, "./assets/fonts/arial.ttf", 0, &face))
 			std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
-		FT_Set_Pixel_Sizes(face, 0, 48);
+		FT_Set_Pixel_Sizes(face, 0, FONT_SIZE);
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
@@ -94,7 +94,7 @@ namespace EVA
 		// Activate corresponding render state	
 		m_Shader->Bind();
 		m_Shader->SetUniform3Fv("textColor", color);
-		m_Shader->SetUniformMatrix4Fv("projection", Application::GetScreenSpaceMatrix());
+		m_Shader->SetUniformMatrix4Fv("projection", Application::GetOrthographicMatrix());
 		glActiveTexture(GL_TEXTURE0);
 
 		m_Va->Bind();
@@ -104,7 +104,7 @@ namespace EVA
 			const auto ch = m_Characters[*c];
 
 			const auto xpos = x + ch.bearing.x * scale;
-			const auto ypos = y - (ch.size.y - ch.bearing.y) * scale;
+			const auto ypos = y + (ch.bearing.y - ch.size.y) * scale;
 
 			const auto w = ch.size.x * scale;
 			const auto h = ch.size.y * scale;
@@ -136,43 +136,33 @@ namespace EVA
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void Text::GetSize(std::string text, const float scale) const
+	BoundingBox Text::GetSize(std::string text, const float scale) const
 	{
-		float x = 0;
-		float y = 0;
+		auto x = 0.0f;
+		auto miny =  1000000.0f;
+		auto maxy = -10000000.0f;
 
 		for (std::string::const_iterator c = text.begin(); c != text.end(); ++c)
 		{
 			const auto ch = m_Characters[*c];
 
 			const auto xpos = x + ch.bearing.x * scale;
-			const auto ypos = y - (ch.size.y - ch.bearing.y) * scale;
+			const auto ypos = (ch.bearing.y - ch.size.y) * scale;
 
 			const auto w = ch.size.x * scale;
 			const auto h = ch.size.y * scale;
 
-			// Update VBO for each character
-			GLfloat vertices[6][4] = {
-				{ xpos,     ypos + h,   0.0, 0.0 },
-			{ xpos,     ypos,       0.0, 1.0 },
-			{ xpos + w, ypos,       1.0, 1.0 },
-
-			{ xpos,     ypos + h,   0.0, 0.0 },
-			{ xpos + w, ypos,       1.0, 1.0 },
-			{ xpos + w, ypos + h,   1.0, 0.0 }
-			};
-
-			// Render glyph texture over quad
-			glBindTexture(GL_TEXTURE_2D, ch.textureId);
-
-			// Update content of VBO memory
-			m_Vb->BufferData(vertices, sizeof(vertices));
-
-			// Render quad
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			const auto highY = ypos + h;
 
 			// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 			x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+
+			if (ypos < miny)
+				miny = ypos;
+			if (highY > maxy)
+				maxy = highY;
 		}
+
+		return BoundingBox(0.0f, x, miny, maxy);
 	}
 }

@@ -72,8 +72,7 @@ Game::Game()
 	ghosts.push_back(pokey);
 
 	// UI
-	m_ScoreLabel = CreateUiElement<EVA::Label>("Score: " + std::to_string(m_Score));
-	m_ScoreLabel->position = { 20.0f, 20.0f };
+	//m_ScoreLabel = CreateUiElement<EVA::Label>("Score: " + std::to_string(m_Score));
 }
 
 void Game::Update(const float deltaTime)
@@ -157,7 +156,7 @@ void Game::Update(const float deltaTime)
 
 Game::Wave Game::CurrentWave()
 {
-	if(m_CurrentWave >= 0 && m_CurrentWave < m_Waves.size())
+	if(m_CurrentWave < m_Waves.size())
 		return m_Waves[m_CurrentWave];
 
 	return {};
