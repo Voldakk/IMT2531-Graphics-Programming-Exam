@@ -30,8 +30,6 @@ namespace EVA
 
 	void Scene::Update(const float deltaTime)
 	{
-		m_UpdateState = InBaseUpdate;
-
 		// Update
 		for (auto &gameObject : m_GameObjects)
 		{
@@ -57,11 +55,6 @@ namespace EVA
 		{
 			uiElement->Update();
 		}
-
-		if (m_Abort)
-			self.reset();
-
-		m_UpdateState = Unknown;
 	}
 
 	void Scene::Render()

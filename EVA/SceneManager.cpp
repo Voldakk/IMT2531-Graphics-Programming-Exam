@@ -45,9 +45,19 @@ namespace EVA
 
 	void SceneManager::Update(const float deltaTime)
 	{
-		for (auto &scene : m_Scenes)
+		auto scenesCopy = m_Scenes;
+		for (auto &scene : scenesCopy)
 		{
+			if (scene->abort)
+			{
+				scene->self.reset();
+				continue;
+			}
+
 			scene->Update(deltaTime);
+
+			if (scene->abort)
+				scene->self.reset();
 		}
 	}
 
@@ -86,11 +96,6 @@ namespace EVA
 			std::cout << "SceneManager::ClearScenes - Unloading scene: " << typeid(*scene).name() << " \n";
 
 			scene->Abort();
-
-			if(scene->updateState == Scene::Unknown)
-			{
-				scene->self.reset();
-			}
 		}
 		m_Scenes.clear();
 	}
