@@ -15,6 +15,12 @@ namespace EVA
 	// A scene that can be run by the SceneManager
 	class Scene
 	{
+	public:
+		enum UpdateState { InBaseUpdate, Unknown  };
+
+	private:
+
+		UpdateState m_UpdateState;
 
 		std::vector<std::vector<std::vector<MeshRenderer *>>> m_Materials;
 		std::vector<std::shared_ptr<GameObject>> m_GameObjects;
@@ -28,7 +34,7 @@ namespace EVA
 		
 
 	public:
-
+		const UpdateState& updateState = m_UpdateState;
 		std::shared_ptr<Scene> self;
 		inline void Abort()
 		{

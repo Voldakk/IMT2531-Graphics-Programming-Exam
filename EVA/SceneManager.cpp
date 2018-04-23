@@ -88,7 +88,13 @@ namespace EVA
 		for (auto& scene : m_Scenes)
 		{
 			std::cout << "SceneManager::ClearScenes - Unloading scene: " << typeid(*scene).name() << " \n";
+
 			scene->Abort();
+
+			if(scene->updateState == Scene::Unknown)
+			{
+				scene->self.reset();
+			}
 		}
 		m_Scenes.clear();
 	}
