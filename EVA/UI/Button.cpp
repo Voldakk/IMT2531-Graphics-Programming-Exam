@@ -26,7 +26,7 @@ void EVA::Button::Update()
 	else if (m_State == Highlighted && !mouseOver)
 		m_State = Normal;
 
-	if (mouseOver && Input::MouseButtonDown(0))
+	if (mouseOver && Input::MouseButtonDown(Input::MouseLeft))
 		onClick();
 }
 

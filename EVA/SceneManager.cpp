@@ -9,8 +9,6 @@ namespace EVA
 	{
 		if (GetIndex(scene) == -1)
 		{
-			Input::Clear();
-
 			std::cout << "SceneManager::LoadScene - Loading scene: " << typeid(*scene).name() << " \n";
 			m_Scenes.push_back(scene);
 			scene->self = scene;
@@ -41,8 +39,6 @@ namespace EVA
 	{
 		std::cout << "SceneManager::ChangeScene - Changing scene: " << typeid(*scene).name() << " \n";
 		ClearScenes();
-
-		Input::Clear();
 
 		LoadScene(scene);
 	}

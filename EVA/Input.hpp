@@ -126,6 +126,88 @@ namespace EVA
 		/// <returns>Whether the mouse button was released this frame</returns>
 		static inline glm::vec2 GetScroll()
 		{ return m_Scroll; }
+		
+
+		// ==========     KEYS     ==========
+
+
+		enum Key
+		{
+			/* Printable keys */
+
+			Space = GLFW_KEY_SPACE,
+
+			Apostrophe = GLFW_KEY_APOSTROPHE,
+
+			Comma = GLFW_KEY_COMMA,
+			Minus, Period, Slash,
+
+			Alpha0 = GLFW_KEY_0,
+			Alpha1, Alpha2, Alpha3, Alpha4, Alpha5, Alpha6, Alpha7, Alpha8, Alpha9,
+
+			Semicolon = GLFW_KEY_SEMICOLON,
+
+			Equal = GLFW_KEY_EQUAL,
+
+			A = GLFW_KEY_A,
+			B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+
+			LeftBracket = GLFW_KEY_LEFT_BRACKET,
+			BackSlash, RightBracket,
+
+			GraveAccent = GLFW_KEY_GRAVE_ACCENT,
+
+			World1 = GLFW_KEY_WORLD_1,
+			World2,
+
+			/* Function keys */
+
+			Escape = GLFW_KEY_ESCAPE,
+			Enter, Tab, Backspace, Insert, Delete,
+			Right, Left, Down, Up,
+			PageUp, PageDown, Home, End,
+
+			CapsLock = GLFW_KEY_CAPS_LOCK,
+			ScrollLock, NumLock,
+			PrintScreen, Pause,
+
+			F1 = GLFW_KEY_F1,
+			F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15, F16, F17, F18, F19, F20, F21, F22, F23, F24, F25,
+
+			Kp0 = GLFW_KEY_KP_0,
+			Kp1, Kp2, Kp3, Kp4, Kp5, Kp6, Kp7, Kp8, Kp9,
+
+			KpDecimal = GLFW_KEY_KP_DECIMAL,
+			KpDevide, KpMultiply, KpSubtract, KpAdd, KpEnter, KpEqual,
+
+			LeftShift = GLFW_KEY_LEFT_SHIFT,
+			LeftControl, LeftAlt, LeftSuper,
+			RightShift, RightControl, RightAlt, RightSuper,
+			Menu,
+
+			LastKey = Menu
+		};
+
+		enum Modifier
+		{
+			Shift = GLFW_MOD_SHIFT,
+			Control = GLFW_MOD_CONTROL,
+			Alt = GLFW_MOD_ALT,
+			Super = GLFW_MOD_SUPER
+		};
+
+		enum Button
+		{
+			Mouse0 = GLFW_MOUSE_BUTTON_1, 
+			Mouse1, Mouse2, Mouse3, Mouse4, Mouse5, Mouse6, Mouse7, Mouse8,
+
+			LastButtton = Mouse8,
+
+			MouseLeft = Mouse0,
+			MouseRight = Mouse1,
+			MouseMiddle = Mouse3
+
+		};
 	};
 
 }

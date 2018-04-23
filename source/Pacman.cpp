@@ -40,14 +40,14 @@ void Pacman::Update(const float deltaTime)
 	m_CurrentTile = m_TileMap->GetTileIndex(transform->position);
 
 	// Input
-	if (EVA::Input::Key(GLFW_KEY_UP))
+	if (EVA::Input::Key(EVA::Input::Up))
 		m_InputDirection = Direction::Up;
-	if (EVA::Input::Key(GLFW_KEY_DOWN))
+	if (EVA::Input::Key(EVA::Input::Down))
 		m_InputDirection = Direction::Down;
 
-	if (EVA::Input::Key(GLFW_KEY_RIGHT))
+	if (EVA::Input::Key(EVA::Input::Right))
 		m_InputDirection = Direction::Right;
-	if (EVA::Input::Key(GLFW_KEY_LEFT))
+	if (EVA::Input::Key(EVA::Input::Left))
 		m_InputDirection = Direction::Left;
 
 	// If it's time to select a new target tile

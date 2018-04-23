@@ -5,6 +5,7 @@
 #include "EVA/Graphics.hpp"
 #include "EVA/SceneManager.hpp"
 #include "EVA/ResourceManagers.hpp"
+#include "EVA/Input.hpp"
 #include "EVA/UI.hpp"
 
 #include "TileMap.hpp"
@@ -81,9 +82,9 @@ void Game::Update(const float deltaTime)
 {
 	Scene::Update(deltaTime);
 
-	if (EVA::Input::KeyDown(GLFW_KEY_ENTER))
+	if (EVA::Input::KeyDown(EVA::Input::Enter))
 		EVA::SceneManager::ChangeScene<Game>();
-	else if (EVA::Input::KeyDown(GLFW_KEY_ESCAPE))
+	else if (EVA::Input::KeyDown(EVA::Input::Escape))
 		EVA::SceneManager::ChangeScene<MainMenu>();
 
 	// Waves

@@ -5,7 +5,6 @@
 #include <iostream>
 
 #include "Scene.hpp"
-#include "Input.hpp"
 
 namespace EVA
 {
@@ -83,8 +82,6 @@ namespace EVA
 	{
 		std::cout << "SceneManager::ChangeScene - Changing scene: " << typeid(T).name() << " \n";
 		ClearScenes();
-
-		Input::Clear();
 
 		return CreateScene<T>();
 	}

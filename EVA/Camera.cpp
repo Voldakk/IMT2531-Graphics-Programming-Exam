@@ -26,7 +26,7 @@ namespace EVA
 		glm::vec3 movement;
 
 		// Front
-        if (Input::Key(GLFW_KEY_W))
+        if (Input::Key(Input::W))
         {
 			movement.x -= transform->forward.x;
 			movement.y += transform->forward.y;
@@ -34,7 +34,7 @@ namespace EVA
         }
 
         // Back
-        if (Input::Key(GLFW_KEY_S))
+        if (Input::Key(Input::S))
         {
 			movement.x -= -transform->forward.x;
 			movement.y += -transform->forward.y;
@@ -43,7 +43,7 @@ namespace EVA
 
 
 		// Right
-        if (Input::Key(GLFW_KEY_D))
+        if (Input::Key(Input::D))
         {
 			movement.x += transform->right.x;
 			movement.y += transform->right.y;
@@ -51,7 +51,7 @@ namespace EVA
         }
 
 		// Left
-        if (Input::Key(GLFW_KEY_A))
+        if (Input::Key(Input::A))
 		{
 			movement.x += -transform->right.x;
 			movement.y += -transform->right.y;
@@ -60,7 +60,7 @@ namespace EVA
 
 
 		// Up
-		if (Input::Key(GLFW_KEY_SPACE))
+		if (Input::Key(Input::Space))
 		{
 			movement.x -= transform->up.x;
 			movement.y += transform->up.y;
@@ -68,7 +68,7 @@ namespace EVA
 		}
 
 		// Down
-		if (Input::Key(GLFW_KEY_LEFT_SHIFT))
+		if (Input::Key(Input::LeftShift))
 		{
 			movement.x -= -transform->up.x;
 			movement.y += -transform->up.y;
