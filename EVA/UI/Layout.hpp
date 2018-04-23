@@ -11,7 +11,7 @@ namespace EVA
 
 	public:
 		explicit Layout();
-		void OnChildredUpdated() override;
+		void OnChildrenUpdated() override;
 		void UpdateBoundingBox() override;
 
 		void SetMargin(float newMargin);

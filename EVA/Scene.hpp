@@ -24,12 +24,24 @@ namespace EVA
 
 		std::vector<std::shared_ptr<UiElement>> m_UiElements;
 
+		bool m_Abort = false;
+		
+
 	public:
+
+		std::shared_ptr<Scene> self;
+		inline void Abort()
+		{
+			m_Abort = true;
+		}
+
 
 		/// <summary></summary>
 		std::unique_ptr<Skybox> skybox;
 
 		Scene();
+
+		~Scene();
 
 		
 		/**

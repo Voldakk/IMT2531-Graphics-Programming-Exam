@@ -2,13 +2,14 @@
 
 #include <map>
 
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 
 namespace EVA
 {
 
-// Handles all input in the game
+	// Handles all input in the game
 	class Input
 	{
 
@@ -57,6 +58,13 @@ namespace EVA
 		static bool KeyUp(int key);
 
 
+		// ==========   CURSOR MODE   ==========
+
+		enum CursorMode { Normal, Hidden, Disabled };
+
+		static void SetCursorMode(CursorMode mode);
+
+
 		// ========== MOUSE POSITION ==========
 
 
@@ -71,6 +79,8 @@ namespace EVA
 		/// <returns>The position</returns>
 		static inline glm::vec2 MouseMovement()
 		{ return m_MouseOffset; }
+
+		static glm::vec2 ScreenToWorldPos(glm::vec2 pos);
 
 
 		// ========== MOUSE BUTTONS ==========

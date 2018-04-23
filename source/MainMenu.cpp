@@ -1,16 +1,31 @@
 #include "MainMenu.hpp"
 
 #include "EVA/UI.hpp"
+#include "EVA/Input.hpp"
+#include "EVA/SceneManager.hpp"
+
+#include "Game.hpp"
 
 MainMenu::MainMenu()
 {
-	const auto labelTitle = CreateUiElement<EVA::Label>("PACMAN", 0.005f);
-	const auto labelStart = CreateUiElement<EVA::Label>("START", 0.002f);
-	const auto labelExit = CreateUiElement<EVA::Label>("EXIT", 0.002f);
+	EVA::Input::SetCursorMode(EVA::Input::Normal);
+
+	auto startButton = CreateUiElement<EVA::Button>("START", 0.002f);
+	startButton->onClick = []
+	{
+		EVA::SceneManager::ChangeScene<Game>();
+	};
+
+	auto exitButton = CreateUiElement<EVA::Button>("EXIT", 0.002f);
+	exitButton->onClick = []
+	{
+		EVA::Application::Exit();
+	};
 
 	auto layout = CreateUiElement<EVA::Layout>();
 	layout->SetMargin(0.02f);
-	layout->AddChild(labelTitle);
-	layout->AddChild(labelStart);
-	layout->AddChild(labelExit);
+
+	layout->AddChild(CreateUiElement<EVA::Label>("PACMAN", 0.005f));
+	layout->AddChild(startButton);
+	layout->AddChild(exitButton);
 }

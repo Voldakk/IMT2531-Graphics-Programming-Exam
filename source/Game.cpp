@@ -10,6 +10,7 @@
 #include "TileMap.hpp"
 #include "GhostVariations.hpp"
 #include "Pacman.hpp"
+#include "MainMenu.hpp"
 
 Game::Game()
 {
@@ -72,7 +73,8 @@ Game::Game()
 	ghosts.push_back(pokey);
 
 	// UI
-	//m_ScoreLabel = CreateUiElement<EVA::Label>("Score: " + std::to_string(m_Score));
+	EVA::Input::SetCursorMode(EVA::Input::Disabled);
+	m_ScoreLabel = CreateUiElement<EVA::Label>("Score: " + std::to_string(m_Score));
 }
 
 void Game::Update(const float deltaTime)
@@ -81,6 +83,8 @@ void Game::Update(const float deltaTime)
 
 	if (EVA::Input::KeyDown(GLFW_KEY_ENTER))
 		EVA::SceneManager::ChangeScene<Game>();
+	else if (EVA::Input::KeyDown(GLFW_KEY_ESCAPE))
+		EVA::SceneManager::ChangeScene<MainMenu>();
 
 	// Waves
 	m_WaveTimer += deltaTime;

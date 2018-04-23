@@ -28,15 +28,17 @@ namespace EVA
 
 		void SetParent(UiElement* newParent);
 
-		void AddChild(UiElement * newChild);
+		UiElement* AddChild(UiElement * newChild);
 
-		virtual void OnChildredUpdated();
+		virtual void OnChildrenUpdated();
 
 
 		int GetIndexOfChild(UiElement* child) const;
 		UiElement * GetChild(unsigned int index) const;
 
 		virtual void SetPosition(glm::vec2 newPosition);
+
+		virtual void Update() {}
 
 		virtual void Render() const {}
 

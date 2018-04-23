@@ -53,6 +53,11 @@ namespace EVA
 		{
 			return glm::vec2(min.x + Width() / 2, min.y + Height() / 2);
 		}
+
+		inline bool ContainsPoint(const glm::vec2 point) const
+		{
+			return point.x > min.x && point.x < max.x && point.y > min.y && point.y < max.y;
+		}
 	};
 
 }

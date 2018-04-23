@@ -5,7 +5,7 @@ EVA::Layout::Layout()
 	m_Margin = 0.0f;
 }
 
-void EVA::Layout::OnChildredUpdated()
+void EVA::Layout::OnChildrenUpdated()
 {
 	UpdateBoundingBox();
 }

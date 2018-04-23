@@ -1,5 +1,7 @@
 #include "Input.hpp"
 
+#include "Application.hpp"
+
 namespace EVA
 {
 
@@ -22,9 +24,9 @@ namespace EVA
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
-// ========== KEYBOARD ==========
+	// ========== KEYBOARD ==========
 
-    void Input::KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+    void Input::KeyCallback(GLFWwindow *window, const int key, const int scancode, const int action, const int mods)
     {
         m_KeyStates[key] = action;
     }
@@ -55,7 +57,24 @@ namespace EVA
         return false;
     }
 
-// ========== MOUSE POSITION ==========
+	void Input::SetCursorMode(const CursorMode mode)
+	{
+		switch (mode)
+		{
+		case Normal: 
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			return;
+		case Hidden:
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+			return;
+		case Disabled:
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			return;
+		}
+		
+	}
+
+	// ========== MOUSE POSITION ==========
 
     void Input::CursorPositionCallback(GLFWwindow *window, const double xpos, const double ypos)
     {
@@ -72,7 +91,18 @@ namespace EVA
         m_LastMousePosition = newPos;
     }
 
-// ========== MOUSE BUTTONS ==========
+	glm::vec2 Input::ScreenToWorldPos(glm::vec2 pos)
+	{
+		const auto screenSize = (glm::vec2)Application::GetWindowSize();
+
+		pos -= screenSize / 2.0f;	// Move (0, 0) to the center of the screen
+		pos.y *= -1.0f;				// Flipp y-axis
+		pos /= screenSize.y / 2.0f;	// Normalize to -1 ... +1 on the y-axis, and whatever the aspect ratio is on the x-axis
+
+		return pos;
+	}
+
+	// ========== MOUSE BUTTONS ==========
 
     void Input::MouseButtonCallback(GLFWwindow *window, const int button, const int action, const int mods)
     {
@@ -99,7 +129,7 @@ namespace EVA
         return false;
     }
 
-// ========== MOUSE SCROLL ==========
+	// ========== MOUSE SCROLL ==========
 
     void Input::ScrollCallback(GLFWwindow *window, const double xoffset, const double yoffset)
     {

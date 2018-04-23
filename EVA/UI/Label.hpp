@@ -13,7 +13,6 @@ namespace EVA
 	class Label : public UiElement
 	{
 		std::unique_ptr<Text> m_TextRenderer;
-		std::unique_ptr<SpriteRenderer> m_Sr;
 
 		std::string m_Text;
 		glm::vec3 m_Color;		

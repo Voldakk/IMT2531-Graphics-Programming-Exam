@@ -23,17 +23,19 @@ namespace EVA
 			m_Parent->AddChild(this);
 	}
 
-	void UiElement::AddChild(UiElement* newChild)
+	UiElement* UiElement::AddChild(UiElement* newChild)
 	{
 		if(newChild == nullptr)
-			return;
+			return nullptr;
 		m_Children.push_back(newChild);
 		newChild->m_Parent = this;
 
-		OnChildredUpdated();
+		OnChildrenUpdated();
+
+		return newChild;
 	}
 
-	void UiElement::OnChildredUpdated()
+	void UiElement::OnChildrenUpdated()
 	{
 
 	}

@@ -4,6 +4,7 @@
 
 #include "Application.hpp"
 #include "ShaderManager.hpp"
+#include <iostream>
 
 namespace EVA
 {
@@ -20,6 +21,11 @@ namespace EVA
 	
 		shadowMaterialCube.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube", "shadow_cube.vert", "shadow_cube.frag", "shadow_cube.geom");
 		shadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");
+	}
+
+	Scene::~Scene()
+	{
+		std::cout << "Scene::~Scene() - Deconstructing \n";
 	}
 
 	void Scene::Update(const float deltaTime)
@@ -43,6 +49,15 @@ namespace EVA
 			}
 		}
 		m_DestroyQueue.clear();
+		
+		// UI
+		for (const auto& uiElement : m_UiElements)
+		{
+			uiElement->Update();
+		}
+
+		if (m_Abort)
+			self.reset();
 	}
 
 	void Scene::Render()
@@ -369,7 +384,7 @@ namespace EVA
 	void Scene::RenderUi()
 	{
 		glDepthMask(GL_FALSE);
-		for (auto uiElement : m_UiElements)
+		for (const auto& uiElement : m_UiElements)
 		{
 			uiElement->Render();
 		}

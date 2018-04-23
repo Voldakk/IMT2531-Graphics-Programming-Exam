@@ -13,6 +13,7 @@ namespace EVA
 
 			std::cout << "SceneManager::LoadScene - Loading scene: " << typeid(*scene).name() << " \n";
 			m_Scenes.push_back(scene);
+			scene->self = scene;
 		}
 	}
 
@@ -84,6 +85,11 @@ namespace EVA
 
 	void SceneManager::ClearScenes()
 	{
+		for (auto& scene : m_Scenes)
+		{
+			std::cout << "SceneManager::ClearScenes - Unloading scene: " << typeid(*scene).name() << " \n";
+			scene->Abort();
+		}
 		m_Scenes.clear();
 	}
 

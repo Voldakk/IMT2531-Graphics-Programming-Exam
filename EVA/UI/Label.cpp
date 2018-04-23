@@ -1,13 +1,9 @@
 #include "Label.hpp"
 
-#include <utility>
-#include <iostream>
-
 EVA::Label::Label(const std::string& text, const float textScale) 
 : m_Color(glm::vec3(1.0f)), m_TextScale(textScale)
 {
 	m_TextRenderer = std::make_unique<Text>();
-	m_Sr = std::make_unique<SpriteRenderer>();
 
 	SetText(text);
 }
@@ -24,11 +20,7 @@ void EVA::Label::Render() const
 {
 	UiElement::Render();
 
-	//m_Sr->Render(m_BoundingBox);
 	m_TextRenderer->Render(m_Text, position.x , position.y, m_TextScale, m_Color);
-	
-	//auto a = m_TextRenderer->GetSize(m_Text, 1.0f);
-	//std::cout << a.min.x << "\n";
 }
 
 void EVA::Label::SetText(const std::string& newText)
