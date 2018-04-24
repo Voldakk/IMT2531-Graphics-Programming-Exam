@@ -28,6 +28,8 @@ void EVA::Label::SetText(const std::string& newText)
 
 	UpdateBoundingBox();
 
+	UpdatePosition();
+
 	if(m_Parent != nullptr)
 		m_Parent->UpdateBoundingBox();
 }

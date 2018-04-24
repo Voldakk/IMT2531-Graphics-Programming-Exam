@@ -153,4 +153,51 @@ namespace EVA
 			child->OnScreenResize();
 		}
 	}
+
+	UiElement* UiElement::SetAnchorAndPivot(const glm::vec2 newValue)
+	{
+		m_Anchor = newValue;
+		m_Pivot = newValue;
+		UpdatePosition();
+
+		return this;
+	}
+
+	UiElement* UiElement::SetAnchorAndPivot(const float newValueX, const float newValueY)
+	{
+		return SetAnchorAndPivot({ newValueX, newValueY });
+	}
+
+	UiElement* UiElement::SetAnchorAndPivot(const float newValue)
+	{
+		return SetAnchorAndPivot({ newValue, newValue });
+	}
+
+	UiElement* UiElement::SetOffsetFromAnchor(glm::vec2 newOffset)
+	{
+		if (m_Anchor.x == 0)
+			newOffset.x = 0;
+		else if (m_Anchor.x > 0)
+			newOffset.x *= -1;
+
+		if (m_Anchor.y == 0)
+			newOffset.y = 0;
+		else if (m_Anchor.y > 0)
+			newOffset.y *= -1;
+
+		m_Offset = newOffset;
+		UpdatePosition();
+
+		return this;
+	}
+
+	UiElement* UiElement::SetOffsetFromAnchor(const float newOffsetX, const float newOffsetY)
+	{
+		return SetOffsetFromAnchor({ newOffsetX, newOffsetY });
+	}
+
+	UiElement* UiElement::SetOffsetFromAnchor(const float newOffset)
+	{
+		return SetOffsetFromAnchor({ newOffset, newOffset });
+	}
 }

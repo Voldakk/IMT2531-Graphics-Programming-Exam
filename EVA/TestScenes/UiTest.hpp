@@ -28,24 +28,20 @@ namespace EVA_TEST
 
 			// Corners
 			auto topLeft = CreateUiElement<EVA::Button>("Top Left");
-			topLeft->SetAnchor(-1.0f, 1.0f);
-			topLeft->SetPivot(-1.0f, 1.0f);
-			topLeft->SetOffset(0.05f, -0.05f);
+			topLeft->SetAnchorAndPivot(-1.0f, 1.0f);
+			topLeft->SetOffsetFromAnchor(0.05f);
 
 			auto bottomLeft = CreateUiElement<EVA::Button>("Bottom Left");
-			bottomLeft->SetAnchor(-1.0f, -1.0f);
-			bottomLeft->SetPivot(-1.0f, -1.0f);
-			bottomLeft->SetOffset(0.05f, 0.05f);
+			bottomLeft->SetAnchorAndPivot(-1.0f, -1.0f);
+			bottomLeft->SetOffsetFromAnchor(0.05f);
 
 			auto topRight = CreateUiElement<EVA::Button>("Top Right");
-			topRight->SetAnchor(1.0f, 1.0f);
-			topRight->SetPivot(1.0f, 1.0f);
-			topRight->SetOffset(-0.05f, -0.05f);
+			topRight->SetAnchorAndPivot(1.0f, 1.0f);
+			topRight->SetOffsetFromAnchor(0.05f);
 
 			auto bottomRight = CreateUiElement<EVA::Button>("Bottom Right");
-			bottomRight->SetAnchor(1.0f, -1.0f);
-			bottomRight->SetPivot(1.0f, -1.0f);
-			bottomRight->SetOffset(-0.05f, 0.05f);
+			bottomRight->SetAnchorAndPivot(1.0f, -1.0f);
+			bottomRight->SetOffsetFromAnchor(0.05f);
 		}
 	};
 }

@@ -62,6 +62,14 @@ namespace EVA
 		UiElement * SetOffset(glm::vec2 newOffset);
 		UiElement * SetOffset(float newOffsetX, float newOffsetY);
 
+		UiElement * SetAnchorAndPivot(glm::vec2 newValue);
+		UiElement * SetAnchorAndPivot(float newValueX, float newValueY);
+		UiElement * SetAnchorAndPivot(float newValue);
+
+		UiElement * SetOffsetFromAnchor(glm::vec2 newOffset);
+		UiElement * SetOffsetFromAnchor(float newOffsetX, float newOffsetY);
+		UiElement * SetOffsetFromAnchor(float newOffset);
+
 		void UpdatePosition();
 
 		virtual void OnScreenResize();

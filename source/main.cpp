@@ -8,7 +8,7 @@
 int main()
 {
     EVA::Application::Init("Pacman");
-    EVA::SceneManager::CreateScene<EVA_TEST::UiTest>();
+    EVA::SceneManager::CreateScene<MainMenu>();
     EVA::Application::Run();
 
     return 0;
