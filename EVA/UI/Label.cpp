@@ -10,9 +10,8 @@ EVA::Label::Label(const std::string& text, const float textScale)
 
 void EVA::Label::UpdateBoundingBox()
 {
-	const auto bb = m_TextRenderer->GetSize(m_Text, m_TextScale);
-	m_BoundingBox.min = m_Position;
-	m_BoundingBox.max = m_Position + bb.max;
+	const auto halfSize = m_TextRenderer->GetSize(m_Text, m_TextScale).max / 2.0f;
+	m_BoundingBox = BoundingBox(-halfSize.x, halfSize.x, -halfSize.y, halfSize.y);
 }
 
 
@@ -20,7 +19,7 @@ void EVA::Label::Render() const
 {
 	UiElement::Render();
 
-	m_TextRenderer->Render(m_Text, position.x , position.y, m_TextScale, m_Color);
+	m_TextRenderer->Render(m_Text, position.x + m_BoundingBox.min.x, position.y + m_BoundingBox.min.y, m_TextScale, m_Color);
 }
 
 void EVA::Label::SetText(const std::string& newText)

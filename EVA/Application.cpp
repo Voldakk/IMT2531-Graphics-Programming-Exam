@@ -26,6 +26,8 @@ namespace EVA
 	glm::mat4 Application::m_PerspectiveProjection;
 	glm::mat4 Application::m_ScreenSpaceProjection;
 
+	glm::vec2 Application::m_OrthographicBounds;
+
     void Application::Init(const std::string &title)
     {
         if (!CreateWindow(title))
@@ -185,6 +187,8 @@ namespace EVA
 		}
 
 		m_ScreenSpaceProjection = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
+
+		m_OrthographicBounds = glm::vec2((float)m_WindowSize.x / (float)m_WindowSize.y, 1.0f);
     }
 
     void Application::Exit()

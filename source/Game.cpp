@@ -76,6 +76,8 @@ Game::Game()
 	// UI
 	EVA::Input::SetCursorMode(EVA::Input::Disabled);
 	m_ScoreLabel = CreateUiElement<EVA::Label>("Score: " + std::to_string(m_Score));
+	m_ScoreLabel->SetAnchor(-1.0f, 1.0f);    // Bottom left
+	m_ScoreLabel->SetOffset( 0.05f, -0.05f); // Padding
 }
 
 void Game::Update(const float deltaTime)
@@ -95,7 +97,7 @@ void Game::Update(const float deltaTime)
 		m_WaveTimer = 0.0f;
 		for (auto& ghost : ghosts)
 		{
-			if (ghost->state == GhostState::Dead)
+			if (ghost->state == GhostState::Dead || ghost->state == GhostState::Frightened)
 				continue;
 
 			ghost->SetState(CurrentWave().state);

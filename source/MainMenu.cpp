@@ -28,4 +28,5 @@ MainMenu::MainMenu()
 	layout->AddChild(CreateUiElement<EVA::Label>("PACMAN", 0.005f));
 	layout->AddChild(startButton);
 	layout->AddChild(exitButton);
+
 }

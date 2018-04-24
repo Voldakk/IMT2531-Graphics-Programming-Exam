@@ -27,9 +27,8 @@ void EVA::Layout::UpdateBoundingBox()
 	{
 		auto& child = m_Children[i];
 
-		const auto offset = child->position.y - child->boundingBox.min.y;
-
-		child->SetPosition(glm::vec2(position.x - child->boundingBox.Width() / 2, height + offset));
+		child->SetPivot(0.0f, -1.0f);
+		child->SetPosition(glm::vec2(position.x, height));
 
 		height += child->boundingBox.Height();
 		height += m_Margin;

@@ -34,6 +34,8 @@ namespace EVA
 		static glm::mat4 m_PerspectiveProjection;
 		static glm::mat4 m_ScreenSpaceProjection;
 
+		static glm::vec2 m_OrthographicBounds;
+
     public:
 
         static Camera* mainCamera;
@@ -60,6 +62,9 @@ namespace EVA
 
 		static inline glm::ivec2 GetWindowSize()
 		{ return m_WindowSize; }
+
+		static inline glm::vec2 GetOrthographicBounds()
+		{ return m_OrthographicBounds; }
 
     private:
 

@@ -58,6 +58,26 @@ namespace EVA
 		{
 			return point.x > min.x && point.x < max.x && point.y > min.y && point.y < max.y;
 		}
+
+		inline BoundingBox operator+(const float value) const
+		{
+			return  BoundingBox(min.x + value, max.x + value, min.y + value, max.y + value);
+		}
+
+		inline BoundingBox operator-(const float value) const
+		{
+			return  BoundingBox(min.x - value, max.x - value, min.y - value, max.y - value);
+		}
+
+		inline BoundingBox operator+(const glm::vec2 value) const
+		{
+			return  BoundingBox(min.x + value.x, max.x + value.x, min.y + value.y, max.y + value.y);
+		}
+
+		inline BoundingBox operator-(const glm::vec2 value) const
+		{
+			return  BoundingBox(min.x - value.x, max.x - value.x, min.y - value.y, max.y - value.y);
+		}
 	};
 
 }

@@ -19,7 +19,7 @@ EVA::Button::Button(const std::string& text, const float textScale)
 void EVA::Button::Update()
 {
 	const auto mousePos = Input::ScreenToWorldPos(Input::MousePosition());
-	const auto mouseOver = m_BoundingBox.ContainsPoint(mousePos);
+	const auto mouseOver = m_BoundingBox.ContainsPoint(mousePos - position);
 
 	if (m_State == Normal && mouseOver)
 		m_State = Highlighted;
@@ -34,7 +34,7 @@ void EVA::Button::Render() const
 {
 	if(m_State == Highlighted)
 	{
-		m_Sr->Render(m_BoundingBox);
+		m_Sr->Render(m_BoundingBox + position);
 	}
 
 	Label::Render();
