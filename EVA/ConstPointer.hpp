@@ -30,6 +30,15 @@ namespace EVA
 		}
 
 		/**
+		* \brief Dereferences the stored pointer
+		* \return The stored pointer
+		*/
+		inline T* operator *() const
+		{
+			return *m_Pointer;
+		}
+
+		/**
 		* \brief Returns the stored pointer
 		* \return The stored pointer
 		*/

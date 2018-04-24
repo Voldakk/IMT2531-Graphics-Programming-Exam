@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 
 #include "BoundingBox.hpp"
+#include "../ConstPointer.hpp"
 
 namespace EVA
 {
@@ -24,8 +25,11 @@ namespace EVA
 		glm::vec2 m_Pivot;
 		glm::vec2 m_Offset;
 
+		bool m_StaticPosition = false;
+
 	public:
 
+		const ConstPointer<UiElement> parent = &m_Parent;
 		const glm::vec2& position = m_Position;
 		const BoundingBox& boundingBox = m_BoundingBox;
 		
@@ -59,5 +63,7 @@ namespace EVA
 		UiElement * SetOffset(float newOffsetX, float newOffsetY);
 
 		void UpdatePosition();
+
+		virtual void OnScreenResize();
 	};
 }

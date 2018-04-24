@@ -69,6 +69,14 @@ namespace EVA
 		}
 	}
 
+	void SceneManager::OnScreenResize()
+	{
+		for (auto &scene : m_Scenes)
+		{
+			scene->OnScreenResize();
+		}
+	}
+
 	int SceneManager::GetIndex(const std::shared_ptr<Scene> &scene)
 	{
 		for (size_t i = 0; i < m_Scenes.size(); i++)

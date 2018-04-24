@@ -61,6 +61,8 @@ namespace EVA
 
 	void UiElement::SetPosition(const glm::vec2 newPosition, const bool usePivot)
 	{
+		m_StaticPosition = true;
+
 		m_Position = newPosition;
 
 		if (usePivot)
@@ -123,11 +125,32 @@ namespace EVA
 
 	void UiElement::UpdatePosition()
 	{
+		m_StaticPosition = false;
+
 		const auto bounds = Application::GetOrthographicBounds();
 
-		auto newPos = m_Anchor * bounds;
-		newPos += m_Offset;
+		m_Position = m_Anchor * bounds;
+		m_Position += m_Offset;
 
-		SetPosition(newPos);
+		if (m_Pivot.x > 0.0f)
+			m_Position.x += m_BoundingBox.min.x * m_Pivot.x;
+		else
+			m_Position.x -= m_BoundingBox.max.x * m_Pivot.x;
+
+		if (m_Pivot.y > 0.0f)
+			m_Position.y += m_BoundingBox.min.y * m_Pivot.y;
+		else
+			m_Position.y -= m_BoundingBox.max.y * m_Pivot.y;
+	}
+
+	void UiElement::OnScreenResize()
+	{
+		if(!m_StaticPosition)
+			UpdatePosition();
+
+		for (auto& child : m_Children)
+		{
+			child->OnScreenResize();
+		}
 	}
 }

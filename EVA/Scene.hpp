@@ -94,8 +94,20 @@ namespace EVA
 		 */
 		std::vector<std::shared_ptr<Light>> GetLights() const { return m_Lights; }
 
+		/**
+		 * \brief Creates a new UiElement of type T
+		 * \tparam T The type of UiElement that should be created
+		 * \tparam Args Any agruments for the elements constructor
+		 * \param args Any agruments for the elements constructor
+		 * \return A pointer to the newly created element
+		 */
 		template<class T, typename... Args>
 		T* CreateUiElement(Args... args);
+
+		/**
+		* \brief Calls OnScreenResize on all root UiElements
+		 */
+		void OnScreenResize();
 
 	private:
 

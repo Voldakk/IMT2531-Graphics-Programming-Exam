@@ -189,6 +189,8 @@ namespace EVA
 		m_ScreenSpaceProjection = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
 
 		m_OrthographicBounds = glm::vec2((float)m_WindowSize.x / (float)m_WindowSize.y, 1.0f);
+
+		SceneManager::OnScreenResize();
     }
 
     void Application::Exit()

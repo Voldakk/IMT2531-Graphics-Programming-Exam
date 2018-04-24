@@ -17,10 +17,12 @@ namespace EVA_TEST
 			EVA::Input::SetCursorMode(EVA::Input::Normal);
 
 			// Centered layout with 3 items
+			const auto label = CreateUiElement<EVA::Button>("UI TEST", 0.005f);
+
 			auto layout = CreateUiElement<EVA::Layout>();
 			layout->SetMargin(0.1f);
 
-			layout->AddChild(CreateUiElement<EVA::Button>("UI TEST", 0.005f));
+			layout->AddChild(label);
 			layout->AddChild(CreateUiElement<EVA::Button>("Item 1", 0.002f));
 			layout->AddChild(CreateUiElement<EVA::Button>("Item 2", 0.002f));
 

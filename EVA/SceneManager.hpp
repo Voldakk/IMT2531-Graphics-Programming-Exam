@@ -50,6 +50,9 @@ namespace EVA
 		/// <summary>Renders all active scenes</summary>
 		static void Render();
 
+		/// <summary>Calls OnScreenResize on all scenes</summary>
+		static void OnScreenResize();
+
 	private:
 
 		/// <summary>Findes the index of the scene in the scenes vector</summary>

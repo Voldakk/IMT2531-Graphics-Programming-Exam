@@ -197,6 +197,15 @@ namespace EVA
 		}
 	}
 
+	void Scene::OnScreenResize()
+	{
+		for (auto& uiElement : m_UiElements)
+		{
+			if (*(uiElement->parent) == nullptr)
+				uiElement->OnScreenResize();
+		}
+	}
+
 	void Scene::RenderScene()
 	{
 		const auto ws = Application::GetWindowSize();
