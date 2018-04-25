@@ -1,7 +1,6 @@
 #pragma once
 
 #include "glm/glm.hpp"
-#include "glm/gtx/extended_min_max.inl"
 
 namespace EVA
 {

@@ -3,7 +3,6 @@
 #include <map>
 #include <memory>
 
-#include "GL/glew.h"
 #include "glm/glm.hpp"
 
 #include "../Shader.hpp"
@@ -24,7 +23,7 @@ namespace EVA
 			signed long  advance{};   // Offset to advance to next glyph
 		};
 
-		static std::map<GLchar, Character> m_Characters;
+		static std::map<char, Character> m_Characters;
 
 		static std::shared_ptr<Shader> m_Shader;
 
