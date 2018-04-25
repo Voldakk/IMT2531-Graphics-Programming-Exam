@@ -10,10 +10,8 @@
 #include "GhostVariations.hpp"
 #include "PauseMenu.hpp"
 #include "GameOverScene.hpp"
-#include "../EVA/TestScenes/UiTest.hpp"
 
-Game::Game(const unsigned int extraLives, unsigned int score)
-	: m_ExtraLives(extraLives), m_Score(score)
+Game::Game()
 {
 	// Shaders
 	EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
@@ -173,7 +171,8 @@ void Game::Update(const float deltaTime)
 				else
 				{
 					m_ExtraLives--;
-					EVA::SceneManager::ChangeScene<Game>(m_ExtraLives, m_Score);
+					m_ExtraLivesLabel->SetText("Extra lives: " + std::to_string(m_ExtraLives));
+					Reset();
 				}
 			}
 		}
@@ -212,4 +211,20 @@ void Game::Unpause()
 {
 	m_IsPaused = false;
 	EVA::Input::SetCursorMode(EVA::Input::Disabled);
+}
+
+void Game::Reset()
+{
+	m_CurrentWave = 0;
+	m_WaveTimer = 0.0f;
+	std::cout << "New wave: " << (CurrentWave().state == GhostState::Scatter ? "Scatter" : "Chase") << ", time: " << CurrentWave().time << "\n";
+
+	for (auto ghost : ghosts)
+	{
+		ghost->Reset();
+	}
+
+	pacman->Reset();
+
+	m_ActiveEnergizer = false;
 }

@@ -120,6 +120,9 @@ void Ghost::Reset()
 
 	m_Direction = Direction::Up;
 	m_CurrentDirection = DirectionToVector(m_Direction);
+	transform->SetOrientation(EVA::YAXIS, -90.0f);
+
+	m_TargetTile.x = -1;
 }
 
 void Ghost::SetState(const GhostState newState)

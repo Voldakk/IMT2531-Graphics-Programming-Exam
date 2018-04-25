@@ -27,4 +27,5 @@ public:
 
 	explicit Pacman(EVA::GameObject* gameObject, TileMap* tileMap);
 	void Update(float deltaTime) override;
+	void Reset();
 };

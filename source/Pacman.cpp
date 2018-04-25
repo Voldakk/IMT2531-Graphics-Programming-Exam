@@ -23,15 +23,7 @@ Pacman::Pacman(EVA::GameObject* gameObject, TileMap* tileMap) : Component(gameOb
 	mr->Set(m_Model->GetMesh(1), m_Material);
 
 	// Default values
-	m_TargetTile.x = -1;
-	m_MovementSpeed = 2.0f;
-
-	m_InputDirection = Right;
-	m_CurrentDirection = glm::ivec2(0, 1);
-	transform->SetOrientation(EVA::YAXIS, -90.0f);
-
-	transform->SetPosition(m_TileMap->GetUniqueTilePosition('P'));
-	transform->SetScale(glm::vec3(0.8f));
+	Reset();
 }
 
 void Pacman::Update(const float deltaTime)
@@ -139,4 +131,17 @@ void Pacman::Update(const float deltaTime)
 	{
 		transform->Translate(direction * maxDistance);
 	}	
+}
+
+void Pacman::Reset()
+{
+	m_TargetTile.x = -1;
+	m_MovementSpeed = 2.0f;
+
+	m_InputDirection = Right;
+	m_CurrentDirection = glm::ivec2(0, 1);
+	transform->SetOrientation(EVA::YAXIS, -90.0f);
+
+	transform->SetPosition(m_TileMap->GetUniqueTilePosition('P'));
+	transform->SetScale(glm::vec3(0.8f));
 }

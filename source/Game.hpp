@@ -20,8 +20,8 @@ class Game : public EVA::Scene
 	unsigned int m_CurrentWave = 0;
 	float m_WaveTimer = 0.0f;
 
-	unsigned int m_Score;
-	unsigned int m_ExtraLives;
+	unsigned int m_Score = 0;
+	unsigned int m_ExtraLives = 2;
 
 	// Energizer
 	bool m_ActiveEnergizer = false;
@@ -44,7 +44,7 @@ public:
 	/**
      * \brief Setups the game scene
      */
-	explicit Game(unsigned int extraLives = EXTRA_LIVES, unsigned int score = 0);
+	explicit Game();
 
 	/**
 	* \brief Runs every frame
@@ -70,4 +70,6 @@ public:
 	void ActivateEnergizer(float time);
 
 	void Unpause();
+
+	void Reset();
 };

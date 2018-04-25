@@ -24,10 +24,10 @@ Pellet::Pellet(EVA::GameObject* gameObject, Game* game, const glm::ivec2 tile)
 
 	auto mr = gameObject->AddComponent<EVA::MeshRenderer>();
 	mr->Set(m_Mesh, m_Material);
+	m_Mesh->isDirty = true;
 
 	transform->SetScale(0.1f);
 	transform->SetPosition(TileMap::GetTilePosition(m_Tile) + EVA::YAXIS * transform->scale.y);
-	
 }
 
 void Pellet::Update(const float deltaTime)
