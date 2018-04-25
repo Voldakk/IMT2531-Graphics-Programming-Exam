@@ -8,9 +8,12 @@
 #include "EVA/Input.hpp"
 
 #include "GhostVariations.hpp"
-#include "MainMenu.hpp"
+#include "PauseMenu.hpp"
+#include "GameOverScene.hpp"
+#include "../EVA/TestScenes/UiTest.hpp"
 
-Game::Game(const unsigned int extraLives)
+Game::Game(const unsigned int extraLives, unsigned int score)
+	: m_ExtraLives(extraLives), m_Score(score)
 {
 	// Shaders
 	EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
@@ -53,7 +56,6 @@ Game::Game(const unsigned int extraLives)
 
 	// Pacman
 	pacman = CreateGameObject()->AddComponent<Pacman>(tileMap);
-	m_ExtraLives = extraLives;
 
 	// Shadow
 	const auto shadow = CreateGameObject()->AddComponent<GhostShadow>(this);
@@ -73,19 +75,30 @@ Game::Game(const unsigned int extraLives)
 
 	// UI
 	EVA::Input::SetCursorMode(EVA::Input::Disabled);
+
 	m_ScoreLabel = CreateUiElement<EVA::Label>("Score: " + std::to_string(m_Score));
 	m_ScoreLabel->SetAnchorAndPivot(-1.0f, 1.0f); // Top left
 	m_ScoreLabel->SetOffsetFromAnchor(0.05f);	  // Padding 
+
+	m_ExtraLivesLabel = CreateUiElement<EVA::Label>("Extra lives: " + std::to_string(m_ExtraLives));
+	m_ExtraLivesLabel->SetAnchorAndPivot(-1.0f, 1.0f); // Top left
+	m_ExtraLivesLabel->SetOffset(0.05f, -0.2f);
 }
 
 void Game::Update(const float deltaTime)
 {
-	Scene::Update(deltaTime);
+	// Pause menu
+	if (EVA::Input::KeyDown(EVA::Input::Escape) && !m_IsPaused)
+	{
+		m_IsPaused = true;
+		EVA::SceneManager::CreateScene<PauseMenu>(this);
+	}
 
-	if (EVA::Input::KeyDown(EVA::Input::Enter))
-		EVA::SceneManager::ChangeScene<Game>();
-	else if (EVA::Input::KeyDown(EVA::Input::Escape))
-		EVA::SceneManager::ChangeScene<MainMenu>();
+	if (m_IsPaused)
+		return;
+
+	// Update scene
+	Scene::Update(deltaTime);
 
 	// Waves
 	m_WaveTimer += deltaTime;
@@ -155,12 +168,12 @@ void Game::Update(const float deltaTime)
 			{
 				if (m_ExtraLives == 0)
 				{
-					EVA::SceneManager::ChangeScene<MainMenu>();
+					EVA::SceneManager::ChangeScene<GameOverScene>(false, m_Score);
 				}
 				else
 				{
 					m_ExtraLives--;
-					EVA::SceneManager::ChangeScene<Game>(m_ExtraLives);
+					EVA::SceneManager::ChangeScene<Game>(m_ExtraLives, m_Score);
 				}
 			}
 		}
@@ -193,4 +206,10 @@ void Game::ActivateEnergizer(const float time)
 
 		ghost->SetState(GhostState::Frightened);
 	}
+}
+
+void Game::Unpause()
+{
+	m_IsPaused = false;
+	EVA::Input::SetCursorMode(EVA::Input::Disabled);
 }

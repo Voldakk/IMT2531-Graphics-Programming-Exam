@@ -9,7 +9,7 @@
 
 class Game : public EVA::Scene
 {
-	static const unsigned int EXTRA_LIVES = 3;
+	static const unsigned int EXTRA_LIVES = 2;
 
 	struct Wave
 	{
@@ -20,7 +20,7 @@ class Game : public EVA::Scene
 	unsigned int m_CurrentWave = 0;
 	float m_WaveTimer = 0.0f;
 
-	unsigned int m_Score = 0;
+	unsigned int m_Score;
 	unsigned int m_ExtraLives;
 
 	// Energizer
@@ -30,6 +30,10 @@ class Game : public EVA::Scene
 
 	// UI
 	EVA::Label* m_ScoreLabel;
+	EVA::Label* m_ExtraLivesLabel;
+
+	// Pause menu
+	bool m_IsPaused = false;
 
 public:
 
@@ -40,7 +44,7 @@ public:
 	/**
      * \brief Setups the game scene
      */
-	explicit Game(unsigned int extraLives = EXTRA_LIVES);
+	explicit Game(unsigned int extraLives = EXTRA_LIVES, unsigned int score = 0);
 
 	/**
 	* \brief Runs every frame
@@ -64,4 +68,6 @@ public:
 	 * \brief 
 	 */
 	void ActivateEnergizer(float time);
+
+	void Unpause();
 };

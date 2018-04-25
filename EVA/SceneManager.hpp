@@ -15,6 +15,8 @@ namespace EVA
 
 		static std::vector<std::shared_ptr<Scene>> m_Scenes;
 
+		static std::vector<Scene*> m_UnloadScenes;
+
 	public:
 
 		/// <summary>Creates and loads a new scene ontop of any currently active scenes</summary>
@@ -26,11 +28,11 @@ namespace EVA
 		/// <param name="scene">The scene to be loaded</param>
 		static void LoadScene(const std::shared_ptr<Scene> &scene);
 
-		/// <summary>Unloads a scene</summary>
+		/// <summary>Unloads a scene and restes the scene's self pointer</summary>
 		/// <param name="scene">The scene to be unloaded</param>
 		static void UnloadScene(const std::shared_ptr<Scene> &scene);
 
-		/// <summary>Unloads a scene</summary>
+		/// <summary>Unloads a scene and restes the scene's self pointer</summary>
 		/// <param name="scene">The scene to be unloaded</param>
 		static void UnloadScene(Scene* scene);
 
