@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EVA.hpp"
+//#include "EVA.hpp"
 #include "EVA/UI.hpp"
 
 #include "Pacman.hpp"
@@ -9,6 +9,8 @@
 
 class Game : public EVA::Scene
 {
+	static const unsigned int EXTRA_LIVES = 3;
+
 	struct Wave
 	{
 		GhostState state;
@@ -19,6 +21,7 @@ class Game : public EVA::Scene
 	float m_WaveTimer = 0.0f;
 
 	unsigned int m_Score = 0;
+	unsigned int m_ExtraLives;
 
 	// Energizer
 	bool m_ActiveEnergizer = false;
@@ -37,7 +40,7 @@ public:
 	/**
      * \brief Setups the game scene
      */
-    Game();
+	explicit Game(unsigned int extraLives = EXTRA_LIVES);
 
 	/**
 	* \brief Runs every frame

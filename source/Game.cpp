@@ -6,14 +6,11 @@
 #include "EVA/SceneManager.hpp"
 #include "EVA/ResourceManagers.hpp"
 #include "EVA/Input.hpp"
-#include "EVA/UI.hpp"
 
-#include "TileMap.hpp"
 #include "GhostVariations.hpp"
-#include "Pacman.hpp"
 #include "MainMenu.hpp"
 
-Game::Game()
+Game::Game(const unsigned int extraLives)
 {
 	// Shaders
 	EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
@@ -56,6 +53,7 @@ Game::Game()
 
 	// Pacman
 	pacman = CreateGameObject()->AddComponent<Pacman>(tileMap);
+	m_ExtraLives = extraLives;
 
 	// Shadow
 	const auto shadow = CreateGameObject()->AddComponent<GhostShadow>(this);
@@ -155,7 +153,15 @@ void Game::Update(const float deltaTime)
 			}
 			else
 			{
-				// Die
+				if (m_ExtraLives == 0)
+				{
+					EVA::SceneManager::ChangeScene<MainMenu>();
+				}
+				else
+				{
+					m_ExtraLives--;
+					EVA::SceneManager::ChangeScene<Game>(m_ExtraLives);
+				}
 			}
 		}
 	}
