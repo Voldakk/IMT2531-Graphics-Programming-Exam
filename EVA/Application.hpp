@@ -66,6 +66,9 @@ namespace EVA
 		static inline glm::vec2 GetOrthographicBounds()
 		{ return m_OrthographicBounds; }
 
+		static void SetMainCamera(Camera* camera);
+		static void UseDefaultCamera();
+
     private:
 
         /// <summary>Creates a window and OpenGL context</summary>

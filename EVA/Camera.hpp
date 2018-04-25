@@ -26,6 +26,7 @@ namespace EVA
         float movementSpeed;
 
         explicit Camera(GameObject *gameObject);
+		~Camera();
 
         void Update(float deltaTime) override;
 

@@ -54,7 +54,26 @@ namespace EVA
 		Text::Init();
     }
 
-    bool Application::CreateWindow(const std::string &title)
+	void Application::SetMainCamera(Camera* camera)
+	{
+		mainCamera = camera;
+
+		if (mainCamera != nullptr)
+		{
+			m_PerspectiveProjection = glm::perspective(
+				glm::radians(mainCamera->fov),
+				(float)m_WindowSize.x / (float)m_WindowSize.y,
+				mainCamera->near,
+				mainCamera->far);
+		}
+	}
+
+	void Application::UseDefaultCamera()
+	{
+		SetMainCamera(m_DefaultCamera);
+	}
+
+	bool Application::CreateWindow(const std::string &title)
     {
         // Initialise GLFW
         if (!glfwInit())

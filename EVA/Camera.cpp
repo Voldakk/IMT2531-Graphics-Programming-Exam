@@ -4,6 +4,7 @@
 
 #include "Input.hpp"
 #include "GameObject.hpp"
+#include "Application.hpp"
 
 namespace EVA
 {
@@ -20,7 +21,13 @@ namespace EVA
         UpdateDirections();
     }
 
-    void Camera::Update(const float deltaTime)
+	Camera::~Camera()
+	{
+		if (Application::mainCamera == this)
+			Application::UseDefaultCamera();
+	}
+
+	void Camera::Update(const float deltaTime)
     {
         // Movement
 		glm::vec3 movement;

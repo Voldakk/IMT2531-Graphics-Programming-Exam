@@ -52,7 +52,7 @@ Game::Game()
 	// Camera
 	auto camera = CreateGameObject()->AddComponent<EVA::Camera>();
 	camera->transform->SetPosition({ 0.0f, 3.0f, -2.0f });
-	EVA::Application::mainCamera = camera;
+	EVA::Application::SetMainCamera(camera);
 
 	// Pacman
 	pacman = CreateGameObject()->AddComponent<Pacman>(tileMap);
