@@ -65,10 +65,10 @@ void Ghost::Update(const float deltaTime)
 				transform->SetOrientation(EVA::YAXIS, 180.0f);
 				break;
 			case Right:
-				transform->SetOrientation(EVA::YAXIS, -90.0f);
+				transform->SetOrientation(EVA::YAXIS, 90.0f);
 				break;
 			case Left:
-				transform->SetOrientation(EVA::YAXIS, 90.0f);
+				transform->SetOrientation(EVA::YAXIS, -90.0f);
 				break;
 			}
 		}
@@ -120,7 +120,7 @@ void Ghost::Reset()
 
 	m_Direction = Direction::Up;
 	m_CurrentDirection = DirectionToVector(m_Direction);
-	transform->SetOrientation(EVA::YAXIS, -90.0f);
+	transform->SetOrientation(EVA::YAXIS, 0.0f);
 
 	m_TargetTile.x = -1;
 }

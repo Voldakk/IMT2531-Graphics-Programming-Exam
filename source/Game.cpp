@@ -50,13 +50,6 @@ Game::Game()
 	tileMap = CreateGameObject()->AddComponent<TileMap>(this);
 	tileMap->ReadFile("./assets/levels/level1.txt");
 
-	// Camera
-	auto camera = CreateGameObject()->AddComponent<EVA::Camera>();
-	camera->transform->SetPosition({ 0.0f, 3.0f, -2.0f });
-	EVA::Application::SetMainCamera(camera);
-
-	camera->gameObject->AddComponent<EVA::FreeLook>();
-
 	// Pacman
 	pacman = CreateGameObject()->AddComponent<Pacman>(tileMap);
 
@@ -75,6 +68,17 @@ Game::Game()
 	// Pokey
 	const auto pokey = CreateGameObject()->AddComponent<GhostPokey>(this);
 	ghosts.push_back(pokey);
+
+	// Camera
+	auto camera = CreateGameObject()->AddComponent<EVA::Camera>();
+	camera->transform->SetPosition({ 0.0f, 3.0f, 20.0f });
+	EVA::Application::SetMainCamera(camera);
+
+	//camera->gameObject->AddComponent<EVA::FreeLook>();
+
+	auto follow = camera->gameObject->AddComponent<EVA::FollowTarget>();
+	follow->target = pacman->gameObject->transform.get();
+	follow->offset = glm::vec3(0.0f, 2.0f, -2.0f);
 
 	// UI
 	EVA::Input::SetCursorMode(EVA::Input::Disabled);

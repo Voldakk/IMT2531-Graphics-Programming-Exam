@@ -19,7 +19,6 @@ namespace EVA
 	class Transform : public Component
 	{
 		glm::mat4 m_ModelMatrix;
-		glm::mat4 m_ModelMatrix2D;
 
 		std::shared_ptr<Transform> m_Parent;
 		std::vector<Transform *> m_Children;
@@ -41,7 +40,6 @@ namespace EVA
 
 		// Public read only fields
 		const glm::mat4& modelMatrix = m_ModelMatrix;
-		const glm::mat4& modelMatrix2D = m_ModelMatrix2D;
 
 		const glm::vec3& localPosition = m_LocalPosition;
 		const glm::quat& localOrientation = m_LocalOrientation;
@@ -178,6 +176,8 @@ namespace EVA
 		* \return The child's index
 		*/
 		int GetChildIndex(GameObject *child) const;
+
+		glm::vec3 LocalToWorld(glm::vec3 localPosition) const;
 	};
 
 }

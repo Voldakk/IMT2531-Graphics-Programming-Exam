@@ -56,7 +56,7 @@ namespace EVA
 			// Look
 			const auto mouseMovement = Input::MouseMovement();
 			m_Pitch -= mouseMovement.y * mouseSensitivity * deltaTime;
-			m_Yaw -= mouseMovement.x * mouseSensitivity * deltaTime;
+			m_Yaw += mouseMovement.x * mouseSensitivity * deltaTime;
 
 			// Clamp
 			m_Pitch = glm::clamp(m_Pitch, -89.0f, 89.0f);

@@ -87,10 +87,10 @@ void Pacman::Update(const float deltaTime)
 				transform->SetOrientation(EVA::YAXIS, 180.0f);
 				break;
 			case Right: 
-				transform->SetOrientation(EVA::YAXIS, -90.0f);
+				transform->SetOrientation(EVA::YAXIS, 90.0f);
 				break;
 			case Left: 
-				transform->SetOrientation(EVA::YAXIS, 90.0f);
+				transform->SetOrientation(EVA::YAXIS, -90.0f);
 				break;
 			}
 		}
@@ -140,7 +140,7 @@ void Pacman::Reset()
 
 	m_InputDirection = Right;
 	m_CurrentDirection = glm::ivec2(1, 0);
-	transform->SetOrientation(EVA::YAXIS, -90.0f);
+	transform->SetOrientation(EVA::YAXIS, 90.0f);
 
 	transform->SetPosition(m_TileMap->GetUniqueTilePosition('P'));
 	transform->SetScale(glm::vec3(0.8f));

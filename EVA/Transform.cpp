@@ -52,7 +52,7 @@ namespace EVA
 
 	void Transform::Rotate(const float angle)
 	{
-		m_LocalOrientation = glm::angleAxis(glm::radians(angle), ZAXIS) * m_LocalOrientation;
+		m_LocalOrientation = glm::angleAxis(glm::radians(angle), YAXIS) * m_LocalOrientation;
 		UpdateModelMatrix();
 	}
 
@@ -70,7 +70,7 @@ namespace EVA
 
 	void Transform::SetOrientation(const float angle)
 	{
-		m_LocalOrientation = glm::angleAxis(glm::radians(angle), ZAXIS);
+		m_LocalOrientation = glm::angleAxis(glm::radians(angle), YAXIS);
 		UpdateModelMatrix();
 	}
 
@@ -107,28 +107,23 @@ namespace EVA
 		
 		// Parent
 		m_ModelMatrix = m_Parent == nullptr ? glm::mat4() : m_Parent->modelMatrix;
-		m_ModelMatrix2D = m_Parent == nullptr ? glm::mat4() : m_Parent->modelMatrix2D;
 
 		// Position
 		m_ModelMatrix = glm::translate(m_ModelMatrix, m_LocalPosition);
-		m_ModelMatrix2D = glm::translate(m_ModelMatrix2D, m_LocalPosition);
 
 		// Orientation
-		m_ModelMatrix = m_ModelMatrix * glm::toMat4(m_LocalOrientation);
-		m_ModelMatrix2D = m_ModelMatrix2D * glm::toMat4(m_LocalOrientation);
+		auto o = m_LocalOrientation;
+		o.y *= -1;
+		o.z *= -1;
+		m_ModelMatrix = m_ModelMatrix * glm::toMat4(o);
 
 		// Scale
 		m_ModelMatrix = glm::scale(m_ModelMatrix, m_LocalScale);
-		m_ModelMatrix2D = glm::scale(m_ModelMatrix2D, m_LocalScale);
 
 		// Directions
-		auto o = orientation;
-		o.y *= -1;
-		o.z *= -1;
-
-		m_Forward = glm::normalize(ZAXIS * o);
-		m_Right = glm::normalize(-XAXIS * o);
-		m_Up = glm::normalize(YAXIS * o);
+		m_Forward = glm::normalize(ZAXIS * orientation);
+		m_Right = glm::normalize(-XAXIS * orientation);
+		m_Up = glm::normalize(YAXIS * orientation);
 
 		// Update the children
 		for (auto child : m_Children)
@@ -182,4 +177,10 @@ namespace EVA
 		return -1;
 	}
 
+	glm::vec3 Transform::LocalToWorld(const glm::vec3 localPosition) const
+	{
+		auto o = orientation;
+
+		return localPosition * o;
+	}
 }
