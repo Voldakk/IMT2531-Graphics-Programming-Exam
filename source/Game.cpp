@@ -71,7 +71,7 @@ Game::Game()
 
 	// Camera
 	auto camera = CreateGameObject()->AddComponent<EVA::Camera>();
-	camera->transform->SetPosition({ 0.0f, 3.0f, 20.0f });
+	camera->transform->SetPosition(pacman->transform->position);
 	EVA::Application::SetMainCamera(camera);
 
 	//camera->gameObject->AddComponent<EVA::FreeLook>();

@@ -2,6 +2,7 @@
 
 #include "EVA/Input.hpp"
 #include "EVA/ResourceManagers.hpp"
+#include <iostream>
 
 Pacman::Pacman(EVA::GameObject* gameObject, TileMap* tileMap) : Component(gameObject), m_TileMap(tileMap)
 {
@@ -28,19 +29,27 @@ Pacman::Pacman(EVA::GameObject* gameObject, TileMap* tileMap) : Component(gameOb
 
 void Pacman::Update(const float deltaTime)
 {
+	// Input
+	auto inputDir = -1;
+
+	if (EVA::Input::KeyDown(EVA::Input::Up))
+		inputDir = Direction::Up    + (inputMode == Local ? m_CurrentOrientation : 0);
+	if (EVA::Input::KeyDown(EVA::Input::Down))
+		inputDir = Direction::Down  + (inputMode == Local ? m_CurrentOrientation : 0);
+
+	if (EVA::Input::KeyDown(EVA::Input::Right))
+		inputDir = Direction::Right + (inputMode == Local ? m_CurrentOrientation : 0);
+	if (EVA::Input::KeyDown(EVA::Input::Left))
+		inputDir = Direction::Left  + (inputMode == Local ? m_CurrentOrientation : 0);
+
+	if (inputDir >= Last)
+		inputDir -= Last;
+
+	if (inputDir >= 0)
+		m_InputDirection = (Direction)inputDir;
+
 	// Get the current tile
 	m_CurrentTile = m_TileMap->GetTileIndex(transform->position);
-
-	// Input
-	if (EVA::Input::Key(EVA::Input::Up))
-		m_InputDirection = Direction::Up;
-	if (EVA::Input::Key(EVA::Input::Down))
-		m_InputDirection = Direction::Down;
-
-	if (EVA::Input::Key(EVA::Input::Right))
-		m_InputDirection = Direction::Right;
-	if (EVA::Input::Key(EVA::Input::Left))
-		m_InputDirection = Direction::Left;
 
 	// If it's time to select a new target tile
 	if (m_TargetTile.x == -1)
@@ -76,6 +85,7 @@ void Pacman::Update(const float deltaTime)
 			// Set the target and direction
 			m_TargetTile = possibleTarget;
 			m_CurrentDirection = possibleTarget - m_CurrentTile;
+			m_CurrentOrientation = m_InputDirection;
 
 			// Rotate pacman to face the way he is moving
 			switch (m_InputDirection) 
