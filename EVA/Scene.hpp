@@ -51,8 +51,13 @@ namespace EVA
 		virtual void Update(float deltaTime);
 
 		/**
-		 * \brief Render all scene elements to the screen
-		 */
+		* \brief Called after Update
+		*/
+		virtual void LateUpdate();
+
+		/**
+		* \brief Render all scene elements to the screen
+		*/
 		virtual void Render();
 
 		/**
@@ -131,6 +136,8 @@ namespace EVA
 		void RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, glm::vec3 lightPos, float farPlane);
 
 		void RenderUi();
+
+		void ProcessDestroyQueue();
 	};
 
 	template <class T, typename... Args>

@@ -122,9 +122,13 @@ namespace EVA
 		m_ModelMatrix2D = glm::scale(m_ModelMatrix2D, m_LocalScale);
 
 		// Directions
-		m_Forward = glm::normalize(ZAXIS * orientation);
-		m_Right = glm::normalize(-XAXIS * orientation);
-		m_Up = glm::normalize(YAXIS * orientation);
+		auto o = orientation;
+		o.y *= -1;
+		o.z *= -1;
+
+		m_Forward = glm::normalize(ZAXIS * o);
+		m_Right = glm::normalize(-XAXIS * o);
+		m_Up = glm::normalize(YAXIS * o);
 
 		// Update the children
 		for (auto child : m_Children)

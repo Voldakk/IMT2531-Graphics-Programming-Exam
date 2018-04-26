@@ -64,6 +64,27 @@ namespace EVA
 		m_UnloadScenes.clear();
 	}
 
+	void SceneManager::LateUpdate()
+	{
+		auto scenesCopy = m_Scenes;
+		for (auto &scene : scenesCopy)
+		{
+			if (scene->abort)
+			{
+				continue;
+			}
+
+			scene->LateUpdate();
+		}
+
+		for (auto& scene : m_UnloadScenes)
+		{
+			scene->self.reset();
+		}
+
+		m_UnloadScenes.clear();
+	}
+
 	void SceneManager::Render()
 	{
 		for (auto &scene : m_Scenes)

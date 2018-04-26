@@ -20,6 +20,7 @@ namespace EVA
 
 		std::vector<std::shared_ptr<Component>> m_Components;
 		std::vector<IUpdateComponent*> m_UpdateComponents;
+		std::vector<ILateUpdateComponent*> m_LateUpdateComponents;
 		std::vector<IRenderComponent*> m_RenderComponents;
 
     public:
@@ -41,7 +42,12 @@ namespace EVA
 		void Update(float deltaTime);
 
 		/**
-		* \brief Called after Update. Used to render game elements to the screen
+		* \brief Called after Update
+		*/
+		void LateUpdate();
+
+		/**
+		* \brief Used to render game elements to the screen
 		*/
 		void Render();
 
@@ -83,6 +89,11 @@ namespace EVA
 		const auto uc = dynamic_cast<IUpdateComponent*>(component.get());
 		if (uc != nullptr)
 			m_UpdateComponents.push_back(uc);
+
+		// LateUpdate
+		const auto luc = dynamic_cast<ILateUpdateComponent*>(component.get());
+		if (luc != nullptr)
+			m_LateUpdateComponents.push_back(luc);
 
 		// Render
 		const auto rc = dynamic_cast<IRenderComponent*>(component.get());

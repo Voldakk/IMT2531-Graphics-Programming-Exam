@@ -47,12 +47,22 @@ namespace EVA
 		virtual void Update(float deltaTime) = 0;
 	};
 
+	class ILateUpdateComponent
+	{
+
+	public:
+		/**
+		* \brief Called after Update
+		*/
+		virtual void LateUpdate() = 0;
+	};
+
 	class IRenderComponent
 	{
 
 	public:
 		/**
-		* \brief Called after Update. Used to render game elements to the screen
+		* \brief Used to render game elements to the screen
 		*/
 		virtual void Render() = 0;
 	};

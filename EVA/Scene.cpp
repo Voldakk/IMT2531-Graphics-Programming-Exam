@@ -37,24 +37,25 @@ namespace EVA
 		}
 
 		// Destroy
-		for (auto gameObject : m_DestroyQueue)
-		{
-			for (unsigned int i = 0; i < m_GameObjects.size(); ++i)
-			{
-				if (m_GameObjects[i].get() == gameObject)
-				{
-					m_GameObjects.erase(m_GameObjects.begin() + i);
-					break;;
-				}
-			}
-		}
-		m_DestroyQueue.clear();
+		ProcessDestroyQueue();
 		
 		// UI
 		for (const auto& uiElement : m_UiElements)
 		{
 			uiElement->Update();
 		}
+	}
+
+	void Scene::LateUpdate()
+	{
+		// Update
+		for (auto &gameObject : m_GameObjects)
+		{
+			gameObject->LateUpdate();
+		}
+
+		// Destroy
+		ProcessDestroyQueue();
 	}
 
 	void Scene::Render()
@@ -393,5 +394,21 @@ namespace EVA
 			uiElement->Render();
 		}
 		glDepthMask(GL_TRUE);
+	}
+
+	void Scene::ProcessDestroyQueue()
+	{
+		for (auto gameObject : m_DestroyQueue)
+		{
+			for (unsigned int i = 0; i < m_GameObjects.size(); ++i)
+			{
+				if (m_GameObjects[i].get() == gameObject)
+				{
+					m_GameObjects.erase(m_GameObjects.begin() + i);
+					break;;
+				}
+			}
+		}
+		m_DestroyQueue.clear();
 	}
 }

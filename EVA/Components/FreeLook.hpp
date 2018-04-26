@@ -24,53 +24,32 @@ namespace EVA
 
 		void Update(const float deltaTime) override
 		{
-			auto o = transform->orientation;
-			o.y *= -1;
-			o.z *= -1;
-			const auto forward = glm::normalize(ZAXIS * o);
-			const auto up = glm::normalize(YAXIS * o);
-			const auto right = glm::normalize(-XAXIS * o);
-
 			// Movement
 			glm::vec3 movement;
 
 			// Front
 			if (Input::Key(Input::W))
-			{
-				movement += forward;
-			}
+				movement += transform->forward;
 
 			// Back
 			if (Input::Key(Input::S))
-			{
-				movement -= forward;
-			}
-
+				movement -= transform->forward;
 
 			// Right
 			if (Input::Key(Input::D))
-			{
-				movement += right;
-			}
+				movement += transform->right;
 
 			// Left
 			if (Input::Key(Input::A))
-			{
-				movement -= right;
-			}
-
+				movement -= transform->right;
 
 			// Up
 			if (Input::Key(Input::Space))
-			{
-				movement += up;
-			}
+				movement += transform->up;
 
 			// Down
 			if (Input::Key(Input::LeftShift))
-			{
-				movement -= up;
-			}
+				movement -= transform->up;
 
 			transform->Translate(movement * movementSpeed * deltaTime);
 

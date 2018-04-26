@@ -9,7 +9,7 @@ namespace EVA
 
     class GameObject;
 
-    class Camera : public Component, public IUpdateComponent
+    class Camera : public Component, public ILateUpdateComponent
     {
 		glm::mat4 m_ViewMatrix;
 
@@ -19,16 +19,12 @@ namespace EVA
         float near;
         float far;
 
+		const glm::mat4& viewMatrix = m_ViewMatrix;
+
         explicit Camera(GameObject *gameObject);
 		~Camera();
 
-        void Update(float deltaTime) override;
-
-        glm::mat4 GetViewMatrix() const;
-
-    private:
-
-        void UpdateDirections();
+        void LateUpdate() override;
     };
 
 }

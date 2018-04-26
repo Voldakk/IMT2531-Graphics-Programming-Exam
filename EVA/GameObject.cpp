@@ -18,6 +18,14 @@ namespace EVA
         }
     }
 
+	void GameObject::LateUpdate()
+	{
+		for (auto &component : m_LateUpdateComponents)
+		{
+			component->LateUpdate();
+		}
+	}
+
 	void GameObject::Render()
 	{
 		for (auto &component : m_RenderComponents)

@@ -49,6 +49,9 @@ namespace EVA
 		/// <param name="deltaTime">The time in seconds between frames</param>
 		static void Update(float deltaTime);
 
+		/// <summary>Called after Update</summary>
+		static void LateUpdate();
+
 		/// <summary>Renders all active scenes</summary>
 		static void Render();
 
