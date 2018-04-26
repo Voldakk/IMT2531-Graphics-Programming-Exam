@@ -5,6 +5,7 @@
 #include "Input.hpp"
 #include "GameObject.hpp"
 #include "Application.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 namespace EVA
 {
@@ -29,65 +30,54 @@ namespace EVA
 
 	void Camera::Update(const float deltaTime)
     {
+
         // Movement
 		glm::vec3 movement;
 
 		// Front
         if (Input::Key(Input::W))
         {
-			movement.x -= transform->forward.x;
-			movement.y += transform->forward.y;
-			movement.z += transform->forward.z;
+			movement += transform->forward;
         }
 
         // Back
         if (Input::Key(Input::S))
         {
-			movement.x -= -transform->forward.x;
-			movement.y += -transform->forward.y;
-			movement.z += -transform->forward.z;
+			movement -= transform->forward;
         }
 
 
 		// Right
         if (Input::Key(Input::D))
         {
-			movement.x += transform->right.x;
-			movement.y += transform->right.y;
-			movement.z -= transform->right.z;
+			movement += transform->right;
         }
 
 		// Left
         if (Input::Key(Input::A))
 		{
-			movement.x += -transform->right.x;
-			movement.y += -transform->right.y;
-			movement.z -= -transform->right.z;
+			movement -= transform->right;
 		}
 
 
 		// Up
 		if (Input::Key(Input::Space))
 		{
-			movement.x -= transform->up.x;
-			movement.y += transform->up.y;
-			movement.z += transform->up.z;
+			movement += transform->up;
 		}
 
 		// Down
 		if (Input::Key(Input::LeftShift))
 		{
-			movement.x -= -transform->up.x;
-			movement.y += -transform->up.y;
-			movement.z += -transform->up.z;
+			movement -= transform->up;
 		}
 
 		transform->Translate(movement * movementSpeed * deltaTime);
 
         // Look
         const auto mouseMovement = Input::MouseMovement();
-		m_Pitch += -mouseMovement.y * mouseSensitivity * deltaTime;
-		m_Yaw += mouseMovement.x * mouseSensitivity * deltaTime;
+		m_Pitch -= mouseMovement.y * mouseSensitivity * deltaTime;
+		m_Yaw -= mouseMovement.x * mouseSensitivity * deltaTime;
 
 		// Clamp
 		m_Pitch = glm::clamp(m_Pitch, -89.0f, 89.0f);
@@ -110,11 +100,12 @@ namespace EVA
 
     void Camera::UpdateDirections()
     {
-		// Orientation
+		auto o = transform->orientation;
+		o.y *= -1;
+		o.z *= -1;
+	    const auto forward = glm::normalize(ZAXIS * o);
+		const auto up = glm::normalize(YAXIS * o);
 
-	    const auto tp = transform->position;
-	    const auto position = glm::vec3(-tp.x, tp.y, tp.z);
-
-		m_ViewMatrix = glm::lookAt(position, position + transform->forward, transform->up);
+		m_ViewMatrix = glm::lookAt(transform->position, transform->position + forward, up);
     }
 }

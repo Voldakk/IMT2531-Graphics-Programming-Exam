@@ -83,13 +83,12 @@ glm::mat4 EVA::Light::GetLightSpaceMatrix() const
 	const auto lightProjection = glm::ortho(-directionalShadowDistance, directionalShadowDistance, -directionalShadowDistance, directionalShadowDistance, directionalNearPlane, directionalFarPlane);
 
 	const auto lightDirection = -glm::normalize(glm::vec3(GetDirection()));
-	auto cameram_Position = Application::mainCamera->transform->position;
-	cameram_Position.x *= -1.0f;
+	const auto cameraPosition = Application::mainCamera->transform->position;
 
 
 	const auto lightView = glm::lookAt(
-		glm::vec3(cameram_Position - lightDirection * (directionalFarPlane / 2)),
-		glm::vec3(cameram_Position),
+		glm::vec3(cameraPosition - lightDirection * (directionalFarPlane / 2)),
+		glm::vec3(cameraPosition),
 		glm::vec3(0.0f, 1.0f, 0.0f));
 
 	return lightProjection * lightView;

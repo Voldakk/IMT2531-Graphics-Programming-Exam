@@ -111,7 +111,7 @@ void Pacman::Update(const float deltaTime)
 	}
 
 	// Find the direction and distance pacman should move
-	const auto targetTilePos = m_TileMap->GetTilePosition(m_TargetTile);
+	const auto targetTilePos = TileMap::GetTilePosition(m_TargetTile);
 	const auto direction = glm::normalize(targetTilePos - transform->position);
 	const auto distToTile = glm::distance(transform->position, targetTilePos);
 
@@ -139,7 +139,7 @@ void Pacman::Reset()
 	m_MovementSpeed = 2.0f;
 
 	m_InputDirection = Right;
-	m_CurrentDirection = glm::ivec2(0, 1);
+	m_CurrentDirection = glm::ivec2(1, 0);
 	transform->SetOrientation(EVA::YAXIS, -90.0f);
 
 	transform->SetPosition(m_TileMap->GetUniqueTilePosition('P'));

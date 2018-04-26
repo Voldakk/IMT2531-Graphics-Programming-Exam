@@ -184,7 +184,7 @@ void TileMap::CreateMesh()
 			{
 				// Create a GameObject and a MeshRenderer to display the mesh
 				auto go = scene->CreateGameObject();
-				go->transform->SetPosition({ x+1, 0.0f, y+1 });
+				go->transform->SetPosition({ -x - 1, 0.0f, y + 1 });
 				go->transform->SetScale(glm::vec3(0.5f));
 				auto mr = go->AddComponent<EVA::MeshRenderer>();
 				mr->Set(mesh, m_Material);
@@ -194,7 +194,7 @@ void TileMap::CreateMesh()
 			{
 				// Create a GameObject and a MeshRenderer to display the mesh
 				auto go = scene->CreateGameObject();
-				go->transform->SetPosition({ x + 0.5f, 0.0f, y + 0.5f });
+				go->transform->SetPosition({ -x - 0.5f, 0.0f, y + 0.5f });
 				go->transform->SetScale(glm::vec3(0.5f));
 				auto mr = go->AddComponent<EVA::MeshRenderer>();
 				mr->Set(cubeMesh, ghostDoorMat);
@@ -205,7 +205,7 @@ void TileMap::CreateMesh()
 
 glm::vec3 TileMap::GetUniqueTilePosition(const unsigned int tile)
 {
-	return glm::vec3(m_UniqueTiles[tile].x + 0.5f, 0.0f, m_UniqueTiles[tile].y + 0.5f);
+	return glm::vec3(-m_UniqueTiles[tile].x - 0.5f, 0.0f, m_UniqueTiles[tile].y + 0.5f);
 }
 
 glm::ivec2 TileMap::GetUniqueTile(const unsigned tile)
@@ -215,10 +215,10 @@ glm::ivec2 TileMap::GetUniqueTile(const unsigned tile)
 
 glm::ivec2 TileMap::GetTileIndex(const glm::vec3 worldPosition) const
 {
-	if (worldPosition.x < 0.0f || worldPosition.x > m_Width || worldPosition.z < 0.0f || worldPosition.z > m_Height)
+	if (worldPosition.x > 0.0f || worldPosition.x < -m_Width || worldPosition.z < 0.0f || worldPosition.z > m_Height)
 		return glm::ivec2(-1);
 
-	return glm::ivec2((int)worldPosition.x, (int)worldPosition.z);
+	return glm::ivec2(-(int)worldPosition.x, (int)worldPosition.z);
 }
 
 TileType TileMap::GetTileType(const glm::ivec2 tileIndex)
@@ -236,5 +236,5 @@ TileType TileMap::GetTileType(const glm::vec3 worldPosition)
 
 glm::vec3 TileMap::GetTilePosition(const glm::ivec2 tileIndex)
 {
-	return glm::vec3(tileIndex.x + 0.5f, 0.0f, tileIndex.y + 0.5f);
+	return glm::vec3(-tileIndex.x - 0.5f, 0.0f, tileIndex.y + 0.5f);
 }

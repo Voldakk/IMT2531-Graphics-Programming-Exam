@@ -110,7 +110,7 @@ namespace EVA
 		m_ModelMatrix2D = m_Parent == nullptr ? glm::mat4() : m_Parent->modelMatrix2D;
 
 		// Position
-		m_ModelMatrix = glm::translate(m_ModelMatrix, m_LocalPosition * glm::vec3(-1.0f, 1.0f, 1.0f));
+		m_ModelMatrix = glm::translate(m_ModelMatrix, m_LocalPosition);
 		m_ModelMatrix2D = glm::translate(m_ModelMatrix2D, m_LocalPosition);
 
 		// Orientation
@@ -123,7 +123,7 @@ namespace EVA
 
 		// Directions
 		m_Forward = glm::normalize(ZAXIS * orientation);
-		m_Right = glm::normalize(XAXIS * orientation);
+		m_Right = glm::normalize(-XAXIS * orientation);
 		m_Up = glm::normalize(YAXIS * orientation);
 
 		// Update the children
