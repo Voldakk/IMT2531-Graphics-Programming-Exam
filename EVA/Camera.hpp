@@ -11,9 +11,6 @@ namespace EVA
 
     class Camera : public Component, public IUpdateComponent
     {
-		float m_Pitch = 0.0f;
-		float m_Yaw = 0.0f;
-
 		glm::mat4 m_ViewMatrix;
 
     public:
@@ -21,9 +18,6 @@ namespace EVA
         float fov;
         float near;
         float far;
-
-        float mouseSensitivity;
-        float movementSpeed;
 
         explicit Camera(GameObject *gameObject);
 		~Camera();

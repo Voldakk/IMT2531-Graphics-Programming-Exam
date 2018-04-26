@@ -7,6 +7,9 @@
 #include "EVA/ResourceManagers.hpp"
 #include "EVA/Input.hpp"
 
+#include "../EVA/Components/FreeLook.hpp"
+#include "../EVA/Components/FollowTarget.hpp"
+
 #include "GhostVariations.hpp"
 #include "PauseMenu.hpp"
 #include "GameOverScene.hpp"
@@ -51,6 +54,8 @@ Game::Game()
 	auto camera = CreateGameObject()->AddComponent<EVA::Camera>();
 	camera->transform->SetPosition({ 0.0f, 3.0f, -2.0f });
 	EVA::Application::SetMainCamera(camera);
+
+	camera->gameObject->AddComponent<EVA::FreeLook>();
 
 	// Pacman
 	pacman = CreateGameObject()->AddComponent<Pacman>(tileMap);
