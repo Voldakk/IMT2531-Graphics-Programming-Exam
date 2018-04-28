@@ -32,14 +32,14 @@ void Pacman::Update(const float deltaTime)
 	// Input
 	auto inputDir = -1;
 
-	if (EVA::Input::KeyDown(EVA::Input::Up))
+	if (EVA::Input::KeyDown(EVA::Input::W))
 		inputDir = Direction::Up    + (inputMode == Local ? m_CurrentOrientation : 0);
-	if (EVA::Input::KeyDown(EVA::Input::Down))
+	if (EVA::Input::KeyDown(EVA::Input::S))
 		inputDir = Direction::Down  + (inputMode == Local ? m_CurrentOrientation : 0);
 
-	if (EVA::Input::KeyDown(EVA::Input::Right))
+	if (EVA::Input::KeyDown(EVA::Input::D))
 		inputDir = Direction::Right + (inputMode == Local ? m_CurrentOrientation : 0);
-	if (EVA::Input::KeyDown(EVA::Input::Left))
+	if (EVA::Input::KeyDown(EVA::Input::A))
 		inputDir = Direction::Left  + (inputMode == Local ? m_CurrentOrientation : 0);
 
 	if (inputDir >= Last)

@@ -6,8 +6,13 @@
 
 class Pacman : public EVA::Component, public EVA::IUpdateComponent
 {
+
+public:
+
 	enum Direction { Up, Right, Down, Left, Last };
 	enum InputMode { Global, Local };
+
+private:
 
 	std::shared_ptr<EVA::Model> m_Model;
 	std::shared_ptr<EVA::Material> m_Material;

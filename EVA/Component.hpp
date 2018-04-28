@@ -9,33 +9,18 @@ namespace EVA
 	class GameObject;
 	class Transform;
 
-    class Component
-    {
-		friend GameObject;
+	class IActive
+	{
+		bool m_Active = true;
 
-		Scene* m_Scene;
-		GameObject* m_GameObject;
-		Transform* m_Transform;
+	public:
 
-    public:
+		const bool& active = m_Active;
+		void SetActiveInternal(bool value);
+	};
 
-		const ConstPointer<Scene> scene = &m_Scene;
-		const ConstPointer<GameObject> gameObject = &m_GameObject;
-		const ConstPointer<Transform> transform = &m_Transform;
-	    
-	    /**
-	     * \brief Constructor. gets the refferences to the scene and the transform on the game object
-	     * \param gameObject The GameObject the component is attaced to
-	     */
-	    explicit Component(GameObject *gameObject);
 
-	    /**
-		 * \brief Destructor
-		 */
-		virtual ~Component() = default;
-    };
-
-	class IUpdateComponent
+	class IUpdateComponent : public IActive
 	{
 
 	public:
@@ -47,7 +32,7 @@ namespace EVA
 		virtual void Update(float deltaTime) = 0;
 	};
 
-	class ILateUpdateComponent
+	class ILateUpdateComponent : public IActive
 	{
 
 	public:
@@ -57,7 +42,7 @@ namespace EVA
 		virtual void LateUpdate() = 0;
 	};
 
-	class IRenderComponent
+	class IRenderComponent : public IActive
 	{
 
 	public:
@@ -67,4 +52,38 @@ namespace EVA
 		virtual void Render() = 0;
 	};
 
+
+    class Component
+    {
+		friend GameObject;
+
+		Scene* m_Scene;
+		GameObject* m_GameObject;
+		Transform* m_Transform;
+
+		bool m_Active = true;
+
+    public:
+
+		const ConstPointer<Scene> scene = &m_Scene;
+		const ConstPointer<GameObject> gameObject = &m_GameObject;
+		const ConstPointer<Transform> transform = &m_Transform;
+
+		const bool& active = m_Active;
+	    
+	    /**
+	     * \brief Constructor. gets the refferences to the scene and the transform on the game object
+	     * \param gameObject The GameObject the component is attaced to
+	     */
+	    explicit Component(GameObject *gameObject);
+
+	    /**
+		 * \brief Destructor
+		 */
+		virtual ~Component() = default;
+
+		void SetActive(bool value);
+
+		
+    };
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EVA.hpp"
+#include "../Input.hpp"
 
 namespace EVA
 {
@@ -28,27 +29,27 @@ namespace EVA
 			glm::vec3 movement;
 
 			// Front
-			if (Input::Key(Input::W))
+			if (Input::Key(Input::Up))
 				movement += transform->forward;
 
 			// Back
-			if (Input::Key(Input::S))
+			if (Input::Key(Input::Down))
 				movement -= transform->forward;
 
 			// Right
-			if (Input::Key(Input::D))
+			if (Input::Key(Input::Right))
 				movement += transform->right;
 
 			// Left
-			if (Input::Key(Input::A))
+			if (Input::Key(Input::Left))
 				movement -= transform->right;
 
 			// Up
-			if (Input::Key(Input::Space))
+			if (Input::Key(Input::RightShift))
 				movement += transform->up;
 
 			// Down
-			if (Input::Key(Input::LeftShift))
+			if (Input::Key(Input::RightControl))
 				movement -= transform->up;
 
 			transform->Translate(movement * movementSpeed * deltaTime);

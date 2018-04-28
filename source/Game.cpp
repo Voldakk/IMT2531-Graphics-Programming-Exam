@@ -70,15 +70,15 @@ Game::Game()
 	ghosts.push_back(pokey);
 
 	// Camera
-	auto camera = CreateGameObject()->AddComponent<EVA::Camera>();
-	camera->transform->SetPosition(pacman->transform->position);
-	EVA::Application::SetMainCamera(camera);
+	m_Camera = CreateGameObject()->AddComponent<EVA::Camera>();
+	m_Camera->transform->SetPosition(pacman->transform->position);
+	EVA::Application::SetMainCamera(m_Camera);
 
-	//camera->gameObject->AddComponent<EVA::FreeLook>();
+	m_FreeCamera = m_Camera->gameObject->AddComponent<EVA::FreeLook>();
 
-	auto follow = camera->gameObject->AddComponent<EVA::FollowTarget>();
-	follow->target = pacman->gameObject->transform.get();
-	follow->offset = glm::vec3(0.0f, 2.0f, -2.0f);
+	m_ChaseCamera = m_Camera->gameObject->AddComponent<EVA::FollowTarget>();
+	m_ChaseCamera->target = pacman->gameObject->transform.get();
+	m_ChaseCamera->offset = glm::vec3(0.0f, 4.0f, -2.0f);
 
 	// UI
 	EVA::Input::SetCursorMode(EVA::Input::Disabled);
@@ -89,7 +89,15 @@ Game::Game()
 
 	m_ExtraLivesLabel = CreateUiElement<EVA::Label>("Extra lives: " + std::to_string(m_ExtraLives));
 	m_ExtraLivesLabel->SetAnchorAndPivot(-1.0f, 1.0f); // Top left
-	m_ExtraLivesLabel->SetOffset(0.05f, -0.2f);
+	m_ExtraLivesLabel->SetOffset(0.05f, -0.2f);		   // Moved down a bit
+
+	m_CameraModeLabel = CreateUiElement<EVA::Label>("Camera mode");
+	m_CameraModeLabel->SetAnchorAndPivot(-1.0f, -1.0f); // Bottom left
+	m_CameraModeLabel->SetOffsetFromAnchor(0.05f);	    // Padding 
+
+	// Set camera mode
+	m_CurrentCameraMode = TopDown;
+	UpdateCameraMode();
 }
 
 void Game::Update(const float deltaTime)
@@ -106,6 +114,16 @@ void Game::Update(const float deltaTime)
 
 	// Update scene
 	Scene::Update(deltaTime);
+
+	// Camera mode
+	if (EVA::Input::KeyDown(EVA::Input::C))
+	{
+		m_CurrentCameraMode++;
+		if (m_CurrentCameraMode == Last)
+			m_CurrentCameraMode = 0;
+
+		UpdateCameraMode();
+	}
 
 	// Waves
 	m_WaveTimer += deltaTime;
@@ -236,4 +254,42 @@ void Game::Reset()
 	pacman->Reset();
 
 	m_ActiveEnergizer = false;
+}
+
+void Game::UpdateCameraMode()
+{
+	std::string cameraModeName;
+
+	switch (m_CurrentCameraMode)
+	{
+	case Free:
+		cameraModeName = "Free";
+		pacman->inputMode = Pacman::Global;
+
+		m_ChaseCamera->SetActive(false);
+		m_FreeCamera->SetActive(true);
+		break;
+
+	case Chase:
+		cameraModeName = "Chase";
+		pacman->inputMode = Pacman::Local;
+
+		m_ChaseCamera->SetActive(true);
+		m_FreeCamera->SetActive(false);
+		break;
+
+	case TopDown:
+	default:
+		cameraModeName = "Top-Down";
+		pacman->inputMode = Pacman::Global;
+
+		m_ChaseCamera->SetActive(false);
+		m_FreeCamera->SetActive(false);
+
+		m_Camera->transform->SetPosition({ -tileMap->width / 2.0f, 20.0f, tileMap->height / 2.0f });
+		m_Camera->transform->SetOrientation(EVA::XAXIS, -90.0f);
+		break;
+	}
+
+	m_CameraModeLabel->SetText("Camera mode: " + cameraModeName);
 }

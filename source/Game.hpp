@@ -3,6 +3,9 @@
 //#include "EVA.hpp"
 #include "EVA/UI.hpp"
 
+#include "../EVA/Components/FreeLook.hpp"
+#include "../EVA/Components/FollowTarget.hpp"
+
 #include "Pacman.hpp"
 #include "TileMap.hpp"
 #include "Ghost.hpp"
@@ -31,9 +34,18 @@ class Game : public EVA::Scene
 	// UI
 	EVA::Label* m_ScoreLabel;
 	EVA::Label* m_ExtraLivesLabel;
+	EVA::Label* m_CameraModeLabel;
 
 	// Pause menu
 	bool m_IsPaused = false;
+
+	// Camera
+	enum CameraMode { TopDown, Chase, Free, Last };
+	unsigned int m_CurrentCameraMode;
+
+	EVA::Camera* m_Camera;
+	EVA::FreeLook* m_FreeCamera;
+	EVA::FollowTarget* m_ChaseCamera;
 
 public:
 
@@ -72,4 +84,6 @@ public:
 	void Unpause();
 
 	void Reset();
+
+	void UpdateCameraMode();
 };

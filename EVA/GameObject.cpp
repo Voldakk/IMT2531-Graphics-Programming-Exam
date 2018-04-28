@@ -14,7 +14,8 @@ namespace EVA
     {
         for (auto &component : m_UpdateComponents)
         {
-            component->Update(deltaTime);
+			if(component->active)
+				component->Update(deltaTime);
         }
     }
 
@@ -22,7 +23,8 @@ namespace EVA
 	{
 		for (auto &component : m_LateUpdateComponents)
 		{
-			component->LateUpdate();
+			if (component->active)
+				component->LateUpdate();
 		}
 	}
 
@@ -30,7 +32,8 @@ namespace EVA
 	{
 		for (auto &component : m_RenderComponents)
 		{
-			component->Render();
+			if (component->active)
+				component->Render();
 		}
 	}
 
