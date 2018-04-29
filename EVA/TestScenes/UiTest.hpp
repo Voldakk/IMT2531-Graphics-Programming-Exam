@@ -11,7 +11,7 @@ namespace EVA_TEST
 
 	public:
 
-		UiTest::UiTest()
+		UiTest()
 		{
 			// Cursor mode
 			EVA::Input::SetCursorMode(EVA::Input::Normal);
