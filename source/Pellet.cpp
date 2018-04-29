@@ -8,6 +8,8 @@
 std::shared_ptr<EVA::Mesh> Pellet::m_Mesh;
 std::shared_ptr<EVA::Material> Pellet::m_Material;
 
+unsigned int Pellet::m_PelletCount;
+
 Pellet::Pellet(EVA::GameObject* gameObject, Game* game, const glm::ivec2 tile) 
 	: Component(gameObject), m_Tile(tile), m_Game(game)
 {
@@ -28,6 +30,8 @@ Pellet::Pellet(EVA::GameObject* gameObject, Game* game, const glm::ivec2 tile)
 
 	transform->SetScale(0.1f);
 	transform->SetPosition(TileMap::GetTilePosition(m_Tile) + EVA::YAXIS * transform->scale.y);
+
+	m_PelletCount++;
 }
 
 void Pellet::Update(const float deltaTime)
@@ -43,6 +47,15 @@ void Pellet::Update(const float deltaTime)
 void Pellet::OnPickup()
 {
 	m_Game->AddScore(m_Score);
+
+	m_PelletCount--;
+	if (m_PelletCount == 0)
+		m_Game->Win();
+}
+
+void Pellet::ResetCount()
+{
+	m_PelletCount = 0;
 }
 
 Energizer::Energizer(EVA::GameObject* gameObject, Game* game, const glm::ivec2& tile): Pellet(gameObject, game, tile)

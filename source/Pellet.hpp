@@ -12,6 +12,8 @@ class Pellet : public EVA::Component, public EVA::IUpdateComponent
 
 	glm::ivec2 m_Tile;
 
+	static unsigned int m_PelletCount;
+
 protected:
 
 	Game* m_Game;
@@ -37,6 +39,8 @@ public:
 	 * \brief Called when the pellet is picked up
 	 */
 	virtual void OnPickup();
+
+	static void ResetCount();
 };
 
 class Energizer : public Pellet

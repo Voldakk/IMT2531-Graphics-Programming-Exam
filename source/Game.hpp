@@ -86,4 +86,6 @@ public:
 	void Reset();
 
 	void UpdateCameraMode();
+
+	void Win();
 };

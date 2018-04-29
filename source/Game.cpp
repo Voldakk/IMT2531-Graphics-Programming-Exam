@@ -13,6 +13,7 @@
 #include "GhostVariations.hpp"
 #include "PauseMenu.hpp"
 #include "GameOverScene.hpp"
+#include "Pellet.hpp"
 
 Game::Game()
 {
@@ -47,6 +48,7 @@ Game::Game()
 	std::cout << "New wave: " << (CurrentWave().state == GhostState::Scatter ? "Scatter" : "Chase") << ", time: " << CurrentWave().time << "\n";
 
 	// Tilemap
+	Pellet::ResetCount();
 	tileMap = CreateGameObject()->AddComponent<TileMap>(this);
 	tileMap->ReadFile("./assets/levels/level1.txt");
 
@@ -292,4 +294,9 @@ void Game::UpdateCameraMode()
 	}
 
 	m_CameraModeLabel->SetText("Camera mode: " + cameraModeName);
+}
+
+void Game::Win()
+{
+	EVA::SceneManager::ChangeScene<GameOverScene>(true, m_Score);
 }
