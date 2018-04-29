@@ -27,7 +27,6 @@ class TileMap : public EVA::Component
 	std::shared_ptr<EVA::Material> m_Material;
 
 	std::vector<glm::ivec2> m_Teleporters;
-	std::map<unsigned  int, glm::ivec2> m_TeleporterMap;
 
 	std::map<unsigned int, glm::ivec2> m_UniqueTiles;
 
@@ -92,6 +91,8 @@ public:
 	 * \return The world position
 	 */
 	static glm::vec3 GetTilePosition(glm::ivec2 tileIndex);
+
+	bool GetTeleporter(glm::ivec2 tileIndex, glm::ivec2& destinationIndex);
 
 private:
 

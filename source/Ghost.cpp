@@ -99,7 +99,11 @@ void Ghost::Update(const float deltaTime)
 	// Make sure to not overshoot
 	if (maxDistance > distToTile)
 	{
-		transform->SetPosition(targetTilePos);
+		glm::ivec2 teleportDest;
+		if (m_TileMap->GetTeleporter(m_TargetTile, teleportDest))
+			transform->SetPosition(TileMap::GetTilePosition(teleportDest));
+		else
+			transform->SetPosition(targetTilePos);
 
 
 		// Reset the target tile

@@ -115,8 +115,8 @@ void TileMap::ReadFile(const char *path)
 				row.push_back(TileType::Wall);
 				break;
 
-			case 0:
-			case 1:
+			case '0':
+			case '1':
 			case 2:
 			case 3:
 			case 4:
@@ -125,8 +125,8 @@ void TileMap::ReadFile(const char *path)
 			case 7:
 			case 8:
 			case 9:
-				row.push_back(TileType::Teleporter);
-				m_Teleporters[t] = glm::ivec2(x, y);
+				row.push_back(TileType::Floor);
+				m_Teleporters[t-'0'] = glm::ivec2(x, y);
 				break;
 
 			case '.':
@@ -215,7 +215,7 @@ glm::ivec2 TileMap::GetUniqueTile(const unsigned tile)
 
 glm::ivec2 TileMap::GetTileIndex(const glm::vec3 worldPosition) const
 {
-	if (worldPosition.x > 0.0f || worldPosition.x < -m_Width || worldPosition.z < 0.0f || worldPosition.z > m_Height)
+	if (worldPosition.x > 0 || worldPosition.x < -m_Width || worldPosition.z < 0.0f || worldPosition.z > m_Height)
 		return glm::ivec2(-1);
 
 	return glm::ivec2(-(int)worldPosition.x, (int)worldPosition.z);
@@ -237,4 +237,24 @@ TileType TileMap::GetTileType(const glm::vec3 worldPosition)
 glm::vec3 TileMap::GetTilePosition(const glm::ivec2 tileIndex)
 {
 	return glm::vec3(-tileIndex.x - 0.5f, 0.0f, tileIndex.y + 0.5f);
+}
+
+bool TileMap::GetTeleporter(const glm::ivec2 tileIndex, glm::ivec2& destinationIndex)
+{
+	for (size_t i = 0; i < m_Teleporters.size(); i += 2)
+	{
+		if (tileIndex == m_Teleporters[i])
+		{
+			destinationIndex = m_Teleporters[i + 1];
+			return true;
+		}
+
+		if (tileIndex == m_Teleporters[i + 1])
+		{
+			destinationIndex = m_Teleporters[i];
+			return true;
+		}
+	}
+
+	return false;
 }
