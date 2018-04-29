@@ -8,18 +8,18 @@ A 3D Pacman game made in C++ and OpenGL
 I'm fairly happy with most aspects of the project and choose to not apply any weighting.
 
 ### Architecture/Framework
-I've choosen to create a generic OpenGL game engine, and subsequently an implementation of a Pacman game using the engine.
-It uses a component based system where each 'game object' is only responsible for managing the components attached to it.
+I've choosen to create a generic OpenGL game engine, and subsequently an implementation of a Pacman game using the engine.  
+It uses a component based system where each 'game object' is only responsible for managing the components attached to it.  
 Some component like the Transform and MeshRenderer recives special treatment, but the user is free to create any sort of component they want.
 
 ### Gameplay/Usability
-Both Pacman and the ghosts are locked to the grid, and can never move more than 1 tile each frame. 
+Both Pacman and the ghosts are locked to the grid, and can never move more than 1 tile each frame.   
 This migrates any chance of collision errors or otherwise weird movenet due to lag spikes.
 
 The ghosts are all different from each other and follows their behaveour from the original game as described [here](http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior).
 
-There are 3 different camera modes: Top-Down, Chase and Free.
-In Top-Down and Free mode the input (WASD) is in relation to the world; D wil always make Pacman go towards the right side of the map. 
+There are 3 different camera modes: Top-Down, Chase and Free.  
+In Top-Down and Free mode the input (WASD) is in relation to the world; D wil always make Pacman go towards the right side of the map.   
 In Chase mode the input is in relation to Pacman.
 
 The game can load a map of any size using the [provided format](http://prod3.imt.hig.no/Voldakk/IMT2531-Assignment2/blob/master/assets/levels/format.md).
@@ -84,7 +84,6 @@ cd bin
 * [TheChernoProject - Abstracting OpenGL into Classes](https://www.youtube.com/watch?v=bTHqmzjm2UI)
 * [TheChernoProject - Buffer Layout Abstraction in OpenGL](https://www.youtube.com/watch?v=oD1dvfbyf6A)
 * [TheChernoProject - Shader Abstraction in OpenGL](https://www.youtube.com/watch?v=gDtHL6hy9R8)
-
 * [LearnOpenGL - Basic Lighting](https://learnopengl.com/Lighting/Basic-Lighting)
 * [LearnOpenGL - Multiple lights](https://learnopengl.com/Lighting/Multiple-lights)
 * [LearnOpenGL - Gamma Correction](https://learnopengl.com/Advanced-Lighting/Gamma-Correction)
