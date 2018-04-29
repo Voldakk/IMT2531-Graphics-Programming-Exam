@@ -9,8 +9,10 @@
 
 class GameOverScene : public EVA::Scene
 {
+
 public:
-	GameOverScene(bool won, unsigned int score)
+
+	GameOverScene(const bool won, const unsigned int score)
 	{
 		EVA::Input::SetCursorMode(EVA::Input::Normal);
 
@@ -21,12 +23,16 @@ public:
 		};
 
 		auto layout = CreateUiElement<EVA::Layout>();
-		layout->SetMargin(0.02f);
+		layout->SetMargin(0.05f);
 
 		layout->AddChild(CreateUiElement<EVA::Label>("GAME OVER", 0.005f));
 
+		layout->AddChild(CreateUiElement<EVA::Padding>(glm::vec2(0.1f)));
+
 		layout->AddChild(CreateUiElement<EVA::Label>(won ? "YOU WON!" : "YOU LOST!", 0.002f));
 		layout->AddChild(CreateUiElement<EVA::Label>("SCORE: " + std::to_string(score), 0.002f));
+
+		layout->AddChild(CreateUiElement<EVA::Padding>(glm::vec2(0.1f)));
 
 		layout->AddChild(startButton);
 	}

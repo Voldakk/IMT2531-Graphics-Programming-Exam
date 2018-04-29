@@ -29,9 +29,10 @@ public:
 		};
 
 		auto layout = CreateUiElement<EVA::Layout>();
-		layout->SetMargin(0.02f);
+		layout->SetMargin(0.05f);
 
 		layout->AddChild(CreateUiElement<EVA::Label>("PACMAN", 0.005f));
+		layout->AddChild(CreateUiElement<EVA::Padding>(glm::vec2(0.2f)));
 		layout->AddChild(startButton);
 		layout->AddChild(exitButton);
 
