@@ -13,7 +13,7 @@ class Game;
 
 enum TileType
 {
-	Floor, Wall, Teleporter, GhostFloor, GhostDoor, GhostSpawn
+	Floor, Wall, GhostFloor, GhostDoor, GhostSpawn
 };
 
 class TileMap : public EVA::Component
