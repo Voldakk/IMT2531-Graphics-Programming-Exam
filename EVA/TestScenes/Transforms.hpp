@@ -21,10 +21,21 @@ namespace EVA_TEST
 			// Skybox
 			skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
 
-			// A directional light that fits the skybox
+			// 3 directional lights from different angles
 			auto directionalLight = CreateLight(EVA::LightType::Directional, true);
-			directionalLight->SetRotation({ 60.0f, -80.0 });
+			directionalLight->SetRotation({ 60.0f, 0.0f });
 			directionalLight->directionalShadowDistance = 25.0f;
+			directionalLight->color = { 0.5f, 0.0f, 0.0f };
+
+			directionalLight = CreateLight(EVA::LightType::Directional, true);
+			directionalLight->SetRotation({ 60.0f, 120.0f });
+			directionalLight->directionalShadowDistance = 25.0f;
+			directionalLight->color = { 0.0f, 0.5f, 0.0f };
+
+			directionalLight = CreateLight(EVA::LightType::Directional, true);
+			directionalLight->SetRotation({ 60.0f, 240.0f });
+			directionalLight->directionalShadowDistance = 25.0f;
+			directionalLight->color = { 0.0f, 0.0f, 0.5f };
 
 			// Camera
 			auto camera = CreateGameObject();
