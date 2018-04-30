@@ -11,6 +11,8 @@ While I'm fairly happy with most aspects of the project I choose to weight sligh
 * I choose to create a generic OpenGL game engine, and subsequently an implementation of a Pacman game using the engine.  
 * It uses a component based system where each 'game object' is only responsible for managing the components attached to it.  
 Some component like the Transform and MeshRenderer receives special treatment, but the user is free to create any sort of component they want.
+* Transforms can have a parent and translates/scales/rotates correctly with the parent.
+* The SceneManager provides an easy way to create multiple seperate scenes and change between them. Multiple scenes can be loaded at once as seen with the Game & PauseMenu.
 
 ### Gameplay/Usability
 * Both Pacman and the ghosts are locked to the grid, and can never move more than 1 tile each frame.   
@@ -68,6 +70,11 @@ make
 cd bin
 ./main
 ```
+## Test scenes
+
+Thera are 2 test scenes in addition to the pacman game.
+To run them simply uncomment the line in source/main.cpp
+
 ## Built With
 
 * [GLEW](http://glew.sourceforge.net/)

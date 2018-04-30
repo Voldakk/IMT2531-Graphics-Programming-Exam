@@ -14,6 +14,8 @@ namespace EVA
 
 	public:
 
+		bool wasd = true;
+
 		float mouseSensitivity = 50.0f;
 		float movementSpeed = 5.0f;
 
@@ -29,27 +31,27 @@ namespace EVA
 			glm::vec3 movement;
 
 			// Front
-			if (Input::Key(Input::Up))
+			if (Input::Key(wasd ? Input::W : Input::Up))
 				movement += transform->forward;
 
 			// Back
-			if (Input::Key(Input::Down))
+			if (Input::Key(wasd ? Input::S : Input::Down))
 				movement -= transform->forward;
 
 			// Right
-			if (Input::Key(Input::Right))
+			if (Input::Key(wasd ? Input::D : Input::Right))
 				movement += transform->right;
 
 			// Left
-			if (Input::Key(Input::Left))
+			if (Input::Key(wasd ? Input::A : Input::Left))
 				movement -= transform->right;
 
 			// Up
-			if (Input::Key(Input::RightShift))
+			if (Input::Key(wasd ? Input::Space : Input::RightShift))
 				movement += transform->up;
 
 			// Down
-			if (Input::Key(Input::RightControl))
+			if (Input::Key(wasd ? Input::LeftShift : Input::RightControl))
 				movement -= transform->up;
 
 			transform->Translate(movement * movementSpeed * deltaTime);

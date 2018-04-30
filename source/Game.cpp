@@ -77,6 +77,7 @@ Game::Game()
 	EVA::Application::SetMainCamera(m_Camera);
 
 	m_FreeCamera = m_Camera->gameObject->AddComponent<EVA::FreeLook>();
+	m_FreeCamera->wasd = false;
 
 	m_ChaseCamera = m_Camera->gameObject->AddComponent<EVA::FollowTarget>();
 	m_ChaseCamera->target = pacman->gameObject->transform.get();
