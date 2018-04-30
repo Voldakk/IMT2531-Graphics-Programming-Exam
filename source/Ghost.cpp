@@ -205,7 +205,6 @@ std::vector<Ghost::Direction> Ghost::FindPossibleDirections() const
 			switch (tile)
 			{
 			case TileType::Floor:
-			case TileType::Teleporter:
 				directions.push_back((Direction)i);
 				break;
 

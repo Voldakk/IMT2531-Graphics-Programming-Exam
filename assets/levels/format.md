@@ -1,4 +1,4 @@
-# Pacman level formt
+# Pacman level format
 
 ### Size
 The first line specifies the map size  
@@ -23,8 +23,8 @@ Teleporter pairs: 0-9
 
 ### Ghost house construction
 The ghost house is where the ghost spawn and go to respawn when eaten by Pacman.  
-The ghost spawn (G) marks the exact thile they wil spawn on.  
-The floor (H) is similar to the normal floor exept is causing live ghosts to move upwards.  
+The ghost spawn (G) marks the exact tile they wil spawn on.  
+The floor (H) is similar to the normal floor except it causes alive ghosts to move upwards.  
 The door (D) is a visible barrier only the ghost can go through. The door should always be above the ghost's spawn point
 
 ### Ghost scatter tiles
