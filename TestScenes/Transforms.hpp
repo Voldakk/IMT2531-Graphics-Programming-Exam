@@ -3,7 +3,7 @@
 #include "EVA.hpp"
 #include "EVA/Graphics.hpp"
 #include "EVA/ResourceManagers.hpp"
-#include "../Components/FreeLook.hpp"
+#include "EVA/Components.hpp"
 
 namespace EVA_TEST
 {
@@ -21,7 +21,7 @@ namespace EVA_TEST
 			// Skybox
 			skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
 
-			// 3 directional lights from different angles
+			// A directional light that fits the skybox
 			auto directionalLight = CreateLight(EVA::LightType::Directional, true);
 			directionalLight->SetRotation({ 60.0f, 80.0f });
 			directionalLight->directionalShadowDistance = 25.0f;

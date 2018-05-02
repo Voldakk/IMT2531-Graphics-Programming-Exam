@@ -1,10 +1,8 @@
 #pragma once
 
-//#include "EVA.hpp"
+#include "EVA.hpp"
 #include "EVA/UI.hpp"
-
-#include "../EVA/Components/FreeLook.hpp"
-#include "../EVA/Components/FollowTarget.hpp"
+#include "EVA/Components.hpp"
 
 #include "Pacman.hpp"
 #include "TileMap.hpp"

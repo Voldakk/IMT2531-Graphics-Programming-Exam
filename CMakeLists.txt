@@ -46,6 +46,8 @@ file(GLOB SOURCES
 	source/*
 	EVA/*
 	EVA/*/*
+	TestScenes/*
+	TestScenes/*/*
 	dependencies/stb-image/*
 )
 
