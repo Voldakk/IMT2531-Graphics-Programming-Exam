@@ -3,11 +3,15 @@
 #include <cstdio>
 #include <memory>
 
+#include "glm/glm.hpp"
+
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
 
 namespace EVA
 {
+	typedef rapidjson::Value json_value;
+	typedef rapidjson::Value json_object;
 
 	class Json
 	{
@@ -27,11 +31,11 @@ namespace EVA
 			return d;
 		}
 
-		static bool IsVec4(rapidjson::Value& value)
+		static bool IsVec4(json_value& jsonValue)
 		{
-			if (value.IsArray())
+			if (jsonValue.IsArray())
 			{
-				const auto a = value.GetArray();
+				const auto a = jsonValue.GetArray();
 				if (a.Size() == 4 && a[0].IsDouble() && a[1].IsDouble() && a[2].IsDouble() && a[3].IsDouble())
 					return true;
 			}
@@ -39,11 +43,100 @@ namespace EVA
 			return false;
 		}
 
-		static glm::vec4 GetVec4(rapidjson::Value& value)
+		static glm::vec4 GetVec4(json_value& jsonValue)
 		{
-			const auto a = value.GetArray();
+			const auto a = jsonValue.GetArray();
 			return { a[0].GetDouble() , a[1].GetDouble() , a[2].GetDouble() , a[3].GetDouble() };
 		}
+
+		static float GetFloat(const json_value& json, const char* key, const float defaultValue)
+		{
+			if(json.HasMember(key) && json[key].IsNumber())
+				return (float)json[key].GetDouble();
+
+			return defaultValue;
+		}
+	};
+
+	class DataObject
+	{
+		json_value& m_Json;
+
+	public:
+
+		explicit DataObject(json_value& json) : m_Json(json)
+		{
+
+		}
+
+		int GetInt(const char* key, const int defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsInt())
+				return m_Json[key].GetInt();
+
+			return defaultValue;
+		}
+
+		bool GetBool(const char* key, const bool defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsBool())
+				return m_Json[key].GetBool();
+
+			return defaultValue;
+		}
+
+		float GetFloat(const char* key, const float defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsNumber())
+				return (float)m_Json[key].GetDouble();
+
+			return defaultValue;
+		}
+
+		glm::vec2 GetVec2(const char* key, const glm::vec2 defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsArray())
+			{
+				const auto a = m_Json[key].GetArray();
+				if (a.Size() == 2 && a[0].IsDouble() && a[1].IsDouble())
+					return { a[0].GetDouble(), a[1].GetDouble() };
+			}
+
+			return defaultValue;
+		}
+
+		glm::vec3 GetVec3(const char* key, const glm::vec3 defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsArray())
+			{
+				const auto a = m_Json[key].GetArray();
+				if (a.Size() == 3 && a[0].IsDouble() && a[1].IsDouble() && a[2].IsDouble())
+					return { a[0].GetDouble(), a[1].GetDouble(), a[2].GetDouble() };
+			}
+
+			return defaultValue;
+		}
+
+		glm::vec4 GetVec4(const char* key, const glm::vec4 defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsArray())
+			{
+				const auto a = m_Json[key].GetArray();
+				if (a.Size() == 4 && a[0].IsDouble() && a[1].IsDouble() && a[2].IsDouble() && a[3].IsDouble())
+					return { a[0].GetDouble(), a[1].GetDouble(), a[2].GetDouble(), a[3].GetDouble() };
+			}
+
+			return defaultValue;
+		}
+
+		std::string GetString(const char* key, const std::string defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsString())
+				return m_Json[key].GetString();
+
+			return defaultValue;
+		}
+
 	};
 
 }

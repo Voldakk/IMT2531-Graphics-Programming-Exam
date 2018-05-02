@@ -2,6 +2,8 @@
 
 #include "ConstPointer.hpp"
 
+#include "Parsers/Json.hpp"
+
 namespace EVA
 {
 
@@ -87,9 +89,13 @@ namespace EVA
 		*/
 		void SetGameObject(GameObject* gameObject);
 
-		void SetActive(bool value);
+		void SetScene(Scene* scene);
+		
+    	void SetActive(bool value);
 
 		virtual void Start();
-		
+
+    	// JSON parser
+		virtual void Load(const DataObject data);
     };
 }

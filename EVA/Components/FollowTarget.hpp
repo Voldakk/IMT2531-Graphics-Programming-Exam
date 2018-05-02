@@ -19,5 +19,7 @@ namespace EVA
 		float scalar = 1.0f;
 
 		void Update(const float deltaTime) override;
+
+		void Load(const DataObject data) override;
 	};
 }

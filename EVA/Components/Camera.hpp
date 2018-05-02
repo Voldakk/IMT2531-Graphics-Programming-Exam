@@ -18,9 +18,9 @@ namespace EVA
 
     public:
 
-        float fov;
-        float near;
-        float far;
+        float fov = 90.0f;
+        float near = 0.1f;
+        float far = 1000.0f;
 
 		const glm::mat4& viewMatrix = m_ViewMatrix;
 
@@ -30,6 +30,7 @@ namespace EVA
 		void Start() override;
 
         void LateUpdate() override;
-    };
 
+		void Load(const DataObject data) override;
+    };
 }

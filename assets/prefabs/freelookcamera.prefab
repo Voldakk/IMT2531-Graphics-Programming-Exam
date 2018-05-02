@@ -2,7 +2,14 @@
 	"components": 
 	[
 		{
-			"id": "EVA::Camera"
+			"id": "EVA::Transform",
+			"position": [0.0, 0.0, -5.0]
+		},
+		{
+			"id": "EVA::Camera",
+			"fov": 90,
+			"near": 0.1,
+			"far": 100
 		},
 		{
 			"id": "EVA::FreeLook"

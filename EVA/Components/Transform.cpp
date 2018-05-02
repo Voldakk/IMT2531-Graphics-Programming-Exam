@@ -180,8 +180,19 @@ namespace EVA
 
 	glm::vec3 Transform::LocalToWorld(const glm::vec3 localPosition) const
 	{
-		auto o = orientation;
+		const auto o = orientation;
 
 		return localPosition * o;
+	}
+
+	void Transform::Load(const DataObject data)
+	{
+		m_LocalPosition = data.GetVec3("position", glm::vec3(0.0f));
+		m_LocalScale = data.GetVec3("scale", glm::vec3(1.0f));
+
+		const auto o = data.GetVec4("orientation", { 0.0f, 0.0f, 0.0f, 1.0f });
+		m_LocalOrientation = glm::quat(o.w, o.x, o.y, o.z);
+
+		UpdateModelMatrix();
 	}
 }

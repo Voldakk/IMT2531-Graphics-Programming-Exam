@@ -50,4 +50,11 @@ namespace EVA
 		transform->SetOrientation(YAXIS, m_Yaw);
 		transform->Rotate(XAXIS, m_Pitch);
 	}
+
+	void FreeLook::Load(const DataObject data)
+	{
+		wasd = data.GetBool("wasd", true);
+		mouseSensitivity = data.GetFloat("mouseSensitivity", 50.0f);
+		movementSpeed = data.GetFloat("movementSpeed", 5.0f);
+	}
 }

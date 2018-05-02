@@ -25,16 +25,8 @@ namespace EVA_TEST
 			// Camera
 			auto camera = EVA::PrefabParser::Load(this, "./assets/prefabs/freelookcamera.prefab");
 
-			// Mesh
-			const auto cubeModel = EVA::ModelManager::Primitive(EVA::Cube);
-
-			// Material
-			const auto material = EVA::MaterialParser::Get("./assets/materials/uv.mat");
-
-			// Center cube
-			auto cube = CreateGameObject().get();
-			auto mr = cube->AddComponent<EVA::MeshRenderer>();
-			mr->Set(cubeModel->GetMesh(0), material);
+			// Cube
+			auto cube = EVA::PrefabParser::Load(this, "./assets/prefabs/uvcube.prefab");
 		}
 	};
 

@@ -1,0 +1,10 @@
+{
+	"components": 
+	[
+		{
+			"id": "EVA::MeshRenderer",
+			"meshPrimitive": "cube",
+			"material": "./assets/materials/uv.mat"
+		}
+	]
+}

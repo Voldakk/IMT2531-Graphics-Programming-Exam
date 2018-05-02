@@ -117,49 +117,49 @@ namespace EVA
 
 	std::shared_ptr<Model> ModelManager::Primitive(const PrimitiveType type)
 	{
-		std::string path = "./assets/models/primitives/";
+		auto path = PRIMITIVES_PATH;
 
 		switch (type)
 		{
 		case Circle:
-			path += "circle.obj";
+			path += "circle";
 			break;
 		case Cone:
-			path += "cone.obj";
+			path += "cone";
 			break;
 		case Cube:
-			path += "cube.obj";
+			path += "cube";
 			break;
 		case CubeInverted:
-			path += "cube_inverted.obj";
+			path += "cube_inverted";
 			break;
 		case Cylinder:
-			path += "cylinder.obj";
+			path += "cylinder";
 			break;
 		case Monkey:
-			path += "monkey_low.obj";
+			path += "monkey_low";
 			break;
 		case MonkeyHigh:
-			path += "monkey_high.obj";
+			path += "monkey_high";
 			break;
 		case Icosphere:
-			path += "icosphere.obj";
+			path += "icosphere";
 			break;
 		case Plane:
-			path += "plane.obj";
+			path += "plane";
 			break;
 		case Sphere:
-			path += "sphere.obj";
+			path += "sphere";
 			break;
 		case Torus:
-			path += "torus.obj";
+			path += "torus";
 			break;
 			// Default to cube
 		default:
-			path += "cube.obj";
+			path += "cube";
 			break;
 		}
 
-		return LoadModel(path);
+		return LoadModel(path + PRIMITIVES_TYPE);
 	}
 }

@@ -24,13 +24,15 @@ namespace EVA
 		const std::shared_ptr<Mesh>& mesh = m_Mesh;
 		const std::shared_ptr<Material>& material = m_Material;
 
-		MeshRenderer() = default;
-
 		~MeshRenderer() override;
+
+		void Start() override;
 
 		void Set(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material);
 
 		void Render() const;
+
+		void Load(const DataObject data) override;
 		
 	};
 }

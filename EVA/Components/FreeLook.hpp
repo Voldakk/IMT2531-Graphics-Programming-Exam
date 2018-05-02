@@ -23,5 +23,7 @@ namespace EVA
 		FreeLook() = default;
 
 		void Update(const float deltaTime) override;
+
+		void Load(const DataObject data) override;
 	};
 }

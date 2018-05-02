@@ -25,16 +25,24 @@ namespace EVA
 
 				for (unsigned int i = 0; i < components.Size(); ++i)
 				{
-					const auto& c = components[i];
+					auto& c = components[i];
 
 					const std::string id = c["id"].GetString();
 
-					const auto component = ComponentMap::CreateComponent(id);
-					if(component != nullptr)
+					if(id == "EVA::Transform")
 					{
-						gameObject->AttachComponent(component);
+						gameObject->transform->Load(DataObject(c));
 					}
-
+					else
+					{
+						const auto component = ComponentMap::CreateComponent(id);
+						if (component != nullptr)
+						{
+							component->SetScene(scene);
+							component->Load(DataObject(c));
+							gameObject->AttachComponent(component);
+						}
+					}
 				}
 			}
 

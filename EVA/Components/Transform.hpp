@@ -180,5 +180,7 @@ namespace EVA
 		int GetChildIndex(GameObject *child) const;
 
 		glm::vec3 LocalToWorld(glm::vec3 localPosition) const;
+
+		void Load(const DataObject data) override;
 	};
 }

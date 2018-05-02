@@ -15,4 +15,10 @@ namespace EVA
 		const auto targetPos = target->position + target->LocalToWorld(offset);
 		transform->SetPosition(glm::mix(transform->position, targetPos, deltaTime * scalar));
 	}
+
+	void FollowTarget::Load(const DataObject data)
+	{
+		offset = data.GetVec3("offset", glm::vec3(0.0f));
+		scalar = data.GetFloat("scalar", 1.0f);
+	}
 }

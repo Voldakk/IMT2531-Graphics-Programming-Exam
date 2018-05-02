@@ -20,10 +20,12 @@ namespace EVA
 
 	class ModelManager
 	{
-
 		static std::map<std::string, std::shared_ptr<Model>> m_Models;
 
 	public:
+
+		inline static const  std::string PRIMITIVES_PATH = "./assets/models/primitives/";
+		inline static const  std::string PRIMITIVES_TYPE = ".obj";
 
 		/**
 		 * \brief Load a model from the specified path

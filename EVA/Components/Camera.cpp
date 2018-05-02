@@ -17,10 +17,6 @@ namespace EVA
 
 	void Camera::Start()
 	{
-		fov = 90.0f;
-		near = 0.1f;
-		far = 1000.0f;
-
 		EVA::Application::SetMainCamera(this);
 	}
 
@@ -29,4 +25,11 @@ namespace EVA
     	// Update view
 		m_ViewMatrix = glm::lookAt(transform->position, transform->position + transform->forward, transform->up);
     }
+
+	void Camera::Load(const DataObject data)
+	{
+		fov = data.GetFloat("fov", 90.0f);
+		near = data.GetFloat("near", 0.1f);
+		far = data.GetFloat("far", 1000.0f);
+	}
 }
