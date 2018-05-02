@@ -4,12 +4,6 @@
 
 namespace EVA
 {
-
-	MeshRenderer::MeshRenderer(GameObject *gameObject) : Component(gameObject)
-	{
-
-	}
-
 	MeshRenderer::~MeshRenderer()
 	{
 		scene->RemoveMeshRenderer(this);
@@ -27,5 +21,4 @@ namespace EVA
 		m_Material->Activate(scene.Get(), transform.Get());
 		m_Mesh->Draw();
 	}
-
 }

@@ -20,7 +20,7 @@ namespace EVA
 	{
 		glm::mat4 m_ModelMatrix;
 
-		std::shared_ptr<Transform> m_Parent;
+		Transform* m_Parent;
 		std::vector<Transform *> m_Children;
 
 		glm::vec3 m_LocalPosition = glm::vec3(0.0f);
@@ -54,10 +54,9 @@ namespace EVA
 		const glm::vec3& up = m_Up;
 
 		/**
-		 * \brief 
-		 * \param gameObject The GameObject the transform is attaced to
+		 * \brief Constructor
 		 */
-		explicit Transform(GameObject *gameObject);
+		Transform();
 
 		/**
 		* \brief Translates the transform by the given offset
@@ -161,7 +160,7 @@ namespace EVA
 		 * \brief Sets the transform's parent
 		 * \param newParent The new parent
 		 */
-		void SetParent(std::shared_ptr<Transform> newParent);
+		void SetParent(Transform* newParent);
 
 		/**
 		 * \brief Gets the child's index in the transforms list of children
@@ -179,5 +178,4 @@ namespace EVA
 
 		glm::vec3 LocalToWorld(glm::vec3 localPosition) const;
 	};
-
 }

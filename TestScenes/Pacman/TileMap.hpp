@@ -18,8 +18,8 @@ enum TileType
 
 class TileMap : public EVA::Component
 {
-	int m_Width;
-	int m_Height;
+	int m_Width = 0;
+	int m_Height = 0;
 
 	std::vector<std::vector<TileType>> m_Tiles;
 
@@ -30,19 +30,16 @@ class TileMap : public EVA::Component
 
 	std::map<unsigned int, glm::ivec2> m_UniqueTiles;
 
-	Game* m_Game;
+	
 
 public:
+
+	Game * game;
 
 	const int& width = m_Width;
 	const int& height = m_Height;
 
-	/**
-	 * \brief 
-	 * \param gameObject The GameObject the pellet is attaced to
-	 * \param game The game scene
-	 */
-	explicit TileMap(EVA::GameObject *gameObject, Game* game);
+	void Start() override;
 
 	/**
 	 * \brief Reads a level from the specified file

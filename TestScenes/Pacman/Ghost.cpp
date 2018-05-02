@@ -4,8 +4,7 @@
 
 #include "Game.hpp"
 
-Ghost::Ghost(EVA::GameObject* gameObject, Game* game)
-	: Component(gameObject), m_Direction(Direction::Up), m_State(GhostState::Chase), m_Game(game), m_TileMap(game->tileMap), m_Pacman(game->pacman)
+void Ghost::Start()
 {
 	const auto shader = EVA::ShaderManager::GetShader("standard");
 
@@ -31,15 +30,17 @@ Ghost::Ghost(EVA::GameObject* gameObject, Game* game)
 	auto eyeMr = gameObject->AddComponent<EVA::MeshRenderer>();
 	eyeMr->Set(m_Model->GetMesh("ghost_eyes"), m_EyeMaterial);
 
+	m_Pacman = game->pacman;
+
 	Reset();
 }
 
 void Ghost::Update(const float deltaTime)
 {
 	// Get the current tile
-	m_CurrentTile = m_TileMap->GetTileIndex(transform->position);
+	m_CurrentTile = tileMap->GetTileIndex(transform->position);
 
-	if (m_State == GhostState::Dead && m_CurrentTile == m_TileMap->GetUniqueTile('G'))
+	if (m_State == GhostState::Dead && m_CurrentTile == tileMap->GetUniqueTile('G'))
 		Reset();
 
 	// If it's time to select a new target tile
@@ -49,7 +50,7 @@ void Ghost::Update(const float deltaTime)
 		const auto possibleTarget = m_CurrentTile + DirectionToVector(m_Direction);
 
 		// The possible target is traversable
-		if (m_TileMap->GetTileType(possibleTarget) != TileType::Wall)
+		if (tileMap->GetTileType(possibleTarget) != TileType::Wall)
 		{
 			// Set the target and direction
 			m_TargetTile = possibleTarget;
@@ -81,7 +82,7 @@ void Ghost::Update(const float deltaTime)
 	}
 
 	// Return if the target tile isn't traversable
-	const auto nextTile = m_TileMap->GetTileType(m_TargetTile);
+	const auto nextTile = tileMap->GetTileType(m_TargetTile);
 	if (nextTile == TileType::Wall)
 	{
 		m_TargetTile.x = -1;
@@ -100,7 +101,7 @@ void Ghost::Update(const float deltaTime)
 	if (maxDistance > distToTile)
 	{
 		glm::ivec2 teleportDest;
-		if (m_TileMap->GetTeleporter(m_TargetTile, teleportDest))
+		if (tileMap->GetTeleporter(m_TargetTile, teleportDest))
 			transform->SetPosition(TileMap::GetTilePosition(teleportDest));
 		else
 			transform->SetPosition(targetTilePos);
@@ -117,10 +118,10 @@ void Ghost::Update(const float deltaTime)
 
 void Ghost::Reset()
 {
-	SetState(m_Game->CurrentWave().state);
+	ResetState();
 
-	m_CurrentTile = m_TileMap->GetUniqueTile('G');
-	transform->SetPosition(m_TileMap->GetUniqueTilePosition('G'));
+	m_CurrentTile = tileMap->GetUniqueTile('G');
+	transform->SetPosition(tileMap->GetUniqueTilePosition('G'));
 
 	m_Direction = Direction::Up;
 	m_CurrentDirection = DirectionToVector(m_Direction);
@@ -141,7 +142,7 @@ void Ghost::SetState(const GhostState newState)
 
 void Ghost::ResetState()
 {
-	SetState(m_Game->CurrentWave().state);
+	SetState(game->CurrentWave().state);
 }
 
 void Ghost::SetMaterialColor(const glm::vec3 color) const
@@ -195,7 +196,7 @@ std::vector<Ghost::Direction> Ghost::FindPossibleDirections() const
 			continue;
 
 		const auto direction = DirectionToVector((Direction)i);
-		const auto tile = m_TileMap->GetTileType(m_CurrentTile + direction);
+		const auto tile = tileMap->GetTileType(m_CurrentTile + direction);
 
 		switch (m_State)
 		{
@@ -224,7 +225,7 @@ std::vector<Ghost::Direction> Ghost::FindPossibleDirections() const
 
 Ghost::Direction Ghost::ChooseDirection(const std::vector<Ghost::Direction>& directions) const
 {
-	const auto currentTile = m_TileMap->GetTileType(m_CurrentTile);
+	const auto currentTile = tileMap->GetTileType(m_CurrentTile);
 
 	switch (currentTile)
 	{
@@ -245,7 +246,7 @@ Ghost::Direction Ghost::ChooseDirection(const std::vector<Ghost::Direction>& dir
 
 		case Dead:
 		default:
-			return DirectionToTarget(directions, m_TileMap->GetUniqueTile('G'));
+			return DirectionToTarget(directions, tileMap->GetUniqueTile('G'));
 		}
 		
 
@@ -262,7 +263,7 @@ Ghost::Direction Ghost::ChooseDirection(const std::vector<Ghost::Direction>& dir
 
 		case GhostState::Dead:
 		default:
-			return DirectionToTarget(directions, m_TileMap->GetUniqueTile('G'));
+			return DirectionToTarget(directions, tileMap->GetUniqueTile('G'));
 		}
 	}
 

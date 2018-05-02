@@ -10,24 +10,18 @@ class Pellet : public EVA::Component, public EVA::IUpdateComponent
 	static std::shared_ptr<EVA::Mesh> m_Mesh;
 	static std::shared_ptr<EVA::Material> m_Material;
 
-	glm::ivec2 m_Tile;
-
 	static unsigned int m_PelletCount;
 
 protected:
 
-	Game* m_Game;
 	unsigned int m_Score = 10;
 
 public:
 
-	/**
-	 * \brief Constructor. Adds a MeshRenderer and positions the pellet
-	 * \param gameObject The GameObject the pellet is attaced to
-	 * \param game The game scene
-	 * \param tile The tile index where the pellet is located
-	 */
-	explicit Pellet(EVA::GameObject* gameObject, Game* game, glm::ivec2 tile);
+	Game* game;
+	glm::ivec2 tile;
+
+	void Start() override;
 
 	/**
 	* \brief Runs every frame
@@ -49,7 +43,8 @@ class Energizer : public Pellet
 	float m_Time = 8.0f;
 
 public:
-	Energizer(EVA::GameObject* gameObject, Game* game, const glm::ivec2& tile);
+
+	void Start() override;
 
 	void OnPickup() override;
 };

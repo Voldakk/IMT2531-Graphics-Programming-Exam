@@ -72,18 +72,24 @@ namespace EVA
 		const bool& active = m_Active;
 	    
 	    /**
-	     * \brief Constructor. gets the refferences to the scene and the transform on the game object
-	     * \param gameObject The GameObject the component is attaced to
+	     * \brief Default constructor
 	     */
-	    explicit Component(GameObject *gameObject);
+		Component() = default;
 
-	    /**
-		 * \brief Destructor
-		 */
+		/**
+		* \brief Default destructor
+		*/
 		virtual ~Component() = default;
+
+		/**
+		* \brief Gets the refferences to the scene and the transform on the game object
+		* \param gameObject The GameObject the component is attaced to
+		*/
+		void SetGameObject(GameObject* gameObject);
 
 		void SetActive(bool value);
 
+		virtual void Start();
 		
     };
 }

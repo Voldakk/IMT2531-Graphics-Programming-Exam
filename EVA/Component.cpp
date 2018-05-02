@@ -11,8 +11,9 @@ namespace EVA
 		m_Active = value;
 	}
 
-    Component::Component(GameObject *gameObject) : m_GameObject(gameObject)
-    {
+	void Component::SetGameObject(GameObject* gameObject)
+	{
+		m_GameObject = gameObject;
 		if (gameObject != nullptr)
 		{
 			m_Scene = gameObject->scene.Get();
@@ -22,7 +23,7 @@ namespace EVA
 				m_Transform = gameObject->transform.get();
 			}
 		}
-    }
+	}
 
 	void Component::SetActive(const bool value)
 	{
@@ -42,5 +43,10 @@ namespace EVA
 		const auto rc = dynamic_cast<IRenderComponent*>(this);
 		if (rc != nullptr)
 			rc->SetActiveInternal(value);
+	}
+
+	void Component::Start()
+	{
+
 	}
 }

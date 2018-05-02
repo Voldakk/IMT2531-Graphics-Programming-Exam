@@ -46,39 +46,54 @@ Game::Game()
 
 	// Tilemap
 	Pellet::ResetCount();
-	tileMap = CreateGameObject()->AddComponent<TileMap>(this);
+	tileMap = CreateGameObject()->AddComponent<TileMap>();
+	tileMap->game = this;
+	tileMap->Start();
 	tileMap->ReadFile("./assets/levels/level1.txt");
 
 	// Pacman
-	pacman = CreateGameObject()->AddComponent<Pacman>(tileMap);
+	pacman = CreateGameObject()->AddComponent<Pacman>();
+	pacman->tileMap = tileMap;
+	pacman->Start();
 
 	// Shadow
-	const auto shadow = CreateGameObject()->AddComponent<GhostShadow>(this);
+	const auto shadow = CreateGameObject()->AddComponent<GhostShadow>();
 	ghosts.push_back(shadow);
 
 	//Speedy
-	const auto speedy = CreateGameObject()->AddComponent<GhostSpeedy>(this);
+	const auto speedy = CreateGameObject()->AddComponent<GhostSpeedy>();
 	ghosts.push_back(speedy);
 
 	// Bashful
-	const auto bashful = CreateGameObject()->AddComponent<GhostBashful>(this, shadow);
+	const auto bashful = CreateGameObject()->AddComponent<GhostBashful>();
+	bashful->shadow = shadow;
 	ghosts.push_back(bashful);
 
 	// Pokey
-	const auto pokey = CreateGameObject()->AddComponent<GhostPokey>(this);
+	const auto pokey = CreateGameObject()->AddComponent<GhostPokey>();
 	ghosts.push_back(pokey);
+
+	for (auto ghost : ghosts)
+	{
+		ghost->game = this;
+		ghost->tileMap = tileMap;
+		ghost->Start();
+	}
 
 	// Camera
 	m_Camera = CreateGameObject()->AddComponent<EVA::Camera>();
+	m_Camera->Start();
 	m_Camera->transform->SetPosition(pacman->transform->position);
 	EVA::Application::SetMainCamera(m_Camera);
 
 	m_FreeCamera = m_Camera->gameObject->AddComponent<EVA::FreeLook>();
 	m_FreeCamera->wasd = false;
+	m_FreeCamera->Start();
 
 	m_ChaseCamera = m_Camera->gameObject->AddComponent<EVA::FollowTarget>();
 	m_ChaseCamera->target = pacman->gameObject->transform.get();
 	m_ChaseCamera->offset = glm::vec3(0.0f, 4.0f, -2.0f);
+	m_ChaseCamera->Start();
 
 	// UI
 	EVA::Input::SetCursorMode(EVA::Input::Disabled);

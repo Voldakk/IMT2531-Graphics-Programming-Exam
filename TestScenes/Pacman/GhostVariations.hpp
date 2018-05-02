@@ -14,10 +14,13 @@ class GhostShadow : public Ghost
 {
 public:
 
-	GhostShadow(EVA::GameObject* gameObject, Game* game) : Ghost(gameObject, game)
+	void Start() override
 	{
+		Ghost::Start();
+
 		SetColor({ 1.0f, 0.0f, 0.0f });
 		m_ScatterTile = game->tileMap->GetUniqueTile('B');
+
 	}
 
 protected:
@@ -35,10 +38,13 @@ class GhostSpeedy : public Ghost
 {
 public:
 
-	GhostSpeedy(EVA::GameObject* gameObject, Game* game) : Ghost(gameObject, game)
+	void Start() override
 	{
+		Ghost::Start();
+
 		SetColor({ 0.85f, 0.35f, 0.85f });
 		m_ScatterTile = game->tileMap->GetUniqueTile('S');
+
 	}
 
 private:
@@ -54,24 +60,28 @@ private:
 */
 class GhostBashful : public Ghost
 {
-	GhostShadow* m_Shadow;
 
 public:
+	
+	GhostShadow* shadow;
 
-	GhostBashful(EVA::GameObject* gameObject, Game* game, GhostShadow* shadow) : Ghost(gameObject, game), m_Shadow(shadow)
+	void Start() override
 	{
+		Ghost::Start();
+
 		SetColor({ 0.5f, 0.9f, 0.9f });
 		m_ScatterTile = game->tileMap->GetUniqueTile('I');
+
 	}
 
 private:
 
 	Direction ChooseChaseTarget(const std::vector<Ghost::Direction>& directions) const override
 	{
-		if (m_Shadow != nullptr)
+		if (shadow != nullptr)
 		{
 			const auto pacmanFront = m_Pacman->currentTile + m_Pacman->currentDirection * 2;
-			const auto shadowToPacmanFront = pacmanFront - m_Shadow->currentTile;
+			const auto shadowToPacmanFront = pacmanFront - shadow->currentTile;
 
 			return DirectionToTarget(directions, pacmanFront + shadowToPacmanFront);
 		}
@@ -86,10 +96,13 @@ class GhostPokey : public Ghost
 {
 public:
 
-	GhostPokey(EVA::GameObject* gameObject, Game* game) : Ghost(gameObject, game)
+	void Start() override
 	{
+		Ghost::Start();
+
 		SetColor({ 0.95f, 0.8f, 0.3f });
 		m_ScatterTile = game->tileMap->GetUniqueTile('C');
+
 	}
 
 private:

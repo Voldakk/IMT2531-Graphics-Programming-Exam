@@ -22,7 +22,7 @@ namespace EVA
 		const std::shared_ptr<Mesh>& mesh = m_Mesh;
 		const std::shared_ptr<Material>& material = m_Material;
 
-		explicit MeshRenderer(GameObject *gameObject);
+		MeshRenderer() = default;
 
 		~MeshRenderer() override;
 
@@ -31,5 +31,4 @@ namespace EVA
 		void Render() const;
 		
 	};
-
 }

@@ -16,7 +16,7 @@ namespace EVA
     {
 
 		Scene* m_Scene;
-        std::shared_ptr<Transform> m_Transform;
+        std::unique_ptr<Transform> m_Transform;
 
 		std::vector<std::shared_ptr<Component>> m_Components;
 		std::vector<IUpdateComponent*> m_UpdateComponents;
@@ -27,7 +27,7 @@ namespace EVA
 
 		// Public read only fields
 		const ConstPointer<Scene> scene = &m_Scene;
-		const std::shared_ptr<Transform>& transform = m_Transform;
+		const std::unique_ptr<Transform>& transform = m_Transform;
 		
 	    /**
 	     * \brief Constructor. Adds a transform to the game object
@@ -54,12 +54,10 @@ namespace EVA
 	    /**
          * \brief Adds a component of the given type to the game object
          * \tparam T The component type
-         * \tparam Args Any arguments passed to the components constructor
-         * \param args Any arguments passed to the components constructor
          * \return A pointer to the component
          */
-        template<class T, typename... Args>
-        T* AddComponent(Args... args);
+        template<class T>
+        T* AddComponent();
 
 	    /**
          * \brief Sets the parent of the gameobject's transform
@@ -79,11 +77,13 @@ namespace EVA
 		void Destroy();
     };
 
-    template<class T, typename... Args>
-	T* GameObject::AddComponent(Args... args)
+    template<class T>
+	T* GameObject::AddComponent()
     {
-        std::shared_ptr<T> component = std::make_shared<T>(this, args...);
+        std::shared_ptr<T> component = std::make_shared<T>();
         m_Components.push_back(component);
+
+		component->SetGameObject(this);
 
 		// Update
 		const auto uc = dynamic_cast<IUpdateComponent*>(component.get());

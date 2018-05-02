@@ -10,6 +10,7 @@ namespace EVA
 
 	class FollowTarget : public Component, public IUpdateComponent
 	{
+
 	public:
 
 		Transform * target;
@@ -17,8 +18,7 @@ namespace EVA
 		float scalar = 1.0f;
 		
 
-		explicit FollowTarget(GameObject* gameObject)
-			: Component(gameObject)
+		FollowTarget()
 		{
 			target = nullptr;
 		}
@@ -34,7 +34,5 @@ namespace EVA
 			const auto targetPos = target->position + target->LocalToWorld(offset);
 			transform->SetPosition(glm::mix(transform->position, targetPos, deltaTime * scalar));
 		}
-
 	};
-
 }

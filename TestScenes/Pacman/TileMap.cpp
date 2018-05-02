@@ -7,8 +7,7 @@
 #include "Game.hpp"
 #include "Pellet.hpp"
 
-TileMap::TileMap(EVA::GameObject *gameObject, Game* game)
-	: Component(gameObject), m_Width(0), m_Height(0), m_Game(game)
+void TileMap::Start()
 {
 	// Load meshes
 	m_Model = EVA::ModelManager::LoadModel("./assets/models/tile.obj");
@@ -93,6 +92,9 @@ void TileMap::ReadFile(const char *path)
 			const auto t = level[y][x];
 			m_UniqueTiles[t] = glm::ivec2(x, y);
 
+			Pellet* p;
+			Energizer* e;
+
 			switch (t)
 			{
 			case 'D':
@@ -130,12 +132,20 @@ void TileMap::ReadFile(const char *path)
 				break;
 
 			case '.':
-				scene->CreateGameObject()->AddComponent<Pellet>(m_Game, glm::ivec2(x, y));
+				p = scene->CreateGameObject()->AddComponent<Pellet>();
+				p->game = game;
+				p->tile = glm::ivec2(x, y);
+				p->Start();
+
 				row.push_back(TileType::Floor);
 				break;
 
 			case 'E':
-				scene->CreateGameObject()->AddComponent<Energizer>(m_Game, glm::ivec2(x, y));
+				e = scene->CreateGameObject()->AddComponent<Energizer>();
+				e->game = game;
+				e->tile = glm::ivec2(x, y);
+				e->Start();
+
 				row.push_back(TileType::Floor);
 				break;
 

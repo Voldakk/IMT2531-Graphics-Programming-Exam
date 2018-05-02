@@ -7,18 +7,17 @@
 
 namespace EVA
 {
-
-    Camera::Camera(GameObject *gameObject) : Component(gameObject)
-    {
-        fov = 90.0f;
-        near = 0.1f;
-        far = 1000.0f;
-    }
-
 	Camera::~Camera()
 	{
 		if (Application::mainCamera == this)
 			Application::UseDefaultCamera();
+	}
+
+	void Camera::Start()
+	{
+		fov = 90.0f;
+		near = 0.1f;
+		far = 1000.0f;
 	}
 
 	void Camera::LateUpdate()

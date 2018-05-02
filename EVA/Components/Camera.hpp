@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 
 #include "../Component.hpp"
+#include "../ComponentMap.hpp"
 
 namespace EVA
 {
@@ -11,6 +12,8 @@ namespace EVA
 
     class Camera : public Component, public ILateUpdateComponent
     {
+		//const ComponentRegister<Camera> m_Register = ComponentRegister<Camera>("EVA::Camera");
+
 		glm::mat4 m_ViewMatrix;
 
     public:
@@ -21,8 +24,10 @@ namespace EVA
 
 		const glm::mat4& viewMatrix = m_ViewMatrix;
 
-        explicit Camera(GameObject *gameObject);
+        Camera() = default;
 		~Camera();
+
+		void Start() override;
 
         void LateUpdate() override;
     };

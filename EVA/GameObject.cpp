@@ -6,7 +6,8 @@ namespace EVA
 {
     GameObject::GameObject(Scene* scene): m_Scene(scene)
 	{
-	    m_Transform = std::make_shared<Transform>(this);
+	    m_Transform = std::make_unique<Transform>();
+		m_Transform->SetGameObject(this);
 		m_Transform->m_Transform = m_Transform.get();
     }
 
@@ -39,12 +40,7 @@ namespace EVA
 
 	void GameObject::SetParent(GameObject *newParent) const
     {
-        m_Transform->SetParent(newParent->m_Transform);
-    }
-
-    void GameObject::SetParent(std::shared_ptr<GameObject> &newParent) const
-    {
-        m_Transform->SetParent(newParent->m_Transform);
+        m_Transform->SetParent(newParent->m_Transform.get());
     }
 
 	void GameObject::Destroy()

@@ -2,9 +2,8 @@
 
 #include "EVA/Input.hpp"
 #include "EVA/ResourceManagers.hpp"
-#include <iostream>
 
-Pacman::Pacman(EVA::GameObject* gameObject, TileMap* tileMap) : Component(gameObject), m_TileMap(tileMap)
+void Pacman::Start()
 {
 	// Mesh
 	m_Model = EVA::ModelManager::LoadModel("./assets/models/pacman.obj");
@@ -23,7 +22,6 @@ Pacman::Pacman(EVA::GameObject* gameObject, TileMap* tileMap) : Component(gameOb
 	mr = gameObject->AddComponent<EVA::MeshRenderer>();
 	mr->Set(m_Model->GetMesh(1), m_Material);
 
-	// Default values
 	Reset();
 }
 
@@ -49,7 +47,7 @@ void Pacman::Update(const float deltaTime)
 		m_InputDirection = (Direction)inputDir;
 
 	// Get the current tile
-	m_CurrentTile = m_TileMap->GetTileIndex(transform->position);
+	m_CurrentTile = tileMap->GetTileIndex(transform->position);
 
 	// If it's time to select a new target tile
 	if (m_TargetTile.x == -1)
@@ -80,7 +78,7 @@ void Pacman::Update(const float deltaTime)
 		}
 
 		// The possible target is traversable by pacman
-		if (m_TileMap->GetTileType(possibleTarget) == TileType::Floor)
+		if (tileMap->GetTileType(possibleTarget) == TileType::Floor)
 		{
 			// Set the target and direction
 			m_TargetTile = possibleTarget;
@@ -113,7 +111,7 @@ void Pacman::Update(const float deltaTime)
 	}
 
 	// Return if the target tile isn't traversable
-	const auto nextTile = m_TileMap->GetTileType(m_TargetTile);
+	const auto nextTile = tileMap->GetTileType(m_TargetTile);
 	if (nextTile != TileType::Floor)
 	{
 		m_TargetTile.x = -1;
@@ -132,7 +130,7 @@ void Pacman::Update(const float deltaTime)
 	if (maxDistance > distToTile)
 	{
 		glm::ivec2 teleportDest;
-		if(m_TileMap->GetTeleporter(m_TargetTile, teleportDest))
+		if(tileMap->GetTeleporter(m_TargetTile, teleportDest))
 			transform->SetPosition(TileMap::GetTilePosition(teleportDest));
 		else
 			transform->SetPosition(targetTilePos);
@@ -156,6 +154,6 @@ void Pacman::Reset()
 	m_CurrentDirection = glm::ivec2(1, 0);
 	transform->SetOrientation(EVA::YAXIS, 90.0f);
 
-	transform->SetPosition(m_TileMap->GetUniqueTilePosition('P'));
+	transform->SetPosition(tileMap->GetUniqueTilePosition('P'));
 	transform->SetScale(glm::vec3(0.8f));
 }

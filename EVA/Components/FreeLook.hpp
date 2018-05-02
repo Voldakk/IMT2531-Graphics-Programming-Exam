@@ -19,11 +19,7 @@ namespace EVA
 		float mouseSensitivity = 50.0f;
 		float movementSpeed = 5.0f;
 
-		explicit FreeLook(GameObject* gameObject)
-			: Component(gameObject)
-		{
-
-		}
+		FreeLook() = default;
 
 		void Update(const float deltaTime) override
 		{
@@ -72,5 +68,4 @@ namespace EVA
 			transform->Rotate(XAXIS, m_Pitch);
 		}
 	};
-
 }

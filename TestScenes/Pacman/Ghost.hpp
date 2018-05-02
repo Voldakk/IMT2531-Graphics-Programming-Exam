@@ -35,13 +35,13 @@ private:
 
 	// Movement
 	glm::ivec2 m_TargetTile;
-	Direction m_Direction;
+	Direction m_Direction = Up;
 	glm::ivec2 m_CurrentDirection;
 
 	float m_MovementSpeed = 2.0f;
 
 	// The ghosts current state
-	GhostState m_State;
+	GhostState m_State = Chase;
 
 	glm::vec3 m_Color;
 
@@ -50,24 +50,20 @@ protected:
 	glm::ivec2 m_CurrentTile;
 
 	// Other game elements
-	Game* m_Game;
-	TileMap* m_TileMap;
-	Pacman* m_Pacman;
+	Pacman* m_Pacman = nullptr;
 
 	// The tile the ghost targets while in the scatter state
 	glm::ivec2 m_ScatterTile;
 
 public:
+	
+	Game* game = nullptr;
+	TileMap* tileMap;
 
 	const glm::ivec2& currentTile = m_CurrentTile;
 	const GhostState& state = m_State;
 
-	/**
-	 * \brief Constructor. Loads the model and setsup the materials. Calls Reset()
-	 * \param gameObject The GameObject the ghost is attaced to
-	 * \param game The game scene
-	 */
-	explicit Ghost(EVA::GameObject* gameObject, Game* game);
+	void Start() override;
 
 	/**
 	 * \brief Runs every frame

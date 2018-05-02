@@ -10,10 +10,9 @@ std::shared_ptr<EVA::Material> Pellet::m_Material;
 
 unsigned int Pellet::m_PelletCount;
 
-Pellet::Pellet(EVA::GameObject* gameObject, Game* game, const glm::ivec2 tile) 
-	: Component(gameObject), m_Tile(tile), m_Game(game)
+void Pellet::Start()
 {
-	if(m_Mesh == nullptr)
+	if (m_Mesh == nullptr)
 	{
 		m_Mesh = EVA::ModelManager::Primitive(EVA::PrimitiveType::Sphere)->GetMesh(0);
 		m_Mesh->SetStatic(true);
@@ -29,14 +28,14 @@ Pellet::Pellet(EVA::GameObject* gameObject, Game* game, const glm::ivec2 tile)
 	m_Mesh->isDirty = true;
 
 	transform->SetScale(0.1f);
-	transform->SetPosition(TileMap::GetTilePosition(m_Tile) + EVA::YAXIS * transform->scale.y);
+	transform->SetPosition(TileMap::GetTilePosition(tile) + EVA::YAXIS * transform->scale.y);
 
 	m_PelletCount++;
 }
 
 void Pellet::Update(const float deltaTime)
 {
-	if (m_Game->pacman->currentTile == m_Tile)
+	if (game->pacman->currentTile == tile)
 	{
 		OnPickup();
 		gameObject->Destroy();
@@ -46,11 +45,11 @@ void Pellet::Update(const float deltaTime)
 
 void Pellet::OnPickup()
 {
-	m_Game->AddScore(m_Score);
+	game->AddScore(m_Score);
 
 	m_PelletCount--;
 	if (m_PelletCount == 0)
-		m_Game->Win();
+		game->Win();
 }
 
 void Pellet::ResetCount()
@@ -58,8 +57,10 @@ void Pellet::ResetCount()
 	m_PelletCount = 0;
 }
 
-Energizer::Energizer(EVA::GameObject* gameObject, Game* game, const glm::ivec2& tile): Pellet(gameObject, game, tile)
+void Energizer::Start()
 {
+	Pellet::Start();
+
 	Pellet::m_Score = m_Score;
 
 	transform->SetScale(0.3f);
@@ -68,5 +69,5 @@ Energizer::Energizer(EVA::GameObject* gameObject, Game* game, const glm::ivec2& 
 void Energizer::OnPickup()
 {
 	Pellet::OnPickup();
-	m_Game->ActivateEnergizer(m_Time);
+	game->ActivateEnergizer(m_Time);
 }

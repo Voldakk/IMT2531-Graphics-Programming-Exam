@@ -8,7 +8,7 @@
 namespace EVA
 {
 
-	Transform::Transform(GameObject *gameObject) : Component(gameObject)
+	Transform::Transform()
 	{
 		m_Parent = nullptr;
 		UpdateModelMatrix();
@@ -135,10 +135,10 @@ namespace EVA
 	void Transform::SetParent(GameObject *newParent)
 	{
 		if (newParent != nullptr)
-			SetParent(newParent->transform);
+			SetParent(newParent->transform.get());
 	}
 
-	void Transform::SetParent(std::shared_ptr<Transform> newParent)
+	void Transform::SetParent(Transform* newParent)
 	{
 		// If the transform has a parent
 		if (m_Parent != nullptr)
@@ -150,7 +150,7 @@ namespace EVA
 		}
 
 		// Set new parent
-		m_Parent = std::move(newParent);
+		m_Parent = newParent;
 
 		// Add the transform to the new parents list of children
 		if (m_Parent != nullptr)

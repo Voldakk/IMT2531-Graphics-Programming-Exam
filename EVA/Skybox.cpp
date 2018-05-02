@@ -30,7 +30,7 @@ namespace EVA
 		m_Model = ModelManager::Primitive(PrimitiveType::CubeInverted);
 
 		// Transform
-		m_Transform = std::make_unique<Transform>(nullptr);
+		m_Transform = std::make_unique<Transform>();
 	}
 
 	void Skybox::Render() const
