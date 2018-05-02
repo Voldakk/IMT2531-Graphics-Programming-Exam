@@ -11,12 +11,10 @@ namespace EVA
 
 	public:
 
-		static GameObject* Load (Scene* scene, const std::string& path)
+		static GameObject* Load(GameObject* gameObject, json_generic& d)
 		{
-			const auto sd = Json::Open(path);
-			auto& d = (*sd);
-
-			auto gameObject = scene->CreateGameObject();
+			// Transform
+			gameObject->transform->Load(DataObject(d));
 
 			// Components
 			if (d.HasMember("components") && d["components"].IsArray())
@@ -29,27 +27,35 @@ namespace EVA
 
 					const std::string id = c["id"].GetString();
 
-					if(id == "EVA::Transform")
+					const auto component = ComponentMap::CreateComponent(id);
+					if (component != nullptr)
 					{
-						gameObject->transform->Load(DataObject(c));
-					}
-					else
-					{
-						const auto component = ComponentMap::CreateComponent(id);
-						if (component != nullptr)
-						{
-							component->SetScene(scene);
-							component->Load(DataObject(c));
-							gameObject->AttachComponent(component);
-						}
+						component->SetScene(gameObject->scene.Get());
+						component->Load(DataObject(c));
+						gameObject->AttachComponent(component);
 					}
 				}
 			}
 
 			gameObject->Start();
 
+			return gameObject;
+		}
+
+		static GameObject* Load(Scene* scene, json_generic& d)
+		{
+			auto gameObject = scene->CreateGameObject();
+
+			Load(gameObject.get(), d);
+
 			return gameObject.get();
 		}
-	};
 
+		static GameObject* Load (Scene* scene, const std::string& path)
+		{
+			const auto sd = Json::Open(path);
+
+			return Load(scene, *sd);
+		}
+	};
 }

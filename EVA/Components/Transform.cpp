@@ -187,10 +187,10 @@ namespace EVA
 
 	void Transform::Load(const DataObject data)
 	{
-		m_LocalPosition = data.GetVec3("position", glm::vec3(0.0f));
-		m_LocalScale = data.GetVec3("scale", glm::vec3(1.0f));
+		m_LocalPosition = data.GetVec3("position", m_LocalPosition);
+		m_LocalScale = data.GetVec3("scale", m_Scale);
 
-		const auto o = data.GetVec4("orientation", { 0.0f, 0.0f, 0.0f, 1.0f });
+		const auto o = data.GetVec4("orientation", { m_LocalOrientation.x, m_LocalOrientation.y, m_LocalOrientation.z, m_LocalOrientation.w });
 		m_LocalOrientation = glm::quat(o.w, o.x, o.y, o.z);
 
 		UpdateModelMatrix();

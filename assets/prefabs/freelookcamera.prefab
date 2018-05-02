@@ -1,10 +1,7 @@
 {
+	"position": [0.0, 2.0, -5.0],
 	"components": 
 	[
-		{
-			"id": "EVA::Transform",
-			"position": [0.0, 0.0, -5.0]
-		},
 		{
 			"id": "EVA::Camera",
 			"fov": 90,

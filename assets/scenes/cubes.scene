@@ -1,0 +1,37 @@
+{
+	"skybox": 
+	{
+		"folderPath": "./assets/ame_ash/",
+		"fileExtension": ".tga"
+	},
+	"gameObjects": 
+	[
+		{
+			"prefab": "./assets/prefabs/freelookcamera.prefab"
+		},
+		{
+			"position": [0.0, 0.0, 0.0],
+			"scale": [10.0, 1.0, 10.0],
+			"components": 
+			[
+				{
+					"id": "EVA::MeshRenderer",
+					"meshPrimitive": "plane",
+					"material": "./assets/materials/grid.mat"
+				}
+			]
+		},
+		{
+			"prefab": "./assets/prefabs/uvcube.prefab",
+			"position": [1.5, 1.0, 0.0]
+		},
+		{
+			"prefab": "./assets/prefabs/uvcube.prefab",
+			"position": [-1.5, 1.0, 0.0]
+		},
+		{
+			"prefab": "./assets/prefabs/uvcube.prefab",
+			"position": [0.0, 3.0, 0.0]
+		}
+	]
+}

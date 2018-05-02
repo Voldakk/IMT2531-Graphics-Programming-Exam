@@ -16,6 +16,9 @@ namespace EVA
 
 	Skybox::Skybox(const std::string &folderPath, const std::string &fileType)
 	{
+		assert(!folderPath.empty());
+		assert(!fileType.empty());
+
 		// Texture
 		m_Texture = TextureManager::GetTextureCubemap(folderPath, fileType);
 
@@ -31,6 +34,11 @@ namespace EVA
 
 		// Transform
 		m_Transform = std::make_unique<Transform>();
+	}
+
+	Skybox::Skybox(DataObject data) : Skybox(data.GetString("folderPath", ""), data.GetString("fileExtension", ""))
+	{
+
 	}
 
 	void Skybox::Render() const

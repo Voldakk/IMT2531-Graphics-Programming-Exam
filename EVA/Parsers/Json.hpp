@@ -11,7 +11,8 @@
 namespace EVA
 {
 	typedef rapidjson::Value json_value;
-	typedef rapidjson::Value json_object;
+	typedef rapidjson::Document json_document;
+	typedef rapidjson::GenericValue<rapidjson::UTF8<>> json_generic;
 
 	class Json
 	{

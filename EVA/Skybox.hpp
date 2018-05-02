@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include "Parsers/Json.hpp"
 
 namespace EVA
 {
@@ -23,6 +24,7 @@ namespace EVA
 	public:
 
 		Skybox(const std::string &folderPath, const std::string &fileType);
+		explicit Skybox(DataObject data);
 
 		void Render() const;
 	};
