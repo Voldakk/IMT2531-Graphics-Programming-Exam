@@ -1,27 +1,12 @@
-# IMT2531 Assignment2 - 3D Pacman
+# EVA Engine
 
-A 3D Pacman game made in C++ and OpenGL
-
-## Marking Consideration
-
-### Weighting
-While I'm fairly happy with most aspects of the project I choose to weight slightly towards Architecture/Framework
+A C++ OpenGL game engine
 
 ### Architecture/Framework
-* I choose to create a generic OpenGL game engine, and subsequently an implementation of a Pacman game using the engine.  
-* It uses a component based system where each 'game object' is only responsible for managing the components attached to it.  
+* Component based system where each 'game object' is only responsible for managing the components attached to it.  
 Some component like the Transform and MeshRenderer receives special treatment, but the user is free to create any sort of component they want.
-* Transforms can have a parent and translates/scales/rotates correctly with the parent.
-* The SceneManager provides an easy way to create multiple seperate scenes and change between them. Multiple scenes can be loaded at once as seen with the Game & PauseMenu.
-
-### Gameplay/Usability
-* Both Pacman and the ghosts are locked to the grid, and can never move more than 1 tile each frame.   
-  This migrates any chance of collision errors or otherwise weird moment due to lag spikes.
-* The ghosts are all different from each other and follows their behaviour from the original game as described [here](http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior).
-* There are 3 different camera modes: Top-Down, Chase and Free.  
- In Top-Down and Free mode the input (WASD) is in relation to the world; D wil always make Pacman go towards the right side of the map.   
- In Chase mode the input is in relation to Pacman.
-* The game can load a map of any size using the [provided format](http://prod3.imt.hig.no/Voldakk/IMT2531-Assignment2/blob/master/assets/levels/format.md).
+* InputManager for eays access to both mouse and keyboard input.
+* The SceneManager provides an easy way to create multiple seperate scenes and change between them. Multiple scenes can be loaded at once.
 
 ### Aesthetics/Quality of Graphics
 The engine uses the Phong lighting model. It supports: 
@@ -72,7 +57,7 @@ cd bin
 ```
 ## Test scenes
 
-Thera are 2 test scenes in addition to the pacman game.
+Thera are 3 test scenes in addition to a pacman game.
 To run them simply uncomment the line in source/main.cpp
 
 ## Built With
@@ -87,7 +72,7 @@ To run them simply uncomment the line in source/main.cpp
 
 ## Authors
 
-* **Eivind Vold Aunebakk** - 471185 - [Voldakk](https://github.com/Voldakk)
+* **Eivind Vold Aunebakk** - [Voldakk](https://github.com/Voldakk)
 
 ## Acknowledgments
 
@@ -102,3 +87,4 @@ To run them simply uncomment the line in source/main.cpp
 * [LearnOpenGL - Normal Mapping](https://learnopengl.com/Advanced-Lighting/Normal-Mapping)
 * [LearnOpenGL - Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
 * [LearnOpenGL - Text Rendering](https://learnopengl.com/In-Practice/Text-Rendering)
+* [Stack Overflow - String to type mapping](https://stackoverflow.com/a/582456)
