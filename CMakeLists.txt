@@ -43,7 +43,7 @@ endif(WINDOWS)
 
 # Main executeable
 file(GLOB SOURCES
-    source/* 
+	source/*
 	EVA/*
 	EVA/*/*
 	dependencies/stb-image/*
@@ -80,6 +80,7 @@ target_include_directories(
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/stb-image
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/assimp/include/
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/freetype/include/
+	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/rapidjson/include/
 )
 
 if(WINDOWS)

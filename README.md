@@ -83,6 +83,7 @@ To run them simply uncomment the line in source/main.cpp
 * [FreeType](https://www.freetype.org/)
 * [ASSIMP](http://assimp.org/)
 * [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)
+* [RapidJSON](https://github.com/Tencent/rapidjson)
 
 ## Authors
 
