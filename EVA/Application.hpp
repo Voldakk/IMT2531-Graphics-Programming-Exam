@@ -6,7 +6,7 @@
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 
-#include "Camera.hpp"
+#include "Components/Camera.hpp"
 #include "GameObject.hpp"
 
 namespace EVA

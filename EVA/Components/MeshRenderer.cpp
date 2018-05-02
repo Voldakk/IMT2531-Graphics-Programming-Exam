@@ -1,6 +1,6 @@
 #include "MeshRenderer.hpp"
 
-#include "Scene.hpp"
+#include "../Scene.hpp"
 
 namespace EVA
 {

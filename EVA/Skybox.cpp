@@ -6,7 +6,7 @@
 
 #include "ModelManager.hpp"
 #include "Material.hpp"
-#include "Transform.hpp"
+#include "Components/Transform.hpp"
 #include "Application.hpp"
 #include "TextureManager.hpp"
 #include "ShaderManager.hpp"

@@ -2,7 +2,7 @@
 
 #include "../../Model.hpp"
 #include "../../Mesh.hpp"
-#include "../../MeshRenderer.hpp"
+#include "../../Components/MeshRenderer.hpp"
 #include "../../Material.hpp"
 #include "../../Shader.hpp"
 #include "../../Light.hpp"

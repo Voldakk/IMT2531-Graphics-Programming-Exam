@@ -2,7 +2,7 @@
 
 #include "Scene.hpp"
 #include "GameObject.hpp"
-#include "Transform.hpp"
+#include "Components/Transform.hpp"
 
 namespace EVA
 {

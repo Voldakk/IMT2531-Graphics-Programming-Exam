@@ -2,7 +2,7 @@
 
 #include "glm/glm.hpp"
 
-#include "Component.hpp"
+#include "../Component.hpp"
 
 namespace EVA
 {

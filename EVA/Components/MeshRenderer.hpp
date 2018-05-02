@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include "Mesh.hpp"	
+#include "../Mesh.hpp"	
 
-#include "Material.hpp"	
-#include "Component.hpp"
+#include "../Material.hpp"	
+#include "../Component.hpp"
 
 namespace EVA
 {

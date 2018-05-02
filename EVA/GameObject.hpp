@@ -5,7 +5,7 @@
 
 #include "ConstPointer.hpp"
 #include "Component.hpp"
-#include "Transform.hpp"
+#include "Components/Transform.hpp"
 
 namespace EVA
 {

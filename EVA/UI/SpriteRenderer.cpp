@@ -1,7 +1,6 @@
 #include "SpriteRenderer.hpp"
 
 #include "../ShaderManager.hpp"
-#include "../Transform.hpp"
 #include "../Application.hpp"
 #include "BoundingBox.hpp"
 

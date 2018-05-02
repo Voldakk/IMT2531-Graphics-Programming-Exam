@@ -6,7 +6,7 @@
 #include "Light.hpp"
 #include "GameObject.hpp"
 #include "Skybox.hpp"
-#include "MeshRenderer.hpp"
+#include "Components/MeshRenderer.hpp"
 #include "UI/UiElement.hpp"
 
 namespace EVA

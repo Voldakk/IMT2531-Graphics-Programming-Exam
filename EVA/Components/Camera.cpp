@@ -2,8 +2,8 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "GameObject.hpp"
-#include "Application.hpp"
+#include "../GameObject.hpp"
+#include "../Application.hpp"
 
 namespace EVA
 {
