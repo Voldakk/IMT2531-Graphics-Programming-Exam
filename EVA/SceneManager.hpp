@@ -24,6 +24,11 @@ namespace EVA
 		template<class T, typename... Args>
 		static std::shared_ptr<T> CreateScene(Args... args);
 
+		/// <summary>Creates and loads a new scene ontop of any currently active scenes</summary>
+		/// <param name="path">The path to the scene asset</param>
+		/// <returns>Returns a pointer to the newly created scene</returns>
+		static std::shared_ptr<Scene> CreateScene(std::string path);
+
 		/// <summary>Loads an existing scene ontop of any currently active scenes</summary>
 		/// <param name="scene">The scene to be loaded</param>
 		static void LoadScene(const std::shared_ptr<Scene> &scene);
@@ -39,6 +44,10 @@ namespace EVA
 		/// <summary>Unloads all active scenes and loads an existing scene</summary>
 		/// <param name="scene">The new scene</param>
 		static void ChangeScene(const std::shared_ptr<Scene> &scene);
+
+		/// <summary>Unloads all active scenes and loads an existing scene</summary>
+		/// <param name="path">The path to the scene asset</param>
+		static void ChangeScene(const std::string path);
 
 		/// <summary>Unloads all active scenes and creates a new scene</summary>
 		/// <returns>Returns a pointer to the newly created scene</returns>

@@ -4,6 +4,24 @@
 		"folderPath": "./assets/ame_ash/",
 		"fileExtension": ".tga"
 	},
+	"lights":
+	[
+		{
+			"type": "directional",
+			"color": [ 0.5, 0.5, 0.5 ],
+			"rotation": [ 60.0, -80.0 ]
+		},
+		{
+			"type": "directional",
+			"color": [ 0.5, 0.5, 0.5 ],
+			"rotation": [ 60.0, -200.0 ]
+		},
+		{
+			"type": "directional",
+			"color": [ 0.5, 0.5, 0.5 ],
+			"rotation": [ 60.0, -320.0 ]
+		}
+	],
 	"gameObjects": 
 	[
 		{

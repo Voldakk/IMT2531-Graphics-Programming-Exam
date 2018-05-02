@@ -41,6 +41,8 @@ namespace EVA
 
 		Scene();
 
+		explicit Scene(std::string path);
+
 		~Scene();
 
 		
@@ -79,7 +81,9 @@ namespace EVA
 		 * \param shadowSize 
 		 * \return 
 		 */
-		std::shared_ptr<Light> CreateLight(LightType type, bool shadows = false, unsigned int shadowSize = 4096);
+		std::shared_ptr<Light> CreateLight(LightType type, bool shadows = false, unsigned int shadowSize = Light::DEFAULT_SHADOW_MAP_SIZE);
+
+		Light* CreateLight(DataObject data);
 
 		/**
 		* \brief

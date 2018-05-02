@@ -59,6 +59,26 @@ EVA::Light::Light(const LightType type, const bool shadows, const unsigned int s
 	}
 }
 
+EVA::Light::Light(DataObject data) 
+	: Light(
+	data.GetString("type", "directional") == "point" ? Point : Directional, 
+	data.GetBool("shadows", true), 
+	data.GetInt("shadowMapSize", DEFAULT_SHADOW_MAP_SIZE))
+{
+	SetRotation(data.GetVec2("rotation", glm::vec2(0.0f)));
+	SetPosition(data.GetVec3("position", glm::vec3(0.0f)));
+
+	color = data.GetVec3("color", color);
+
+	directionalShadowDistance = data.GetFloat("directionalShadowDistance", directionalShadowDistance);
+
+	directionalNearPlane = data.GetFloat("directionalNearPlane", directionalNearPlane);
+	directionalFarPlane = data.GetFloat("directionalFarPlane", directionalFarPlane);
+
+	pointNearPlane = data.GetFloat("pointNearPlane", pointNearPlane);
+	pointFarPlane = data.GetFloat("pointFarPlane", pointFarPlane);
+}
+
 void EVA::Light::SetPosition(const glm::vec3 newPosition)
 {
 	m_Position = newPosition;

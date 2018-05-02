@@ -2,6 +2,7 @@
 
 #include "glm/glm.hpp"
 #include <vector>
+#include "Parsers/Json.hpp"
 
 namespace EVA
 {
@@ -19,7 +20,7 @@ namespace EVA
 
 		// Directional light
 		glm::vec4 m_Direction;
-		glm::vec2 m_Rotation = { 30.0f, 0.0f };
+		glm::vec2 m_Rotation;
 
 		// Point light
 		glm::vec3 m_Position;
@@ -31,14 +32,16 @@ namespace EVA
 		unsigned int m_ShadowMapSize;
 
 	public:
-
-		const float directionalNearPlane = 1.0f;
-		const float directionalFarPlane = 100.0f;
-
-		const float pointNearPlane = 0.1f;
-		const float pointFarPlane = 25.0f;
-
+		
+		static const unsigned int DEFAULT_SHADOW_MAP_SIZE = 4096;
+		
 		float directionalShadowDistance = 20.0f;
+
+		float directionalNearPlane = 1.0f;
+		float directionalFarPlane = 100.0f;
+
+		float pointNearPlane = 0.1f;
+		float pointFarPlane = 25.0f;
 
 		// Common
 		glm::vec3 color = glm::vec3(1.0f);
@@ -49,7 +52,8 @@ namespace EVA
 		float attenuation = 0.2f;
 
 		// Constructor
-		explicit Light(LightType type, bool shadows, unsigned int shadowSize);
+		explicit Light(LightType type, bool shadows, unsigned int shadowSize = DEFAULT_SHADOW_MAP_SIZE);
+		explicit Light(DataObject data);
 
 		void SetPosition(glm::vec3 newPosition);
 		void SetRotation(glm::vec2 rotation);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PrefabParser.hpp"
+
 namespace EVA
 {
 	
@@ -17,6 +19,18 @@ namespace EVA
 			if (d.HasMember("skybox") && d["skybox"].IsObject())
 			{
 				scene->skybox = std::make_unique<Skybox>(DataObject(d["skybox"]));
+			}
+
+			// Lights
+			// Game objects
+			if (d.HasMember("lights") && d["lights"].IsArray())
+			{
+				auto lights = d["lights"].GetArray();
+
+				for (unsigned int i = 0; i < lights.Size(); ++i)
+				{
+					scene->CreateLight(DataObject(lights[i]));
+				}
 			}
 
 			// Game objects

@@ -1,10 +1,12 @@
 #include "Scene.hpp"
 
+#include <iostream>
+
 #include "GL/glew.h"
 
 #include "Application.hpp"
 #include "ShaderManager.hpp"
-#include <iostream>
+#include "Parsers/SceneParser.hpp"
 
 namespace EVA
 {
@@ -21,6 +23,11 @@ namespace EVA
 	
 		shadowMaterialCube.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube", "shadow_cube.vert", "shadow_cube.frag", "shadow_cube.geom");
 		shadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");
+	}
+
+	Scene::Scene(std::string path) : Scene()
+	{
+		EVA::SceneParser::Load(this, path);
 	}
 
 	Scene::~Scene()
@@ -123,6 +130,15 @@ namespace EVA
 		m_Lights.push_back(light);
 
 		return light;
+	}
+
+	Light* Scene::CreateLight(DataObject data)
+	{
+		auto light = std::make_shared<Light>(data);
+
+		m_Lights.push_back(light);
+
+		return light.get();
 	}
 
 	void Scene::RegisterMeshRenderer(MeshRenderer *meshRenderer)

@@ -4,7 +4,6 @@
 #include "../TestScenes/Pacman/MainMenu.hpp"
 #include "../TestScenes/UiTest.hpp"
 #include "../TestScenes/Transforms.hpp"
-#include "../TestScenes/ParserTest.hpp"
 
 int main()
 {
@@ -15,7 +14,7 @@ int main()
 	//EVA::SceneManager::CreateScene<EVA_TEST::Transforms>(); // Shows transform parents and multiple directional lights
 	//EVA::SceneManager::CreateScene<EVA_TEST::UiTest>();     // Shows buttons, and UI anchor and pivots
 
-	EVA::SceneManager::CreateScene<EVA_TEST::ParserTest>();
+	EVA::SceneManager::CreateScene("./assets/scenes/cubes.scene");
 
     EVA::Application::Run();
 
