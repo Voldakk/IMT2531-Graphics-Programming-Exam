@@ -23,19 +23,9 @@ namespace EVA_TEST
 
 			// 3 directional lights from different angles
 			auto directionalLight = CreateLight(EVA::LightType::Directional, true);
-			directionalLight->SetRotation({ 60.0f, 0.0f });
+			directionalLight->SetRotation({ 60.0f, 80.0f });
 			directionalLight->directionalShadowDistance = 25.0f;
-			directionalLight->color = { 0.5f, 0.0f, 0.0f };
-
-			directionalLight = CreateLight(EVA::LightType::Directional, true);
-			directionalLight->SetRotation({ 60.0f, 120.0f });
-			directionalLight->directionalShadowDistance = 25.0f;
-			directionalLight->color = { 0.0f, 0.5f, 0.0f };
-
-			directionalLight = CreateLight(EVA::LightType::Directional, true);
-			directionalLight->SetRotation({ 60.0f, 240.0f });
-			directionalLight->directionalShadowDistance = 25.0f;
-			directionalLight->color = { 0.0f, 0.0f, 0.5f };
+			directionalLight->color = { 1.0f, 1.0f, 1.0f };
 
 			// Camera
 			auto camera = CreateGameObject();
@@ -104,7 +94,7 @@ namespace EVA_TEST
 		{
 			Scene::Update(deltaTime);
 
-			m_CenterCube->transform->Rotate(EVA::YAXIS, deltaTime * 100.f);
+			m_CenterCube->transform->Rotate(EVA::YAXIS, deltaTime * 50.f);
 
 			m_ChildCube2->transform->Rotate(EVA::XAXIS, deltaTime * 200.f);
 		}
