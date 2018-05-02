@@ -1,0 +1,11 @@
+{
+	"components": 
+	[
+		{
+			"id": "EVA::Camera"
+		},
+		{
+			"id": "EVA::FreeLook"
+		}
+	]
+}

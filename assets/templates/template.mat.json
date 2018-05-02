@@ -1,7 +1,0 @@
-{
-  "tintDiffuse": [ 1.0, 1.0, 1.0 ],
-  "textureDiffuse": "./assets/textures/default_diffuse.png",
-  "textureSpecular": "./assets/textures/default_specular.png",
-  "textureNormal": "./assets/textures/default_normal.png",
-  "textureEmission": "./assets/textures/default_emission.png",
-}

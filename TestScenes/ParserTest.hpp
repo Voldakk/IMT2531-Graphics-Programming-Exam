@@ -23,12 +23,7 @@ namespace EVA_TEST
 			directionalLight->color = { 1.0f, 1.0f, 1.0f };
 
 			// Camera
-			auto camera = CreateGameObject();
-			const auto cameraComponent = camera->AddComponent<EVA::Camera>();
-			camera->AddComponent<EVA::FreeLook>();
-			EVA::Application::SetMainCamera(cameraComponent);
-			EVA::Input::SetCursorMode(EVA::Input::Disabled);
-			camera->transform->SetPosition({ 0.0f, 2.0f, -5.0f });
+			auto camera = EVA::PrefabParser::Load(this, "./assets/prefabs/freelookcamera.prefab");
 
 			// Mesh
 			const auto cubeModel = EVA::ModelManager::Primitive(EVA::Cube);

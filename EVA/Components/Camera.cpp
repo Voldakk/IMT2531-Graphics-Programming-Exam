@@ -7,6 +7,8 @@
 
 namespace EVA
 {
+	REGISTER_COMPONENT_CPP(Camera, "EVA::Camera")
+
 	Camera::~Camera()
 	{
 		if (Application::mainCamera == this)
@@ -18,6 +20,8 @@ namespace EVA
 		fov = 90.0f;
 		near = 0.1f;
 		far = 1000.0f;
+
+		EVA::Application::SetMainCamera(this);
 	}
 
 	void Camera::LateUpdate()

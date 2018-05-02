@@ -11,6 +11,15 @@ namespace EVA
 		m_Transform->m_Transform = m_Transform.get();
     }
 
+	void GameObject::Start()
+	{
+		for (auto &component : m_Components)
+		{
+			if (component->active)
+				component->Start();
+		}
+	}
+
 	void GameObject::Update(const float deltaTime)
     {
         for (auto &component : m_UpdateComponents)
@@ -36,6 +45,30 @@ namespace EVA
 			if (component->active)
 				component->Render();
 		}
+	}
+
+	Component* GameObject::AttachComponent(const std::shared_ptr<Component>& component)
+	{
+		m_Components.push_back(component);
+
+		component->SetGameObject(this);
+
+		// Update
+		const auto uc = dynamic_cast<IUpdateComponent*>(component.get());
+		if (uc != nullptr)
+			m_UpdateComponents.push_back(uc);
+
+		// LateUpdate
+		const auto luc = dynamic_cast<ILateUpdateComponent*>(component.get());
+		if (luc != nullptr)
+			m_LateUpdateComponents.push_back(luc);
+
+		// Render
+		const auto rc = dynamic_cast<IRenderComponent*>(component.get());
+		if (rc != nullptr)
+			m_RenderComponents.push_back(rc);
+
+		return component.get();
 	}
 
 	void GameObject::SetParent(GameObject *newParent) const

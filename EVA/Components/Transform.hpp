@@ -7,6 +7,7 @@
 #include "glm/gtc/quaternion.hpp"
 
 #include "../Component.hpp"
+#include "../ComponentMap.hpp"
 
 namespace EVA
 {
@@ -18,6 +19,8 @@ namespace EVA
 
 	class Transform : public Component
 	{
+		REGISTER_COMPONENT_HPP(Transform)
+
 		glm::mat4 m_ModelMatrix;
 
 		Transform* m_Parent;

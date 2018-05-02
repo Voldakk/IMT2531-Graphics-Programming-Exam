@@ -7,6 +7,7 @@
 
 namespace EVA
 {
+	REGISTER_COMPONENT_CPP(Transform, "EVA::Transform")
 
 	Transform::Transform()
 	{

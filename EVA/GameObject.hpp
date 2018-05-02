@@ -35,6 +35,8 @@ namespace EVA
 	     */
 	    explicit GameObject(Scene* scene);
 
+		void Start();
+
 		/**
 		* \brief Runs every frame
 		* \param deltaTime The time in seconds between frames
@@ -59,17 +61,13 @@ namespace EVA
         template<class T>
         T* AddComponent();
 
-	    /**
-         * \brief Sets the parent of the gameobject's transform
-         * \param newParent The new parent's game object
-         */
-        void SetParent(GameObject *newParent) const;
+		Component* AttachComponent(const std::shared_ptr<Component>& component);
 
 	    /**
          * \brief Sets the parent of the gameobject's transform
          * \param newParent The new parent's game object
          */
-        void SetParent(std::shared_ptr<GameObject> &newParent) const;
+        void SetParent(GameObject *newParent) const;
 
 	    /**
 		 * \brief Destroys the game object
@@ -81,24 +79,8 @@ namespace EVA
 	T* GameObject::AddComponent()
     {
         std::shared_ptr<T> component = std::make_shared<T>();
-        m_Components.push_back(component);
-
-		component->SetGameObject(this);
-
-		// Update
-		const auto uc = dynamic_cast<IUpdateComponent*>(component.get());
-		if (uc != nullptr)
-			m_UpdateComponents.push_back(uc);
-
-		// LateUpdate
-		const auto luc = dynamic_cast<ILateUpdateComponent*>(component.get());
-		if (luc != nullptr)
-			m_LateUpdateComponents.push_back(luc);
-
-		// Render
-		const auto rc = dynamic_cast<IRenderComponent*>(component.get());
-		if (rc != nullptr)
-			m_RenderComponents.push_back(rc);
+        
+		AttachComponent(component);
 
         return component.get();
     }

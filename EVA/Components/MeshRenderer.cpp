@@ -4,6 +4,8 @@
 
 namespace EVA
 {
+	REGISTER_COMPONENT_CPP(MeshRenderer, "EVA::MeshRenderer")
+
 	MeshRenderer::~MeshRenderer()
 	{
 		scene->RemoveMeshRenderer(this);

@@ -12,7 +12,7 @@ namespace EVA
 
     class Camera : public Component, public ILateUpdateComponent
     {
-		//const ComponentRegister<Camera> m_Register = ComponentRegister<Camera>("EVA::Camera");
+		REGISTER_COMPONENT_HPP(Camera)
 
 		glm::mat4 m_ViewMatrix;
 

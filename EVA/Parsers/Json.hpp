@@ -16,7 +16,7 @@ namespace EVA
 
 		static std::shared_ptr<rapidjson::Document> Open(const std::string& path)
 		{
-			const auto fp = fopen(path.c_str(), "rb"); // non-Windows use "r"
+			const auto fp = fopen(path.c_str(), "rb");
 			char readBuffer[65536];
 
 			rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));

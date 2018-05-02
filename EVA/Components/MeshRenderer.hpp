@@ -6,12 +6,14 @@
 
 #include "../Material.hpp"	
 #include "../Component.hpp"
+#include "../ComponentMap.hpp"
 
 namespace EVA
 {
 
 	class MeshRenderer : public Component
 	{
+		REGISTER_COMPONENT_HPP(MeshRenderer)
 
 		std::shared_ptr<Mesh> m_Mesh;
 		std::shared_ptr<Material> m_Material;
