@@ -5,8 +5,14 @@ A C++ OpenGL game engine
 ### Architecture/Framework
 * Component based system where each 'game object' is only responsible for managing the components attached to it.  
 Some component like the Transform and MeshRenderer receives special treatment, but the user is free to create any sort of component they want.
-* InputManager for eays access to both mouse and keyboard input.
+* Transforms can have a parent and translates/scales/rotates correctly with the parent. This is shown in the Transforms test scene.
 * The SceneManager provides an easy way to create multiple seperate scenes and change between them. Multiple scenes can be loaded at once.
+* The Model-, Shader- and TextureManagers help load their respective kind of asset and prevents duplication if multiple components use the same asset.
+* There are a few UI elements (Button, Label, Layout and padding) that makes setting up a simple menu or HUD a pretty trivial task.  
+The UI elements can be anchored to any part of the screen and the position is automaticly updated when the windows is resized. This is shown in the UITest test scene.
+* InputManager for eays access to both mouse and keyboard input.
+* The MeshRenderer components are sorted by material and mesh to reduse the overhead of repeatedly switching materials.  
+GPU Instancing is also supported
 
 ### Aesthetics/Quality of Graphics
 The engine uses the Phong lighting model. It supports: 
@@ -14,7 +20,6 @@ The engine uses the Phong lighting model. It supports:
 * Multiple directional and point lights.
 * Multiple directional shadow maps and a single cube map.
 * A skybox.
-* Instanced rendering.
 * FreeType text.
 
 ## Setup
