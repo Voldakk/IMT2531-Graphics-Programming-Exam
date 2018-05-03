@@ -11,12 +11,19 @@ namespace EVA
 		m_Transform->m_Transform = m_Transform.get();
     }
 
+	void GameObject::Awake()
+	{
+		for (auto &component : m_Components)
+		{
+			component->Awake();
+		}
+	}
+
 	void GameObject::Start()
 	{
 		for (auto &component : m_Components)
 		{
-			if (component->active)
-				component->Start();
+			component->Start();
 		}
 	}
 

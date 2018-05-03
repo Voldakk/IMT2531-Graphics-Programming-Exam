@@ -110,7 +110,12 @@ namespace EVA
 		T* GetComponentOfType();
 
 		/**
-		* \brief Called at the start of the game
+		* \brief Called before the scene starts
+		*/
+		virtual void Awake();
+
+		/**
+		* \brief Called when the scene starts
 		*/
 		virtual void Start();
 

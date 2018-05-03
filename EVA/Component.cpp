@@ -50,6 +50,11 @@ namespace EVA
 			rc->SetActiveInternal(value);
 	}
 
+	void Component::Awake()
+	{
+
+	}
+
 	void Component::Start()
 	{
 

@@ -11,6 +11,9 @@ namespace EVA
 		std::cout << "SceneManager::CreateScene - Creating scene: " << path << " \n";
 		auto scene = std::make_shared<Scene>(path);
 
+		scene->Awake();
+		scene->Start();
+
 		LoadScene(scene);
 
 		return scene;
@@ -53,7 +56,7 @@ namespace EVA
 		LoadScene(scene);
 	}
 
-	void SceneManager::ChangeScene(const std::string path)
+	void SceneManager::ChangeScene(const std::string& path)
 	{
 		std::cout << "SceneManager::ChangeScene - Changing scene: " << path << " \n";
 		ClearScenes();

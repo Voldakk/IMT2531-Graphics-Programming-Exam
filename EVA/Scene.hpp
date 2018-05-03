@@ -25,9 +25,12 @@ namespace EVA
 		std::vector<std::shared_ptr<UiElement>> m_UiElements;
 
 		bool m_Abort = false;
+		bool m_Started = false;
 		
 
 	public:
+
+		const bool& started = m_Started;
 		const bool& abort = m_Abort;
 		std::shared_ptr<Scene> self;
 		inline void Abort()
@@ -41,11 +44,21 @@ namespace EVA
 
 		Scene();
 
-		explicit Scene(std::string path);
+		explicit Scene(const std::string& path);
 
 		~Scene();
 
-		
+
+		/**
+		* \brief Called before the scene starts
+		*/
+		virtual void Awake();
+
+		/**
+		* \brief Called when the scene starts
+		*/
+		virtual void Start();
+
 		/**
 		 * \brief Runs every frame
 		 * \param deltaTime The time in seconds between frames

@@ -25,7 +25,7 @@ namespace EVA
 		shadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");
 	}
 
-	Scene::Scene(std::string path) : Scene()
+	Scene::Scene(const std::string& path) : Scene()
 	{
 		EVA::SceneParser::Load(this, path);
 	}
@@ -33,6 +33,24 @@ namespace EVA
 	Scene::~Scene()
 	{
 		std::cout << "Scene::~Scene() - Deconstructing \n";
+	}
+
+	void Scene::Awake()
+	{
+		for (auto &gameObject : m_GameObjects)
+		{
+			gameObject->Awake();
+		}
+	}
+
+	void Scene::Start()
+	{
+		m_Started = true;
+
+		for (auto &gameObject : m_GameObjects)
+		{
+			gameObject->Start();
+		}
 	}
 
 	void Scene::Update(const float deltaTime)

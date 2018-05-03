@@ -47,7 +47,7 @@ namespace EVA
 
 		/// <summary>Unloads all active scenes and loads an existing scene</summary>
 		/// <param name="path">The path to the scene asset</param>
-		static void ChangeScene(const std::string path);
+		static void ChangeScene(const std::string& path);
 
 		/// <summary>Unloads all active scenes and creates a new scene</summary>
 		/// <returns>Returns a pointer to the newly created scene</returns>
@@ -88,6 +88,9 @@ namespace EVA
 	{
 		std::cout << "SceneManager::CreateScene - Creating scene: " << typeid(T).name() << " \n";
 		std::shared_ptr<T> scene = std::make_shared<T>(args...);
+
+		scene->Awake();
+		scene->Start();
 
 		LoadScene(scene);
 

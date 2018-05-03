@@ -61,7 +61,11 @@ namespace EVA
 				}
 			}
 
-			gameObject->Start();
+			if (gameObject->scene->started)
+			{
+				gameObject->Awake();
+				gameObject->Start();
+			}
 
 			return gameObject;
 		}

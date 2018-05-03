@@ -36,9 +36,14 @@ namespace EVA
 	    explicit GameObject(Scene* scene);
 
 
-	    /**
-		 * \brief Called at the start of the game
-		 */
+		/**
+		* \brief Called before the scene starts
+		*/
+		void Awake();
+
+		/**
+		* \brief Called when the scene starts
+		*/
 		void Start();
 
 		/**
