@@ -7,11 +7,19 @@
 namespace EVA
 {
 
+	/**
+	 * \brief Parser for material files
+	 */
 	class MaterialParser
 	{
 
 	public:
 
+		/**
+		 * \brief Loads a mertertil form a material asset file
+		 * \param path The path to the file
+		 * \return A pointer to the material
+		 */
 		static std::shared_ptr<Material> Get(const std::string& path)
 		{
 			auto material = std::make_shared<Material>();
@@ -26,16 +34,16 @@ namespace EVA
 
 			// Textures
 			if (d.HasMember("textureDiffuse") && d["textureDiffuse"].IsString())
-				material->SetTexture(Diffuse, d["textureDiffuse"].GetString());
+				material->SetTexture(Texture::Diffuse, d["textureDiffuse"].GetString());
 
 			if (d.HasMember("textureSpecular") && d["textureSpecular"].IsString())
-				material->SetTexture(Specular, d["textureSpecular"].GetString());
+				material->SetTexture(Texture::Specular, d["textureSpecular"].GetString());
 
 			if (d.HasMember("textureNormal") && d["textureNormal"].IsString())
-				material->SetTexture(Normal, d["textureNormal"].GetString());
+				material->SetTexture(Texture::Normal, d["textureNormal"].GetString());
 
 			if (d.HasMember("textureEmission") && d["textureEmission"].IsString())
-				material->SetTexture(Emission, d["textureEmission"].GetString());
+				material->SetTexture(Texture::Emission, d["textureEmission"].GetString());
 
 			return material;
 		}

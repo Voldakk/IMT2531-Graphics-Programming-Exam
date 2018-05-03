@@ -24,7 +24,7 @@ Game::Game()
 	skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
 
 	// A directional light that fits the skybox
-	auto directionalLight = CreateLight(EVA::LightType::Directional, true);
+	auto directionalLight = CreateLight(EVA::Light::Directional, true);
 	directionalLight->SetRotation({ 60.0f, -80.0 });
 	directionalLight->directionalShadowDistance = 25.0f;
 

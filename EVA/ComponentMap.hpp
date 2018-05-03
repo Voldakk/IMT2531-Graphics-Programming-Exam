@@ -16,7 +16,7 @@ namespace EVA
     ComponentRegister<TYPE> TYPE::m_Register(NAME);
 
 	/**
-	 * \brief Keep track of all registerd components
+	 * \brief Keeps track of all registerd components
 	 */
 	class ComponentMap
 	{
@@ -60,7 +60,7 @@ namespace EVA
 	template<typename T>
 	struct ComponentRegister 
 	{
-		ComponentRegister(std::string const& s)
+		explicit ComponentRegister(std::string const& s)
 		{
 			ComponentMap::GetMap()->insert(std::make_pair(s, &ComponentMap::CreateT<T>));
 		}

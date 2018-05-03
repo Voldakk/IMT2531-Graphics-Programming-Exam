@@ -22,7 +22,7 @@ namespace EVA_TEST
 			skybox = std::make_unique<EVA::Skybox>("./assets/ame_ash/", ".tga");
 
 			// A directional light that fits the skybox
-			auto directionalLight = CreateLight(EVA::LightType::Directional, true);
+			auto directionalLight = CreateLight(EVA::Light::Directional, true);
 			directionalLight->SetRotation({ 60.0f, 80.0f });
 			directionalLight->directionalShadowDistance = 25.0f;
 			directionalLight->color = { 1.0f, 1.0f, 1.0f };
@@ -36,12 +36,12 @@ namespace EVA_TEST
 			camera->transform->SetPosition({ 0.0f, 2.0f, -5.0f });
 
 			// Mesh
-			const auto cubeModel = EVA::ModelManager::Primitive(EVA::Cube);
-			const auto planeModel = EVA::ModelManager::Primitive(EVA::Plane);
+			const auto cubeModel = EVA::ModelManager::Primitive(EVA::ModelManager::Cube);
+			const auto planeModel = EVA::ModelManager::Primitive(EVA::ModelManager::Plane);
 
 			// Plane Material
 			auto material = std::make_shared<EVA::Material>();
-			material->SetTexture(EVA::Diffuse, "./assets/textures/grid.png");
+			material->SetTexture(EVA::Texture::Diffuse, "./assets/textures/grid.png");
 			material->shader = EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
 
 			// Ground plane

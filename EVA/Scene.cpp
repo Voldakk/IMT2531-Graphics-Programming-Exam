@@ -10,19 +10,13 @@
 
 namespace EVA
 {
-	ShadowMaterial shadowMaterial;
-	ShadowMaterial shadowMaterialInstanced;
-
-	ShadowMaterial shadowMaterialCube;
-	ShadowMaterial shadowMaterialCubeInstanced;
-
 	Scene::Scene()
 	{
-		shadowMaterial.shader = ShaderManager::CreateOrGetShader("scene_shadow", "shadow.vert", "shadow.frag");
-		shadowMaterialInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_instanced", "shadow_instanced.vert", "shadow.frag");
+		m_ShadowMaterial.shader = ShaderManager::CreateOrGetShader("scene_shadow", "shadow.vert", "shadow.frag");
+		m_ShadowMaterialInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_instanced", "shadow_instanced.vert", "shadow.frag");
 	
-		shadowMaterialCube.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube", "shadow_cube.vert", "shadow_cube.frag", "shadow_cube.geom");
-		shadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");
+		m_ShadowMaterialCube.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube", "shadow_cube.vert", "shadow_cube.frag", "shadow_cube.geom");
+		m_ShadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");
 	}
 
 	Scene::Scene(const std::string& path) : Scene()
@@ -89,7 +83,7 @@ namespace EVA
 		// Shadows 
 		for (auto& light : m_Lights)
 		{
-			if (light->GetType() == LightType::Directional && light->Shadows())
+			if (light->GetType() == Light::Directional && light->Shadows())
 			{
 				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
 				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
@@ -99,7 +93,7 @@ namespace EVA
 
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			}
-			else if (light->GetType() == LightType::Point && light->Shadows())
+			else if (light->GetType() == Light::Point && light->Shadows())
 			{
 				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
 				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
@@ -168,7 +162,7 @@ namespace EVA
 		return true;
 	}
 
-	std::shared_ptr<Light> Scene::CreateLight(LightType type, const bool shadows, const unsigned int shadowSize)
+	std::shared_ptr<Light> Scene::CreateLight(Light::Type type, const bool shadows, const unsigned int shadowSize)
 	{
 		auto light = std::make_shared<Light>(type, shadows, shadowSize);
 
@@ -333,8 +327,8 @@ namespace EVA
 			if (materials[0][0]->material->enableInstancing)
 			{
 				// Set material / shader
-				shadowMaterialInstanced.Activate(this, nullptr);
-				shadowMaterialInstanced.shader->SetUniformMatrix4Fv("lightSpaceMatrix", lightSpaceMatrix);
+				m_ShadowMaterialInstanced.Activate(this, nullptr);
+				m_ShadowMaterialInstanced.shader->SetUniformMatrix4Fv("lightSpaceMatrix", lightSpaceMatrix);
 
 				// For each mesh
 				for (auto &meshes : materials)
@@ -363,8 +357,8 @@ namespace EVA
 			}
 			else // If not
 			{
-				shadowMaterial.Activate(this, nullptr);
-				shadowMaterial.shader->SetUniformMatrix4Fv("lightSpaceMatrix", lightSpaceMatrix);
+				m_ShadowMaterial.Activate(this, nullptr);
+				m_ShadowMaterial.shader->SetUniformMatrix4Fv("lightSpaceMatrix", lightSpaceMatrix);
 
 				// For each mesh
 				for (auto &meshes : materials)
@@ -373,7 +367,7 @@ namespace EVA
 					for (auto &meshRenderer : meshes)
 					{
 						// Render the mesh at the MeshRenderers position
-						shadowMaterial.SetObjectUniforms(meshRenderer->transform.Get());
+						m_ShadowMaterial.SetObjectUniforms(meshRenderer->transform.Get());
 						meshRenderer->mesh->Draw();
 					}
 				}
@@ -389,12 +383,12 @@ namespace EVA
 			if (materials[0][0]->material->enableInstancing)
 			{
 				// Set material / shader
-				shadowMaterialCubeInstanced.Activate(this, nullptr);
-				shadowMaterialCubeInstanced.shader->SetUniform3Fv("lightPos", lightPos);
-				shadowMaterialCubeInstanced.shader->SetUniform1F("farPlane", farPlane);
+				m_ShadowMaterialCubeInstanced.Activate(this, nullptr);
+				m_ShadowMaterialCubeInstanced.shader->SetUniform3Fv("lightPos", lightPos);
+				m_ShadowMaterialCubeInstanced.shader->SetUniform1F("farPlane", farPlane);
 				for (unsigned int i = 0; i < shadowMatrices.size(); ++i)
 				{
-					shadowMaterialCubeInstanced.shader->SetUniformMatrix4Fv("shadowMatrices[" + std::to_string(i) + "]", shadowMatrices[i]);
+					m_ShadowMaterialCubeInstanced.shader->SetUniformMatrix4Fv("shadowMatrices[" + std::to_string(i) + "]", shadowMatrices[i]);
 				}
 
 				// For each mesh
@@ -424,12 +418,12 @@ namespace EVA
 			}
 			else // If not
 			{
-				shadowMaterialCube.Activate(this, nullptr);
-				shadowMaterialCube.shader->SetUniform3Fv("lightPos", lightPos);
-				shadowMaterialCube.shader->SetUniform1F("farPlane", farPlane);
+				m_ShadowMaterialCube.Activate(this, nullptr);
+				m_ShadowMaterialCube.shader->SetUniform3Fv("lightPos", lightPos);
+				m_ShadowMaterialCube.shader->SetUniform1F("farPlane", farPlane);
 				for (unsigned int i = 0; i < shadowMatrices.size(); ++i)
 				{
-					shadowMaterialCube.shader->SetUniformMatrix4Fv("shadowMatrices[" + std::to_string(i) + "]", shadowMatrices[i]);
+					m_ShadowMaterialCube.shader->SetUniformMatrix4Fv("shadowMatrices[" + std::to_string(i) + "]", shadowMatrices[i]);
 				}
 
 				// For each mesh
@@ -439,7 +433,7 @@ namespace EVA
 					for (auto &meshRenderer : meshes)
 					{
 						// Render the mesh at the MeshRenderers position
-						shadowMaterialCube.SetObjectUniforms(meshRenderer->transform.Get());
+						m_ShadowMaterialCube.SetObjectUniforms(meshRenderer->transform.Get());
 						meshRenderer->mesh->Draw();
 					}
 				}

@@ -6,17 +6,23 @@
 
 namespace EVA
 {
-	
 
-	enum LightType
-	{
-		Directional, Point
-	};
-
+	/**
+	 * \brief A light. Used to light up a Scene
+	 */
 	class Light
 	{
 
-		LightType m_Type;
+	public:
+
+		enum Type
+		{
+			Directional, Point
+		};
+
+	private:
+
+		Type m_Type;
 
 		// Directional light
 		glm::vec4 m_Direction;
@@ -52,14 +58,14 @@ namespace EVA
 		float attenuation = 0.2f;
 
 		// Constructor
-		explicit Light(LightType type, bool shadows, unsigned int shadowSize = DEFAULT_SHADOW_MAP_SIZE);
+		explicit Light(Type type, bool shadows, unsigned int shadowSize = DEFAULT_SHADOW_MAP_SIZE);
 		explicit Light(DataObject data);
 
 		void SetPosition(glm::vec3 newPosition);
 		void SetRotation(glm::vec2 rotation);
 
 		// Get stuff
-		inline LightType GetType()		const { return m_Type; }
+		inline Type GetType()		const { return m_Type; }
 		inline glm::vec4 GetDirection() const { return m_Direction; }
 
 		glm::mat4 GetLightSpaceMatrix() const;

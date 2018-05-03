@@ -5,6 +5,10 @@
 #include "../TestScenes/UiTest.hpp"
 #include "../TestScenes/Transforms.hpp"
 
+/**
+ * \brief The entry point of the program
+ * \return An exit code indicating how the program exited
+ */
 int main()
 {
     EVA::Application::Init("EVA-Engine");
@@ -18,5 +22,5 @@ int main()
 
     EVA::Application::Run();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

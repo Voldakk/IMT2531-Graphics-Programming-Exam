@@ -8,8 +8,9 @@
 
 namespace EVA
 {
-
-// Manages the active scenes in the game
+	/**
+	 * \brief Manages the active scenes in the game
+	 */
 	class SceneManager
 	{
 

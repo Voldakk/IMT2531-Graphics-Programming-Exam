@@ -8,6 +8,9 @@
 namespace EVA
 {
 
+	/**
+	 * \brief Used to interact with an OpenGL shader program
+	 */
 	class Shader
 	{
 

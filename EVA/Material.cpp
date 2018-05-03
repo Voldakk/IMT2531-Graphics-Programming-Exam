@@ -14,14 +14,14 @@ namespace EVA
 	unsigned int Material::textureDefaultNormal;
 	unsigned int Material::textureDefaultEmission;
 
-	void Material::SetTexture(const TextureType type, const char *path)
+	void Material::SetTexture(const Texture::Type type, const char *path)
 	{
 		Texture t = { 0, type, path };
 		t.id = TextureManager::GetTexture(t.path);
 		SetTexture(t);
 	}
 
-	void Material::SetTexture(const TextureType type, const unsigned int id)
+	void Material::SetTexture(const Texture::Type type, const unsigned int id)
 	{
 		const Texture t = { id, type, "" };
 		SetTexture(t);
@@ -31,19 +31,19 @@ namespace EVA
 	{
 		switch (texture.type)
 		{
-		case Diffuse:
+		case Texture::Diffuse:
 			textureDiffuse = texture;
 			break;
-		case Specular:
+		case Texture::Specular:
 			textureSpecular = texture;
 			break;
-		case Normal:
+		case Texture::Normal:
 			textureNormal = texture;
 			break;
-		case Height:
+		case Texture::Height:
 			textureHeight = texture;
 			break;
-		case Emission:
+		case Texture::Emission:
 			textureEmission = texture;
 			break;
 		default:
@@ -98,7 +98,7 @@ namespace EVA
 			shader->SetUniform3Fv(lightNum + "color", lights[i]->color);
 			shader->SetUniform1F(lightNum + "ambientCoefficient", lights[i]->ambientCoefficient);
 
-			if(lights[i]->GetType() == LightType::Directional)
+			if(lights[i]->GetType() == Light::Type::Directional)
 			{
 				shader->SetUniform4Fv(lightNum + "position", lights[i]->GetDirection());
 
@@ -112,7 +112,7 @@ namespace EVA
 					shadowNum++;
 				}
 			}
-			else if (lights[i]->GetType() == LightType::Point)
+			else if (lights[i]->GetType() == Light::Type::Point)
 			{
 				shader->SetUniform4Fv(lightNum + "position", glm::vec4(lights[i]->position, 1.0f));
 				shader->SetUniform1F(lightNum + "attenuation", lights[i]->attenuation);

@@ -10,16 +10,18 @@
 
 namespace EVA
 {
-	typedef rapidjson::Value json_value;
-	typedef rapidjson::Document json_document;
-	typedef rapidjson::GenericValue<rapidjson::UTF8<>> json_generic;
+	
 
 	class Json
 	{
 
 	public:
 
-		static std::shared_ptr<json_document> Open(const std::string& path)
+		typedef rapidjson::Value Value;
+		typedef rapidjson::Document Document;
+		typedef rapidjson::GenericValue<rapidjson::UTF8<>> Generic;
+
+		static std::shared_ptr<Document> Open(const std::string& path)
 		{
 			const auto fp = fopen(path.c_str(), "rb");
 			char readBuffer[65536];
@@ -32,7 +34,7 @@ namespace EVA
 			return d;
 		}
 
-		static bool IsVec4(json_value& jsonValue)
+		static bool IsVec4(Value& jsonValue)
 		{
 			if (jsonValue.IsArray())
 			{
@@ -44,13 +46,13 @@ namespace EVA
 			return false;
 		}
 
-		static glm::vec4 GetVec4(json_value& jsonValue)
+		static glm::vec4 GetVec4(Value& jsonValue)
 		{
 			const auto a = jsonValue.GetArray();
 			return { a[0].GetDouble() , a[1].GetDouble() , a[2].GetDouble() , a[3].GetDouble() };
 		}
 
-		static float GetFloat(const json_value& json, const char* key, const float defaultValue)
+		static float GetFloat(const Value& json, const char* key, const float defaultValue)
 		{
 			if(json.HasMember(key) && json[key].IsNumber())
 				return (float)json[key].GetDouble();
@@ -61,11 +63,11 @@ namespace EVA
 
 	class DataObject
 	{
-		json_generic& m_Json;
+		Json::Generic& m_Json;
 
 	public:
 
-		explicit DataObject(json_generic& json) : m_Json(json)
+		explicit DataObject(Json::Generic& json) : m_Json(json)
 		{
 
 		}

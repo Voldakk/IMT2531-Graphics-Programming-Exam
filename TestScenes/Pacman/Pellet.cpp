@@ -14,7 +14,7 @@ void Pellet::Start()
 {
 	if (m_Mesh == nullptr)
 	{
-		m_Mesh = EVA::ModelManager::Primitive(EVA::PrimitiveType::Sphere)->GetMesh(0);
+		m_Mesh = EVA::ModelManager::Primitive(EVA::ModelManager::Sphere)->GetMesh(0);
 		m_Mesh->SetStatic(true);
 
 		m_Material = std::make_shared<EVA::Material>();

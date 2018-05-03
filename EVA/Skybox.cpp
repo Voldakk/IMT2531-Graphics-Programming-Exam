@@ -24,13 +24,13 @@ namespace EVA
 
 		// Material
 		m_Material = std::make_unique<Material>();
-		m_Material->SetTexture(TextureType::Diffuse, m_Texture);
+		m_Material->SetTexture(Texture::Diffuse, m_Texture);
 
 		// Shader
 		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
 
 		// Mesh
-		m_Model = ModelManager::Primitive(PrimitiveType::CubeInverted);
+		m_Model = ModelManager::Primitive(ModelManager::CubeInverted);
 
 		// Transform
 		m_Transform = std::make_unique<Transform>();

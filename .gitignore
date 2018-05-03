@@ -7,3 +7,5 @@ cmake-build-debug/
 CMakeSettings.json
 
 project files/
+
+doc/

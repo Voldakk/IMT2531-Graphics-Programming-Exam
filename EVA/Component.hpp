@@ -11,6 +11,9 @@ namespace EVA
 	class GameObject;
 	class Transform;
 
+	/**
+	* \brief Used to manage the active state a Component
+	*/
 	class IActive
 	{
 		bool m_Active = true;
@@ -22,6 +25,9 @@ namespace EVA
 	};
 
 
+	/**
+	* \brief Gives a Component access to the Update method
+	*/
 	class IUpdateComponent : public IActive
 	{
 
@@ -34,6 +40,9 @@ namespace EVA
 		virtual void Update(float deltaTime) = 0;
 	};
 
+	/**
+	* \brief Gives a Component access to the LateUpdate method
+	*/
 	class ILateUpdateComponent : public IActive
 	{
 
@@ -44,6 +53,9 @@ namespace EVA
 		virtual void LateUpdate() = 0;
 	};
 
+	/**
+	* \brief Gives a Component access to the Render method
+	*/
 	class IRenderComponent : public IActive
 	{
 
@@ -54,7 +66,9 @@ namespace EVA
 		virtual void Render() = 0;
 	};
 
-
+	/**
+	* \brief Base class for components
+	*/
     class Component
     {
 		friend GameObject;

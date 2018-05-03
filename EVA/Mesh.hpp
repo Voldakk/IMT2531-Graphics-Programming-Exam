@@ -20,6 +20,9 @@ namespace EVA
 		glm::vec3 bitangent;
 	};
 
+	/**
+	 * \brief A mesh
+	 */
 	class Mesh
 	{
 

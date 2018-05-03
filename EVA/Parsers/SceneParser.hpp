@@ -5,11 +5,19 @@
 namespace EVA
 {
 	
+	/**
+	 * \brief Parser for scene asset files
+	 */
 	class SceneParser
 	{
 
 	public:
 
+		/**
+		 * \brief Loads to contetns of a scene asset file to a scene
+		 * \param scene The scene to load to 
+		 * \param path The path to the file 
+		 */
 		static void Load(Scene* scene, const std::string& path)
 		{
 			const auto sd = Json::Open(path);

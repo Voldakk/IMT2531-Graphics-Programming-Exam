@@ -10,8 +10,9 @@
 
 namespace EVA
 {
-
-	// A helper class for loading shaders
+	/**
+	 * \brief A helper class for loading shaders
+	 */
 	class ShaderManager
 	{
 

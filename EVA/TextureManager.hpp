@@ -5,7 +5,9 @@
 namespace EVA
 {
 
-	// A helper class used to load images from file to GL textures
+	/**
+	 * \brief A helper class used to load images from file to OpenGL textures
+	 */
 	class TextureManager
 	{
 

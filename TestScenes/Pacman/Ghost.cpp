@@ -13,9 +13,9 @@ void Ghost::Start()
 	// Body
 	m_BodyMaterial = std::make_shared<EVA::Material>();
 	m_BodyMaterial->shader = shader;
-	m_BodyMaterial->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/ghost/ghost_body_diffuse.png");
-	m_BodyMaterial->SetTexture(EVA::TextureType::Specular, "./assets/textures/ghost/ghost_body_specular.png");
-	m_BodyMaterial->SetTexture(EVA::TextureType::Normal, "./assets/textures/ghost/ghost_body_normal.png");
+	m_BodyMaterial->SetTexture(EVA::Texture::Diffuse, "./assets/textures/ghost/ghost_body_diffuse.png");
+	m_BodyMaterial->SetTexture(EVA::Texture::Specular, "./assets/textures/ghost/ghost_body_specular.png");
+	m_BodyMaterial->SetTexture(EVA::Texture::Normal, "./assets/textures/ghost/ghost_body_normal.png");
 
 	auto bodyMr = gameObject->AddComponent<EVA::MeshRenderer>();
 	bodyMr->Set(m_Model->GetMesh("ghost_body"), m_BodyMaterial);
@@ -23,9 +23,9 @@ void Ghost::Start()
 	// Eyes
 	m_EyeMaterial = std::make_shared<EVA::Material>();
 	m_EyeMaterial->shader = shader;
-	m_EyeMaterial->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/ghost/ghost_eyes_diffuse.png");
-	m_EyeMaterial->SetTexture(EVA::TextureType::Specular, "./assets/textures/ghost/ghost_eyes_specular.png");
-	m_EyeMaterial->SetTexture(EVA::TextureType::Normal, "./assets/textures/ghost/ghost_eyes_normal.png");
+	m_EyeMaterial->SetTexture(EVA::Texture::Diffuse, "./assets/textures/ghost/ghost_eyes_diffuse.png");
+	m_EyeMaterial->SetTexture(EVA::Texture::Specular, "./assets/textures/ghost/ghost_eyes_specular.png");
+	m_EyeMaterial->SetTexture(EVA::Texture::Normal, "./assets/textures/ghost/ghost_eyes_normal.png");
 
 	auto eyeMr = gameObject->AddComponent<EVA::MeshRenderer>();
 	eyeMr->Set(m_Model->GetMesh("ghost_eyes"), m_EyeMaterial);

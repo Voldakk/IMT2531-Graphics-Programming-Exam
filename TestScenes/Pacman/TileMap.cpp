@@ -20,9 +20,9 @@ void TileMap::Start()
 	// Material
 	m_Material = std::make_shared<EVA::Material>();
 	m_Material->enableInstancing = true;
-	m_Material->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/Cement 1/Cement 1_Dif.jpg");
-	m_Material->SetTexture(EVA::TextureType::Specular, "./assets/textures/Cement 1/Cement 1_Ref.jpg");
-	m_Material->SetTexture(EVA::TextureType::Normal, "./assets/textures/Cement 1/Cement 1_Nor.jpg");
+	m_Material->SetTexture(EVA::Texture::Diffuse, "./assets/textures/Cement 1/Cement 1_Dif.jpg");
+	m_Material->SetTexture(EVA::Texture::Specular, "./assets/textures/Cement 1/Cement 1_Ref.jpg");
+	m_Material->SetTexture(EVA::Texture::Normal, "./assets/textures/Cement 1/Cement 1_Nor.jpg");
 	m_Material->shader = EVA::ShaderManager::GetShader("standard_instanced");
 }
 
@@ -168,7 +168,7 @@ void TileMap::CreateMesh()
 	auto ghostDoorMat = std::make_shared<EVA::Material>();
 	ghostDoorMat->tintDiffuse = glm::vec4(0.5f, 0.0f, 0.8f, 0.5f);
 	ghostDoorMat->shader = EVA::ShaderManager::GetShader("standard_transparent");
-	const auto cubeMesh = EVA::ModelManager::Primitive(EVA::PrimitiveType::Cube)->GetMesh(0);
+	const auto cubeMesh = EVA::ModelManager::Primitive(EVA::ModelManager::Cube)->GetMesh(0);
 
 	for (auto y = 0; y < m_Height - 1; ++y)
 	{

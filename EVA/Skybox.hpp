@@ -12,6 +12,9 @@ namespace EVA
 	class Material;
 	class Transform;
 
+	/**
+	 * \brief A skybox
+	 */
 	class Skybox
 	{
 

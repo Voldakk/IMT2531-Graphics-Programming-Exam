@@ -20,6 +20,9 @@ namespace EVA
     const bool LOG_FPS = true;
     const double LOG_FPS_INTERVAL = 1.0;
 
+	/**
+	* \brief Controls the application window and main loop
+	*/
     class Application
     {
 

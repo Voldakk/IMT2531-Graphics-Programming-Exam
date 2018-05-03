@@ -4,7 +4,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "Application.hpp"
 
-EVA::Light::Light(const LightType type, const bool shadows, const unsigned int shadowSize)
+EVA::Light::Light(const Type type, const bool shadows, const unsigned int shadowSize)
 {
 	m_Type = type;
 	m_Shadows = shadows;
@@ -13,7 +13,7 @@ EVA::Light::Light(const LightType type, const bool shadows, const unsigned int s
 	if(!shadows)
 		return;;
 
-	if(m_Type == LightType::Directional)
+	if(m_Type == Directional)
 	{
 		glGenTextures(1, &m_DepthMap);
 		glBindTexture(GL_TEXTURE_2D, m_DepthMap);

@@ -11,8 +11,9 @@
 
 namespace EVA
 {
-
-	// A scene that can be run by the SceneManager
+	/**
+	 * \brief A scene that can be run by the SceneManager
+	 */
 	class Scene
 	{
 
@@ -28,6 +29,12 @@ namespace EVA
 
 		bool m_Abort = false;
 		bool m_Started = false;
+
+		ShadowMaterial m_ShadowMaterial;
+		ShadowMaterial m_ShadowMaterialInstanced;
+
+		ShadowMaterial m_ShadowMaterialCube;
+		ShadowMaterial m_ShadowMaterialCubeInstanced;
 		
 
 	public:
@@ -124,7 +131,7 @@ namespace EVA
 		 * \param shadowSize The size of the shadow map
 		 * \return A pointer to the light
 		 */
-		std::shared_ptr<Light> CreateLight(LightType type, bool shadows = false, unsigned int shadowSize = Light::DEFAULT_SHADOW_MAP_SIZE);
+		std::shared_ptr<Light> CreateLight(Light::Type type, bool shadows = false, unsigned int shadowSize = Light::DEFAULT_SHADOW_MAP_SIZE);
 
 		/**
 		 * \brief Creates a new light in the scene from the given data

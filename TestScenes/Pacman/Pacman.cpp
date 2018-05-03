@@ -11,9 +11,9 @@ void Pacman::Start()
 	// Material
 	m_Material = std::make_shared<EVA::Material>();
 	m_Material->shader = EVA::ShaderManager::GetShader("standard");
-	m_Material->SetTexture(EVA::TextureType::Diffuse, "./assets/textures/pacman/pacman_diffuse.png");
-	m_Material->SetTexture(EVA::TextureType::Specular, "./assets/textures/pacman/pacman_specular.png");
-	m_Material->SetTexture(EVA::TextureType::Normal, "./assets/textures/pacman/pacman_normal.png");
+	m_Material->SetTexture(EVA::Texture::Diffuse, "./assets/textures/pacman/pacman_diffuse.png");
+	m_Material->SetTexture(EVA::Texture::Specular, "./assets/textures/pacman/pacman_specular.png");
+	m_Material->SetTexture(EVA::Texture::Normal, "./assets/textures/pacman/pacman_normal.png");
 
 	// Mesh renderer
 	auto mr = gameObject->AddComponent<EVA::MeshRenderer>();

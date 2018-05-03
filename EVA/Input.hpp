@@ -9,7 +9,9 @@
 namespace EVA
 {
 
-	// Handles all input in the game
+	/**
+	 * \brief Handles all input
+	 */
 	class Input
 	{
 
@@ -96,17 +98,17 @@ namespace EVA
 		static void MouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
 
 		/// <summary>Checks whether the mouse button is currently held down</summary>
-		/// <param name="key">The mouse button</param>
+		/// <param name="button">The mouse button</param>
 		/// <returns>Whether the mouse button is currently held down</returns>
 		static bool MouseButton(int button);
 
 		/// <summary>Checks whether the mouse button was pressed this frame</summary>
-		/// <param name="key">The mouse button</param>
+		/// <param name="button">The mouse button</param>
 		/// <returns>Whether the mouse button was pressed this frame</returns>
 		static bool MouseButtonDown(int button);
 
 		/// <summary>Checks whether the mouse button was released this frame</summary>
-		/// <param name="key">The mouse button</param>
+		/// <param name="button">The mouse button</param>
 		/// <returns>Whether the mouse button was released this frame</returns>
 		static bool MouseButtonUp(int button);
 

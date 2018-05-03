@@ -13,16 +13,20 @@
 
 namespace EVA
 {
-	enum PrimitiveType
-	{
-		Circle, Cone, Cube, CubeInverted, Cylinder, Icosphere, Monkey, MonkeyHigh, Plane, Sphere, Torus
-	};
 
+	/**
+	 * \brief Handles the loading of models
+	 */
 	class ModelManager
 	{
 		static std::map<std::string, std::shared_ptr<Model>> m_Models;
 
 	public:
+
+		enum PrimitiveType
+		{
+			Circle, Cone, Cube, CubeInverted, Cylinder, Icosphere, Monkey, MonkeyHigh, Plane, Sphere, Torus
+		};
 
 		inline static const  std::string PRIMITIVES_PATH = "./assets/models/primitives/";
 		inline static const  std::string PRIMITIVES_TYPE = ".obj";

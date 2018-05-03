@@ -12,6 +12,9 @@ namespace EVA
 
     class Scene;
 
+	/**
+     * \brief A game object. Holds different components to build more complex behaviours
+     */
     class GameObject
     {
 

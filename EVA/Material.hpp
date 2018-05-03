@@ -6,18 +6,17 @@
 
 namespace EVA
 {
-
-	// Different texture types
-	enum TextureType
-	{
-		Diffuse, Specular, Normal, Emission, Height
-	};
-
 	// Struct for holding texture info
 	struct Texture
 	{
+		// Different texture types
+		enum Type
+		{
+			Diffuse, Specular, Normal, Emission, Height
+		};
+
 		unsigned int id{};
-		TextureType type;
+		Type type;
 		std::string path;
 	};
 
@@ -25,6 +24,9 @@ namespace EVA
 
 	class Transform;
 
+	/**
+	 * \brief A material holds a Shader, textures and other material properties
+	 */
 	class Material
 	{
 
@@ -53,9 +55,9 @@ namespace EVA
 
 		Material() = default;
 
-		void SetTexture(TextureType type, const char *path);
+		void SetTexture(Texture::Type type, const char *path);
 
-		void SetTexture(TextureType type, unsigned int id);
+		void SetTexture(Texture::Type type, unsigned int id);
 
 		void SetTexture(Texture texture);
 
