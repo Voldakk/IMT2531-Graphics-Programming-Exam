@@ -137,6 +137,14 @@ namespace EVA
 		void SetOrientation(glm::vec3 euler);
 
 		/**
+		* \brief Rotates z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis
+		* \param x The rotation around the x axis in degrees
+		* \param y The rotation around the y axis in degrees
+		* \param z The rotation around the z axis in degrees
+		*/
+		void SetOrientation(float x, float y, float z);
+
+		/**
 		 * \brief Scales the transform by a given amount on each axis
 		 * \param amount The amount
 		 */

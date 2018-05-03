@@ -89,6 +89,13 @@ namespace EVA
 		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.y), YAXIS);
 	}
 
+	void Transform::SetOrientation(const float x, const float y, const float z)
+	{
+		m_LocalOrientation = glm::angleAxis(glm::radians(z), ZAXIS);
+		m_LocalOrientation *= glm::angleAxis(glm::radians(x), XAXIS);
+		m_LocalOrientation *= glm::angleAxis(glm::radians(y), YAXIS);
+	}
+
 	void Transform::Scale(const glm::vec3 amount)
 	{
 		m_LocalScale += amount;

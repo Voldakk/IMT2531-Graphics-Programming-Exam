@@ -6,7 +6,7 @@ namespace EVA
 {
 	REGISTER_COMPONENT_CPP(FreeLook, "EVA::FreeLook")
 
-	void FreeLook::Start()
+		void FreeLook::Start()
 	{
 		m_Camera = GetComponentOfType<Camera>();
 	}
@@ -54,10 +54,9 @@ namespace EVA
 		else if (m_Yaw > 360.0f)
 			m_Yaw -= 360.0f;
 
-		transform->SetOrientation(YAXIS, m_Yaw);
-		transform->Rotate(XAXIS, m_Pitch);
+		transform->SetOrientation(m_Pitch, m_Yaw, 0.0f);
 
-		if(m_Camera != nullptr)
+		if (m_Camera != nullptr)
 			m_Camera->fov -= Input::GetScroll().y;
 	}
 
