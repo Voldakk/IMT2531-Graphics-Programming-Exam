@@ -35,6 +35,10 @@ namespace EVA
 	     */
 	    explicit GameObject(Scene* scene);
 
+
+	    /**
+		 * \brief Called at the start of the game
+		 */
 		void Start();
 
 		/**
@@ -61,7 +65,20 @@ namespace EVA
         template<class T>
         T* AddComponent();
 
+	    /**
+		 * \brief Attaches an existing component to the game object
+		 * \param component The component
+		 * \return A pointer to the component
+		 */
 		Component* AttachComponent(const std::shared_ptr<Component>& component);
+
+	    /**
+		 * \brief Gets a component of the given type form the game object
+		 * \tparam T The type of component
+		 * \return A pointer to the component, or nullptr
+		 */
+		template<class T>
+		T* GetComponentOfType();
 
 	    /**
          * \brief Sets the parent of the gameobject's transform
@@ -84,4 +101,17 @@ namespace EVA
 
         return component.get();
     }
+
+	template <class T>
+	T* GameObject::GetComponentOfType()
+	{
+		for (auto component : m_Components)
+		{
+			T* pointer = dynamic_cast<T*>(component.get());
+			if (pointer != nullptr)
+				return pointer;
+		}
+
+		return nullptr;
+	}
 }

@@ -24,6 +24,7 @@ namespace EVA
     {
     	// Update view
 		m_ViewMatrix = glm::lookAt(transform->position, transform->position + transform->forward, transform->up);
+		EVA::Application::SetMainCamera(this);
     }
 
 	void Camera::Load(const DataObject data)

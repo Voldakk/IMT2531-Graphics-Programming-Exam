@@ -50,12 +50,12 @@ namespace EVA
 
 					// Prefab
 					if (go.HasMember("prefab") && go["prefab"].IsString())
-						child = GameObjectParser::Load(gameObject->scene.Get(), go["prefab"].GetString());
+						child = Load(gameObject->scene.Get(), go["prefab"].GetString());
 					else
 						child = gameObject->scene->CreateGameObject().get();
 
 					// Load the rest of the components
-					GameObjectParser::Load(child, go);
+					Load(child, go);
 
 					child->SetParent(gameObject);
 				}

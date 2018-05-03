@@ -89,13 +89,41 @@ namespace EVA
 		*/
 		void SetGameObject(GameObject* gameObject);
 
+	    /**
+		 * \brief Sets the scene
+		 * \param scene The new scene
+		 */
 		void SetScene(Scene* scene);
 		
+	    /**
+    	 * \brief Sets the component's active state
+    	 * \param value The new state
+    	 */
     	void SetActive(bool value);
 
+		/**
+		* \brief Gets a component of the given type form the game object
+		* \tparam T The type of component
+		* \return A pointer to the component, or nullptr
+		*/
+		template<class T>
+		T* GetComponentOfType();
+
+		/**
+		* \brief Called at the start of the game
+		*/
 		virtual void Start();
 
-    	// JSON parser
+	    /**
+		 * \brief Loads component values from the given data
+		 * \param data The data
+		 */
 		virtual void Load(const DataObject data);
     };
+
+	template <class T>
+	T* Component::GetComponentOfType()
+	{
+		return m_GameObject->GetComponentOfType<T>();
+	}
 }

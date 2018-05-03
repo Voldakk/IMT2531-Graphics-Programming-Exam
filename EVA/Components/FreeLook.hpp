@@ -1,7 +1,9 @@
 #pragma once
 
 #include "EVA.hpp"
-#include "../Input.hpp"
+
+#include "Camera.hpp"
+
 
 namespace EVA
 {
@@ -13,14 +15,16 @@ namespace EVA
 		float m_Pitch = 0.0f;
 		float m_Yaw = 0.0f;
 
+		Camera* m_Camera = nullptr;
+
 	public:
 
 		bool wasd = true;
 
 		float mouseSensitivity = 50.0f;
 		float movementSpeed = 5.0f;
-
-		FreeLook() = default;
+		
+		void Start() override;
 
 		void Update(const float deltaTime) override;
 

@@ -1,8 +1,15 @@
 #include "FreeLook.hpp"
 
+#include "EVA/Input.hpp"
+
 namespace EVA
 {
 	REGISTER_COMPONENT_CPP(FreeLook, "EVA::FreeLook")
+
+	void FreeLook::Start()
+	{
+		m_Camera = GetComponentOfType<Camera>();
+	}
 
 	void FreeLook::Update(const float deltaTime)
 	{
@@ -49,6 +56,9 @@ namespace EVA
 
 		transform->SetOrientation(YAXIS, m_Yaw);
 		transform->Rotate(XAXIS, m_Pitch);
+
+		if(m_Camera != nullptr)
+			m_Camera->fov -= Input::GetScroll().y;
 	}
 
 	void FreeLook::Load(const DataObject data)
