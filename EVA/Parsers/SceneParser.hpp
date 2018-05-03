@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PrefabParser.hpp"
+#include "GameObjectParser.hpp"
 
 namespace EVA
 {
@@ -22,7 +22,6 @@ namespace EVA
 			}
 
 			// Lights
-			// Game objects
 			if (d.HasMember("lights") && d["lights"].IsArray())
 			{
 				auto lights = d["lights"].GetArray();
@@ -46,11 +45,12 @@ namespace EVA
 
 					// Prefab
 					if (go.HasMember("prefab") && go["prefab"].IsString())
-						gameObject = PrefabParser::Load(scene, go["prefab"].GetString());
+						gameObject = GameObjectParser::Load(scene, go["prefab"].GetString());
 					else
 						gameObject = scene->CreateGameObject().get();
 
-					PrefabParser::Load(gameObject, go);
+					// Load the rest of the components
+					GameObjectParser::Load(gameObject, go);
 				}
 			}
 

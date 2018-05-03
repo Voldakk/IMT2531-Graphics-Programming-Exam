@@ -19,7 +19,7 @@ namespace EVA
 
 	public:
 
-		static std::shared_ptr<rapidjson::Document> Open(const std::string& path)
+		static std::shared_ptr<json_document> Open(const std::string& path)
 		{
 			const auto fp = fopen(path.c_str(), "rb");
 			char readBuffer[65536];
@@ -61,11 +61,11 @@ namespace EVA
 
 	class DataObject
 	{
-		json_value& m_Json;
+		json_generic& m_Json;
 
 	public:
 
-		explicit DataObject(json_value& json) : m_Json(json)
+		explicit DataObject(json_generic& json) : m_Json(json)
 		{
 
 		}
@@ -130,7 +130,7 @@ namespace EVA
 			return defaultValue;
 		}
 
-		std::string GetString(const char* key, const std::string defaultValue) const
+		std::string GetString(const char* key, const std::string& defaultValue) const
 		{
 			if (m_Json.HasMember(key) && m_Json[key].IsString())
 				return m_Json[key].GetString();

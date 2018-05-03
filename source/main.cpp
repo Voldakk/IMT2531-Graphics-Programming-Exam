@@ -7,7 +7,7 @@
 
 int main()
 {
-    EVA::Application::Init("Pacman");
+    EVA::Application::Init("EVA-Engine");
 
 	//EVA::SceneManager::CreateScene<MainMenu>();               // The Pacman game
 

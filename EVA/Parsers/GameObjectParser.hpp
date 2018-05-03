@@ -6,7 +6,7 @@
 namespace EVA
 {
 
-	class PrefabParser
+	class GameObjectParser
 	{
 
 	public:
@@ -34,6 +34,30 @@ namespace EVA
 						component->Load(DataObject(c));
 						gameObject->AttachComponent(component);
 					}
+				}
+			}
+
+			// Children
+			if (d.HasMember("gameObjects") && d["gameObjects"].IsArray())
+			{
+				auto gameObjects = d["gameObjects"].GetArray();
+
+				for (unsigned int i = 0; i < gameObjects.Size(); ++i)
+				{
+					auto& go = gameObjects[i];
+
+					GameObject * child = nullptr;
+
+					// Prefab
+					if (go.HasMember("prefab") && go["prefab"].IsString())
+						child = GameObjectParser::Load(gameObject->scene.Get(), go["prefab"].GetString());
+					else
+						child = gameObject->scene->CreateGameObject().get();
+
+					// Load the rest of the components
+					GameObjectParser::Load(child, go);
+
+					child->SetParent(gameObject);
 				}
 			}
 

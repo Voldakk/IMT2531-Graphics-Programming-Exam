@@ -100,10 +100,16 @@ namespace EVA
 		void Rotate(glm::vec3 axis, float angle);
 
 		/**
-		* \brief Rotates the transform around the Z axis
+		* \brief Rotates the transform around the Y axis
 		* \param angle The angle in degrees
 		*/
 		void Rotate(float angle);
+
+		/**
+		* \brief Rotates z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis
+		* \param euler The angles in degrees
+		*/
+		void Rotate(glm::vec3 euler);
 
 		/**
 		 * \brief Sets the transform's orientation
@@ -123,6 +129,12 @@ namespace EVA
 		* \param angle The angle in degrees
 		*/
 		void SetOrientation(float angle);
+
+		/**
+		* \brief Rotates z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis
+		* \param euler The angles in degrees
+		*/
+		void SetOrientation(glm::vec3 euler);
 
 		/**
 		 * \brief Scales the transform by a given amount on each axis

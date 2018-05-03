@@ -57,6 +57,13 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
+	void Transform::Rotate(const glm::vec3 euler)
+	{
+		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.z), ZAXIS);
+		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.x), XAXIS);
+		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.y), YAXIS);
+	}
+
 	void Transform::SetOrientation(const glm::quat newOrientation)
 	{
 		m_LocalOrientation = newOrientation;
@@ -73,6 +80,13 @@ namespace EVA
 	{
 		m_LocalOrientation = glm::angleAxis(glm::radians(angle), YAXIS);
 		UpdateModelMatrix();
+	}
+
+	void Transform::SetOrientation(const glm::vec3 euler)
+	{
+		m_LocalOrientation = glm::angleAxis(glm::radians(euler.z), ZAXIS);
+		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.x), XAXIS);
+		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.y), YAXIS);
 	}
 
 	void Transform::Scale(const glm::vec3 amount)
