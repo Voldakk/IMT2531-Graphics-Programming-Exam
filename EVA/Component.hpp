@@ -17,7 +17,7 @@ namespace EVA
 
 	public:
 
-		const bool& active = m_Active;
+		const bool& activeInternal = m_Active;
 		void SetActiveInternal(bool value);
 	};
 

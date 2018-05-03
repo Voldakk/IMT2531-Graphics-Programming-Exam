@@ -23,6 +23,8 @@ namespace EVA
 		std::vector<ILateUpdateComponent*> m_LateUpdateComponents;
 		std::vector<IRenderComponent*> m_RenderComponents;
 
+		std::string m_Name;
+
     public:
 
 		// Public read only fields
@@ -34,7 +36,6 @@ namespace EVA
 	     * \param scene The scene the game object is located in
 	     */
 	    explicit GameObject(Scene* scene);
-
 
 		/**
 		* \brief Called before the scene starts
@@ -95,6 +96,18 @@ namespace EVA
 		 * \brief Destroys the game object
 		 */
 		void Destroy();
+
+	    /**
+		 * \brief Sets the name of the game object
+		 * \param newName The new name
+		 */
+		void SetName(const std::string& newName);
+
+	    /**
+		 * \brief Gets the name of the game object
+		 * \return The name
+		 */
+		std::string GetName() const;
     };
 
     template<class T>

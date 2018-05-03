@@ -141,6 +141,33 @@ namespace EVA
 		m_DestroyQueue.push_back(gameObject);
 	}
 
+	void Scene::RemoveFromNameMap(GameObject* gameObject)
+	{
+		const auto iterator = m_NameMap.find(gameObject->GetName());
+		m_NameMap.erase(iterator);
+	}
+
+	GameObject* Scene::FindGameObjectByName(const std::string& name)
+	{
+		const auto iterator = m_NameMap.find(name);
+
+		if (iterator == m_NameMap.end())
+			return nullptr;
+
+		return m_NameMap[name];
+	}
+
+	bool Scene::AddToNameMap(GameObject* gameObject)
+	{
+		const auto iterator = m_NameMap.find(gameObject->GetName());
+
+		if(iterator != m_NameMap.end())
+			return false;
+
+		m_NameMap[gameObject->GetName()] = gameObject;
+		return true;
+	}
+
 	std::shared_ptr<Light> Scene::CreateLight(LightType type, const bool shadows, const unsigned int shadowSize)
 	{
 		auto light = std::make_shared<Light>(type, shadows, shadowSize);

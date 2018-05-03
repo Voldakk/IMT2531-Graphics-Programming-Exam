@@ -31,7 +31,7 @@ namespace EVA
     {
         for (auto &component : m_UpdateComponents)
         {
-			if(component->active)
+			if(component->activeInternal)
 				component->Update(deltaTime);
         }
     }
@@ -40,7 +40,7 @@ namespace EVA
 	{
 		for (auto &component : m_LateUpdateComponents)
 		{
-			if (component->active)
+			if (component->activeInternal)
 				component->LateUpdate();
 		}
 	}
@@ -49,7 +49,7 @@ namespace EVA
 	{
 		for (auto &component : m_RenderComponents)
 		{
-			if (component->active)
+			if (component->activeInternal)
 				component->Render();
 		}
 	}
@@ -86,5 +86,21 @@ namespace EVA
 	void GameObject::Destroy()
 	{
 		scene->DestroyGameObject(this);
+	}
+
+	void GameObject::SetName(const std::string& newName)
+	{
+		if (!m_Name.empty())
+			scene->RemoveFromNameMap(this);
+
+		m_Name = newName;
+
+		if (!m_Name.empty())
+			scene->AddToNameMap(this);
+	}
+
+	std::string GameObject::GetName() const
+	{
+		return m_Name;
 	}
 }

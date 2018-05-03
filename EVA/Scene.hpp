@@ -24,6 +24,8 @@ namespace EVA
 
 		std::vector<std::shared_ptr<UiElement>> m_UiElements;
 
+		std::map<std::string, GameObject*> m_NameMap;
+
 		bool m_Abort = false;
 		bool m_Started = false;
 		
@@ -76,43 +78,76 @@ namespace EVA
 		virtual void Render();
 
 		/**
-		 * \brief 
-		 * \return 
+		 * \brief Creates a new game object
+		 * \return A pointer to the game object
 		 */
 		std::shared_ptr<GameObject> CreateGameObject();
 
 		/**
-		* \brief
-		* \param gameObject
+		* \brief Destroys a game object
+		* \param gameObject The game object
 		*/
 		void DestroyGameObject(GameObject * gameObject);
 
 		/**
-		 * \brief 
-		 * \param type 
-		 * \param shadows 
-		 * \param shadowSize 
-		 * \return 
+		 * \brief Adds a game object to the name map
+		 * \param gameObject The game object
+		 * \return Wether the game object could be added to the map
+		 */
+		bool AddToNameMap(GameObject* gameObject);
+
+		/**
+		 * \brief removes a game object from the name map
+		 * \param gameObject The game object
+		 */
+		void RemoveFromNameMap(GameObject* gameObject);
+
+		/**
+		 * \brief Tries to find a game object with the given name
+		 * \param name The name
+		 * \return The game object, or nullptr
+		 */
+		GameObject* FindGameObjectByName(const std::string& name);
+
+		/**
+		* \brief Tries to find a component of the given type on any game object in the scene
+		* \tparam T The type of component
+		* \return A pointer to the component, or nullptr
+		*/
+		template<class T>
+		T* FindComponentOfType();
+
+		/**
+		 * \brief Creates a new light in the scene
+		 * \param type The type of light
+		 * \param shadows Wheter the light has shadows
+		 * \param shadowSize The size of the shadow map
+		 * \return A pointer to the light
 		 */
 		std::shared_ptr<Light> CreateLight(LightType type, bool shadows = false, unsigned int shadowSize = Light::DEFAULT_SHADOW_MAP_SIZE);
 
+		/**
+		 * \brief Creates a new light in the scene from the given data
+		 * \param data The data
+		 * \return A pointer to the light
+		 */
 		Light* CreateLight(DataObject data);
 
 		/**
-		* \brief
-		* \param meshRenderer
+		* \brief Registers a mesh renderer to be rendered in the scene
+		* \param meshRenderer The mesh renderer
 		*/
 		void RegisterMeshRenderer(MeshRenderer *meshRenderer);
 
 		/**
-		* \brief
-		* \param removeMeshRenderer
+		* \brief Removes a mesh renderer form the list mesh renderers in the scene
+		* \param removeMeshRenderer The mesh renderer
 		*/
 		void RemoveMeshRenderer(MeshRenderer *removeMeshRenderer);
 
 		/**
-		 * \brief 
-		 * \return 
+		 * \brief gets all the lights in the scene
+		 * \return A list of lights
 		 */
 		std::vector<std::shared_ptr<Light>> GetLights() const { return m_Lights; }
 
@@ -156,6 +191,19 @@ namespace EVA
 
 		void ProcessDestroyQueue();
 	};
+
+	template <class T>
+	T* Scene::FindComponentOfType()
+	{
+		for (auto gameObject : m_GameObjects)
+		{
+			T* pointer = gameObject->GetComponentOfType<T>();
+			if (pointer != nullptr)
+				return pointer;
+		}
+
+		return nullptr;
+	}
 
 	template <class T, typename... Args>
 	T* Scene::CreateUiElement(Args... args)

@@ -1,6 +1,7 @@
 #include "FreeLook.hpp"
 
 #include "EVA/Input.hpp"
+#include "Transformer.hpp"
 
 namespace EVA
 {
@@ -58,6 +59,19 @@ namespace EVA
 
 		if (m_Camera != nullptr)
 			m_Camera->fov -= Input::GetScroll().y;
+
+		if (Input::KeyDown(Input::Alpha1))
+		{
+			auto target = scene->FindGameObjectByName("TargetCube");
+			if (target != nullptr)
+				target->transform->SetScale(2.0f);
+		}
+		if (Input::KeyDown(Input::Alpha2))
+		{
+			auto target = scene->FindComponentOfType<Transformer>();
+			if (target != nullptr)
+				target->SetActive(!target->active);
+		}
 	}
 
 	void FreeLook::Load(const DataObject data)

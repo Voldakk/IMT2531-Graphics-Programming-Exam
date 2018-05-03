@@ -16,6 +16,10 @@ namespace EVA
 			// Transform
 			gameObject->transform->Load(DataObject(d));
 
+			if (d.HasMember("name") && d["name"].IsString())
+				gameObject->SetName(d["name"].GetString());
+
+
 			// Components
 			if (d.HasMember("components") && d["components"].IsArray())
 			{
