@@ -9,7 +9,7 @@ namespace EVA
 
 		void FreeLook::Start()
 	{
-		m_Camera = GetComponentOfType<Camera>();
+		m_Camera = gameObject->GetComponentOfType<Camera>();
 	}
 
 	void FreeLook::Update(const float deltaTime)

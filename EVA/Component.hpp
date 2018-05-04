@@ -120,8 +120,8 @@ namespace EVA
 		* \tparam T The type of component
 		* \return A pointer to the component, or nullptr
 		*/
-		template<class T>
-		T* GetComponentOfType();
+		/*template<class T>
+		T* GetComponentOfType();*/
 
 		/**
 		* \brief Called before the scene starts
@@ -140,9 +140,9 @@ namespace EVA
 		virtual void Load(const DataObject data);
     };
 
-	template <class T>
+	/*template <class T>
 	T* Component::GetComponentOfType()
 	{
 		return m_GameObject->GetComponentOfType<T>();
-	}
+	}*/
 }
