@@ -16,6 +16,16 @@ namespace EVA
 	 */
 	class Scene
 	{
+		bool m_Abort = false;
+		bool m_Started = false;
+
+		ShadowMaterial m_ShadowMaterial;
+		ShadowMaterial m_ShadowMaterialInstanced;
+
+		ShadowMaterial m_ShadowMaterialCube;
+		ShadowMaterial m_ShadowMaterialCubeInstanced;
+
+	protected:
 
 		std::vector<std::vector<std::vector<MeshRenderer *>>> m_Materials;
 		std::vector<std::shared_ptr<GameObject>> m_GameObjects;
@@ -27,14 +37,6 @@ namespace EVA
 
 		std::map<std::string, GameObject*> m_NameMap;
 
-		bool m_Abort = false;
-		bool m_Started = false;
-
-		ShadowMaterial m_ShadowMaterial;
-		ShadowMaterial m_ShadowMaterialInstanced;
-
-		ShadowMaterial m_ShadowMaterialCube;
-		ShadowMaterial m_ShadowMaterialCubeInstanced;
 		
 
 	public:

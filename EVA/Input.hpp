@@ -70,9 +70,15 @@ namespace EVA
 		// ========== MOUSE POSITION ==========
 
 
+		/**
+		 * \brief Callback for mouse position change in a GLFW window
+		 * \param window The window
+		 * \param xpos Mouse x position
+		 * \param ypos Mouse y position
+		 */
 		static void CursorPositionCallback(GLFWwindow *window, double xpos, double ypos);
 
-		/// <summary>Gets the current position of the cursor</summary>
+		/// <summary>Gets the current position of the cursor from the top left corner of the window</summary>
 		/// <returns>The position</returns>
 		static inline glm::vec2 MousePosition()
 		{ return m_LastMousePosition; }

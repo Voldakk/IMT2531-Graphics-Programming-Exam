@@ -5,14 +5,18 @@
 #include "EVA/ResourceManagers.hpp"
 #include "EVA/Components.hpp"
 
+#include "../EVA/Physics.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/quaternion.hpp"
+
 namespace EVA_TEST
 {
 
 	class Transforms : public EVA::Scene
 	{
-		EVA::GameObject* m_CenterCube;
-
-		EVA::GameObject* m_ChildCube2;
+		EVA::GameObject* m_Plane;
+		EVA::GameObject* m_Cube;
 
 	public:
 
@@ -29,11 +33,12 @@ namespace EVA_TEST
 
 			// Camera
 			auto camera = CreateGameObject();
+			camera->SetName("Camera");
 			const auto cameraComponent = camera->AddComponent<EVA::Camera>();
-			camera->AddComponent<EVA::FreeLook>();
+			//camera->AddComponent<EVA::FreeLook>();
 			EVA::Application::SetMainCamera(cameraComponent);
-			EVA::Input::SetCursorMode(EVA::Input::Disabled);
-			camera->transform->SetPosition({ 0.0f, 2.0f, -5.0f });
+			EVA::Input::SetCursorMode(EVA::Input::Normal);
+			camera->transform->SetPosition({ 0.0f, 4.0f, -10.0f });
 
 			// Mesh
 			const auto cubeModel = EVA::ModelManager::Primitive(EVA::ModelManager::Cube);
@@ -45,58 +50,73 @@ namespace EVA_TEST
 			material->shader = EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
 
 			// Ground plane
-			auto plane = CreateGameObject();
-			auto mr = plane->AddComponent<EVA::MeshRenderer>();
+			m_Plane = CreateGameObject().get();
+			m_Plane->SetName("Plane");
+			auto mr = m_Plane->AddComponent<EVA::MeshRenderer>();
 			mr->Set(planeModel->GetMesh(0), material);
 
-			plane->transform->SetScale(10.0f);
-			plane->transform->SetPosition(EVA::YAXIS * -2.0f);
+			m_Plane->transform->SetScale({10.0f, 0.010f, 10.0f});
+			m_Plane->transform->SetPosition(EVA::YAXIS * -2.0f);
 
 			// Cube Material
 			material = std::make_shared<EVA::Material>();
 			material->shader = EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
 
 			// Center cube
-			m_CenterCube = CreateGameObject().get();
-			mr = m_CenterCube->AddComponent<EVA::MeshRenderer>();
+			m_Cube = CreateGameObject().get();
+			m_Cube->SetName("Cube");
+			mr = m_Cube->AddComponent<EVA::MeshRenderer>();
 			mr->Set(cubeModel->GetMesh(0), material);
-
-			// Child cube
-			auto childCube = CreateGameObject();
-			mr = childCube->AddComponent<EVA::MeshRenderer>();
-			mr->Set(cubeModel->GetMesh(0), material);
-
-			childCube->SetParent(m_CenterCube);
-			childCube->transform->SetScale(0.5f);
-			childCube->transform->SetPosition(EVA::ZAXIS * 4.0f);
-
-			// Child cube 2
-			m_ChildCube2 = CreateGameObject().get();
-			mr = m_ChildCube2->AddComponent<EVA::MeshRenderer>();
-			mr->Set(cubeModel->GetMesh(0), material);
-
-			m_ChildCube2->SetParent(m_CenterCube);
-			m_ChildCube2->transform->SetScale(0.5f);
-			m_ChildCube2->transform->SetPosition(EVA::ZAXIS * 8.0f);
-
-			// Child cube 2.1
-			auto childCube21 = CreateGameObject();
-
-			mr = childCube21->AddComponent<EVA::MeshRenderer>();
-			mr->Set(cubeModel->GetMesh(0), material);
-
-			childCube21->SetParent(m_ChildCube2);
-			childCube21->transform->SetScale(0.5f); // Effectively 0.5 * 0.5 = 0.25
-			childCube21->transform->SetPosition(EVA::ZAXIS * 2.0f);
 		}
 
 		void Update(const float deltaTime) override
 		{
 			Scene::Update(deltaTime);
 
-			m_CenterCube->transform->Rotate(EVA::YAXIS, deltaTime * 50.f);
+			if(EVA::Input::MouseButton(EVA::Input::MouseLeft))
+			{
+				const auto windowSize = EVA::Application::GetWindowSize();
+				const auto mousePos = EVA::Input::MousePosition();
 
-			m_ChildCube2->transform->Rotate(EVA::XAXIS, deltaTime * 200.f);
+				const auto ray = EVA::Physics::ScreenPosToWorldRay(mousePos, EVA::Application::mainCamera);
+
+				EVA::GameObject* nearest = nullptr;
+				auto minDist = 999999.0f;
+				glm::vec3 point;
+
+				for (const auto& gameObject : m_GameObjects)
+				{
+					if(gameObject->GetName() == "Camera")
+						continue;;
+
+					float intersectionDistance;
+					const auto aabbMin = -gameObject->transform->scale;
+					const auto aabbMax = gameObject->transform->scale;
+
+					const auto rotationMatrix = glm::toMat4(gameObject->transform->orientation);
+					const auto translationMatrix = glm::translate(glm::mat4(), gameObject->transform->position);
+					const auto modelMatrix = translationMatrix * rotationMatrix;
+
+					if (EVA::Physics::TestRayObbIntersection(
+						ray,
+						aabbMin,
+						aabbMax,
+						modelMatrix,
+						intersectionDistance)
+						) 
+					{
+						if(intersectionDistance < minDist)
+						{
+							minDist = intersectionDistance;
+							nearest = gameObject.get();
+							point = ray.origin + ray.direction * intersectionDistance;
+						}
+					}
+				}
+
+				if(nearest != nullptr)
+					std::cout << "Name: " << nearest->GetName() << ", Dist: " << minDist << ", Point: (" << point.x << ", " << point.y << ", " << point.z << ") \n";
+			}
 		}
 	};
 

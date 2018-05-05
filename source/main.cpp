@@ -15,10 +15,10 @@ int main()
 
 	//EVA::SceneManager::CreateScene<MainMenu>();               // The Pacman game
 
-	//EVA::SceneManager::CreateScene<EVA_TEST::Transforms>(); // Shows transform parents and multiple directional lights
+	EVA::SceneManager::CreateScene<EVA_TEST::Transforms>(); // Shows transform parents and multiple directional lights
 	//EVA::SceneManager::CreateScene<EVA_TEST::UiTest>();     // Shows buttons, and UI anchor and pivots
 
-	EVA::SceneManager::CreateScene("./assets/scenes/cubes.scene");
+	//EVA::SceneManager::CreateScene("./assets/scenes/cubes.scene");
 
     EVA::Application::Run();
 
