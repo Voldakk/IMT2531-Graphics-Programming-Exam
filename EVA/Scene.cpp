@@ -22,7 +22,7 @@ namespace EVA
 
 	Scene::Scene(const std::string& path) : Scene()
 	{
-		EVA::SceneParser::Load(this, path);
+		SceneParser::Load(this, path);
 	}
 
 	Scene::~Scene()

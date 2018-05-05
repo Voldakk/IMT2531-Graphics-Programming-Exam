@@ -189,8 +189,8 @@ namespace EVA
 
 		for (const auto& collider : scene->GetColliders())
 		{
-			if (collider->gameObject->GetName() == "Camera")
-				continue;;
+			if (!collider->active)
+				continue;
 
 			float intersectionDistance;
 			const auto aabbMin = -collider->transform->scale;
