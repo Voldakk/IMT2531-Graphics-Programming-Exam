@@ -9,12 +9,34 @@
 namespace EVA
 {
 
+	/**
+	 * \brief A ray for use in ray casting
+	 */
 	struct Ray
 	{
 		glm::vec3 origin;
 		glm::vec3 direction;
+
+		/**
+		* \brief Default constructor
+		*/
+		Ray() = default;
+
+		/**
+		 * \brief 
+		 * \param origin The ray's origin
+		 * \param direction The ray's direction
+		 */
+		Ray(const glm::vec3 origin, const glm::vec3 direction)
+		{
+			this->origin = origin;
+			this->direction = direction;
+		}
 	};
 
+	/**
+	 * \brief Holds information about a raycast hit
+	 */
 	struct RaycastHit
 	{
 		Ray ray;
@@ -22,18 +44,30 @@ namespace EVA
 		float distance = 0.0f;
 		GameObject* hitObject = nullptr;
 
+		/**
+		 * \brief Default constructor
+		 */
 		RaycastHit() = default;
 
+		/**
+		 * \brief Constructor
+		 * \param ray The ray
+		 * \param point The hit point
+		 * \param distance The intersection distance
+		 * \param hitObject The object that was hit
+		 */
 		RaycastHit(const Ray ray, const glm::vec3 point, const float distance, GameObject* hitObject)
 		{
 			this->ray = ray;
 			this->point = point;
 			this->distance = distance;
 			this->hitObject = hitObject;
-
 		}
 	};
 
+	/**
+	 * \brief 
+	 */
 	class Physics
 	{
 	public:
@@ -57,8 +91,13 @@ namespace EVA
 		 */
 		static bool TestRayObbIntersection(Ray ray, glm::vec3 aabbMin, glm::vec3 aabbMax, glm::mat4 modelMatrix, float& intersectionDistance);
 
-		static bool Raycast(Ray ray, Scene* scene, RaycastHit& out);
-
+		/**
+		 * \brief Tests for intersections between the ray and game objects in the scene
+		 * \param ray The ray
+		 * \param out Hit information
+		 * \param scene The scene the ray should be cast in
+		 * \return Whether the ray hit an object
+		 */
+		static bool Raycast(Ray ray, RaycastHit& out, Scene* scene);
 	};
-
 }

@@ -93,3 +93,4 @@ To run them simply uncomment the line in source/main.cpp
 * [LearnOpenGL - Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
 * [LearnOpenGL - Text Rendering](https://learnopengl.com/In-Practice/Text-Rendering)
 * [Stack Overflow - String to type mapping](https://stackoverflow.com/a/582456)
+* [opengl-tutorial - Picking with custom Ray-OBB function](http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/)

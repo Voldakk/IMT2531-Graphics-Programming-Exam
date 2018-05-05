@@ -182,7 +182,7 @@ namespace EVA
 		return true;
 	}
 
-	bool Physics::Raycast(const Ray ray, Scene* scene, RaycastHit& out)
+	bool Physics::Raycast(const Ray ray, RaycastHit& out, Scene* scene)
 	{
 		auto minDist = 999999.0f;
 		EVA::GameObject* go = nullptr;
@@ -200,13 +200,7 @@ namespace EVA
 			const auto translationMatrix = glm::translate(glm::mat4(), gameObject->transform->position);
 			const auto modelMatrix = translationMatrix * rotationMatrix;
 
-			if (EVA::Physics::TestRayObbIntersection(
-				ray,
-				aabbMin,
-				aabbMax,
-				modelMatrix,
-				intersectionDistance)
-				)
+			if (TestRayObbIntersection(ray, aabbMin, aabbMax, modelMatrix, intersectionDistance))
 			{
 				if (intersectionDistance < minDist)
 				{
@@ -216,7 +210,7 @@ namespace EVA
 			}
 		}
 
-		if(go != nullptr)
+		if (go != nullptr)
 		{
 			const auto point = ray.origin + ray.direction * minDist;
 

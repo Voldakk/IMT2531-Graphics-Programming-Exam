@@ -77,7 +77,7 @@ namespace EVA_TEST
 				const auto ray = EVA::Physics::ScreenPosToWorldRay(mousePos, EVA::Application::mainCamera);
 
 				EVA::RaycastHit hit;
-				if (EVA::Physics::Raycast(ray, this, hit))
+				if (EVA::Physics::Raycast(ray, hit, this))
 				{
 					std::cout << "Name: " << hit.hitObject->GetName() << ", Dist: " << hit.distance << ", Point: (" << hit.point.x << ", " << hit.point.y << ", " << hit.point.z << ") \n";
 				}
