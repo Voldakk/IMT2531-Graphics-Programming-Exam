@@ -54,25 +54,6 @@ namespace EVA
 		Text::Init();
     }
 
-	void Application::SetMainCamera(Camera* camera)
-	{
-		mainCamera = camera;
-
-		if (mainCamera != nullptr)
-		{
-			m_PerspectiveProjection = glm::perspective(
-				glm::radians(mainCamera->fov),
-				(float)m_WindowSize.x / (float)m_WindowSize.y,
-				mainCamera->near,
-				mainCamera->far);
-		}
-	}
-
-	void Application::UseDefaultCamera()
-	{
-		SetMainCamera(m_DefaultCamera);
-	}
-
 	bool Application::CreateWindow(const std::string &title)
     {
         // Initialise GLFW
@@ -82,6 +63,9 @@ namespace EVA
             getchar();
             return false;
         }
+
+		glfwSetErrorCallback(GlfwErrorCallback);
+
         glfwWindowHint(GLFW_SAMPLES, 4);
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -185,6 +169,30 @@ namespace EVA
         glfwTerminate();
     }
 
+	void Application::Exit()
+	{
+		glfwSetWindowShouldClose(m_Window, 1);
+	}
+
+	void Application::SetMainCamera(Camera* camera)
+	{
+		mainCamera = camera;
+
+		if (mainCamera != nullptr)
+		{
+			m_PerspectiveProjection = glm::perspective(
+				glm::radians(mainCamera->fov),
+				(float)m_WindowSize.x / (float)m_WindowSize.y,
+				mainCamera->near,
+				mainCamera->far);
+		}
+	}
+
+	void Application::UseDefaultCamera()
+	{
+		SetMainCamera(m_DefaultCamera);
+	}
+
     void Application::WindowResizeCallback(GLFWwindow *window, const int width, const int height)
     {
         m_WindowSize = glm::ivec2(width, height);
@@ -214,9 +222,13 @@ namespace EVA
 		SceneManager::OnScreenResize();
     }
 
-    void Application::Exit()
-    {
-        glfwSetWindowShouldClose(m_Window, 1);
-    }
+	void Application::GlfwErrorCallback(const int error, const char* description)
+	{
+		std::cout << 
+			"\nGLFW error code: " << error << "\n" << 
+			description << "\n\n";
+
+		std::system("PAUSE");
+	}
 
 }

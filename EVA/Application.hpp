@@ -79,6 +79,13 @@ namespace EVA
 
         /// <summary>Callback for when the window is resized</summary>
         static void WindowResizeCallback(GLFWwindow *window, int width, int height);
+
+	    /**
+		 * \brief Callback for GLFW errors
+		 * \param error Error code
+		 * \param description Error description
+		 */
+		static void GlfwErrorCallback(int error, const char* description);
     };
 
 }
