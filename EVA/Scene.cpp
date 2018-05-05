@@ -7,6 +7,7 @@
 #include "Application.hpp"
 #include "ShaderManager.hpp"
 #include "Parsers/SceneParser.hpp"
+#include "Components/Collider.hpp"
 
 namespace EVA
 {
@@ -260,6 +261,36 @@ namespace EVA
 		}
 	}
 
+	void Scene::AddCollider(Collider* collider)
+	{
+		for (unsigned int i = 0; i < m_Colliders.size(); ++i)
+		{
+			if (m_Colliders[i] == collider)
+			{
+				return;
+			}
+		}
+
+		m_Colliders.push_back(collider);
+	}
+
+	void Scene::RemoveCollider(Collider* collider)
+	{
+		for (unsigned int i = 0; i < m_Colliders.size(); ++i)
+		{
+			if(m_Colliders[i] == collider)
+			{
+				m_Colliders.erase(m_Colliders.begin() + i);
+				return;
+			}
+		}
+	}
+
+	std::vector<Collider*>& Scene::GetColliders()
+	{
+		return m_Colliders;
+	}
+
 	void Scene::RenderScene()
 	{
 		const auto ws = Application::GetWindowSize();
@@ -460,7 +491,7 @@ namespace EVA
 				if (m_GameObjects[i].get() == gameObject)
 				{
 					m_GameObjects.erase(m_GameObjects.begin() + i);
-					break;;
+					break;
 				}
 			}
 		}

@@ -11,6 +11,8 @@
 
 namespace EVA
 {
+	class Collider;
+
 	/**
 	 * \brief A scene that can be run by the SceneManager
 	 */
@@ -33,11 +35,11 @@ namespace EVA
 
 		std::vector<GameObject*> m_DestroyQueue;
 
+		std::vector<Collider*> m_Colliders;
+
 		std::vector<std::shared_ptr<UiElement>> m_UiElements;
 
 		std::map<std::string, GameObject*> m_NameMap;
-
-		
 
 	public:
 
@@ -179,6 +181,11 @@ namespace EVA
 		{
 			return m_GameObjects;
 		}
+
+		void AddCollider(Collider* collider);
+		void RemoveCollider(Collider* collider);
+		std::vector<Collider*>& GetColliders();
+
 
 	private:
 

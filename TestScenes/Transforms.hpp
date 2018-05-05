@@ -6,6 +6,7 @@
 #include "EVA/Components.hpp"
 
 #include "../EVA/Physics.hpp"
+#include "../EVA/Components/BoxCollider.hpp"
 
 
 namespace EVA_TEST
@@ -53,8 +54,12 @@ namespace EVA_TEST
 			auto mr = m_Plane->AddComponent<EVA::MeshRenderer>();
 			mr->Set(planeModel->GetMesh(0), material);
 
-			m_Plane->transform->SetScale({10.0f, 0.010f, 10.0f});
+			m_Plane->transform->SetScale({10.0f, 1.0f, 10.0f});
 			m_Plane->transform->SetPosition(EVA::YAXIS * -2.0f);
+			m_Plane->transform->Rotate(EVA::YAXIS, 45.0f);
+
+			auto collider = m_Plane->AddComponent<EVA::BoxCollider>();
+			collider->bounds.extents = glm::vec3(1.0f, 0.0f, 1.0f);
 
 			// Cube Material
 			material = std::make_shared<EVA::Material>();
@@ -65,6 +70,9 @@ namespace EVA_TEST
 			m_Cube->SetName("Cube");
 			mr = m_Cube->AddComponent<EVA::MeshRenderer>();
 			mr->Set(cubeModel->GetMesh(0), material);
+
+			collider = m_Cube->AddComponent<EVA::BoxCollider>();
+			collider->bounds.extents = glm::vec3(1.0f);
 		}
 
 		void Update(const float deltaTime) override
@@ -79,7 +87,7 @@ namespace EVA_TEST
 				EVA::RaycastHit hit;
 				if (EVA::Physics::Raycast(ray, hit, this))
 				{
-					std::cout << "Name: " << hit.hitObject->GetName() << ", Dist: " << hit.distance << ", Point: (" << hit.point.x << ", " << hit.point.y << ", " << hit.point.z << ") \n";
+					std::cout << "Name: " << hit.hitCollider->gameObject->GetName() << ", Dist: " << hit.distance << ", Point: (" << hit.point.x << ", " << hit.point.y << ", " << hit.point.z << ") \n";
 				}
 					
 			}

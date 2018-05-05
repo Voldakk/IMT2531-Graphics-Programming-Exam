@@ -5,6 +5,7 @@
 #include "Application.hpp"
 #include "GameObject.hpp"
 #include "Components/Camera.hpp"
+#include "Components/Collider.hpp"
 
 namespace EVA
 {
@@ -42,7 +43,7 @@ namespace EVA
 		Ray ray;
 		glm::vec3 point;
 		float distance = 0.0f;
-		GameObject* hitObject = nullptr;
+		Collider* hitCollider = nullptr;
 
 		/**
 		 * \brief Default constructor
@@ -54,14 +55,14 @@ namespace EVA
 		 * \param ray The ray
 		 * \param point The hit point
 		 * \param distance The intersection distance
-		 * \param hitObject The object that was hit
+		 * \param hitCollider The collider that was hit
 		 */
-		RaycastHit(const Ray ray, const glm::vec3 point, const float distance, GameObject* hitObject)
+		RaycastHit(const Ray ray, const glm::vec3 point, const float distance, Collider* hitCollider)
 		{
 			this->ray = ray;
 			this->point = point;
 			this->distance = distance;
-			this->hitObject = hitObject;
+			this->hitCollider = hitCollider;
 		}
 	};
 

@@ -101,7 +101,7 @@ namespace EVA
 		* \brief Gets the refferences to the scene and the transform on the game object
 		* \param gameObject The GameObject the component is attaced to
 		*/
-		void SetGameObject(GameObject* gameObject);
+		virtual void SetGameObject(GameObject* gameObject);
 
 	    /**
 		 * \brief Sets the scene

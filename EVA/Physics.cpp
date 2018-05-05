@@ -1,9 +1,9 @@
 #include "Physics.hpp"
 
-#include "Scene.hpp"	
-
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"
+
+#include "Scene.hpp"
 
 namespace EVA
 {
@@ -185,19 +185,19 @@ namespace EVA
 	bool Physics::Raycast(const Ray ray, RaycastHit& out, Scene* scene)
 	{
 		auto minDist = 999999.0f;
-		EVA::GameObject* go = nullptr;
+		Collider* hitCollider = nullptr;
 
-		for (const auto& gameObject : scene->GetGameObjects())
+		for (const auto& collider : scene->GetColliders())
 		{
-			if (gameObject->GetName() == "Camera")
+			if (collider->gameObject->GetName() == "Camera")
 				continue;;
 
 			float intersectionDistance;
-			const auto aabbMin = -gameObject->transform->scale;
-			const auto aabbMax = gameObject->transform->scale;
+			const auto aabbMin = -collider->transform->scale;
+			const auto aabbMax = collider->transform->scale;
 
-			const auto rotationMatrix = glm::toMat4(gameObject->transform->orientation);
-			const auto translationMatrix = glm::translate(glm::mat4(), gameObject->transform->position);
+			const auto rotationMatrix = glm::toMat4(collider->transform->orientation);
+			const auto translationMatrix = glm::translate(glm::mat4(), collider->transform->position);
 			const auto modelMatrix = translationMatrix * rotationMatrix;
 
 			if (TestRayObbIntersection(ray, aabbMin, aabbMax, modelMatrix, intersectionDistance))
@@ -205,16 +205,16 @@ namespace EVA
 				if (intersectionDistance < minDist)
 				{
 					minDist = intersectionDistance;
-					go = gameObject.get();
+					hitCollider = collider;
 				}
 			}
 		}
 
-		if (go != nullptr)
+		if (hitCollider != nullptr)
 		{
 			const auto point = ray.origin + ray.direction * minDist;
 
-			out = RaycastHit(ray, point, minDist, go);
+			out = RaycastHit(ray, point, minDist, hitCollider);
 			return true;
 		}
 
