@@ -7,6 +7,9 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
+
 #include "UI/Text.hpp"
 #include "Input.hpp"
 #include "SceneManager.hpp"
@@ -52,6 +55,13 @@ namespace EVA
 
 		// Text
 		Text::Init();
+
+		// ImGui
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+	    auto& io = ImGui::GetIO(); (void)io;
+		ImGui_ImplGlfwGL3_Init(m_Window, true);
+		ImGui::StyleColorsDark();
     }
 
 	bool Application::CreateWindow(const std::string &title)
@@ -119,7 +129,7 @@ namespace EVA
         auto currentFrameTime = glfwGetTime();
         auto lastFrameTime = currentFrameTime;
 
-        int frameCounter = 0;
+	    auto frameCounter = 0;
         auto lastFpsTime = lastFrameTime;
 
         while (glfwWindowShouldClose(m_Window) == 0)
@@ -141,6 +151,7 @@ namespace EVA
                 frameCounter = 0;
             }
 
+			ImGui_ImplGlfwGL3_NewFrame();
 
             // ==== UPDATE ====
             SceneManager::Update(deltaTime);
@@ -150,6 +161,9 @@ namespace EVA
             // ==== RENDER ====
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             SceneManager::Render();
+
+			ImGui::Render();
+			ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
             // Swap buffers
             glfwSwapBuffers(m_Window);
@@ -163,6 +177,10 @@ namespace EVA
             if (sleepDur > 0)
                 std::this_thread::sleep_for(std::chrono::milliseconds((int) (sleepDur * 1000)));
         }
+
+		// Shutdown ImGui
+		ImGui_ImplGlfwGL3_Shutdown();
+		ImGui::DestroyContext();
 
         // Destroy the window and exit
         glfwDestroyWindow(m_Window);
