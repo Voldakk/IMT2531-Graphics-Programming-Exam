@@ -1,5 +1,10 @@
 #include "Physics.hpp"
 
+#include "Scene.hpp"	
+
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/quaternion.hpp"
+
 namespace EVA
 {
 
@@ -177,4 +182,48 @@ namespace EVA
 		return true;
 	}
 
+	bool Physics::Raycast(const Ray ray, Scene* scene, RaycastHit& out)
+	{
+		auto minDist = 999999.0f;
+		EVA::GameObject* go = nullptr;
+
+		for (const auto& gameObject : scene->GetGameObjects())
+		{
+			if (gameObject->GetName() == "Camera")
+				continue;;
+
+			float intersectionDistance;
+			const auto aabbMin = -gameObject->transform->scale;
+			const auto aabbMax = gameObject->transform->scale;
+
+			const auto rotationMatrix = glm::toMat4(gameObject->transform->orientation);
+			const auto translationMatrix = glm::translate(glm::mat4(), gameObject->transform->position);
+			const auto modelMatrix = translationMatrix * rotationMatrix;
+
+			if (EVA::Physics::TestRayObbIntersection(
+				ray,
+				aabbMin,
+				aabbMax,
+				modelMatrix,
+				intersectionDistance)
+				)
+			{
+				if (intersectionDistance < minDist)
+				{
+					minDist = intersectionDistance;
+					go = gameObject.get();
+				}
+			}
+		}
+
+		if(go != nullptr)
+		{
+			const auto point = ray.origin + ray.direction * minDist;
+
+			out = RaycastHit(ray, point, minDist, go);
+			return true;
+		}
+
+		return false;
+	}
 }

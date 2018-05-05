@@ -175,6 +175,11 @@ namespace EVA
 		 */
 		void OnScreenResize();
 
+		std::vector<std::shared_ptr<GameObject>>& GetGameObjects()
+		{
+			return m_GameObjects;
+		}
+
 	private:
 
 		/**

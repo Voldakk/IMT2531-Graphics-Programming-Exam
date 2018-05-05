@@ -6,9 +6,7 @@
 #include "EVA/Components.hpp"
 
 #include "../EVA/Physics.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/quaternion.hpp"
-#include "glm/gtx/quaternion.hpp"
+
 
 namespace EVA_TEST
 {
@@ -75,50 +73,16 @@ namespace EVA_TEST
 
 			if(EVA::Input::MouseButton(EVA::Input::MouseLeft))
 			{
-				const auto windowSize = EVA::Application::GetWindowSize();
 				const auto mousePos = EVA::Input::MousePosition();
-
 				const auto ray = EVA::Physics::ScreenPosToWorldRay(mousePos, EVA::Application::mainCamera);
 
-				EVA::GameObject* nearest = nullptr;
-				auto minDist = 999999.0f;
-				glm::vec3 point;
-
-				for (const auto& gameObject : m_GameObjects)
+				EVA::RaycastHit hit;
+				if (EVA::Physics::Raycast(ray, this, hit))
 				{
-					if(gameObject->GetName() == "Camera")
-						continue;;
-
-					float intersectionDistance;
-					const auto aabbMin = -gameObject->transform->scale;
-					const auto aabbMax = gameObject->transform->scale;
-
-					const auto rotationMatrix = glm::toMat4(gameObject->transform->orientation);
-					const auto translationMatrix = glm::translate(glm::mat4(), gameObject->transform->position);
-					const auto modelMatrix = translationMatrix * rotationMatrix;
-
-					if (EVA::Physics::TestRayObbIntersection(
-						ray,
-						aabbMin,
-						aabbMax,
-						modelMatrix,
-						intersectionDistance)
-						) 
-					{
-						if(intersectionDistance < minDist)
-						{
-							minDist = intersectionDistance;
-							nearest = gameObject.get();
-							point = ray.origin + ray.direction * intersectionDistance;
-						}
-					}
+					std::cout << "Name: " << hit.hitObject->GetName() << ", Dist: " << hit.distance << ", Point: (" << hit.point.x << ", " << hit.point.y << ", " << hit.point.z << ") \n";
 				}
-
-				if(nearest != nullptr)
-					std::cout << "Name: " << nearest->GetName() << ", Dist: " << minDist << ", Point: (" << point.x << ", " << point.y << ", " << point.z << ") \n";
+					
 			}
 		}
 	};
-
-
 }

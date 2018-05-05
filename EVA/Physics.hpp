@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 
 #include "Application.hpp"
+#include "GameObject.hpp"
 #include "Components/Camera.hpp"
 
 namespace EVA
@@ -12,6 +13,25 @@ namespace EVA
 	{
 		glm::vec3 origin;
 		glm::vec3 direction;
+	};
+
+	struct RaycastHit
+	{
+		Ray ray;
+		glm::vec3 point;
+		float distance = 0.0f;
+		GameObject* hitObject = nullptr;
+
+		RaycastHit() = default;
+
+		RaycastHit(const Ray ray, const glm::vec3 point, const float distance, GameObject* hitObject)
+		{
+			this->ray = ray;
+			this->point = point;
+			this->distance = distance;
+			this->hitObject = hitObject;
+
+		}
 	};
 
 	class Physics
@@ -36,6 +56,8 @@ namespace EVA
 		 * \return Whether the ray hit an object
 		 */
 		static bool TestRayObbIntersection(Ray ray, glm::vec3 aabbMin, glm::vec3 aabbMax, glm::mat4 modelMatrix, float& intersectionDistance);
+
+		static bool Raycast(Ray ray, Scene* scene, RaycastHit& out);
 
 	};
 
