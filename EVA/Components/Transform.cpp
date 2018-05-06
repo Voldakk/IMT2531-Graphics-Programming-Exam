@@ -1,15 +1,13 @@
 #include "Transform.hpp"
 
 #include "glm/gtx/quaternion.hpp"
+#include "glm/gtx/euler_angles.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "../GameObject.hpp"
-#include "glm/gtx/euler_angles.inl"
 
 namespace EVA
 {
-	REGISTER_COMPONENT_CPP(Transform, "EVA::Transform")
-
 	Transform::Transform()
 	{
 		m_Parent = nullptr;
