@@ -111,6 +111,8 @@ namespace EVA
 		 * \return The name
 		 */
 		std::string GetName() const;
+
+		std::vector<std::shared_ptr<Component>>& GetComponents();
     };
 
     template<class T>

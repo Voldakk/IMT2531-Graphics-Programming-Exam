@@ -30,6 +30,8 @@ namespace EVA
 		glm::quat m_LocalOrientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 		glm::vec3 m_LocalScale = glm::vec3(1.0f);
 
+		glm::vec3 m_LocalRotation = glm::vec3(0.0f);
+
 		glm::vec3 m_Position = glm::vec3(0.0f);
 		glm::quat m_Orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 		glm::vec3 m_Scale = glm::vec3(1.0f);
@@ -37,7 +39,6 @@ namespace EVA
 		glm::vec3 m_Forward;
 		glm::vec3 m_Right;
 		glm::vec3 m_Up;
-
 
 	public:
 
@@ -47,6 +48,8 @@ namespace EVA
 		const glm::vec3& localPosition = m_LocalPosition;
 		const glm::quat& localOrientation = m_LocalOrientation;
 		const glm::vec3& localScale = m_LocalScale;
+
+		const glm::vec3& localRotation = m_LocalRotation;
 
 		const glm::vec3& position = m_Position;
 		const glm::quat& orientation = m_Orientation;

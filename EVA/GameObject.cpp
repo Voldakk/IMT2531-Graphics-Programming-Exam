@@ -103,4 +103,9 @@ namespace EVA
 	{
 		return m_Name;
 	}
+
+	std::vector<std::shared_ptr<Component>>& GameObject::GetComponents()
+	{
+		return m_Components;
+	}
 }

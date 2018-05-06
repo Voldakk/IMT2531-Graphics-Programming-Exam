@@ -6,6 +6,7 @@
 
 #include "Components/SceneCamera.hpp"
 #include "Parsers/SceneParser.hpp"
+#include "glm/gtx/euler_angles.inl"
 
 namespace EVA
 {
@@ -34,20 +35,17 @@ namespace EVA
 		void Update(const float deltaTime) override
 		{
 			m_SceneCameraGameObject->Update(deltaTime);
+
+			EditorWindows::SceneHierarchy(this, &m_SceneCamera->selected);
+
+			EditorWindows::Inspector(m_SceneCamera->selected);
+
+			ImGui::ShowDemoWindow();
 		}
 
 		void LateUpdate() override
 		{
 			m_SceneCameraGameObject->LateUpdate();
-		}
-
-		void Render() override
-		{
-			Scene::Render();
-
-			EditorWindows::SceneHierarchy(this, &m_SceneCamera->selected);
-
-			//ImGui::ShowDemoWindow();
 		}
 	};
 

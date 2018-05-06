@@ -64,4 +64,9 @@ namespace EVA
 	{
 
 	}
+
+	std::string Component::GetTypeId()
+	{
+		return "";
+	}
 }

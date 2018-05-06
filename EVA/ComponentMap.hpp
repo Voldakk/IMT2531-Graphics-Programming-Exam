@@ -9,11 +9,18 @@ namespace EVA
 {
 	// Macro for registering a component. Should be put inside the class declaration
 	#define REGISTER_COMPONENT_HPP(TYPE) \
-    static ComponentRegister<TYPE> m_Register;
+    static ComponentRegister<TYPE> m_Register;\
+	public:\
+	std::string GetTypeId() override;\
+	private:
 
 	// Macro for registering a component
 	#define REGISTER_COMPONENT_CPP(TYPE, NAME) \
-    ComponentRegister<TYPE> TYPE::m_Register(NAME);
+    ComponentRegister<TYPE> TYPE::m_Register(NAME);\
+	std::string TYPE::GetTypeId()\
+	{\
+		return m_Register.typeId;\
+	}
 
 	/**
 	 * \brief Keeps track of all registerd components
@@ -60,8 +67,10 @@ namespace EVA
 	template<typename T>
 	struct ComponentRegister 
 	{
+		std::string typeId;
 		explicit ComponentRegister(std::string const& s)
 		{
+			typeId = s;
 			ComponentMap::GetMap()->insert(std::make_pair(s, &ComponentMap::CreateT<T>));
 		}
 	};

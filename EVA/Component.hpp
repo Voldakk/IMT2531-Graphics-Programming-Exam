@@ -1,7 +1,8 @@
 #pragma once
 
-#include "ConstPointer.hpp"
+#include <string>
 
+#include "ConstPointer.hpp"
 #include "Parsers/Json.hpp"
 
 namespace EVA
@@ -138,6 +139,8 @@ namespace EVA
 		 * \param data The data
 		 */
 		virtual void Load(const DataObject data);
+
+		virtual std::string GetTypeId();
     };
 
 	/*template <class T>

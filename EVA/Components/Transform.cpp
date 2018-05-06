@@ -4,6 +4,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "../GameObject.hpp"
+#include "glm/gtx/euler_angles.inl"
 
 namespace EVA
 {
@@ -43,18 +44,24 @@ namespace EVA
 	{
 		m_LocalOrientation = offset * m_LocalOrientation;
 		UpdateModelMatrix();
+
+		m_LocalRotation = glm::eulerAngles(m_LocalOrientation) * glm::degrees(1.0f);
 	}
 
 	void Transform::Rotate(const glm::vec3 axis, const float angle)
 	{
 		m_LocalOrientation = glm::angleAxis(glm::radians(angle), axis) * m_LocalOrientation;
 		UpdateModelMatrix();
+
+		m_LocalRotation = glm::eulerAngles(m_LocalOrientation) * glm::degrees(1.0f);
 	}
 
 	void Transform::Rotate(const float angle)
 	{
 		m_LocalOrientation = glm::angleAxis(glm::radians(angle), YAXIS) * m_LocalOrientation;
 		UpdateModelMatrix();
+
+		m_LocalRotation = glm::eulerAngles(m_LocalOrientation) * glm::degrees(1.0f);
 	}
 
 	void Transform::Rotate(const glm::vec3 euler)
@@ -62,38 +69,50 @@ namespace EVA
 		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.z), ZAXIS);
 		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.x), XAXIS);
 		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.y), YAXIS);
+
+		m_LocalRotation = glm::eulerAngles(m_LocalOrientation) * glm::degrees(1.0f);
 	}
 
 	void Transform::SetOrientation(const glm::quat newOrientation)
 	{
 		m_LocalOrientation = newOrientation;
 		UpdateModelMatrix();
+
+		m_LocalRotation = glm::eulerAngles(m_LocalOrientation) * glm::degrees(1.0f);
 	}
 
 	void Transform::SetOrientation(const glm::vec3 axis, const float angle)
 	{
 		m_LocalOrientation = glm::angleAxis(glm::radians(angle), axis);
 		UpdateModelMatrix();
+
+		m_LocalRotation = glm::eulerAngles(m_LocalOrientation) * glm::degrees(1.0f);
 	}
 
 	void Transform::SetOrientation(const float angle)
 	{
 		m_LocalOrientation = glm::angleAxis(glm::radians(angle), YAXIS);
 		UpdateModelMatrix();
+
+		m_LocalRotation = glm::eulerAngles(m_LocalOrientation) * glm::degrees(1.0f);
 	}
 
 	void Transform::SetOrientation(const glm::vec3 euler)
 	{
-		m_LocalOrientation = glm::angleAxis(glm::radians(euler.z), ZAXIS);
-		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.x), XAXIS);
-		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.y), YAXIS);
+		m_LocalRotation = euler;
+
+		m_LocalOrientation = glm::toQuat(glm::eulerAngleXYZ(glm::radians(m_LocalRotation.x), glm::radians(m_LocalRotation.y), glm::radians(m_LocalRotation.z)));
+
+		UpdateModelMatrix();
 	}
 
 	void Transform::SetOrientation(const float x, const float y, const float z)
 	{
-		m_LocalOrientation = glm::angleAxis(glm::radians(z), ZAXIS);
-		m_LocalOrientation *= glm::angleAxis(glm::radians(x), XAXIS);
-		m_LocalOrientation *= glm::angleAxis(glm::radians(y), YAXIS);
+		m_LocalRotation = { x,y,z };
+
+		m_LocalOrientation = glm::toQuat(glm::eulerAngleXYZ(glm::radians(m_LocalRotation.x), glm::radians(m_LocalRotation.y), glm::radians(m_LocalRotation.z)));
+
+		UpdateModelMatrix();
 	}
 
 	void Transform::Scale(const glm::vec3 amount)
