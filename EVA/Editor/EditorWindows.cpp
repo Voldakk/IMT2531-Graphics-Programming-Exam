@@ -15,10 +15,11 @@ namespace EVA
 	void EditorWindows::SceneHierarchy() const
 	{
 		const auto windowSize = Application::GetWindowSize();
-		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)windowSize.y }, { (float)windowSize.x, (float)windowSize.y });
-		ImGui::SetNextWindowPos({ 0.0f, 0.0f });
+		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)windowSize.y - m_MenuBarHeight }, { (float)windowSize.x, (float)windowSize.y - m_MenuBarHeight });
+		ImGui::SetNextWindowPos({ 0.0f, m_MenuBarHeight });
 
-		ImGui::Begin("Scene Hierarchy");
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide;
+		ImGui::Begin("Scene Hierarchy", nullptr, flags);
 
 		for (auto& gameObject : m_Editor->GetGameObjects())
 		{
@@ -35,10 +36,12 @@ namespace EVA
 	void EditorWindows::Inspector() const
 	{
 		const auto screenSize = Application::GetWindowSize();
-		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y }, { (float)screenSize.x, (float)screenSize.y });
-		ImGui::SetNextWindowPos({ (float)screenSize.x, 0.0f }, 0, { 1.0f, 0.0f });
+		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y - m_MenuBarHeight }, { (float)screenSize.x, (float)screenSize.y - m_MenuBarHeight });
+		ImGui::SetNextWindowPos({ (float)screenSize.x, m_MenuBarHeight }, 0, { 1.0f, 0.0f });
 
-		ImGui::Begin("Inspector");
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide;
+		ImGui::Begin("Inspector", nullptr, flags);
+
 		const auto windowSize = ImGui::GetWindowSize();
 
 		auto gameObject = m_Editor->GetSelected();
@@ -123,6 +126,66 @@ namespace EVA
 		}
 
 		ImGui::End();
+	}
+
+	void EditorWindows::MenuBar()
+	{
+		if (ImGui::BeginMainMenuBar())
+		{
+			m_MenuBarHeight = ImGui::GetWindowSize().y;
+
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+				{
+					
+				}
+				if (ImGui::MenuItem("Open", "Ctrl+O"))
+				{
+					
+				}
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Add"))
+			{
+				if (ImGui::MenuItem("GameObject"))
+				{
+
+				}
+
+				if (ImGui::BeginMenu("Component"))
+				{
+					auto ids = ComponentMap::GetComponentIds();
+					auto gameObject = m_Editor->GetSelected();
+
+					for (const auto& id : ids)
+					{
+						if (ImGui::MenuItem(id.c_str()))
+						{
+							const auto component = ComponentMap::CreateComponent(id);
+							if (component != nullptr)
+							{
+								component->SetScene(gameObject->scene.Get());
+								gameObject->AttachComponent(component);
+
+								component->Awake();
+								component->Start();
+							}
+						}
+					}
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("Light"))
+				{
+
+				}
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMainMenuBar();
+		}
 	}
 
 	void EditorWindows::DisplayGameObjectsRecursively(GameObject* gameObject) const

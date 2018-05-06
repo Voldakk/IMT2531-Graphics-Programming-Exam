@@ -58,10 +58,11 @@ namespace EVA
 			}
 
 			// Windows
-			 m_Ew->SceneHierarchy();
-			 m_Ew->Inspector();
+			m_Ew->SceneHierarchy();
+			m_Ew->Inspector();
+			m_Ew->MenuBar();
 
-			//ImGui::ShowDemoWindow();			
+			ImGui::ShowDemoWindow();			
 		}
 
 		void LateUpdate() override

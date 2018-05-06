@@ -12,7 +12,7 @@ namespace EVA
 	{
 		SceneEditor* m_Editor;
 
-		
+		float m_MenuBarHeight = 0.0f;
 
 	public:
 
@@ -21,6 +21,8 @@ namespace EVA
 		void SceneHierarchy() const;
 
 		void Inspector() const;
+
+		void MenuBar();
 
 	private:
 
