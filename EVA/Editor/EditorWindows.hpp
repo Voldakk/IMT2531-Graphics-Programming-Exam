@@ -50,6 +50,10 @@ namespace EVA
 	private:
 
 		void DisplayGameObjectsRecursively(EVA::GameObject* gameObject);
+
+		void GameObjectInspector(float width) const;
+		void LightInspector(float width) const;
+		void SkyboxInspector(float width) const;
 	};
 
 }

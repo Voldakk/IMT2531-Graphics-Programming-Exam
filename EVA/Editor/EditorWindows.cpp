@@ -103,93 +103,19 @@ namespace EVA
 
 		const auto windowSize = ImGui::GetWindowSize();
 
-		auto gameObject = SelectedGameObject();
-
-		if (gameObject != nullptr)
+		switch (m_SelectedType)
 		{
-			// Name
-			ImGui::Text("Name");
-			const auto gameObjectName = new char[10000];
-
-			strcpy_s(gameObjectName, sizeof(gameObject->GetName()), gameObject->GetName().c_str());
-
-			ImGui::PushItemWidth(windowSize.x);
-			if(ImGui::InputText("##Line", gameObjectName, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
-			{
-				gameObject->SetName(gameObjectName);
-			}
-
-			delete[] gameObjectName;
-
-			ImGui::Spacing();
-
-			// Transform
-			ImGui::Text("Position");
-			auto position = gameObject->transform->localPosition;
-			ImGui::InputFloat3("InspectorTransformPosition", glm::value_ptr(position), "%.7g");
-
-			gameObject->transform->SetPosition(position);
-
-			ImGui::Text("Rotation");
-			auto rotation = gameObject->transform->localRotation;
-			ImGui::InputFloat3("InspectorTransformRotation", glm::value_ptr(rotation), "%.7g");
-			gameObject->transform->SetOrientation(rotation);
-
-
-			ImGui::Text("Scale");
-			auto scale = gameObject->transform->localScale;
-			ImGui::InputFloat3("InspectorTransformScale", glm::value_ptr(scale), "%.7g");
-			gameObject->transform->SetScale(scale);
-
-			// Other components
-			ImGui::Text("Components");
-			const auto components = gameObject->GetComponents();
-			for (unsigned int i = 0; i < components.size(); ++i)
-			{
-				auto component = components[i];
-				bool keep = true;
-				if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str(), &keep))
-				{
-					
-					ImGui::Text("This is a component");
-
-					ImGui::Spacing();
-				}
-				if(!keep)
-				{
-					gameObject->RemoveComponent(component.get());
-				}
-			}
-
-			// Add component
-			if(ImGui::Button("Add Component"))
-			{
-				ImGui::OpenPopup("InspectorAddComponentSelect");
-			}
-
-			if (ImGui::BeginPopup("InspectorAddComponentSelect"))
-			{
-				auto ids = ComponentMap::GetComponentIds();
-				ImGui::Separator();
-
-				for (const auto& id : ids)
-				{
-					if (ImGui::Selectable(id.c_str()))
-					{
-						const auto component = ComponentMap::CreateComponent(id);
-						if (component != nullptr)
-						{
-							component->SetScene(gameObject->scene.Get());
-							gameObject->AttachComponent(component);
-
-							component->Awake();
-							component->Start();
-						}
-					}
-				}
-				ImGui::EndPopup();
-			}
-
+		case GameObject:
+			GameObjectInspector(windowSize.x);
+			break;
+		case Light:
+			LightInspector(windowSize.x);
+			break;
+		case Skybox:
+			SkyboxInspector(windowSize.x);
+			break;
+		default: 
+			break;
 		}
 
 		ImGui::End();
@@ -352,4 +278,134 @@ namespace EVA
 		}
 	}
 
+	void EditorWindows::GameObjectInspector(float width) const
+	{
+		auto gameObject = SelectedGameObject();
+
+		if (gameObject == nullptr)
+			return;
+
+		ImGui::PushItemWidth(width);
+
+		// Name
+		ImGui::Text("Name");
+		const auto gameObjectName = new char[10000];
+
+		strcpy_s(gameObjectName, sizeof(gameObject->GetName()), gameObject->GetName().c_str());
+
+		if (ImGui::InputText("##Line", gameObjectName, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			gameObject->SetName(gameObjectName);
+		}
+
+		delete[] gameObjectName;
+
+		ImGui::Spacing();
+
+		// Transform
+		ImGui::Text("Position");
+		auto position = gameObject->transform->localPosition;
+		ImGui::InputFloat3("InspectorTransformPosition", glm::value_ptr(position), "%.7g");
+
+		gameObject->transform->SetPosition(position);
+
+		ImGui::Text("Rotation");
+		auto rotation = gameObject->transform->localRotation;
+		ImGui::InputFloat3("InspectorTransformRotation", glm::value_ptr(rotation), "%.7g");
+		gameObject->transform->SetOrientation(rotation);
+
+
+		ImGui::Text("Scale");
+		auto scale = gameObject->transform->localScale;
+		ImGui::InputFloat3("InspectorTransformScale", glm::value_ptr(scale), "%.7g");
+		gameObject->transform->SetScale(scale);
+
+		// Other components
+		ImGui::Text("Components");
+		const auto components = gameObject->GetComponents();
+		for (unsigned int i = 0; i < components.size(); ++i)
+		{
+			auto component = components[i];
+			bool keep = true;
+			if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str(), &keep))
+			{
+
+				ImGui::Text("This is a component");
+
+				ImGui::Spacing();
+			}
+			if (!keep)
+			{
+				gameObject->RemoveComponent(component.get());
+			}
+		}
+
+		// Add component
+		if (ImGui::Button("Add Component"))
+		{
+			ImGui::OpenPopup("InspectorAddComponentSelect");
+		}
+
+		if (ImGui::BeginPopup("InspectorAddComponentSelect"))
+		{
+			auto ids = ComponentMap::GetComponentIds();
+			ImGui::Separator();
+
+			for (const auto& id : ids)
+			{
+				if (ImGui::Selectable(id.c_str()))
+				{
+					const auto component = ComponentMap::CreateComponent(id);
+					if (component != nullptr)
+					{
+						component->SetScene(gameObject->scene.Get());
+						gameObject->AttachComponent(component);
+
+						component->Awake();
+						component->Start();
+					}
+				}
+			}
+			ImGui::EndPopup();
+		}
+
+		ImGui::PopItemWidth();
+	}
+
+	void EditorWindows::LightInspector(float width) const
+	{
+		auto light = SelectedLight();
+		if(light == nullptr)
+			return;
+
+		ImGui::Text("Light");
+
+		ImGui::ColorEdit3("Color", glm::value_ptr(light->color));
+		ImGui::InputFloat("Ambient coefficient", &light->ambientCoefficient);
+
+		if(light->GetType() == Light::Directional)
+		{
+			ImGui::InputFloat("Shadow distance", &light->directionalShadowDistance);
+			ImGui::InputFloat("Near plane", &light->directionalNearPlane);
+			ImGui::InputFloat("Far plane", &light->directionalFarPlane);
+		}
+		else
+		{
+			auto position = light->position;
+			ImGui::InputFloat3("Position", glm::value_ptr(position));
+			light->SetPosition(position);
+
+			ImGui::InputFloat("Attenuation", &light->attenuation);
+			ImGui::InputFloat("Near plane", &light->pointNearPlane);
+			ImGui::InputFloat("Far plane", &light->pointFarPlane);
+		}
+	}
+
+	void EditorWindows::SkyboxInspector(float width) const
+	{
+		auto skybox = SelectedSkybox();
+
+		if(skybox == nullptr)
+			return;
+	}
 }
