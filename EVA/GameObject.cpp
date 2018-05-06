@@ -82,10 +82,52 @@ namespace EVA
 	{
 		for (unsigned int i = 0; i < m_Components.size(); ++i)
 		{
-			if(m_Components[i].get() == component)
+			if (m_Components[i].get() == component)
 			{
 				m_Components.erase(m_Components.begin() + i);
-				return;
+				break;
+			}
+		}
+
+		// Update
+		const auto uc = dynamic_cast<IUpdateComponent*>(component);
+		if (uc != nullptr)
+		{
+			for (unsigned int i = 0; i < m_UpdateComponents.size(); ++i)
+			{
+				if (m_UpdateComponents[i] == uc)
+				{
+					m_UpdateComponents.erase(m_UpdateComponents.begin() + i);
+					break;
+				}
+			}
+		}
+
+		// Late update
+		const auto luc = dynamic_cast<ILateUpdateComponent*>(component);
+		if (luc != nullptr)
+		{
+			for (unsigned int i = 0; i < m_LateUpdateComponents.size(); ++i)
+			{
+				if (m_LateUpdateComponents[i] == luc)
+				{
+					m_LateUpdateComponents.erase(m_LateUpdateComponents.begin() + i);
+					break;
+				}
+			}
+		}
+
+		// Render
+		const auto rc = dynamic_cast<IRenderComponent*>(component);
+		if (rc != nullptr)
+		{
+			for (unsigned int i = 0; i < m_RenderComponents.size(); ++i)
+			{
+				if (m_RenderComponents[i] == rc)
+				{
+					m_RenderComponents.erase(m_RenderComponents.begin() + i);
+					break;
+				}
 			}
 		}
 	}
