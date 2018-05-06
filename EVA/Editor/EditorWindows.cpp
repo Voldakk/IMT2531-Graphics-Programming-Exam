@@ -7,34 +7,12 @@
 namespace EVA
 {
 
-	void EditorWindows::DisplayGameObjectsRecursively(GameObject* gameObject)
-	{
-		const auto nodeFlags =
-			ImGuiTreeNodeFlags_OpenOnDoubleClick |
-			ImGuiTreeNodeFlags_OpenOnArrow |
-			(gameObject == m_Editor->GetSelected() ? ImGuiTreeNodeFlags_Selected : 0) |
-			(gameObject->transform->GetChildren().empty() ? ImGuiTreeNodeFlags_Leaf : 0);
-
-		if (ImGui::TreeNodeEx(gameObject->GetName().c_str(), nodeFlags))
-		{
-			if (ImGui::IsItemClicked())
-				m_Editor->SetSelected(gameObject);
-
-			for (auto& child : gameObject->transform->GetChildren())
-			{
-				DisplayGameObjectsRecursively(child->gameObject.Get());
-			}
-
-			ImGui::TreePop();
-		}
-	}
-
 	EditorWindows::EditorWindows(SceneEditor* editor)
 	{
 		m_Editor = editor;
 	}
 
-	void EditorWindows::SceneHierarchy()
+	void EditorWindows::SceneHierarchy() const
 	{
 		const auto windowSize = Application::GetWindowSize();
 		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)windowSize.y }, { (float)windowSize.x, (float)windowSize.y });
@@ -54,7 +32,7 @@ namespace EVA
 		ImGui::End();
 	}
 
-	void EditorWindows::Inspector()
+	void EditorWindows::Inspector() const
 	{
 		const auto screenSize = Application::GetWindowSize();
 		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y }, { (float)screenSize.x, (float)screenSize.y });
@@ -83,19 +61,19 @@ namespace EVA
 			// Transform
 			ImGui::Text("Position");
 			auto position = gameObject->transform->localPosition;
-			ImGui::InputFloat3("transformPosition", glm::value_ptr(position), "%.7g");
+			ImGui::InputFloat3("InspectorTransformPosition", glm::value_ptr(position), "%.7g");
 
 			gameObject->transform->SetPosition(position);
 
 			ImGui::Text("Rotation");
 			auto rotation = gameObject->transform->localRotation;
-			ImGui::InputFloat3("transformRotation", glm::value_ptr(rotation), "%.7g");
+			ImGui::InputFloat3("InspectorTransformRotation", glm::value_ptr(rotation), "%.7g");
 			gameObject->transform->SetOrientation(rotation);
 
 
 			ImGui::Text("Scale");
 			auto scale = gameObject->transform->localScale;
-			ImGui::InputFloat3("transformScale", glm::value_ptr(scale), "%.7g");
+			ImGui::InputFloat3("InspectorTransformScale", glm::value_ptr(scale), "%.7g");
 			gameObject->transform->SetScale(scale);
 
 			// Other components
@@ -116,10 +94,10 @@ namespace EVA
 			// Add component
 			if(ImGui::Button("Add Component"))
 			{
-				ImGui::OpenPopup("select");
+				ImGui::OpenPopup("InspectorAddComponentSelect");
 			}
 
-			if (ImGui::BeginPopup("select"))
+			if (ImGui::BeginPopup("InspectorAddComponentSelect"))
 			{
 				auto ids = ComponentMap::GetComponentIds();
 				ImGui::Separator();
@@ -145,6 +123,28 @@ namespace EVA
 		}
 
 		ImGui::End();
+	}
+
+	void EditorWindows::DisplayGameObjectsRecursively(GameObject* gameObject) const
+	{
+		const auto nodeFlags =
+			ImGuiTreeNodeFlags_OpenOnDoubleClick |
+			ImGuiTreeNodeFlags_OpenOnArrow |
+			(gameObject == m_Editor->GetSelected() ? ImGuiTreeNodeFlags_Selected : 0) |
+			(gameObject->transform->GetChildren().empty() ? ImGuiTreeNodeFlags_Leaf : 0);
+
+		if (ImGui::TreeNodeEx(gameObject->GetName().c_str(), nodeFlags))
+		{
+			if (ImGui::IsItemClicked())
+				m_Editor->SetSelected(gameObject);
+
+			for (auto& child : gameObject->transform->GetChildren())
+			{
+				DisplayGameObjectsRecursively(child->gameObject.Get());
+			}
+
+			ImGui::TreePop();
+		}
 	}
 
 }

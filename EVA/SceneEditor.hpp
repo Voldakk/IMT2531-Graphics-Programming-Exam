@@ -61,7 +61,7 @@ namespace EVA
 			 m_Ew->SceneHierarchy();
 			 m_Ew->Inspector();
 
-			ImGui::ShowDemoWindow();			
+			//ImGui::ShowDemoWindow();			
 		}
 
 		void LateUpdate() override

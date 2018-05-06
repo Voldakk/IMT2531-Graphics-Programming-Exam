@@ -12,15 +12,19 @@ namespace EVA
 	{
 		SceneEditor* m_Editor;
 
-		void DisplayGameObjectsRecursively(GameObject* gameObject);
+		
 
 	public:
 
 		explicit EditorWindows(SceneEditor* editor);
 
-		void SceneHierarchy();
+		void SceneHierarchy() const;
 
-		void Inspector();
+		void Inspector() const;
+
+	private:
+
+		void DisplayGameObjectsRecursively(GameObject* gameObject) const;
 	};
 
 }
