@@ -84,6 +84,7 @@ To run them simply uncomment the line in source/main.cpp
 * [TheChernoProject - Abstracting OpenGL into Classes](https://www.youtube.com/watch?v=bTHqmzjm2UI)
 * [TheChernoProject - Buffer Layout Abstraction in OpenGL](https://www.youtube.com/watch?v=oD1dvfbyf6A)
 * [TheChernoProject - Shader Abstraction in OpenGL](https://www.youtube.com/watch?v=gDtHL6hy9R8)
+* [TheChernoProject - ImGui in OpenGL](https://www.youtube.com/watch?v=nVaQuNXueFw)
 * [LearnOpenGL - Basic Lighting](https://learnopengl.com/Lighting/Basic-Lighting)
 * [LearnOpenGL - Multiple lights](https://learnopengl.com/Lighting/Multiple-lights)
 * [LearnOpenGL - Gamma Correction](https://learnopengl.com/Advanced-Lighting/Gamma-Correction)

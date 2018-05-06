@@ -31,6 +31,18 @@ namespace EVA
 				DisplayGameObjectsRecursively(gameObject.get());
 		}
 
+		// Context menu
+		if (ImGui::BeginPopupContextWindow(nullptr, 1, false))
+		{
+			if (ImGui::MenuItem("Add game object"))
+			{
+				auto newGameObject = m_Editor->CreateGameObject();
+				newGameObject->SetName("New GameObject");
+			}
+
+			ImGui::EndPopup();
+		}
+
 		ImGui::End();
 	}
 
