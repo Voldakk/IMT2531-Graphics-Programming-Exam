@@ -14,11 +14,8 @@ namespace EVA
 
 	class SceneEditor : public Scene
 	{
-
 		std::shared_ptr<GameObject> m_SceneCameraGameObject;
 		SceneCamera* m_SceneCamera;
-
-		GameObject* m_Selected = nullptr;
 
 		std::unique_ptr<EditorWindows> m_Ew;
 
@@ -53,7 +50,7 @@ namespace EVA
 					std::cout << "Name: " << hit.hitCollider->gameObject->GetName() << ", Dist: " << hit.distance
 						<< ", Point: (" << hit.point.x << ", " << hit.point.y << ", " << hit.point.z << ") \n";
 
-					SetSelected(hit.hitCollider->gameObject.Get());
+					m_Ew->SelectGameObject(hit.hitCollider->gameObject.Get());
 				}
 			}
 
@@ -71,16 +68,6 @@ namespace EVA
 		{
 			// Move camera
 			m_SceneCameraGameObject->LateUpdate();
-		}
-
-		void SetSelected(GameObject* selected)
-		{
-			m_Selected = selected;
-		}
-
-		GameObject* GetSelected() const
-		{
-			return m_Selected;
 		}
 	};
 

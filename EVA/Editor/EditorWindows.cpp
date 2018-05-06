@@ -12,7 +12,7 @@ namespace EVA
 		m_Editor = editor;
 	}
 
-	void EditorWindows::SceneHierarchy() const
+	void EditorWindows::SceneHierarchy()
 	{
 		const auto windowSize = Application::GetWindowSize();
 		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)windowSize.y - m_MenuBarHeight }, { (float)windowSize.x, (float)windowSize.y - m_MenuBarHeight });
@@ -21,6 +21,52 @@ namespace EVA
 		const auto flags = ImGuiWindowFlags_ResizeFromAnySide;
 		ImGui::Begin("Scene Hierarchy", nullptr, flags);
 
+		// Skybox
+		if (m_Editor->skybox != nullptr)
+		{
+			const auto nodeFlags =
+				ImGuiTreeNodeFlags_OpenOnDoubleClick |
+				ImGuiTreeNodeFlags_OpenOnArrow |
+				ImGuiTreeNodeFlags_Leaf |
+				(IsSelected(m_Editor->skybox.get()) ? ImGuiTreeNodeFlags_Selected : 0);
+
+			if (ImGui::TreeNodeEx("Skybox", nodeFlags))
+			{
+				// Select on click
+				if (ImGui::IsItemClicked())
+					SelectSkybox(m_Editor->skybox.get());
+
+				ImGui::TreePop();
+			}
+		}
+
+		// Lights
+		if (ImGui::TreeNodeEx("Lights"))
+		{
+			auto lights = m_Editor->GetLights();
+
+			for (unsigned int i = 0; i < lights.size(); ++i)
+			{
+				const auto nodeFlags =
+				ImGuiTreeNodeFlags_OpenOnDoubleClick |
+				ImGuiTreeNodeFlags_OpenOnArrow |
+				ImGuiTreeNodeFlags_Leaf |
+				(IsSelected(lights[i].get()) ? ImGuiTreeNodeFlags_Selected : 0);
+
+				if (ImGui::TreeNodeEx(("Light #" + std::to_string(i)).c_str(), nodeFlags))
+				{
+					// Select on click
+					if (ImGui::IsItemClicked())
+						SelectLight(lights[i].get());
+
+					ImGui::TreePop();
+				}
+			}
+
+			ImGui::TreePop();
+		}
+
+		// Game objects
 		auto gameObjects = m_Editor->GetGameObjects();
 		for (auto& gameObject : gameObjects)
 		{
@@ -46,7 +92,7 @@ namespace EVA
 		ImGui::End();
 	}
 
-	void EditorWindows::Inspector() const
+	void EditorWindows::Inspector()
 	{
 		const auto screenSize = Application::GetWindowSize();
 		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y - m_MenuBarHeight }, { (float)screenSize.x, (float)screenSize.y - m_MenuBarHeight });
@@ -57,7 +103,7 @@ namespace EVA
 
 		const auto windowSize = ImGui::GetWindowSize();
 
-		auto gameObject = m_Editor->GetSelected();
+		auto gameObject = SelectedGameObject();
 
 		if (gameObject != nullptr)
 		{
@@ -151,8 +197,6 @@ namespace EVA
 
 	void EditorWindows::MenuBar()
 	{
-		auto selected = m_Editor->GetSelected();
-
 		if (ImGui::BeginMainMenuBar())
 		{
 			m_MenuBarHeight = ImGui::GetWindowSize().y;
@@ -185,13 +229,13 @@ namespace EVA
 
 					for (const auto& id : ids)
 					{
-						if (ImGui::MenuItem(id.c_str()) && selected != nullptr)
+						if (ImGui::MenuItem(id.c_str()) && SelectedGameObject() != nullptr)
 						{
 							const auto component = ComponentMap::CreateComponent(id);
 							if (component != nullptr)
 							{
-								component->SetScene(selected->scene.Get());
-								selected->AttachComponent(component);
+								component->SetScene(SelectedGameObject()->scene.Get());
+								SelectedGameObject()->AttachComponent(component);
 
 								component->Awake();
 								component->Start();
@@ -212,19 +256,68 @@ namespace EVA
 		}
 	}
 
-	void EditorWindows::DisplayGameObjectsRecursively(GameObject* gameObject) const
+	void EditorWindows::SelectGameObject(EVA::GameObject* gameObject)
+	{
+		m_SelectedType = GameObject;
+		m_SelectedGameObject = gameObject;
+	}
+
+	bool EditorWindows::IsSelected(EVA::GameObject* gameObject) const
+	{
+		return m_SelectedType == GameObject && m_SelectedGameObject == gameObject;
+	}
+
+	EVA::GameObject* EditorWindows::SelectedGameObject() const
+	{
+		return m_SelectedType == GameObject ? m_SelectedGameObject : nullptr;
+	}
+	
+	void EditorWindows::SelectLight(EVA::Light* light)
+	{
+		m_SelectedType = Light;
+		m_SelectedLight = light;
+	}
+
+	bool EditorWindows::IsSelected(EVA::Light* light) const
+	{
+		return m_SelectedType == Light && m_SelectedLight == light;
+	}
+
+	EVA::Light* EditorWindows::SelectedLight() const
+	{
+		return m_SelectedType == Light ? m_SelectedLight : nullptr;
+	}
+
+	void EditorWindows::SelectSkybox(EVA::Skybox* skybox)
+	{
+		m_SelectedType = Skybox;
+		m_SelectedSkybox = skybox;
+	}
+
+	bool EditorWindows::IsSelected(EVA::Skybox* skybox) const
+	{
+		return m_SelectedType == Skybox && m_SelectedSkybox == skybox;
+	}
+
+	EVA::Skybox* EditorWindows::SelectedSkybox() const
+	{
+		return m_SelectedType == Skybox ? m_SelectedSkybox : nullptr;
+	}
+
+
+	void EditorWindows::DisplayGameObjectsRecursively(EVA::GameObject* gameObject)
 	{
 		const auto nodeFlags =
 			ImGuiTreeNodeFlags_OpenOnDoubleClick |
 			ImGuiTreeNodeFlags_OpenOnArrow |
-			(gameObject == m_Editor->GetSelected() ? ImGuiTreeNodeFlags_Selected : 0) |
+			(IsSelected(gameObject) ? ImGuiTreeNodeFlags_Selected : 0) |
 			(gameObject->transform->GetChildren().empty() ? ImGuiTreeNodeFlags_Leaf : 0);
 
 		if (ImGui::TreeNodeEx(gameObject->GetName().c_str(), nodeFlags))
 		{
 			// Select on click
 			if (ImGui::IsItemClicked())
-				m_Editor->SetSelected(gameObject);
+				SelectGameObject(gameObject);
 
 			// Context menu
 			if (ImGui::BeginPopupContextItem())
@@ -238,8 +331,8 @@ namespace EVA
 				if (ImGui::MenuItem("Delete"))
 				{
 					gameObject->Destroy();
-					if (m_Editor->GetSelected() == gameObject)
-						m_Editor->SetSelected(nullptr);
+					if (IsSelected(gameObject))
+						SelectGameObject(nullptr);
 
 					ImGui::EndPopup();
 					ImGui::TreePop();
