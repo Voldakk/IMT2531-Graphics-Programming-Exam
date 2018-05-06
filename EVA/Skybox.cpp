@@ -53,9 +53,6 @@ namespace EVA
 
 	void Skybox::Set(const std::string& folderPath, const std::string& fileType)
 	{
-		assert(!folderPath.empty());
-		assert(!fileType.empty());
-
 		m_FolderPath = folderPath;
 		m_FileType = fileType;
 

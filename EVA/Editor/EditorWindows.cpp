@@ -36,6 +36,19 @@ namespace EVA
 				if (ImGui::IsItemClicked())
 					SelectSkybox(m_Editor->skybox.get());
 
+				// Context menu
+				if (ImGui::BeginPopupContextItem())
+				{
+					if (ImGui::MenuItem("Delete"))
+					{
+						if (IsSelected(m_Editor->skybox.get()))
+							SelectSkybox(nullptr);
+						m_Editor->skybox = nullptr;
+					}
+
+					ImGui::EndPopup();
+				}
+
 				ImGui::TreePop();
 			}
 		}
@@ -58,6 +71,19 @@ namespace EVA
 					// Select on click
 					if (ImGui::IsItemClicked())
 						SelectLight(lights[i].get());
+
+					// Context menu
+					if (ImGui::BeginPopupContextItem())
+					{
+						if (ImGui::MenuItem("Delete"))
+						{
+							if (IsSelected(lights[i].get()))
+								SelectLight(nullptr);
+							m_Editor->DestroyLight(lights[i].get());
+						}
+
+						ImGui::EndPopup();
+					}
 
 					ImGui::TreePop();
 				}
@@ -92,7 +118,7 @@ namespace EVA
 		ImGui::End();
 	}
 
-	void EditorWindows::Inspector()
+	void EditorWindows::Inspector() const
 	{
 		const auto screenSize = Application::GetWindowSize();
 		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y - m_MenuBarHeight }, { (float)screenSize.x, (float)screenSize.y - m_MenuBarHeight });
@@ -170,11 +196,29 @@ namespace EVA
 					}
 					ImGui::EndMenu();
 				}
-
-				if (ImGui::MenuItem("Light"))
+				if (ImGui::BeginMenu("Light"))
 				{
+					if (ImGui::MenuItem("Directional"))
+					{
+						m_Editor->CreateLight(Light::Directional);
+					}
+					if (ImGui::MenuItem("Point"))
+					{
+						m_Editor->CreateLight(Light::Point);
+					}
 
+					ImGui::EndMenu();
 				}
+
+				if(m_Editor->skybox == nullptr)
+				{
+					if (ImGui::MenuItem("Skybox"))
+					{
+						m_Editor->skybox = std::make_unique<EVA::Skybox>("", "");
+					}
+				}
+				
+
 				ImGui::EndMenu();
 			}
 
@@ -278,7 +322,7 @@ namespace EVA
 		}
 	}
 
-	void EditorWindows::GameObjectInspector(float width) const
+	void EditorWindows::GameObjectInspector(const float width) const
 	{
 		auto gameObject = SelectedGameObject();
 
@@ -372,13 +416,13 @@ namespace EVA
 		ImGui::PopItemWidth();
 	}
 
-	void EditorWindows::LightInspector(float width) const
+	void EditorWindows::LightInspector(const float width) const
 	{
 		auto light = SelectedLight();
 		if(light == nullptr)
 			return;
 
-		ImGui::Text("Light");
+		ImGui::Text(light->GetType() == Light::Directional ? "Directional light" : "Point light");
 
 		ImGui::ColorEdit3("Color", glm::value_ptr(light->color));
 		ImGui::InputFloat("Ambient coefficient", &light->ambientCoefficient);
@@ -401,7 +445,7 @@ namespace EVA
 		}
 	}
 
-	void EditorWindows::SkyboxInspector(float width) const
+	void EditorWindows::SkyboxInspector(const float width) const
 	{
 		auto skybox = SelectedSkybox();
 

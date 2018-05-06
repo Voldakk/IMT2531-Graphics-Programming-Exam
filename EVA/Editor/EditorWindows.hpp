@@ -31,7 +31,7 @@ namespace EVA
 
 		void SceneHierarchy();
 
-		void Inspector();
+		void Inspector() const;
 
 		void MenuBar();
 

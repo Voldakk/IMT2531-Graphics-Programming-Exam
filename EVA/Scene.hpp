@@ -145,6 +145,8 @@ namespace EVA
 		 */
 		Light* CreateLight(DataObject data);
 
+		void DestroyLight(Light* light);
+
 		/**
 		* \brief Registers a mesh renderer to be rendered in the scene
 		* \param meshRenderer The mesh renderer
