@@ -139,7 +139,9 @@ namespace EVA
 	void Scene::RemoveFromNameMap(GameObject* gameObject)
 	{
 		const auto iterator = m_NameMap.find(gameObject->GetName());
-		m_NameMap.erase(iterator);
+
+		if (iterator != m_NameMap.end())
+			m_NameMap.erase(iterator);
 	}
 
 	GameObject* Scene::FindGameObjectByName(const std::string& name)
@@ -152,15 +154,24 @@ namespace EVA
 		return m_NameMap[name];
 	}
 
-	bool Scene::AddToNameMap(GameObject* gameObject)
+	std::string Scene::AddToNameMap(GameObject* gameObject)
 	{
-		const auto iterator = m_NameMap.find(gameObject->GetName());
+		auto iterator = m_NameMap.find(gameObject->GetName());
 
-		if(iterator != m_NameMap.end())
-			return false;
+		if (iterator == m_NameMap.end())
+		{
+			m_NameMap[gameObject->GetName()] = gameObject;
+			return gameObject->GetName();
+		}
 
-		m_NameMap[gameObject->GetName()] = gameObject;
-		return true;
+		do
+		{
+			m_NameCounter++;
+			iterator = m_NameMap.find(gameObject->GetName() + std::to_string(m_NameCounter));
+		}
+		while (iterator != m_NameMap.end());
+
+		return gameObject->GetName() + std::to_string(m_NameCounter);
 	}
 
 	std::shared_ptr<Light> Scene::CreateLight(Light::Type type, const bool shadows, const unsigned int shadowSize)

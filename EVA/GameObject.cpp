@@ -95,8 +95,8 @@ namespace EVA
 
 		m_Name = newName;
 
-		if (!m_Name.empty())
-			scene->AddToNameMap(this);
+		const auto name = scene->AddToNameMap(this);
+		m_Name = name;
 	}
 
 	std::string GameObject::GetName() const

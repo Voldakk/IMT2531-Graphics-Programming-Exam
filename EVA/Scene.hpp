@@ -40,6 +40,7 @@ namespace EVA
 		std::vector<std::shared_ptr<UiElement>> m_UiElements;
 
 		std::map<std::string, GameObject*> m_NameMap;
+		unsigned int m_NameCounter = 0;
 
 	public:
 
@@ -103,9 +104,9 @@ namespace EVA
 		/**
 		 * \brief Adds a game object to the name map
 		 * \param gameObject The game object
-		 * \return Wether the game object could be added to the map
+		 * \return The name that was added
 		 */
-		bool AddToNameMap(GameObject* gameObject);
+		std::string AddToNameMap(GameObject* gameObject);
 
 		/**
 		 * \brief removes a game object from the name map

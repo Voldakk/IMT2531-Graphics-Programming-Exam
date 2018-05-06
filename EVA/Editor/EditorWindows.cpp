@@ -21,7 +21,8 @@ namespace EVA
 		const auto flags = ImGuiWindowFlags_ResizeFromAnySide;
 		ImGui::Begin("Scene Hierarchy", nullptr, flags);
 
-		for (auto& gameObject : m_Editor->GetGameObjects())
+		auto gameObjects = m_Editor->GetGameObjects();
+		for (auto& gameObject : gameObjects)
 		{
 			if (gameObject->GetName() == "EVA::EditorCamera")
 				continue;
@@ -130,6 +131,8 @@ namespace EVA
 
 	void EditorWindows::MenuBar()
 	{
+		auto selected = m_Editor->GetSelected();
+
 		if (ImGui::BeginMainMenuBar())
 		{
 			m_MenuBarHeight = ImGui::GetWindowSize().y;
@@ -151,23 +154,24 @@ namespace EVA
 			{
 				if (ImGui::MenuItem("GameObject"))
 				{
-
+					auto newGameObject = m_Editor->CreateGameObject();
+					newGameObject->SetName("New GameObject");
 				}
 
 				if (ImGui::BeginMenu("Component"))
 				{
 					auto ids = ComponentMap::GetComponentIds();
-					auto gameObject = m_Editor->GetSelected();
+					
 
 					for (const auto& id : ids)
 					{
-						if (ImGui::MenuItem(id.c_str()))
+						if (ImGui::MenuItem(id.c_str()) && selected != nullptr)
 						{
 							const auto component = ComponentMap::CreateComponent(id);
 							if (component != nullptr)
 							{
-								component->SetScene(gameObject->scene.Get());
-								gameObject->AttachComponent(component);
+								component->SetScene(selected->scene.Get());
+								selected->AttachComponent(component);
 
 								component->Awake();
 								component->Start();
@@ -198,9 +202,26 @@ namespace EVA
 
 		if (ImGui::TreeNodeEx(gameObject->GetName().c_str(), nodeFlags))
 		{
+			// Select on click
 			if (ImGui::IsItemClicked())
 				m_Editor->SetSelected(gameObject);
 
+			// Context menu
+			if (ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::MenuItem("Add game object"))
+				{
+					auto newGameObject = m_Editor->CreateGameObject();
+					newGameObject->SetName("New GameObject");
+
+					if (gameObject != nullptr)
+						newGameObject->SetParent(gameObject);
+				}
+
+				ImGui::EndPopup();
+			}
+
+			// Display children
 			for (auto& child : gameObject->transform->GetChildren())
 			{
 				DisplayGameObjectsRecursively(child->gameObject.Get());
