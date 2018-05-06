@@ -3,6 +3,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "../SceneEditor.hpp"
+#include "imgui_internal.h"
 
 namespace EVA
 {
@@ -101,12 +102,17 @@ namespace EVA
 			for (unsigned int i = 0; i < components.size(); ++i)
 			{
 				auto component = components[i];
-
-				if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str()))
+				bool keep = true;
+				if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str(), &keep))
 				{
+					
 					ImGui::Text("This is a component");
 
 					ImGui::Spacing();
+				}
+				if(!keep)
+				{
+					gameObject->RemoveComponent(component.get());
 				}
 			}
 

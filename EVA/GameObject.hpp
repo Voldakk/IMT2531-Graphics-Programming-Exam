@@ -81,6 +81,8 @@ namespace EVA
 		 */
 		Component* AttachComponent(const std::shared_ptr<Component>& component);
 
+		void RemoveComponent(Component* component);
+
 	    /**
 		 * \brief Gets a component of the given type form the game object
 		 * \tparam T The type of component

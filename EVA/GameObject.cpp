@@ -78,6 +78,18 @@ namespace EVA
 		return component.get();
 	}
 
+	void GameObject::RemoveComponent(Component* component)
+	{
+		for (unsigned int i = 0; i < m_Components.size(); ++i)
+		{
+			if(m_Components[i].get() == component)
+			{
+				m_Components.erase(m_Components.begin() + i);
+				return;
+			}
+		}
+	}
+
 	void GameObject::SetParent(GameObject *newParent) const
     {
         m_Transform->SetParent(newParent->m_Transform.get());
