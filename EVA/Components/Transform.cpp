@@ -206,6 +206,11 @@ namespace EVA
 		return localPosition * o;
 	}
 
+	std::vector<Transform*>& Transform::GetChildren()
+	{
+		return m_Children;
+	}
+
 	void Transform::Load(const DataObject data)
 	{
 		m_LocalPosition = data.GetVec3("position", m_LocalPosition);

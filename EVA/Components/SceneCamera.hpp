@@ -10,9 +10,11 @@ namespace EVA
 	
 	class SceneCamera : public FreeLook
 	{
-		GameObject* m_Selected = nullptr;
 
 	public:
+		
+		GameObject* selected = nullptr;
+		
 		void Update(float deltaTime) override;
 	};
 
@@ -27,7 +29,7 @@ namespace EVA
 		{
 			Input::SetCursorMode(Input::Normal);
 
-			if (Input::MouseButtonDown(Input::MouseLeft))
+			if (Input::MouseButton(Input::MouseLeft))
 			{
 				const auto mousePos = Input::MousePosition();
 				const auto ray = Physics::ScreenPosToWorldRay(mousePos, Application::mainCamera);
@@ -38,9 +40,8 @@ namespace EVA
 					std::cout << "Name: " << hit.hitCollider->gameObject->GetName() << ", Dist: " << hit.distance 
 					<< ", Point: (" << hit.point.x << ", " << hit.point.y << ", " << hit.point.z << ") \n";
 
-					m_Selected = hit.hitCollider->gameObject.Get();
+					selected = hit.hitCollider->gameObject.Get();
 				}
-
 			}
 		}
 	}

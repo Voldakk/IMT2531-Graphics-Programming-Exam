@@ -22,9 +22,11 @@
   ],
   "gameObjects": [
     {
-      "prefab": "./assets/prefabs/freelookcamera.prefab"
+      "prefab": "./assets/prefabs/freelookcamera.prefab",
+      "name": "Freelook camera"
     },
     {
+      "name": "Ground plane",
       "position": [ 0.0, 0.0, 0.0 ],
       "scale": [ 10.0, 1.0, 10.0 ],
       "components": [
@@ -36,6 +38,7 @@
       ]
     },
     {
+      "name": "Center cube",
       "prefab": "./assets/prefabs/uvcube.prefab",
       "position": [ 0.0, 1.0, 0.0 ],
       "components": [
@@ -46,12 +49,13 @@
       ],
       "gameObjects": [
         {
+          "name": "Child cube",
           "prefab": "./assets/prefabs/uvcube.prefab",
-          "name": "TargetCube",
           "position": [ 0.0, 0.0, 4.0 ],
           "scale": [ 0.8, 0.8, 0.8 ]
         },
         {
+          "name": "Rotating cube",
           "prefab": "./assets/prefabs/uvcube.prefab",
           "position": [ 0.0, 0.0, 8.0 ],
           "scale": [ 0.5, 0.5, 0.5 ],
@@ -63,6 +67,7 @@
           ],
           "gameObjects": [
             {
+              "name": "Stretch cube",
               "prefab": "./assets/prefabs/uvcube.prefab",
               "position": [ 0.0, 0.0, 2.0 ],
               "scale": [ 0.5, 0.5, 0.5 ],

@@ -23,7 +23,7 @@ namespace EVA
 
 		glm::mat4 m_ModelMatrix;
 
-		Transform* m_Parent;
+		Transform* m_Parent = nullptr;
 		std::vector<Transform *> m_Children;
 
 		glm::vec3 m_LocalPosition = glm::vec3(0.0f);
@@ -55,6 +55,8 @@ namespace EVA
 		const glm::vec3& forward = m_Forward;
 		const glm::vec3& right = m_Right;
 		const glm::vec3& up = m_Up;
+
+		const ConstPointer<Transform> parent = &m_Parent;
 
 		/**
 		 * \brief Constructor
@@ -201,6 +203,8 @@ namespace EVA
 
 		glm::vec3 LocalToWorld(glm::vec3 localPosition) const;
 
-		void Load(const DataObject data) override;
+		std::vector<Transform *>& GetChildren();
+
+		void Load(DataObject data) override;
 	};
 }
