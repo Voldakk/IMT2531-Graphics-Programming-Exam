@@ -17,15 +17,18 @@ namespace EVA
 
 		static GLFWwindow *m_Window;
 		static std::map<int, int> m_KeyStates;
+		static std::map<int, int> m_ButtonStates;
 		static glm::vec2 m_Scroll;
 		static glm::vec2 m_LastMousePosition;
 		static glm::vec2 m_MouseOffset;
+
+		static bool m_ImGui;
 
 	public:
 
 		/// <summary>Sets the window to capture input from</summary>
 		/// <param name="window"></param>
-		static void SetWindow(GLFWwindow *window);
+		static void SetWindow(GLFWwindow *window, bool imgui = false);
 
 		/// <summary>Clears the recorded states. Should be called every frame immediately before glfwPollEvents()</summary>
 		static void Clear();

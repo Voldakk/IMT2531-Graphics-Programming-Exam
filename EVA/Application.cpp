@@ -47,19 +47,19 @@ namespace EVA
 
         WindowResizeCallback(m_Window, width, height);
 
-        // Input
-        Input::SetWindow(m_Window);
-
 		// Material stuff
 		Material::Init();
 
 		// Text
 		Text::Init();
 
+        // Input
+        Input::SetWindow(m_Window, true);
+
 		// ImGui
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-	    auto& io = ImGui::GetIO(); (void)io;
+	    //auto& io = ImGui::GetIO(); (void)io;
 		ImGui_ImplGlfwGL3_Init(m_Window, true);
 		ImGui::StyleColorsDark();
     }

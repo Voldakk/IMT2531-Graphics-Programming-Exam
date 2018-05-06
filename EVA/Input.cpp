@@ -1,27 +1,33 @@
 #include "Input.hpp"
 
 #include "Application.hpp"
+#include "Editor/EditorWindows.hpp"
 
 namespace EVA
 {
 
     GLFWwindow *Input::m_Window = nullptr;
-    std::map<int, int> Input::m_KeyStates;
+	std::map<int, int> Input::m_KeyStates;
+	std::map<int, int> Input::m_ButtonStates;
     glm::vec2 Input::m_Scroll;
     glm::vec2 Input::m_LastMousePosition;
     glm::vec2 Input::m_MouseOffset;
 
-    void Input::SetWindow(GLFWwindow *window)
+	bool Input::m_ImGui;
+
+    void Input::SetWindow(GLFWwindow *window, const bool imgui)
     {
-        Input::m_Window = window;
+        m_Window = window;
 
-        glfwSetKeyCallback(window, KeyCallback);
+		m_ImGui = imgui;
+		if(!imgui)
+		{
+	        glfwSetKeyCallback(window, KeyCallback);
+	        glfwSetMouseButtonCallback(window, MouseButtonCallback);
+		}
 
-        glfwSetCursorPosCallback(window, CursorPositionCallback);
-        glfwSetMouseButtonCallback(window, MouseButtonCallback);
-        glfwSetScrollCallback(window, ScrollCallback);
-
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	    glfwSetScrollCallback(window, ScrollCallback);
+	    glfwSetCursorPosCallback(window, CursorPositionCallback);
     }
 
 	// ========== KEYBOARD ==========
@@ -34,6 +40,7 @@ namespace EVA
     void Input::Clear()
     {
         m_KeyStates.clear();
+		m_ButtonStates.clear();
         m_Scroll = glm::vec2(0.0f, 0.0f);
         m_MouseOffset = glm::vec2(0.0f, 0.0f);
     }
@@ -45,6 +52,9 @@ namespace EVA
 
     bool Input::KeyDown(const int key)
     {
+		if (m_ImGui)
+			return ImGui::IsKeyPressed(key);
+
         if (m_KeyStates.count(key))
             return m_KeyStates[key] == GLFW_PRESS;
         return false;
@@ -52,6 +62,9 @@ namespace EVA
 
     bool Input::KeyUp(const int key)
     {
+		if (m_ImGui)
+			return ImGui::IsKeyReleased(key);
+
         if (m_KeyStates.count(key))
             return m_KeyStates[key] == GLFW_RELEASE;
         return false;
@@ -106,7 +119,7 @@ namespace EVA
 
     void Input::MouseButtonCallback(GLFWwindow *window, const int button, const int action, const int mods)
     {
-        m_KeyStates[button] = action;
+		m_ButtonStates[button] = action;
     }
 
     bool Input::MouseButton(const int button)
@@ -117,15 +130,21 @@ namespace EVA
 
     bool Input::MouseButtonDown(const int button)
     {
-        if (m_KeyStates.count(button))
-            return m_KeyStates[button] == GLFW_PRESS;
+		if (m_ImGui)
+			return ImGui::IsMouseClicked(button);
+
+        if (m_ButtonStates.count(button))
+            return m_ButtonStates[button] == GLFW_PRESS;
         return false;
     }
 
     bool Input::MouseButtonUp(const int button)
     {
-        if (m_KeyStates.count(button))
-            return m_KeyStates[button] == GLFW_RELEASE;
+		if (m_ImGui)
+			return ImGui::IsMouseReleased(button);
+
+        if (m_ButtonStates.count(button))
+            return m_ButtonStates[button] == GLFW_RELEASE;
         return false;
     }
 

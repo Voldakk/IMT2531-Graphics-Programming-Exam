@@ -17,7 +17,7 @@ namespace EVA
 		std::shared_ptr<GameObject> m_SceneCameraGameObject;
 		SceneCamera* m_SceneCamera;
 
-		
+		GameObject* m_Selected = nullptr;		
 
 	public:
 
@@ -29,18 +29,33 @@ namespace EVA
 			m_SceneCameraGameObject->AddComponent<Camera>();
 			m_SceneCamera = m_SceneCameraGameObject->AddComponent<SceneCamera>();
 
-			m_SceneCamera->selected = FindGameObjectByName("Ground plane");
+			m_Selected = FindGameObjectByName("Ground plane");
 		}
 
 		void Update(const float deltaTime) override
 		{
 			m_SceneCameraGameObject->Update(deltaTime);
 
-			EditorWindows::SceneHierarchy(this, &m_SceneCamera->selected);
+			if (Input::MouseButtonDown(Input::MouseLeft))
+			{
+				const auto mousePos = Input::MousePosition();
+				const auto ray = Physics::ScreenPosToWorldRay(mousePos, Application::mainCamera);
 
-			EditorWindows::Inspector(m_SceneCamera->selected);
+				RaycastHit hit;
+				if (Physics::Raycast(ray, hit, this))
+				{
+					std::cout << "Name: " << hit.hitCollider->gameObject->GetName() << ", Dist: " << hit.distance
+						<< ", Point: (" << hit.point.x << ", " << hit.point.y << ", " << hit.point.z << ") \n";
 
-			ImGui::ShowDemoWindow();
+					m_Selected = hit.hitCollider->gameObject.Get();
+				}
+			}
+
+			EditorWindows::SceneHierarchy(this, &m_Selected);
+
+			EditorWindows::Inspector(m_Selected);
+
+			ImGui::ShowDemoWindow();			
 		}
 
 		void LateUpdate() override
