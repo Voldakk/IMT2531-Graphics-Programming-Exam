@@ -16,18 +16,7 @@ namespace EVA
 
 	Skybox::Skybox(const std::string &folderPath, const std::string &fileType)
 	{
-		assert(!folderPath.empty());
-		assert(!fileType.empty());
-
-		// Texture
-		m_Texture = TextureManager::GetTextureCubemap(folderPath, fileType);
-
-		// Material
-		m_Material = std::make_unique<Material>();
-		m_Material->SetTexture(Texture::Diffuse, m_Texture);
-
-		// Shader
-		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
+		Set(folderPath, fileType);
 
 		// Mesh
 		m_Model = ModelManager::Primitive(ModelManager::CubeInverted);
@@ -52,4 +41,20 @@ namespace EVA
 		glDepthMask(GL_TRUE);
 	}
 
+	void Skybox::Set(const std::string& folderPath, const std::string& fileType)
+	{
+		assert(!folderPath.empty());
+		assert(!fileType.empty());
+
+		m_FolderPath = folderPath;
+		m_FileType = fileType;
+
+		// Texture
+		m_Texture = TextureManager::GetTextureCubemap(folderPath, fileType);
+
+		// Material
+		m_Material = std::make_unique<Material>();
+		m_Material->SetTexture(Texture::Diffuse, m_Texture);
+		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
+	}
 }

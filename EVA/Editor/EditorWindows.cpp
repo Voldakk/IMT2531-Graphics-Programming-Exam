@@ -407,5 +407,22 @@ namespace EVA
 
 		if(skybox == nullptr)
 			return;
+
+		ImGui::Text("Skybox");
+
+		const auto folderPath = new char[10000];
+		strcpy_s(folderPath, sizeof(skybox->folderPath), skybox->folderPath.c_str());
+
+		const auto fileType = new char[10000];
+		strcpy_s(fileType, sizeof(skybox->fileType), skybox->fileType.c_str());
+
+		if (ImGui::InputText("Folder path", folderPath, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			skybox->Set(folderPath, fileType);
+		}
+		if (ImGui::InputText("File type", fileType, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			skybox->Set(folderPath, fileType);
+		}
 	}
 }
