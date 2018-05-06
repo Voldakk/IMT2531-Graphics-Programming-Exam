@@ -56,9 +56,10 @@ namespace EVA
 			strcpy_s(gameObjectName, sizeof(gameObject->GetName()), gameObject->GetName().c_str());
 
 			ImGui::PushItemWidth(windowSize.x);
-			ImGui::InputText("##Line", gameObjectName, 10000);
-
-			gameObject->SetName(gameObjectName);
+			if(ImGui::InputText("##Line", gameObjectName, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				gameObject->SetName(gameObjectName);
+			}
 
 			ImGui::Spacing();
 
