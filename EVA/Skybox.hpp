@@ -4,13 +4,24 @@
 #include <memory>
 #include "Parsers/Json.hpp"
 
+#include "Material.hpp"
+
 namespace EVA
 {
 
 	class Model;
 	class Shader;
-	class Material;
 	class Transform;
+
+	class SkyBoxMaterial : public Material
+	{
+
+	public:
+
+		SkyBoxMaterial() = default;
+
+		void SetMaterialUniforms(Scene* scene) const override;
+	};
 
 	/**
 	 * \brief A skybox
@@ -21,7 +32,7 @@ namespace EVA
 		unsigned int m_Texture;
 
 		std::shared_ptr<Model> m_Model;
-		std::unique_ptr<Material> m_Material;
+		std::unique_ptr<SkyBoxMaterial> m_Material;
 		std::unique_ptr<Transform> m_Transform;
 
 		std::string m_FolderPath;

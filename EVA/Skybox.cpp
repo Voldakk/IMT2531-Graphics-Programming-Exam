@@ -1,7 +1,5 @@
 #include "Skybox.hpp"
 
-#include <vector>
-
 #include "GL/glew.h"
 
 #include "ModelManager.hpp"
@@ -13,6 +11,18 @@
 
 namespace EVA
 {
+	void SkyBoxMaterial::SetMaterialUniforms(Scene* scene) const
+	{
+		shader->SetUniformMatrix4Fv("view", Application::mainCamera->viewMatrix);
+		shader->SetUniformMatrix4Fv("projection", Application::GetPerspectiveMatrix());
+
+		// Cubemap
+		glActiveTexture(GL_TEXTURE0);
+		shader->SetUniform1I("material.texture_diffuse", 0);
+
+		if (textureDiffuse.id != 0)
+			glBindTexture(GL_TEXTURE_CUBE_MAP, textureDiffuse.id);
+	}
 
 	Skybox::Skybox(const std::string &folderPath, const std::string &fileType)
 	{
@@ -53,7 +63,7 @@ namespace EVA
 		m_Texture = TextureManager::GetTextureCubemap(folderPath, fileType);
 
 		// Material
-		m_Material = std::make_unique<Material>();
+		m_Material = std::make_unique<SkyBoxMaterial>();
 		m_Material->SetTexture(Texture::Diffuse, m_Texture);
 		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
 	}
