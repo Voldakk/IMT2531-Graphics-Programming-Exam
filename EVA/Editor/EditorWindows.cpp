@@ -73,6 +73,8 @@ namespace EVA
 				gameObject->SetName(gameObjectName);
 			}
 
+			delete[] gameObjectName;
+
 			ImGui::Spacing();
 
 			// Transform
