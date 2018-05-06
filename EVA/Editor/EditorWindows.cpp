@@ -424,5 +424,8 @@ namespace EVA
 		{
 			skybox->Set(folderPath, fileType);
 		}
+
+		delete[] folderPath;
+		delete[] fileType;
 	}
 }
