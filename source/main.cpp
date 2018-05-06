@@ -2,7 +2,7 @@
 #include "EVA/SceneManager.hpp"
 
 #include "../TestScenes/UiTest.hpp"
-#include "../EVA/SceneEditor.hpp"
+#include "../EVA/Editor/SceneEditor.hpp"
 
 /**
  * \brief The entry point of the program

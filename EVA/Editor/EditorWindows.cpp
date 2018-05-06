@@ -2,8 +2,7 @@
 
 #include "glm/gtc/type_ptr.hpp"
 
-#include "../SceneEditor.hpp"
-#include "imgui_internal.h"
+#include "SceneEditor.hpp"
 
 namespace EVA
 {

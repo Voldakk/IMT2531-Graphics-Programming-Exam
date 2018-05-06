@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Scene.hpp"
+#include "../Scene.hpp"
 
 #include <iostream>
 #include <memory>
 
-#include "Physics.hpp"
-#include "Components/SceneCamera.hpp"
-#include "Editor/EditorWindows.hpp"
+#include "../Physics.hpp"
+#include "../Components/SceneCamera.hpp"
+#include "EditorWindows.hpp"
 
 namespace EVA
 {
