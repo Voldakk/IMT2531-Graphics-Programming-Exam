@@ -1,8 +1,8 @@
 #pragma once
 
 #include "EVA.hpp"
+
 #include "imgui.h"
-#include "glm/gtc/type_ptr.inl"
 
 namespace EVA
 {

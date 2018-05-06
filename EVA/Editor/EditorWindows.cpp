@@ -1,5 +1,7 @@
 #include "EditorWindows.hpp"
 
+#include "glm/gtc/type_ptr.hpp"
+
 #include "../SceneEditor.hpp"
 
 namespace EVA
@@ -98,15 +100,48 @@ namespace EVA
 
 			// Other components
 			ImGui::Text("Components");
-			for (const auto& component : gameObject->GetComponents())
+			const auto components = gameObject->GetComponents();
+			for (unsigned int i = 0; i < components.size(); ++i)
 			{
-				if (ImGui::CollapsingHeader(component->GetTypeId().c_str()))
+				auto component = components[i];
+
+				if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str()))
 				{
 					ImGui::Text("This is a component");
 
 					ImGui::Spacing();
 				}
 			}
+
+			// Add component
+			if(ImGui::Button("Add Component"))
+			{
+				ImGui::OpenPopup("select");
+			}
+
+			if (ImGui::BeginPopup("select"))
+			{
+				auto ids = ComponentMap::GetComponentIds();
+				ImGui::Separator();
+
+				for (const auto& id : ids)
+				{
+					if (ImGui::Selectable(id.c_str()))
+					{
+						const auto component = ComponentMap::CreateComponent(id);
+						if (component != nullptr)
+						{
+							component->SetScene(gameObject->scene.Get());
+							gameObject->AttachComponent(component);
+
+							component->Awake();
+							component->Start();
+						}
+					}
+				}
+				ImGui::EndPopup();
+			}
+
 		}
 
 		ImGui::End();

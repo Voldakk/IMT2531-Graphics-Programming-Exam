@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Component.hpp"
+#include <vector>
 
 namespace EVA
 {
@@ -61,6 +62,18 @@ namespace EVA
 		static std::shared_ptr<Component> CreateT()
 		{
 			return std::make_shared<T>();
+		}
+
+		static std::vector<std::string> GetComponentIds()
+		{
+			std::vector<std::string> ids;
+
+			for (map_type::const_iterator it = map->begin(); it != map->end(); ++it)
+			{
+				ids.push_back(it->first);
+			}
+
+			return ids;
 		}
 	};
 
