@@ -59,7 +59,7 @@ namespace EVA
 		// ImGui
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-	    //auto& io = ImGui::GetIO(); (void)io;
+	    auto& io = ImGui::GetIO(); (void)io;
 		ImGui_ImplGlfwGL3_Init(m_Window, true);
 		ImGui::StyleColorsDark();
     }

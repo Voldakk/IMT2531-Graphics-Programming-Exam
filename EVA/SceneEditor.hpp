@@ -2,6 +2,9 @@
 
 #include "Scene.hpp"
 
+#include <iostream>
+#include <memory>
+
 #include "Physics.hpp"
 #include "Components/SceneCamera.hpp"
 #include "Editor/EditorWindows.hpp"
@@ -15,7 +18,9 @@ namespace EVA
 		std::shared_ptr<GameObject> m_SceneCameraGameObject;
 		SceneCamera* m_SceneCamera;
 
-		GameObject* m_Selected = nullptr;		
+		GameObject* m_Selected = nullptr;
+
+		std::unique_ptr<EditorWindows> m_Ew;
 
 	public:
 
@@ -27,13 +32,16 @@ namespace EVA
 			m_SceneCameraGameObject->AddComponent<Camera>();
 			m_SceneCamera = m_SceneCameraGameObject->AddComponent<SceneCamera>();
 
-			m_Selected = FindGameObjectByName("Ground plane");
+			// Windows
+			m_Ew = std::make_unique<EditorWindows>(this);
 		}
 
 		void Update(const float deltaTime) override
 		{
+			// Move camera
 			m_SceneCameraGameObject->Update(deltaTime);
 
+			// Check for clicked object
 			if (Input::MouseButtonDown(Input::MouseLeft))
 			{
 				const auto mousePos = Input::MousePosition();
@@ -45,20 +53,31 @@ namespace EVA
 					std::cout << "Name: " << hit.hitCollider->gameObject->GetName() << ", Dist: " << hit.distance
 						<< ", Point: (" << hit.point.x << ", " << hit.point.y << ", " << hit.point.z << ") \n";
 
-					m_Selected = hit.hitCollider->gameObject.Get();
+					SetSelected(hit.hitCollider->gameObject.Get());
 				}
 			}
 
-			EditorWindows::SceneHierarchy(this, &m_Selected);
-
-			EditorWindows::Inspector(m_Selected);
+			// Windows
+			 m_Ew->SceneHierarchy();
+			 m_Ew->Inspector();
 
 			ImGui::ShowDemoWindow();			
 		}
 
 		void LateUpdate() override
 		{
+			// Move camera
 			m_SceneCameraGameObject->LateUpdate();
+		}
+
+		void SetSelected(GameObject* selected)
+		{
+			m_Selected = selected;
+		}
+
+		GameObject* GetSelected() const
+		{
+			return m_Selected;
 		}
 	};
 
