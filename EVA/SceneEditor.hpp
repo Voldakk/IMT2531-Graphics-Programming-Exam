@@ -2,11 +2,9 @@
 
 #include "Scene.hpp"
 
-#include "Editor/EditorWindows.hpp"
-
+#include "Physics.hpp"
 #include "Components/SceneCamera.hpp"
-#include "Parsers/SceneParser.hpp"
-#include "glm/gtx/euler_angles.inl"
+#include "Editor/EditorWindows.hpp"
 
 namespace EVA
 {
