@@ -501,6 +501,13 @@ namespace EVA
 			{
 				if (m_GameObjects[i].get() == gameObject)
 				{
+					for (auto& child : m_GameObjects[i]->transform->GetChildren())
+					{
+						child->SetParent((Transform*)nullptr);
+					}
+
+					m_GameObjects[i]->transform->SetParent((Transform*)nullptr);
+
 					m_GameObjects.erase(m_GameObjects.begin() + i);
 					break;
 				}

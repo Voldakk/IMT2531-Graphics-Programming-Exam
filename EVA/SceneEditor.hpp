@@ -62,7 +62,9 @@ namespace EVA
 			m_Ew->Inspector();
 			m_Ew->MenuBar();
 
-			ImGui::ShowDemoWindow();			
+			ImGui::ShowDemoWindow();
+
+			ProcessDestroyQueue();
 		}
 
 		void LateUpdate() override

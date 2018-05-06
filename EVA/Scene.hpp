@@ -187,6 +187,7 @@ namespace EVA
 		void RemoveCollider(Collider* collider);
 		std::vector<Collider*>& GetColliders();
 
+		void ProcessDestroyQueue();
 
 	private:
 
@@ -211,7 +212,6 @@ namespace EVA
 
 		void RenderUi();
 
-		void ProcessDestroyQueue();
 	};
 
 	template <class T>

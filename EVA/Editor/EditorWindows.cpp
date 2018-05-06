@@ -226,9 +226,17 @@ namespace EVA
 				{
 					auto newGameObject = m_Editor->CreateGameObject();
 					newGameObject->SetName("New GameObject");
+					newGameObject->SetParent(gameObject);
+				}
+				if (ImGui::MenuItem("Delete"))
+				{
+					gameObject->Destroy();
+					if (m_Editor->GetSelected() == gameObject)
+						m_Editor->SetSelected(nullptr);
 
-					if (gameObject != nullptr)
-						newGameObject->SetParent(gameObject);
+					ImGui::EndPopup();
+					ImGui::TreePop();
+					return;
 				}
 
 				ImGui::EndPopup();
