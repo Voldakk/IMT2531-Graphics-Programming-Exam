@@ -82,7 +82,6 @@ EVA::Light::Light(DataObject data)
 void EVA::Light::SetPosition(const glm::vec3 newPosition)
 {
 	m_Position = newPosition;
-	m_Position.x *= -1;
 }
 
 void EVA::Light::SetRotation(const glm::vec2 rotation)
