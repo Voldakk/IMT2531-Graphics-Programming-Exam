@@ -24,4 +24,10 @@ namespace EVA
 		offset = data.GetVec3("offset", glm::vec3(0.0f));
 		scalar = data.GetFloat("scalar", 1.0f);
 	}
+
+	void FollowTarget::Save(DataObject& data)
+	{
+		data.SetVec3("offset", offset);
+		data.SetFloat("scalar", scalar);
+	}
 }

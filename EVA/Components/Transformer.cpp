@@ -19,4 +19,11 @@ namespace EVA
 		m_Scaling = data.GetVec3("scaling", m_Scaling);
 		m_Rotation = data.GetVec3("rotation", m_Rotation);
 	}
+
+	void Transformer::Save(DataObject& data)
+	{
+		data.SetVec3("translation", m_Translation);
+		data.SetVec3("scaling", m_Scaling);
+		data.SetVec3("rotation", m_Rotation);
+	}
 }

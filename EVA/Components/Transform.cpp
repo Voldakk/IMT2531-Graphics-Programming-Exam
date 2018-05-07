@@ -238,4 +238,11 @@ namespace EVA
 
 		UpdateModelMatrix();
 	}
+
+	void Transform::Save(DataObject& data)
+	{
+		data.SetVec3("position", m_LocalPosition);
+		data.SetVec3("scale", m_LocalScale);
+		data.SetVec4("orientation", { m_LocalOrientation.x, m_LocalOrientation.y, m_LocalOrientation.z, m_LocalOrientation.w });
+	}
 }

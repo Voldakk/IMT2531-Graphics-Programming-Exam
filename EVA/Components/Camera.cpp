@@ -33,4 +33,11 @@ namespace EVA
 		near = data.GetFloat("near", 0.1f);
 		far = data.GetFloat("far", 1000.0f);
 	}
+
+	void Camera::Save(DataObject& data)
+	{
+		data.SetFloat("fov", fov);
+		data.SetFloat("near", near);
+		data.SetFloat("far", far);
+	}
 }

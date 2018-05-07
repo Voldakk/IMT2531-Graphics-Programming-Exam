@@ -67,4 +67,11 @@ namespace EVA
 		mouseSensitivity = data.GetFloat("mouseSensitivity", 50.0f);
 		movementSpeed = data.GetFloat("movementSpeed", 5.0f);
 	}
+
+	void FreeLook::Save(DataObject& data)
+	{
+		data.SetBool("wasd", wasd);
+		data.SetFloat("mouseSensitivity", mouseSensitivity);
+		data.SetFloat("movementSpeed", movementSpeed);
+	}
 }
