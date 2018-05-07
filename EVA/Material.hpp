@@ -34,6 +34,8 @@ namespace EVA
 
 	public:
 
+		std::string path;
+
 		static unsigned int textureDefaultDiffuse;
 		static unsigned int textureDefaultSpecular;
 		static unsigned int textureDefaultNormal;

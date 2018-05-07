@@ -32,6 +32,8 @@ namespace EVA
 
 		// Convert from assimp scene to model
 		auto model = std::make_shared<Model>();
+		model->path = path;
+
 		ProcessNode(scene->mRootNode, scene, model);
 
 		m_Models[path] = model;

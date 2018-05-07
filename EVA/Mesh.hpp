@@ -44,6 +44,9 @@ namespace EVA
 		bool isDirty = true;
 		std::string name;
 
+		std::string path;
+		unsigned int index;
+
 		explicit Mesh(std::vector<Vertex> vertices, std::string name = "");
 
 		explicit Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> faceIndices, std::string name = "");

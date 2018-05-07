@@ -5,6 +5,8 @@ namespace EVA
 
 	void Model::AddMesh(const std::shared_ptr<Mesh>& mesh)
 	{
+		mesh->path = path;
+		mesh->index = m_Meshes.size();
 		m_Meshes.push_back(mesh);
 	}
 

@@ -20,9 +20,11 @@ namespace EVA
 		 * \param path The path to the file
 		 * \return A pointer to the material
 		 */
-		static std::shared_ptr<Material> Get(const std::string& path)
+		static std::shared_ptr<Material> Load(const std::string& path)
 		{
 			auto material = std::make_shared<Material>();
+
+			material->path = path;
 			material->shader = EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
 
 			const auto sd = Json::Open(path);

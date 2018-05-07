@@ -47,7 +47,7 @@ namespace EVA
 		const auto materialPath = data.GetString("material", "");
 		if (!materialPath.empty())
 		{
-			material = MaterialParser::Get(materialPath);
+			material = MaterialParser::Load(materialPath);
 		}
 
 		// Mesh primitive
@@ -71,5 +71,17 @@ namespace EVA
 		}
 
 		Set(mesh, material);
+	}
+
+	void MeshRenderer::Save(DataObject& data)
+	{
+		if (material != nullptr)
+			data.SetString("material", material->path);
+
+		if(mesh != nullptr)
+		{
+			data.SetString("mesh", mesh->path);
+			data.SetInt("meshIndex", mesh->index);
+		}
 	}
 }

@@ -32,7 +32,17 @@ namespace EVA
 
 		void Render() const;
 
-		void Load(const DataObject data) override;
+		/**
+		* \brief Loads Component values from the given DataObject
+		* \param data The DataObject
+		*/
+		void Load(DataObject data) override;
+
+		/**
+		* \brief Saves Component values to the given DataObject
+		* \param data The DataObject
+		*/
+		void Save(DataObject& data) override;
 		
 	};
 }

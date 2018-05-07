@@ -16,6 +16,8 @@ namespace EVA
 
 	public:
 
+		std::string path;
+
 		void AddMesh(const std::shared_ptr<Mesh>& mesh);
 
 		std::shared_ptr<Mesh> GetMesh(const unsigned int index) const;
