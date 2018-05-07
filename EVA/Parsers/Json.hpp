@@ -11,6 +11,7 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/writer.h"
+#include "rapidjson/prettywriter.h"
 
 namespace EVA
 {
@@ -34,7 +35,7 @@ namespace EVA
 
 			rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 
-			auto d = std::make_shared<rapidjson::Document>();
+			auto d = std::make_shared<Document>();
 			d->ParseStream(is);
 
 			return d;
@@ -45,7 +46,7 @@ namespace EVA
 			const auto fp = fopen(path.c_str(), "wb");
 			char writeBuffer[65536];
 			rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
-			rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+			rapidjson::PrettyWriter<rapidjson::FileWriteStream> writer(os);
 			const auto r = d->Accept(writer);
 			fclose(fp);
 

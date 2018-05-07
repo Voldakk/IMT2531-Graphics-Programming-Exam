@@ -47,6 +47,33 @@ namespace EVA
 
 			return material;
 		}
+
+		static void Save(Material* material, const std::string& path)
+		{
+			Json::Document d;
+			d.SetObject();
+
+			auto& a = d.GetAllocator();
+
+			DataObject data(d, &a);
+
+			if (material->tintDiffuse != glm::vec4(1.0f))
+				data.SetVec4("tintDiffuse", material->tintDiffuse);
+
+			if (material->textureDiffuse.id != 0)
+				data.SetString("textureDiffuse", material->textureDiffuse.path);
+
+			if (material->textureSpecular.id != 0)
+				data.SetString("textureSpecular", material->textureSpecular.path);
+
+			if (material->textureNormal.id != 0)
+				data.SetString("textureNormal", material->textureNormal.path);
+
+			if (material->textureEmission.id != 0)
+				data.SetString("textureEmission", material->textureEmission.path);
+
+			Json::Save(&d, path);
+		}
 	};
 
 }
