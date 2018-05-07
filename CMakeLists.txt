@@ -50,7 +50,7 @@ file(GLOB SOURCES
 	TestScenes/*/*
 	dependencies/stb-image/*
 	dependencies/imgui/*
-	dependencies/noc/*
+	dependencies/tfd/*
 )
 
 add_executable(main ${SOURCES})
@@ -86,7 +86,7 @@ target_include_directories(
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/freetype/include/
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/rapidjson/include/
 	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/imgui
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/noc
+	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/tfd
 )
 
 if(WINDOWS)

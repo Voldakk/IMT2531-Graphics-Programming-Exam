@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #ifdef _WIN32
 
 	#define NOC_FILE_DIALOG_WIN32
@@ -77,3 +77,4 @@ namespace EVA
 	};
 
 }
+*/
