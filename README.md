@@ -74,6 +74,8 @@ To run them simply uncomment the line in source/main.cpp
 * [ASSIMP](http://assimp.org/)
 * [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)
 * [RapidJSON](https://github.com/Tencent/rapidjson)
+* [ImGui](https://github.com/ocornut/imgui)
+* [noc_file_dialog.h](https://github.com/guillaumechereau/noc)
 
 ## Authors
 
@@ -93,5 +95,6 @@ To run them simply uncomment the line in source/main.cpp
 * [LearnOpenGL - Normal Mapping](https://learnopengl.com/Advanced-Lighting/Normal-Mapping)
 * [LearnOpenGL - Instancing](https://learnopengl.com/Advanced-OpenGL/Instancing)
 * [LearnOpenGL - Text Rendering](https://learnopengl.com/In-Practice/Text-Rendering)
-* [Stack Overflow - String to type mapping](https://stackoverflow.com/a/582456)
 * [opengl-tutorial - Picking with custom Ray-OBB function](http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/)
+* [Stack Overflow - String to type mapping](https://stackoverflow.com/a/582456)
+* [Stack Overflow - Full path to the executing app](https://stackoverflow.com/a/198099)
