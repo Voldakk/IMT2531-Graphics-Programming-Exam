@@ -65,6 +65,11 @@ namespace EVA
 
 	}
 
+	void Component::Save(DataObject& data)
+	{
+		
+	}
+
 	std::string Component::GetTypeId()
 	{
 		return "";

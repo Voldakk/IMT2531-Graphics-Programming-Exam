@@ -15,7 +15,7 @@ namespace EVA
 	public:
 
 		/**
-		 * \brief Loads the data form the document into the GameObject
+		 * \brief Loads the data from the document into the GameObject
 		 * \param gameObject The GameObject
 		 * \param document The data
 		 * \return A pointer to the GameObject 
@@ -37,16 +37,18 @@ namespace EVA
 		 * \return A pointer to the GameObject 
 		 */
 		static GameObject* Load(Scene* scene, const std::string& path);
+
+		static void Save(GameObject* gameObject, Json::Generic& d, Json::Allocator& a);
 	};
 
 	inline GameObject* GameObjectParser::Load(GameObject* gameObject, Json::Generic& document)
 	{
-		// Transform
-		gameObject->transform->Load(DataObject(document));
-
+		// Name
 		if (document.HasMember("name") && document["name"].IsString())
 			gameObject->SetName(document["name"].GetString());
 
+		// Transform
+		gameObject->transform->Load(DataObject(document));
 
 		// Components
 		if (document.HasMember("components") && document["components"].IsArray())
@@ -116,5 +118,70 @@ namespace EVA
 		const auto sd = Json::Open(path);
 
 		return Load(scene, *sd);
+	}
+
+	inline void GameObjectParser::Save(GameObject* gameObject, Json::Generic& d, Json::Allocator& a)
+	{
+		DataObject data(d, &a);
+
+		// Name
+		data.SetString("name", gameObject->GetName());
+
+		// Transform
+		gameObject->transform->Save(data);
+
+		// Components
+		const auto& components = gameObject->GetComponents();
+		if(!components.empty())
+		{
+			// Create array
+			Json::Value componentsArray;
+			componentsArray.SetArray();
+
+			// For each component
+			for (auto& component : components)
+			{
+				// Create a data object
+				Json::Value componentValue;
+				componentValue.SetObject();
+				DataObject componentData(componentValue, &a);
+
+				// Id
+				componentData.SetString("id", component->GetTypeId());
+
+				// Save other data
+				component->Save(componentData);
+
+				// Add to array
+				componentsArray.PushBack(componentValue, a);
+			}
+
+			d.AddMember("components", componentsArray, a);
+		}
+
+		// Children
+		const auto& children = gameObject->transform->GetChildren();
+		if(!children.empty())
+		{
+			// Create array
+			Json::Value childrenArray;
+			childrenArray.SetArray();
+
+			// For each child
+			for (auto child : children)
+			{
+				// Create a data object
+				Json::Value childValue;
+				childValue.SetObject();
+
+				// Save child data
+				Save(child->gameObject.Get(), childValue, a);
+
+				// Add to array
+				childrenArray.PushBack(childValue, a);
+			}
+
+			d.AddMember("gameObjects", childrenArray, a);
+		}
 	}
 }

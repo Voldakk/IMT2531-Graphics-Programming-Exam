@@ -135,10 +135,16 @@ namespace EVA
 		virtual void Start();
 
 	    /**
-		 * \brief Loads component values from the given data
-		 * \param data The data
+		 * \brief Loads Component values from the given DataObject
+		 * \param data The DataObject
 		 */
 		virtual void Load(const DataObject data);
+
+	    /**
+		 * \brief Saves Component values to the given DataObject
+		 * \param data The DataObject
+		 */
+		virtual void Save(DataObject& data);
 
 		virtual std::string GetTypeId();
     };
