@@ -3,6 +3,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "SceneEditor.hpp"
+#include "../Parsers/SceneParser.hpp"
 
 namespace EVA
 {
@@ -161,7 +162,11 @@ namespace EVA
 				}
 				if (ImGui::MenuItem("Open", "Ctrl+O"))
 				{
-					
+
+				}
+				if (ImGui::MenuItem("Save", "Ctrl+S"))
+				{
+					SceneParser::Save(m_Editor, "./out.scene");
 				}
 				ImGui::EndMenu();
 			}

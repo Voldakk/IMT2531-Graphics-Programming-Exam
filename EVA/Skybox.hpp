@@ -49,6 +49,12 @@ namespace EVA
 		void Render() const;
 
 		void Set(const std::string &folderPath, const std::string &fileType);
+
+		/**
+		* \brief Saves Skybox values to the given DataObject
+		* \param data The DataObject
+		*/
+		void Save(DataObject& data) const;
 	};
 
 }

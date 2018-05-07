@@ -97,6 +97,44 @@ void EVA::Light::SetRotation(const glm::vec2 rotation)
     m_Direction.w = 0.0f;
 }
 
+void EVA::Light::Save(DataObject& data) const
+{
+	if(m_Type == Directional)
+	{
+		data.SetString("type", "Directional");
+
+		data.SetVec3("color", color);
+
+		data.SetVec2("rotation", m_Rotation);
+
+		data.SetFloat("directionalShadowDistance", directionalShadowDistance);
+
+		data.SetFloat("directionalNearPlane", directionalNearPlane);
+		data.SetFloat("directionalFarPlane", directionalFarPlane);
+	}
+	else
+	{
+		data.SetString("type", "Point");
+
+		data.SetVec3("color", color);
+
+		data.SetVec3("position", m_Position);
+
+		data.SetFloat("attenuation", attenuation);
+
+		data.SetFloat("pointNearPlane", pointNearPlane);
+		data.SetFloat("pointFarPlane", pointFarPlane);
+	}
+
+	data.SetFloat("ambientCoefficient", ambientCoefficient);
+
+	data.SetBool("shadows", m_Shadows);
+	if(m_Shadows)
+	{
+		data.SetInt("shadowMapSize", m_ShadowMapSize);
+	}
+}
+
 glm::mat4 EVA::Light::GetLightSpaceMatrix() const
 {
 	const auto lightProjection = glm::ortho(-directionalShadowDistance, directionalShadowDistance, -directionalShadowDistance, directionalShadowDistance, directionalNearPlane, directionalFarPlane);

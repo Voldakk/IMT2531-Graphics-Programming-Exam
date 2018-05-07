@@ -64,6 +64,12 @@ namespace EVA
 		void SetPosition(glm::vec3 newPosition);
 		void SetRotation(glm::vec2 rotation);
 
+		/**
+		* \brief Saves Light values to the given DataObject
+		* \param data The DataObject
+		*/
+		void Save(DataObject& data) const;
+
 		// Get stuff
 		inline Type GetType()		const { return m_Type; }
 		inline glm::vec4 GetDirection() const { return m_Direction; }

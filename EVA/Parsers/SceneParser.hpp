@@ -63,6 +63,54 @@ namespace EVA
 			}
 
 		}
+
+		static void Save(Scene* scene, const std::string& path)
+		{
+			// Create document
+			Json::Document d;
+			d.SetObject();
+
+			auto& a = d.GetAllocator();
+
+			// Skybox
+			if(scene->skybox != nullptr)
+			{
+				Json::Value skyboxValue;
+				skyboxValue.SetObject();
+				DataObject data(skyboxValue, &a);
+
+				scene->skybox->Save(data);
+
+				d.AddMember("skybox", skyboxValue, a);
+			}
+
+			// Lights
+			const auto lights = scene->GetLights();
+			if (!lights.empty())
+			{
+
+				Json::Value lightsArray;
+				lightsArray.SetArray();
+				for (auto& light : lights)
+				{
+					Json::Value lightValue;
+					lightValue.SetObject();
+					DataObject data(lightValue, &a);
+
+					light->Save(data);
+
+					lightsArray.PushBack(lightValue, a);
+				}
+
+				d.AddMember("lights", lightsArray, a);
+			}
+
+			// Game objects
+
+
+			// Save file
+			Json::Save(&d, path);
+		}
 	};
 
 }

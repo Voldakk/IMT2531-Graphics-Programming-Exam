@@ -66,4 +66,13 @@ namespace EVA
 		m_Material->SetTexture(Texture::Diffuse, m_Texture);
 		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
 	}
+
+	void Skybox::Save(DataObject& data) const
+	{
+		if (!m_FolderPath.empty())
+			data.SetString("folderPath", m_FolderPath);
+
+		if (!m_FolderPath.empty())
+			data.SetString("fileExtension", m_FileType);
+	}
 }
