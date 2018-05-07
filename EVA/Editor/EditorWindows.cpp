@@ -340,7 +340,7 @@ namespace EVA
 		ImGui::Text("Name");
 		const auto gameObjectName = new char[10000];
 
-		strcpy_s(gameObjectName, sizeof(gameObject->GetName()), gameObject->GetName().c_str());
+		std::strcpy(gameObjectName, gameObject->GetName().c_str());
 
 		if (ImGui::InputText("##Line", gameObjectName, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
@@ -460,10 +460,10 @@ namespace EVA
 		ImGui::Text("Skybox");
 
 		const auto folderPath = new char[10000];
-		strcpy_s(folderPath, sizeof(skybox->folderPath), skybox->folderPath.c_str());
+		strcpy(folderPath, skybox->folderPath.c_str());
 
 		const auto fileType = new char[10000];
-		strcpy_s(fileType, sizeof(skybox->fileType), skybox->fileType.c_str());
+		strcpy(fileType, skybox->fileType.c_str());
 
 		if (ImGui::InputText("Folder path", folderPath, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
