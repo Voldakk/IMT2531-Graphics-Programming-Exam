@@ -12,32 +12,35 @@
 #endif
 
 #include <string>
+#include <experimental/filesystem>
 
 #include "tinyfiledialogs.h"
 #include "../../dependencies/tfd/tinyfiledialogs.h"
 
 namespace EVA
 {
-
 	class FileSystem
 	{
-		static const int PATH_LENGTH = 1000;
+
+		static const int PATH_LENGTH = 1024;
+
 	public:
 
+		typedef std::experimental::filesystem::path path;
 
-		static std::string OpenFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr, const bool multiSelect = false)
+		static path OpenFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr, const bool multiSelect = false)
 		{
 			const auto path = tinyfd_openFileDialog(title, defaultPathAndFile, numberOfFilterPatterns, filterPatterns, "", multiSelect);
 			return path == nullptr ? "" : path;
 		}
 
-		static std::string SaveFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr)
+		static path SaveFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr)
 		{
 			const auto path = tinyfd_saveFileDialog(title, defaultPathAndFile, numberOfFilterPatterns, filterPatterns, "");
 			return path == nullptr ? "" : path;
 		}
 
-		static std::string GetWorkingDirectory()
+		static path GetProgramPath()
 		{
 			#ifdef _WIN32
 
@@ -59,11 +62,23 @@ namespace EVA
 
 			#elif __APPLE__
 
-			return "";
+			char path[PATH_LENGTH];
+			uint32_t size = sizeof(path);
+			if (_NSGetExecutablePath(path, &size) == 0)
+				return path;
+			else
+				return "";
 
 			#endif
+		}
 
+		static path GetAssetsFolder()
+		{
+			const auto programPath = GetProgramPath();
+
+			const auto programDirectory = programPath.parent_path();
+
+			return programDirectory / "/assets/";
 		}
 	};
-
 }

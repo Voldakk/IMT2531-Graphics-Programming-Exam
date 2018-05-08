@@ -5,8 +5,6 @@
 #include "SceneEditor.hpp"
 #include "../Parsers/SceneParser.hpp"
 #include "FileSystem.hpp"
-#include <fstream>
-#include <experimental/filesystem>
 
 namespace EVA
 {
@@ -170,7 +168,7 @@ namespace EVA
 					if (!path.empty())
 					{
 						m_Editor->Clear();
-						SceneParser::Load(m_Editor, path);
+						SceneParser::Load(m_Editor, path.string());
 					}
 				}
 				if (ImGui::MenuItem("Save", "Ctrl+S"))
@@ -178,7 +176,7 @@ namespace EVA
 					char const * filterPatterns[1] = { "*.scene" };
 					const auto path = FileSystem::SaveFileDialog("Save scene", (std::experimental::filesystem::current_path().string() + R"(/assets/scenes/)").c_str(), 1, filterPatterns);
 					if(!path.empty())
-						SceneParser::Save(m_Editor, path);
+						SceneParser::Save(m_Editor, path.string());
 				}
 				ImGui::EndMenu();
 			}

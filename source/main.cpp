@@ -5,6 +5,7 @@
 #include "../EVA/Editor/SceneEditor.hpp"
 
 #include <experimental/filesystem>
+#include "../EVA/Editor/FileSystem.hpp"
 
 /**
  * \brief The entry point of the program
@@ -12,8 +13,6 @@
  */
 int main()
 {
-    std::cout << std::experimental::filesystem::current_path() << std::endl;
-
     EVA::Application::Init("EVA-Engine");
 
 	EVA::SceneManager::CreateScene<EVA::SceneEditor>("./assets/scenes/cubes.scene");
