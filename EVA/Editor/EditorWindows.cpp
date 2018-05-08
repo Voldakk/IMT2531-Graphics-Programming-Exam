@@ -272,7 +272,7 @@ namespace EVA
 			ImGui::BeginGroup();
 			if (is_directory(p))
 			{
-				ImGui::Text(p.path().stem().string().c_str());
+				ImGui::Text(("-> " + p.path().stem().string()).c_str());
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
 					ImGui::Text(p.path().stem().string().c_str());
