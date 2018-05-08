@@ -1,6 +1,6 @@
 {
     "skybox": {
-        "folderPath": ".\\assets\\standard assets\\skybox",
+        "folderPath": "./assets/standard assets/skybox",
         "fileExtension": ".png"
     },
     "lights": [
