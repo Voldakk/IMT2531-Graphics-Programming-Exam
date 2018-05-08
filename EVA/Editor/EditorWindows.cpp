@@ -4,6 +4,7 @@
 
 #include "SceneEditor.hpp"
 #include "../Parsers/SceneParser.hpp"
+#include "FileSystem.hpp"
 
 namespace EVA
 {
@@ -282,7 +283,7 @@ namespace EVA
 
 		ImGui::BeginChild(ImGui::GetID((void*)nullptr), ImVec2(200.0f, ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y), true);
 
-		DisplayFoldersRecursively("./Assets");
+		DisplayFoldersRecursively("./assets");
 
 		ImGui::EndChild();
 		ImGui::SameLine();

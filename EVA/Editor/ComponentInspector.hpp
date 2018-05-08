@@ -12,7 +12,7 @@ public:
 
 	static void Text(const char* text)
 	{
-		ImGui::Text(text);
+		ImGui::Text(text, nullptr);
 	}
 
 	static void Int(const char* name, int& value)
