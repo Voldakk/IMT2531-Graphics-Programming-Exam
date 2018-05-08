@@ -45,7 +45,6 @@ namespace EVA
 
 			Clear();
 
-
 			SceneParser::Load(this, path);
 		}
 
@@ -76,7 +75,7 @@ namespace EVA
 			m_Ew->MenuBar();
 			m_Ew->AssetBrowser();
 
-			ImGui::ShowDemoWindow();
+			//ImGui::ShowDemoWindow();
 
 			ProcessDestroyQueue();
 		}

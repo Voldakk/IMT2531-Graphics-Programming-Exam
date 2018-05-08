@@ -30,7 +30,7 @@ namespace EVA
 		float m_HierarchyWidth = 0.0f;
 		float m_InspectorWidth = 0.0f;
 
-		FS::path m_SelectedAssetFolder;
+		FS::path m_SelectedAssetFolder = "./Assets";
 
 	public:
 

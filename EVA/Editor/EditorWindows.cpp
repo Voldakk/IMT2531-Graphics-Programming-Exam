@@ -265,7 +265,20 @@ namespace EVA
 		ImGui::SameLine();
 		ImGui::BeginChild(ImGui::GetID((void*)1), ImVec2(ImGui::GetWindowWidth() - 225.0f, ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y), true);
 
-		// File view
+		for (auto& p : FS::directory_iterator(m_SelectedAssetFolder))
+		{
+			if(is_directory(p))
+			{
+				if(ImGui::Selectable(("[ " + p.path().stem().string() + " ]").c_str()))
+				{
+					m_SelectedAssetFolder = p;
+				}
+			}
+			else
+			{
+				ImGui::Text(p.path().filename().string().c_str());
+			}
+		}
 
 		ImGui::EndChild();
 
