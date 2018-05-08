@@ -58,6 +58,9 @@ namespace EVA
 
 	unsigned int TextureManager::GetTextureCubemap(const std::string &folderPath, const std::string &fileType)
 	{
+		if (folderPath.empty())
+			return 0;
+
 		const auto endSlash = folderPath[folderPath.length() - 1] == '\\' || folderPath[folderPath.length() - 1] == '/';
 
 		const auto slash = endSlash ? "" : "/";
