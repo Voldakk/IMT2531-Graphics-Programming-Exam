@@ -18,6 +18,9 @@ namespace EVA
 		std::shared_ptr<Mesh> m_Mesh;
 		std::shared_ptr<Material> m_Material;
 
+		std::string m_ModelPath;
+		unsigned int m_MeshIndex;
+
 	public:
 
 		// Public read only fields
@@ -43,6 +46,15 @@ namespace EVA
 		* \param data The DataObject
 		*/
 		void Save(DataObject& data) override;
+
+		/**
+		* \brief Draws the component inspector
+		*/
+		void Inspector() override;
+
+	private:
+
+		void SetMesh(const std::string& modelPath, unsigned int meshIndex);
 		
 	};
 }

@@ -30,4 +30,10 @@ namespace EVA
 		data.SetVec3("offset", offset);
 		data.SetFloat("scalar", scalar);
 	}
+
+	void FollowTarget::Inspector()
+	{
+		ComponentInspector::Float3("Offset", offset);
+		ComponentInspector::Float("Scalar", scalar);
+	}
 }

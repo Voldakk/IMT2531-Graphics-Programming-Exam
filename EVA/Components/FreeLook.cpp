@@ -65,7 +65,7 @@ namespace EVA
 	{
 		wasd = data.GetBool("wasd", true);
 		mouseSensitivity = data.GetFloat("mouseSensitivity", 50.0f);
-		movementSpeed = data.GetFloat("movementSpeed", 5.0f);
+		movementSpeed = data.GetFloat("movementSpeed", 10.0f);
 	}
 
 	void FreeLook::Save(DataObject& data)
@@ -73,5 +73,12 @@ namespace EVA
 		data.SetBool("wasd", wasd);
 		data.SetFloat("mouseSensitivity", mouseSensitivity);
 		data.SetFloat("movementSpeed", movementSpeed);
+	}
+
+	void FreeLook::Inspector()
+	{
+		ComponentInspector::Bool("WASD", wasd);
+		ComponentInspector::Float("Mouse sensitivity", mouseSensitivity);
+		ComponentInspector::Float("Movement speed", movementSpeed);
 	}
 }

@@ -7,9 +7,7 @@ namespace EVA
 	void Transformer::Update(const float deltaTime)
 	{
 		transform->Translate(m_Translation * deltaTime);
-
 		transform->SetScale(transform->localScale + m_Scaling * deltaTime);
-
 		transform->Rotate(m_Rotation * deltaTime);
 	}
 
@@ -25,5 +23,12 @@ namespace EVA
 		data.SetVec3("translation", m_Translation);
 		data.SetVec3("scaling", m_Scaling);
 		data.SetVec3("rotation", m_Rotation);
+	}
+
+	void Transformer::Inspector()
+	{
+		ComponentInspector::Float3("Translation", m_Translation);
+		ComponentInspector::Float3("Scaling", m_Scaling);
+		ComponentInspector::Float3("Rotation", m_Rotation);
 	}
 }

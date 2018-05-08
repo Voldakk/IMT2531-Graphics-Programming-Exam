@@ -1,6 +1,8 @@
 #pragma once
 
 #include "imgui.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 class ComponentInspector
 {
@@ -18,6 +20,18 @@ public:
 		ImGui::InputInt(name, &value);
 	}
 
+	static bool EnterInt(const char* name, int& value)
+	{
+		auto temp = value;
+		if( ImGui::InputInt(name, &temp, 1, 5, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			value = temp;
+			return true;
+		}
+
+		return false;
+	}
+
 	static void Bool(const char* name, bool& value)
 	{
 		ImGui::Checkbox(name, &value);
@@ -26,6 +40,21 @@ public:
 	static void Float(const char* name, float& value)
 	{
 		ImGui::InputFloat(name, &value);
+	}
+
+	static void Float2(const char* name, glm::vec2& value)
+	{
+		ImGui::InputFloat2(name, glm::value_ptr(value));
+	}
+
+	static void Float3(const char* name, glm::vec3& value)
+	{
+		ImGui::InputFloat3(name, glm::value_ptr(value));
+	}
+
+	static void Float4(const char* name, glm::vec4& value)
+	{
+		ImGui::InputFloat4(name, glm::value_ptr(value));
 	}
 
 	static void String(const char* name, std::string& value)

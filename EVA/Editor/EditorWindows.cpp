@@ -100,7 +100,7 @@ namespace EVA
 		auto gameObjects = m_Editor->GetGameObjects();
 		for (auto& gameObject : gameObjects)
 		{
-			if (gameObject->GetName() == "EVA::EditdorCamera")
+			if (gameObject->GetName() == "EVA::EditorCamera")
 				continue;
 
 			if (gameObject->transform->parent.Get() == nullptr)
@@ -446,10 +446,9 @@ namespace EVA
 			bool keep = true;
 			if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str(), &keep))
 			{
-
+				ImGui::PushID(i);
 				component->Inspector();
-
-				ImGui::Spacing();
+				ImGui::PopID();
 			}
 			if (!keep)
 			{

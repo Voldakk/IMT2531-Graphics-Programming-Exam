@@ -22,7 +22,7 @@ namespace EVA
 		bool wasd = true;
 
 		float mouseSensitivity = 50.0f;
-		float movementSpeed = 5.0f;
+		float movementSpeed = 10.0f;
 		
 		void Start() override;
 
@@ -39,5 +39,10 @@ namespace EVA
 		* \param data The DataObject
 		*/
 		void Save(DataObject& data) override;
+
+		/**
+		* \brief Draws the component inspector
+		*/
+		void Inspector() override;
 	};
 }

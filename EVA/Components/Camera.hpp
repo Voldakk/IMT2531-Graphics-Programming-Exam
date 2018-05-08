@@ -45,7 +45,7 @@ namespace EVA
 
 
 	    /**
-	     * \brief Draws the camera component inspector
+	     * \brief Draws the component inspector
 	     */
 	    void Inspector() override;
     };

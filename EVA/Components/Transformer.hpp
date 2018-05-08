@@ -28,6 +28,11 @@ namespace EVA
 		* \param data The DataObject
 		*/
 		void Save(DataObject& data) override;
+
+		/**
+		* \brief Draws the component inspector
+		*/
+		void Inspector() override;
 	};
 
 }

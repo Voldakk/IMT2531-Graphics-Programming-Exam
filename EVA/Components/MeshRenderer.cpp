@@ -25,6 +25,12 @@ namespace EVA
 
 		m_Mesh = mesh;
 		m_Material = material;
+
+		if (mesh != nullptr)
+		{
+			m_ModelPath = m_Mesh->path;
+			m_MeshIndex = m_Mesh->index;
+		}
 		
 		if (m_Mesh == nullptr || m_Material == nullptr)
 			return;
@@ -60,12 +66,12 @@ namespace EVA
 		}
 
 		// Mesh
-		const auto meshPath = data.GetString("mesh", "");
+		const auto modelPath = data.GetString("mesh", "");
 		const auto meshIndex = data.GetInt("meshIndex", 0);		
 
-		if(!meshPath.empty())
+		if(!modelPath.empty())
 		{
-			const auto model = ModelManager::LoadModel(meshPath);
+			const auto model = ModelManager::LoadModel(modelPath);
 			if(model->MeshCount() > meshIndex)
 				mesh = model->GetMesh(meshIndex);
 		}
@@ -82,6 +88,52 @@ namespace EVA
 		{
 			data.SetString("mesh", mesh->path);
 			data.SetInt("meshIndex", mesh->index);
+		}
+	}
+
+	void MeshRenderer::Inspector()
+	{
+		auto materialPath = material != nullptr ? material->path : "";
+		if (ComponentInspector::DragDropTargetString("Material", materialPath, "file"))
+		{
+			if (!materialPath.empty())
+			{
+				Set(m_Mesh, MaterialParser::Load(materialPath));
+			}
+		}
+
+		auto modelPath = m_ModelPath;
+		if (ComponentInspector::DragDropTargetString("Model", modelPath, "file"))
+		{
+			if (!modelPath.empty())
+			{
+				SetMesh(modelPath, m_MeshIndex);
+			}
+		}
+
+		int meshIndex = m_MeshIndex;
+		if(ComponentInspector::EnterInt("Mesh index", meshIndex))
+		{
+			if (meshIndex >= 0)
+			{
+				SetMesh(m_ModelPath, meshIndex);
+			}
+		}
+	}
+
+	void MeshRenderer::SetMesh(const std::string& modelPath, const unsigned meshIndex)
+	{
+		m_MeshIndex = meshIndex;
+		m_ModelPath = modelPath;
+
+		if (!modelPath.empty())
+		{
+			const auto model = ModelManager::LoadModel(modelPath);
+			if (model->MeshCount() > meshIndex)
+			{
+				const auto mesh	= model->GetMesh(meshIndex);
+				Set(mesh, m_Material);
+			}
 		}
 	}
 }

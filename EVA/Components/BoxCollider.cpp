@@ -27,4 +27,10 @@ namespace EVA
 		data.SetVec3("center", bounds.center);
 		data.SetVec3("extents", bounds.extents);
 	}
+
+	void BoxCollider::Inspector()
+	{
+		ComponentInspector::Float3("Center", bounds.center);
+		ComponentInspector::Float3("Extents", bounds.extents);
+	}
 }
