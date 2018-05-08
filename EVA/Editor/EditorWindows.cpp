@@ -265,19 +265,32 @@ namespace EVA
 		ImGui::SameLine();
 		ImGui::BeginChild(ImGui::GetID((void*)1), ImVec2(ImGui::GetWindowWidth() - 225.0f, ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y), true);
 
+		unsigned int i = 100;
+
 		for (auto& p : FS::directory_iterator(m_SelectedAssetFolder))
 		{
-			if(is_directory(p))
+			ImGui::BeginGroup();
+			if (is_directory(p))
 			{
-				if(ImGui::Selectable(("[ " + p.path().stem().string() + " ]").c_str()))
+				ImGui::Text(p.path().stem().string().c_str());
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
-					m_SelectedAssetFolder = p;
+					ImGui::Text(p.path().stem().string().c_str());
+					ImGui::SetDragDropPayload("folder", p.path().string().c_str(), sizeof(char) * p.path().string().length()+1, ImGuiCond_Once);
+					ImGui::EndDragDropSource();
 				}
 			}
 			else
 			{
 				ImGui::Text(p.path().filename().string().c_str());
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+				{
+					ImGui::Text(p.path().filename().string().c_str());
+					ImGui::SetDragDropPayload("file", p.path().string().c_str(), sizeof(char) * p.path().string().length()+1, ImGuiCond_Once);
+					ImGui::EndDragDropSource();
+				}
 			}
+			ImGui::EndGroup();
 		}
 
 		ImGui::EndChild();
@@ -518,14 +531,32 @@ namespace EVA
 		const auto fileType = new char[10000];
 		strcpy(fileType, skybox->fileType.c_str());
 
-		if (ImGui::InputText("Folder path", folderPath, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-			skybox->Set(folderPath, fileType);
-		}
 		if (ImGui::InputText("File type", fileType, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			skybox->Set(folderPath, fileType);
 		}
+
+
+		ImGui::BeginGroup();
+		if (ImGui::InputText("Folder path", folderPath, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			skybox->Set(folderPath, fileType);
+		}
+
+		if(ImGui::BeginDragDropTarget())
+		{
+			const auto payload = ImGui::AcceptDragDropPayload("folder");
+			if(payload)
+			{
+				const char* path = (char*)payload->Data;
+				skybox->Set(path, fileType);
+			}
+			ImGui::EndDragDropTarget();
+		}
+		ImGui::EndGroup();
+
+
+
 
 		delete[] folderPath;
 		delete[] fileType;

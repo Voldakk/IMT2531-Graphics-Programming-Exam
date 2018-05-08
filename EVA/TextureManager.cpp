@@ -58,9 +58,13 @@ namespace EVA
 
 	unsigned int TextureManager::GetTextureCubemap(const std::string &folderPath, const std::string &fileType)
 	{
+		const auto endSlash = folderPath[folderPath.length() - 1] == '\\' || folderPath[folderPath.length() - 1] == '/';
+
+		const auto slash = endSlash ? "" : "/";
+
 		// Return the id if the texture's already loaded
-		if (m_Textures.count(folderPath + fileType))
-			return m_Textures[folderPath + fileType];
+		if (m_Textures.count(folderPath + slash + fileType))
+			return m_Textures[folderPath + slash + fileType];
 
 		// Create texture
 		GLuint texture;
@@ -88,7 +92,7 @@ namespace EVA
 
 		for (unsigned int i = 0; i < 6; i++)
 		{
-			auto fullPath = folderPath + sideNames[i];
+			auto fullPath = folderPath + slash + sideNames[i];
 			fullPath.append(fileType);
 
 			int width, height, channels;
