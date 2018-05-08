@@ -154,17 +154,18 @@ namespace EVA
 
 	void EditorWindows::MenuBar()
 	{
+		bool openNew = false;
 		if (ImGui::BeginMainMenuBar())
 		{
 			m_MenuBarHeight = ImGui::GetWindowSize().y;
 
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("New", "Ctrl+N"))
+				if (ImGui::MenuItem("New"))
 				{
-					
+					openNew = true;
 				}
-				if (ImGui::MenuItem("Open", "Ctrl+O"))
+				if (ImGui::MenuItem("Open"))
 				{
 					char const * filterPatterns[1] = { "*.scene" };
 					const auto path = FileSystem::OpenFileDialog("Open scene", (std::experimental::filesystem::current_path().string() + R"(/assets/scenes/)").c_str(), 1, filterPatterns);
@@ -174,7 +175,7 @@ namespace EVA
 						SceneParser::Load(m_Editor, path.string());
 					}
 				}
-				if (ImGui::MenuItem("Save", "Ctrl+S"))
+				if (ImGui::MenuItem("Save"))
 				{
 					char const * filterPatterns[1] = { "*.scene" };
 					const auto path = FileSystem::SaveFileDialog("Save scene", (std::experimental::filesystem::current_path().string() + R"(/assets/scenes/)").c_str(), 1, filterPatterns);
@@ -241,6 +242,28 @@ namespace EVA
 			}
 
 			ImGui::EndMainMenuBar();
+		}
+
+		if(openNew)
+			ImGui::OpenPopup("New scene");
+
+		if (ImGui::BeginPopupModal("New scene", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::Text("Clear the current scene?.\nThis operation cannot be undone!\n\n");
+			ImGui::Separator();
+
+			if (ImGui::Button("OK", ImVec2(120, 0)))
+			{
+				ImGui::CloseCurrentPopup();
+				m_Editor->Clear();
+			}
+			ImGui::SetItemDefaultFocus();
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", ImVec2(120, 0)))
+			{
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
 		}
 	}
 

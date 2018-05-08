@@ -75,7 +75,7 @@ namespace EVA
 			m_Ew->MenuBar();
 			m_Ew->AssetBrowser();
 
-			//ImGui::ShowDemoWindow();
+			ImGui::ShowDemoWindow();
 
 			ProcessDestroyQueue();
 		}
