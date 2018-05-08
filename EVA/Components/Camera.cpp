@@ -40,4 +40,11 @@ namespace EVA
 		data.SetFloat("near", near);
 		data.SetFloat("far", far);
 	}
+
+	void Camera::Inspector()
+	{
+		ComponentInspector::Float("Fov", fov);
+		ComponentInspector::Float("Near", near);
+		ComponentInspector::Float("Far", far);
+	}
 }

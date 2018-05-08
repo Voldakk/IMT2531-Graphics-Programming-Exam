@@ -42,5 +42,11 @@ namespace EVA
 		* \param data The DataObject
 		*/
 		void Save(DataObject& data) override;
+
+
+	    /**
+	     * \brief Draws the camera component inspector
+	     */
+	    void Inspector() override;
     };
 }

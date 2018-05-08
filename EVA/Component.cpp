@@ -74,4 +74,9 @@ namespace EVA
 	{
 		return "";
 	}
+
+	void Component::Inspector()
+	{
+		ComponentInspector::Text("-- No inspector --");
+	}
 }

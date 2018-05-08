@@ -4,6 +4,7 @@
 
 #include "ConstPointer.hpp"
 #include "Parsers/Json.hpp"
+#include "Editor/ComponentInspector.hpp"
 
 namespace EVA
 {
@@ -147,6 +148,11 @@ namespace EVA
 		virtual void Save(DataObject& data);
 
 		virtual std::string GetTypeId();
+
+		/**
+		* \brief Draws the component inspector
+		*/
+		virtual void Inspector();
     };
 
 	/*template <class T>

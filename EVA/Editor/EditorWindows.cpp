@@ -100,7 +100,7 @@ namespace EVA
 		auto gameObjects = m_Editor->GetGameObjects();
 		for (auto& gameObject : gameObjects)
 		{
-			if (gameObject->GetName() == "EVA::EditorCamera")
+			if (gameObject->GetName() == "EVA::EditdorCamera")
 				continue;
 
 			if (gameObject->transform->parent.Get() == nullptr)
@@ -435,6 +435,8 @@ namespace EVA
 		ImGui::InputFloat3("InspectorTransformScale", glm::value_ptr(scale), "%.7g");
 		gameObject->transform->SetScale(scale);
 
+		ImGui::PopItemWidth();
+
 		// Other components
 		ImGui::Text("Components");
 		const auto components = gameObject->GetComponents();
@@ -445,7 +447,7 @@ namespace EVA
 			if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str(), &keep))
 			{
 
-				ImGui::Text("This is a component");
+				component->Inspector();
 
 				ImGui::Spacing();
 			}
@@ -454,6 +456,8 @@ namespace EVA
 				gameObject->RemoveComponent(component.get());
 			}
 		}
+
+		ImGui::PushItemWidth(width);
 
 		// Add component
 		if (ImGui::Button("Add Component"))
@@ -525,41 +529,7 @@ namespace EVA
 
 		ImGui::Text("Skybox");
 
-		const auto folderPath = new char[10000];
-		strcpy(folderPath, skybox->folderPath.c_str());
-
-		const auto fileType = new char[10000];
-		strcpy(fileType, skybox->fileType.c_str());
-
-		if (ImGui::InputText("File type", fileType, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-			skybox->Set(folderPath, fileType);
-		}
-
-
-		ImGui::BeginGroup();
-		if (ImGui::InputText("Folder path", folderPath, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-			skybox->Set(folderPath, fileType);
-		}
-
-		if(ImGui::BeginDragDropTarget())
-		{
-			const auto payload = ImGui::AcceptDragDropPayload("folder");
-			if(payload)
-			{
-				const char* path = (char*)payload->Data;
-				skybox->Set(path, fileType);
-			}
-			ImGui::EndDragDropTarget();
-		}
-		ImGui::EndGroup();
-
-
-
-
-		delete[] folderPath;
-		delete[] fileType;
+		skybox->Inspector();
 	}
 
 	void EditorWindows::DisplayFoldersRecursively(const FS::path& path)

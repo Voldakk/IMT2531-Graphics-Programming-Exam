@@ -55,6 +55,8 @@ namespace EVA
 		* \param data The DataObject
 		*/
 		void Save(DataObject& data) const;
+
+		void Inspector();
 	};
 
 }
