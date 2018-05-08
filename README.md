@@ -75,6 +75,7 @@ To run them simply uncomment the line in source/main.cpp
 * [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)
 * [RapidJSON](https://github.com/Tencent/rapidjson)
 * [ImGui](https://github.com/ocornut/imgui)
+* [tiny file dialogs](https://sourceforge.net/projects/tinyfiledialogs/)
 
 ## Authors
 

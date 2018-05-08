@@ -1,29 +1,20 @@
 #pragma once
-/*
-#ifdef _WIN32
 
-	#define NOC_FILE_DIALOG_WIN32
+#ifdef _WIN32
 
 	#include <Windows.h>
 
-#elif __linux__
-
-	#define NOC_FILE_DIALOG_GTK
+#else
 
 	#include <unistd.h>
 	#include <sys/param.h>
 
-#elif __APPLE__
-
-	#define NOC_FILE_DIALOG_OSX
-
 #endif
-
-#define NOC_FILE_DIALOG_IMPLEMENTATION
 
 #include <string>
 
-#include "noc_file_dialog.h"
+#include "tinyfiledialogs.h"
+#include "../../dependencies/tfd/tinyfiledialogs.h"
 
 namespace EVA
 {
@@ -33,17 +24,16 @@ namespace EVA
 		static const int PATH_LENGTH = 1000;
 	public:
 
-		enum DialogType
-		{
-			Open = NOC_FILE_DIALOG_OPEN, 
-			Save = NOC_FILE_DIALOG_SAVE, 
-			Directory = NOC_FILE_DIALOG_DIR,
-			OverwriteConfirmation = NOC_FILE_DIALOG_OVERWRITE_CONFIRMATION
-		};
 
-		static std::string OpenDialog(const DialogType flags, const char *filters, const char *defaultPath, const char *defaultName)
+		static std::string OpenFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr, const bool multiSelect = false)
 		{
-			const auto path = noc_file_dialog_open(flags, filters, defaultPath, defaultName);
+			const auto path = tinyfd_openFileDialog(title, defaultPathAndFile, numberOfFilterPatterns, filterPatterns, "", multiSelect);
+			return path == nullptr ? "" : path;
+		}
+
+		static std::string SaveFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr)
+		{
+			const auto path = tinyfd_saveFileDialog(title, defaultPathAndFile, numberOfFilterPatterns, filterPatterns, "");
 			return path == nullptr ? "" : path;
 		}
 
@@ -77,4 +67,3 @@ namespace EVA
 	};
 
 }
-*/

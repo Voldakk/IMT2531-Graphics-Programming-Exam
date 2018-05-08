@@ -8,29 +8,45 @@
 #include "../Physics.hpp"
 #include "../Components/SceneCamera.hpp"
 #include "EditorWindows.hpp"
+#include "../Parsers/SceneParser.hpp"
 
 namespace EVA
 {
 
 	class SceneEditor : public Scene
 	{
-		std::shared_ptr<GameObject> m_SceneCameraGameObject;
+		GameObject* m_SceneCameraGameObject;
 		SceneCamera* m_SceneCamera;
 
 		std::unique_ptr<EditorWindows> m_Ew;
 
 	public:
 
-		explicit SceneEditor(const std::string& path) : Scene(path)
+		void Clear()
 		{
+			m_GameObjects.clear();
+			m_NameMap.clear();
+			m_NameCounter = 0;
+			m_Lights.clear();
+			skybox = nullptr;
+			m_Ew->SelectGameObject(nullptr);
+
 			// Camera
-			m_SceneCameraGameObject = CreateGameObject();
+			m_SceneCameraGameObject = CreateGameObject().get();
 			m_SceneCameraGameObject->SetName("EVA::EditorCamera");
 			m_SceneCameraGameObject->AddComponent<Camera>();
 			m_SceneCamera = m_SceneCameraGameObject->AddComponent<SceneCamera>();
+		}
 
+		explicit SceneEditor(const std::string& path)
+		{
 			// Windows
 			m_Ew = std::make_unique<EditorWindows>(this);
+
+			Clear();
+
+
+			SceneParser::Load(this, path);
 		}
 
 		void Update(const float deltaTime) override
