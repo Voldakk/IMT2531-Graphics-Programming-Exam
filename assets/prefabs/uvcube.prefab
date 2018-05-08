@@ -3,7 +3,7 @@
     {
       "id": "EVA::MeshRenderer",
       "meshPrimitive": "cube",
-      "material": "./assets/materials/uv.mat"
+      "material": "./assets/standard assets/materials/uv.mat"
     },
     {
       "id": "EVA::BoxCollider",

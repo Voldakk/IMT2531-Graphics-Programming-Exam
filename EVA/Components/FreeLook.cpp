@@ -7,9 +7,10 @@ namespace EVA
 {
 	REGISTER_COMPONENT_CPP(FreeLook, "EVA::FreeLook")
 
-		void FreeLook::Start()
+	void FreeLook::Start()
 	{
 		m_Camera = gameObject->GetComponentOfType<Camera>();
+		Input::SetCursorMode(Input::Disabled);
 	}
 
 	void FreeLook::Update(const float deltaTime)
@@ -45,17 +46,17 @@ namespace EVA
 
 		// Look
 		const auto mouseMovement = Input::MouseMovement();
-		m_Pitch -= mouseMovement.y * mouseSensitivity * deltaTime;
-		m_Yaw += mouseMovement.x * mouseSensitivity * deltaTime;
+		pitch -= mouseMovement.y * mouseSensitivity * deltaTime;
+		yaw += mouseMovement.x * mouseSensitivity * deltaTime;
 
 		// Clamp
-		m_Pitch = glm::clamp(m_Pitch, -89.0f, 89.0f);
-		if (m_Yaw < 0.0f)
-			m_Yaw += 360.0f;
-		else if (m_Yaw > 360.0f)
-			m_Yaw -= 360.0f;
+		pitch = glm::clamp(pitch, -89.0f, 89.0f);
+		if (yaw < 0.0f)
+			yaw += 360.0f;
+		else if (yaw > 360.0f)
+			yaw -= 360.0f;
 
-		transform->SetOrientation(m_Pitch, m_Yaw, 0.0f);
+		transform->SetOrientation(pitch, yaw, 0.0f);
 
 		if (m_Camera != nullptr)
 			m_Camera->fov -= Input::GetScroll().y;
@@ -66,6 +67,9 @@ namespace EVA
 		wasd = data.GetBool("wasd", true);
 		mouseSensitivity = data.GetFloat("mouseSensitivity", 50.0f);
 		movementSpeed = data.GetFloat("movementSpeed", 10.0f);
+
+		pitch = data.GetFloat("pitch", 0.0f);
+		yaw = data.GetFloat("yaw", 0.0f);
 	}
 
 	void FreeLook::Save(DataObject& data)
@@ -73,6 +77,9 @@ namespace EVA
 		data.SetBool("wasd", wasd);
 		data.SetFloat("mouseSensitivity", mouseSensitivity);
 		data.SetFloat("movementSpeed", movementSpeed);
+
+		data.SetFloat("pitch", pitch);
+		data.SetFloat("yaw", yaw);
 	}
 
 	void FreeLook::Inspector()

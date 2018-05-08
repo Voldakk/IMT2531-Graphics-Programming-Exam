@@ -28,7 +28,7 @@ namespace EVA
 			Circle, Cone, Cube, CubeInverted, Cylinder, Icosphere, Monkey, MonkeyHigh, Plane, Sphere, Torus
 		};
 
-		inline static const  std::string PRIMITIVES_PATH = "./assets/models/primitives/";
+		inline static const  std::string PRIMITIVES_PATH = "./assets/standard assets/models/";
 		inline static const  std::string PRIMITIVES_TYPE = ".obj";
 
 		/**

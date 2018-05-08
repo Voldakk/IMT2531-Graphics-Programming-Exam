@@ -1,7 +1,7 @@
 {
   "skybox": {
-    "folderPath": "./assets/ame_ash/",
-    "fileExtension": ".tga"
+    "folderPath": ".\\assets\\standard assets\\skybox",
+    "fileExtension": ".png"
   },
   "lights": [
     {
@@ -33,7 +33,7 @@
         {
           "id": "EVA::MeshRenderer",
           "meshPrimitive": "plane",
-          "material": "./assets/materials/grid.mat"
+          "material": "./assets/standard assets/materials/grid.mat"
         }
       ]
     },

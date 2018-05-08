@@ -1,11 +1,6 @@
 #include "EVA.hpp"
 #include "EVA/SceneManager.hpp"
-
-#include "../TestScenes/UiTest.hpp"
 #include "../EVA/Editor/SceneEditor.hpp"
-
-#include <experimental/filesystem>
-#include "../EVA/Editor/FileSystem.hpp"
 
 /**
  * \brief The entry point of the program
@@ -15,7 +10,8 @@ int main()
 {
     EVA::Application::Init("EVA-Engine");
 
-	EVA::SceneManager::CreateScene<EVA::SceneEditor>("./assets/scenes/cubes.scene");
+	EVA::SceneManager::CreateScene<EVA::SceneEditor>();
+	//EVA::SceneManager::CreateScene<EVA::Scene>("./assets/scenes/cubes.scene");
 
     EVA::Application::Run();
 

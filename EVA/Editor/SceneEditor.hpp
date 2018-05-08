@@ -20,6 +20,8 @@ namespace EVA
 
 		std::unique_ptr<EditorWindows> m_Ew;
 
+		const char* m_TemplateScenePath = "./assets/standard assets/scenes/template.scene";
+
 	public:
 
 		void Clear()
@@ -36,16 +38,29 @@ namespace EVA
 			m_SceneCameraGameObject->SetName("EVA::EditorCamera");
 			m_SceneCameraGameObject->AddComponent<Camera>();
 			m_SceneCamera = m_SceneCameraGameObject->AddComponent<SceneCamera>();
+
+			m_SceneCameraGameObject->transform->SetPosition({-5.0f, 5.0f, -5.0f});
+			m_SceneCamera->yaw = -45.0f;
+			m_SceneCamera->pitch = -30.0f;
+			m_SceneCamera->FreeLook::Update(0.0f);
 		}
 
-		explicit SceneEditor(const std::string& path)
+		void LoadTemplate()
+		{
+			SceneParser::Load(this, m_TemplateScenePath);
+		}
+
+		explicit SceneEditor(const std::string& path = "")
 		{
 			// Windows
 			m_Ew = std::make_unique<EditorWindows>(this);
 
 			Clear();
 
-			SceneParser::Load(this, path);
+			if (path.empty())
+				LoadTemplate();
+			else
+				SceneParser::Load(this, path);
 		}
 
 		void Update(const float deltaTime) override
@@ -75,7 +90,7 @@ namespace EVA
 			m_Ew->MenuBar();
 			m_Ew->AssetBrowser();
 
-			ImGui::ShowDemoWindow();
+			//ImGui::ShowDemoWindow();
 
 			ProcessDestroyQueue();
 		}

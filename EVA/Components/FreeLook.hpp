@@ -12,9 +12,6 @@ namespace EVA
 	{
 		REGISTER_COMPONENT_HPP(FreeLook)
 
-		float m_Pitch = 0.0f;
-		float m_Yaw = 0.0f;
-
 		Camera* m_Camera = nullptr;
 
 	public:
@@ -23,6 +20,9 @@ namespace EVA
 
 		float mouseSensitivity = 50.0f;
 		float movementSpeed = 10.0f;
+
+		float pitch = 0.0f;
+		float yaw = 0.0f;
 		
 		void Start() override;
 

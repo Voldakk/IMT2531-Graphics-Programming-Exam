@@ -257,6 +257,7 @@ namespace EVA
 			{
 				ImGui::CloseCurrentPopup();
 				m_Editor->Clear();
+				m_Editor->LoadTemplate();
 			}
 			ImGui::SetItemDefaultFocus();
 			ImGui::SameLine();

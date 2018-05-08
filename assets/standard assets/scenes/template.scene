@@ -1,0 +1,166 @@
+{
+    "skybox": {
+        "folderPath": ".\\assets\\standard assets\\skybox",
+        "fileExtension": ".png"
+    },
+    "lights": [
+        {
+            "type": "Directional",
+            "color": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "rotation": [
+                60.0,
+                -80.0
+            ],
+            "directionalShadowDistance": 20.0,
+            "directionalNearPlane": 1.0,
+            "directionalFarPlane": 100.0,
+            "ambientCoefficient": 0.004999999888241291,
+            "shadows": true,
+            "shadowMapSize": 4096
+        },
+        {
+            "type": "Directional",
+            "color": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "rotation": [
+                60.0,
+                -200.0
+            ],
+            "directionalShadowDistance": 20.0,
+            "directionalNearPlane": 1.0,
+            "directionalFarPlane": 100.0,
+            "ambientCoefficient": 0.004999999888241291,
+            "shadows": true,
+            "shadowMapSize": 4096
+        },
+        {
+            "type": "Directional",
+            "color": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "rotation": [
+                60.0,
+                -320.0
+            ],
+            "directionalShadowDistance": 20.0,
+            "directionalNearPlane": 1.0,
+            "directionalFarPlane": 100.0,
+            "ambientCoefficient": 0.004999999888241291,
+            "shadows": true,
+            "shadowMapSize": 4096
+        }
+    ],
+    "gameObjects": [
+        {
+            "name": "Freelook camera",
+            "position": [
+                0.0,
+                2.0,
+                -5.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::Camera",
+                    "fov": 90.0,
+                    "near": 0.10000000149011612,
+                    "far": 100.0
+                },
+                {
+                    "id": "EVA::FreeLook",
+                    "wasd": true,
+                    "mouseSensitivity": 50.0,
+                    "movementSpeed": 10.0,
+                    "pitch": 0.0,
+                    "yaw": 0.0
+                }
+            ]
+        },
+        {
+            "name": "Ground plane",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                10.0,
+                1.0,
+                10.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/grid.mat",
+                    "mesh": "./assets/standard assets/models/plane.obj",
+                    "meshIndex": 0
+                }
+            ]
+        },
+        {
+            "name": "Cube",
+            "position": [
+                0.0,
+                1.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
+                },
+                {
+                    "id": "EVA::BoxCollider",
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "extents": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ]
+}

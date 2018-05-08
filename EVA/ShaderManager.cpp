@@ -10,7 +10,7 @@
 namespace EVA
 {
 
-	const std::string SHADER_PATH = "./assets/shaders/";
+	const std::string SHADER_PATH = "./assets/standard assets/shaders/";
 
 	std::map<std::string, std::shared_ptr<Shader>> ShaderManager::m_Shaders;
 

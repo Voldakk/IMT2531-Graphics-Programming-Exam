@@ -190,10 +190,10 @@ namespace EVA
 
 	void Material::Init()
 	{
-		textureDefaultDiffuse = TextureManager::GetTexture("./assets/textures/default_diffuse.png");
-		textureDefaultSpecular = TextureManager::GetTexture("./assets/textures/default_specular.png");
-		textureDefaultNormal = TextureManager::GetTexture("./assets/textures/default_normal.png");
-		textureDefaultEmission = TextureManager::GetTexture("./assets/textures/default_emission.png");
+		textureDefaultDiffuse = TextureManager::GetTexture("./assets/standard assets/textures/default_diffuse.png");
+		textureDefaultSpecular = TextureManager::GetTexture("./assets/standard assets/textures/default_specular.png");
+		textureDefaultNormal = TextureManager::GetTexture("./assets/standard assets/textures/default_normal.png");
+		textureDefaultEmission = TextureManager::GetTexture("./assets/standard assets/textures/default_emission.png");
 	}
 
 	void ShadowMaterial::SetMaterialUniforms(Scene* scene) const
