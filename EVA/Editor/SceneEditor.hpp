@@ -74,6 +74,7 @@ namespace EVA
 			m_Ew->SceneHierarchy();
 			m_Ew->Inspector();
 			m_Ew->MenuBar();
+			m_Ew->AssetBrowser();
 
 			ImGui::ShowDemoWindow();
 

@@ -25,15 +25,20 @@ namespace EVA
 		EVA::Light* m_SelectedLight = nullptr;
 		EVA::Skybox* m_SelectedSkybox = nullptr;
 
+		float m_HierarchyWidth = 0.0f;
+		float m_InspectorWidth = 0.0f;
+
 	public:
 
 		explicit EditorWindows(SceneEditor* editor);
 
 		void SceneHierarchy();
 
-		void Inspector() const;
+		void Inspector();
 
 		void MenuBar();
+
+		void AssetBrowser();
 
 		void SelectGameObject(EVA::GameObject* gameObject);
 		bool IsSelected(EVA::GameObject* gameObject) const;

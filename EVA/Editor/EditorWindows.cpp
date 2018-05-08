@@ -16,12 +16,15 @@ namespace EVA
 
 	void EditorWindows::SceneHierarchy()
 	{
-		const auto windowSize = Application::GetWindowSize();
-		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)windowSize.y - m_MenuBarHeight }, { (float)windowSize.x, (float)windowSize.y - m_MenuBarHeight });
+		const auto screenSize = Application::GetWindowSize();
+		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y - m_MenuBarHeight }, { (float)screenSize.x, (float)screenSize.y - m_MenuBarHeight });
 		ImGui::SetNextWindowPos({ 0.0f, m_MenuBarHeight });
 
-		const auto flags = ImGuiWindowFlags_ResizeFromAnySide;
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse;
 		ImGui::Begin("Scene Hierarchy", nullptr, flags);
+
+		const auto windowSize = ImGui::GetWindowSize();
+		m_HierarchyWidth = windowSize.x;
 
 		// Skybox
 		if (m_Editor->skybox != nullptr)
@@ -120,16 +123,17 @@ namespace EVA
 		ImGui::End();
 	}
 
-	void EditorWindows::Inspector() const
+	void EditorWindows::Inspector()
 	{
 		const auto screenSize = Application::GetWindowSize();
 		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y - m_MenuBarHeight }, { (float)screenSize.x, (float)screenSize.y - m_MenuBarHeight });
 		ImGui::SetNextWindowPos({ (float)screenSize.x, m_MenuBarHeight }, 0, { 1.0f, 0.0f });
 
-		const auto flags = ImGuiWindowFlags_ResizeFromAnySide;
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse;
 		ImGui::Begin("Inspector", nullptr, flags);
 
 		const auto windowSize = ImGui::GetWindowSize();
+		m_InspectorWidth = windowSize.x;
 
 		switch (m_SelectedType)
 		{
@@ -239,6 +243,22 @@ namespace EVA
 
 			ImGui::EndMainMenuBar();
 		}
+	}
+
+	void EditorWindows::AssetBrowser()
+	{
+		const auto screenSize = Application::GetWindowSize();
+
+		ImGui::SetNextWindowSizeConstraints(
+			{ (float)screenSize.x - m_HierarchyWidth - m_InspectorWidth, 200.0f }, 
+			{ (float)screenSize.x - m_HierarchyWidth - m_InspectorWidth, (float)screenSize.y - m_MenuBarHeight });
+
+		ImGui::SetNextWindowPos({ m_HierarchyWidth, (float)screenSize.y }, 0, { 0.0f, 1.0f });
+
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse;
+		ImGui::Begin("Assets", nullptr, flags);
+
+		ImGui::End();
 	}
 
 	void EditorWindows::SelectGameObject(EVA::GameObject* gameObject)
