@@ -4,7 +4,6 @@
 
 #include "SceneEditor.hpp"
 #include "../Parsers/SceneParser.hpp"
-#include "FileSystem.hpp"
 
 namespace EVA
 {
@@ -258,6 +257,18 @@ namespace EVA
 		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse;
 		ImGui::Begin("Assets", nullptr, flags);
 
+		ImGui::BeginChild(ImGui::GetID((void*)nullptr), ImVec2(200.0f, ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y), true);
+
+		DisplayFoldersRecursively("./Assets");
+
+		ImGui::EndChild();
+		ImGui::SameLine();
+		ImGui::BeginChild(ImGui::GetID((void*)1), ImVec2(ImGui::GetWindowWidth() - 225.0f, ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y), true);
+
+		// File view
+
+		ImGui::EndChild();
+
 		ImGui::End();
 	}
 
@@ -308,7 +319,6 @@ namespace EVA
 	{
 		return m_SelectedType == Skybox ? m_SelectedSkybox : nullptr;
 	}
-
 
 	void EditorWindows::DisplayGameObjectsRecursively(EVA::GameObject* gameObject)
 	{
@@ -506,5 +516,41 @@ namespace EVA
 
 		delete[] folderPath;
 		delete[] fileType;
+	}
+
+	void EditorWindows::DisplayFoldersRecursively(const FS::path& path)
+	{
+		auto hasChildDirectories = false;
+		for (auto& p : FS::directory_iterator(path))
+		{
+			if (is_directory(p))
+			{
+				hasChildDirectories = true;
+				break;
+			}
+		}
+
+		const auto nodeFlags =
+			ImGuiTreeNodeFlags_OpenOnDoubleClick |
+			ImGuiTreeNodeFlags_OpenOnArrow |
+			(path == m_SelectedAssetFolder ? ImGuiTreeNodeFlags_Selected : 0) |
+			(hasChildDirectories ? 0 : ImGuiTreeNodeFlags_Leaf);
+
+		if (ImGui::TreeNodeEx(path.stem().string().c_str(), nodeFlags))
+		{
+			// Select on click
+			if (ImGui::IsItemClicked())
+				m_SelectedAssetFolder = path;
+
+			for (auto& p : FS::directory_iterator(path))
+			{
+				if (is_directory(p))
+				{
+					DisplayFoldersRecursively(p.path());
+				}
+			}
+
+			ImGui::TreePop();
+		}
 	}
 }

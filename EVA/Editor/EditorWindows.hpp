@@ -4,6 +4,8 @@
 
 #include "imgui.h"
 
+#include "FileSystem.hpp"
+
 namespace EVA
 {
 	class SceneEditor;
@@ -27,6 +29,8 @@ namespace EVA
 
 		float m_HierarchyWidth = 0.0f;
 		float m_InspectorWidth = 0.0f;
+
+		FS::path m_SelectedAssetFolder;
 
 	public:
 
@@ -59,6 +63,8 @@ namespace EVA
 		void GameObjectInspector(float width) const;
 		void LightInspector(float width) const;
 		void SkyboxInspector(float width) const;
+
+		void DisplayFoldersRecursively(const FS::path& path);
 	};
 
 }

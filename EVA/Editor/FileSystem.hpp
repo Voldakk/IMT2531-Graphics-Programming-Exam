@@ -17,6 +17,8 @@
 #include "tinyfiledialogs.h"
 #include "../../dependencies/tfd/tinyfiledialogs.h"
 
+namespace FS = std::experimental::filesystem;
+
 namespace EVA
 {
 	class FileSystem
@@ -26,21 +28,19 @@ namespace EVA
 
 	public:
 
-		typedef std::experimental::filesystem::path path;
-
-		static path OpenFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr, const bool multiSelect = false)
+		static FS::path OpenFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr, const bool multiSelect = false)
 		{
 			const auto path = tinyfd_openFileDialog(title, defaultPathAndFile, numberOfFilterPatterns, filterPatterns, "", multiSelect);
 			return path == nullptr ? "" : path;
 		}
 
-		static path SaveFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr)
+		static FS::path SaveFileDialog(const char* title, const char* defaultPathAndFile = "", const int numberOfFilterPatterns = 0, const char * const * filterPatterns = nullptr)
 		{
 			const auto path = tinyfd_saveFileDialog(title, defaultPathAndFile, numberOfFilterPatterns, filterPatterns, "");
 			return path == nullptr ? "" : path;
 		}
 
-		static path GetProgramPath()
+		static FS::path GetProgramPath()
 		{
 			#ifdef _WIN32
 
@@ -72,7 +72,7 @@ namespace EVA
 			#endif
 		}
 
-		static path GetAssetsFolder()
+		static FS::path GetAssetsFolder()
 		{
 			const auto programPath = GetProgramPath();
 
