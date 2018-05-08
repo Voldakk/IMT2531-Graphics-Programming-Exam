@@ -112,8 +112,17 @@ else()
 	target_link_libraries(
 		main 
 		${GLEW_LIBRARY}
-	) 
+	)
 endif(WINDOWS)
+
+if(LINUX)
+	add_library(stdc++fs UNKNOWN IMPORTED)
+	set_property(TARGET stdc++fs PROPERTY IMPORTED_LOCATION "${PROJECT_SOURCE_DIR}/dependencies/stdfs/libstdc++fs.a")
+	target_link_libraries(
+			main
+			stdc++fs
+	)
+endif(LINUX)
 
 # Apple
 if(APPLE)
@@ -122,6 +131,7 @@ if(APPLE)
 		"${CMAKE_CXX_FLAGS} -I${GLEW_INCLUDE_DIRS}"
 	)
 endif(APPLE)
+
 
 # Copy assets
 file(COPY  ${PROJECT_SOURCE_DIR}/assets DESTINATION ${PROJECT_BINARY_DIR}/bin)
