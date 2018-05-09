@@ -13,7 +13,7 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/prettywriter.h"
 
-#include "./FileSystem.hpp"
+#include "../FileSystem.hpp"
 
 namespace EVA
 {

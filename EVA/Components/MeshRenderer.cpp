@@ -2,7 +2,6 @@
 
 #include "../Scene.hpp"
 #include "../ModelManager.hpp"
-#include "../Parsers/MaterialParser.hpp"
 #include "../MaterialManager.hpp"
 
 namespace EVA
@@ -54,7 +53,7 @@ namespace EVA
 		const auto materialPath = data.GetString("material", "");
 		if (!materialPath.empty())
 		{
-			material = MaterialParser::Load(materialPath);
+			material = MaterialManager::LoadMaterial(materialPath);
 		}
 
 		// Mesh primitive

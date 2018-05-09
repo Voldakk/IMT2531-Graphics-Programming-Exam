@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <algorithm>
 #include <experimental/filesystem>
 
 #include "tinyfiledialogs.h"
