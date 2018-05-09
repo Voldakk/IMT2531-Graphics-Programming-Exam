@@ -6,7 +6,6 @@
 
 namespace EVA
 {
-
 	Material *Material::m_ActiveMaterial;
 
 	std::shared_ptr<Texture> Material::textureDefaultDiffuse;
@@ -17,6 +16,31 @@ namespace EVA
 	void Material::SetTexture(const Texture::Type type, const FS::path& path)
 	{
 		const auto t = TextureManager::LoadTexture(path);
+		if (t == nullptr)
+		{
+			switch (type)
+			{
+			case Texture::Diffuse:
+				textureDiffuse = nullptr;
+				break;
+			case Texture::Specular:
+				textureSpecular = nullptr;
+				break;
+			case Texture::Normal:
+				textureNormal = nullptr;
+				break;
+			case Texture::Height:
+				textureHeight = nullptr;
+				break;
+			case Texture::Emission:
+				textureEmission = nullptr;
+				break;
+			default:
+				break;
+			}
+			return;
+		}
+
 		t->type = type;
 		SetTexture(t);
 	}

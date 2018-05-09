@@ -14,7 +14,7 @@ namespace EVA
 	{
 	public:
 
-		enum SelectedType { GameObject, Light, Skybox };
+		enum SelectedType { GameObject, Light, Skybox, Material };
 
 	private:
 
@@ -26,6 +26,7 @@ namespace EVA
 		EVA::GameObject* m_SelectedGameObject = nullptr;
 		EVA::Light* m_SelectedLight = nullptr;
 		EVA::Skybox* m_SelectedSkybox = nullptr;
+		EVA::Material* m_SelectedMaterial = nullptr;
 
 		float m_HierarchyWidth = 0.0f;
 		float m_InspectorWidth = 0.0f;
@@ -56,13 +57,20 @@ namespace EVA
 		bool IsSelected(EVA::Skybox* skybox) const;
 		EVA::Skybox* SelectedSkybox() const;
 
+		void SelectMaterial(EVA::Material* material);
+		bool IsSelected(EVA::Material* material) const;
+		EVA::Material* SelectedMaterial() const;
+
 	private:
 
 		void DisplayGameObjectsRecursively(EVA::GameObject* gameObject);
-
 		void GameObjectInspector(float width) const;
+
 		void LightInspector(float width) const;
+
 		void SkyboxInspector(float width) const;
+
+		void MaterialInspector(float width) const;
 
 		void DisplayFoldersRecursively(const FS::path& path);
 	};

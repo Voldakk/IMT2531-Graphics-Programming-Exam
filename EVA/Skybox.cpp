@@ -60,7 +60,8 @@ namespace EVA
 
 		// Texture
 		m_Texture = TextureManager::LoadTextureCubemap(folderPath, fileType);
-		m_Texture->type = Texture::Diffuse;
+		if(m_Texture != nullptr)
+			m_Texture->type = Texture::Diffuse;
 
 		// Material
 		m_Material = std::make_unique<SkyBoxMaterial>();

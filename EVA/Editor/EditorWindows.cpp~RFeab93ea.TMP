@@ -4,8 +4,6 @@
 
 #include "SceneEditor.hpp"
 #include "../Parsers/SceneParser.hpp"
-#include "../MaterialManager.hpp"
-#include "../Parsers/MaterialParser.hpp"
 
 namespace EVA
 {
@@ -67,10 +65,10 @@ namespace EVA
 			for (unsigned int i = 0; i < lights.size(); ++i)
 			{
 				const auto nodeFlags =
-					ImGuiTreeNodeFlags_OpenOnDoubleClick |
-					ImGuiTreeNodeFlags_OpenOnArrow |
-					ImGuiTreeNodeFlags_Leaf |
-					(IsSelected(lights[i].get()) ? ImGuiTreeNodeFlags_Selected : 0);
+				ImGuiTreeNodeFlags_OpenOnDoubleClick |
+				ImGuiTreeNodeFlags_OpenOnArrow |
+				ImGuiTreeNodeFlags_Leaf |
+				(IsSelected(lights[i].get()) ? ImGuiTreeNodeFlags_Selected : 0);
 
 				if (ImGui::TreeNodeEx(("Light #" + std::to_string(i)).c_str(), nodeFlags))
 				{
@@ -147,10 +145,7 @@ namespace EVA
 		case Skybox:
 			SkyboxInspector(windowSize.x);
 			break;
-		case Material:
-			MaterialInspector(windowSize.x);
-			break;
-		default:
+		default: 
 			break;
 		}
 
@@ -184,7 +179,7 @@ namespace EVA
 				{
 					char const * filterPatterns[1] = { "*.scene" };
 					auto path = FileSystem::SaveFileDialog("Save scene", "", 1, filterPatterns);
-
+					
 					if (!path.empty())
 					{
 						if (!path.has_extension())
@@ -207,7 +202,7 @@ namespace EVA
 				if (ImGui::BeginMenu("Component", SelectedGameObject() != nullptr))
 				{
 					auto ids = ComponentMap::GetComponentIds();
-
+					
 					for (const auto& id : ids)
 					{
 						if (ImGui::MenuItem(id.c_str()) && SelectedGameObject() != nullptr)
@@ -239,14 +234,14 @@ namespace EVA
 					ImGui::EndMenu();
 				}
 
-				if (m_Editor->skybox == nullptr)
+				if(m_Editor->skybox == nullptr)
 				{
 					if (ImGui::MenuItem("Skybox"))
 					{
 						m_Editor->skybox = std::make_unique<EVA::Skybox>("", "");
 					}
 				}
-
+				
 
 				ImGui::EndMenu();
 			}
@@ -254,7 +249,7 @@ namespace EVA
 			ImGui::EndMainMenuBar();
 		}
 
-		if (openNew)
+		if(openNew)
 			ImGui::OpenPopup("New scene");
 
 		if (ImGui::BeginPopupModal("New scene", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
@@ -283,7 +278,7 @@ namespace EVA
 		const auto screenSize = Application::GetWindowSize();
 
 		ImGui::SetNextWindowSizeConstraints(
-			{ (float)screenSize.x - m_HierarchyWidth - m_InspectorWidth, 200.0f },
+			{ (float)screenSize.x - m_HierarchyWidth - m_InspectorWidth, 200.0f }, 
 			{ (float)screenSize.x - m_HierarchyWidth - m_InspectorWidth, (float)screenSize.y - m_MenuBarHeight });
 
 		ImGui::SetNextWindowPos({ m_HierarchyWidth, (float)screenSize.y }, 0, { 0.0f, 1.0f });
@@ -301,7 +296,7 @@ namespace EVA
 
 		unsigned int i = 100;
 
-		for (auto p : FS::directory_iterator(m_SelectedAssetFolder))
+		for (auto& p : FS::directory_iterator(m_SelectedAssetFolder))
 		{
 			ImGui::BeginGroup();
 			if (is_directory(p))
@@ -311,24 +306,18 @@ namespace EVA
 				{
 					ImGui::Text(p.path().stem().string().c_str());
 					const auto pathString = FileSystem::ToString(p.path());
-					ImGui::SetDragDropPayload("folder", pathString.c_str(), sizeof(char) * pathString.length() + 1, ImGuiCond_Once);
+					ImGui::SetDragDropPayload("folder", pathString.c_str(), sizeof(char) * pathString.length()+1, ImGuiCond_Once);
 					ImGui::EndDragDropSource();
 				}
 			}
 			else
 			{
-				if (ImGui::Selectable(p.path().filename().string().c_str()))
-				{
-					if (p.path().has_extension() && p.path().extension().string() == ".mat")
-					{
-						SelectMaterial(MaterialManager::LoadMaterial(p).get());
-					}
-				}
+				ImGui::Text(p.path().filename().string().c_str());
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
 					ImGui::Text(p.path().filename().string().c_str());
 					const auto pathString = FileSystem::ToString(p.path());
-					ImGui::SetDragDropPayload("file", pathString.c_str(), sizeof(char) * pathString.length() + 1, ImGuiCond_Once);
+					ImGui::SetDragDropPayload("file", pathString.c_str(), sizeof(char) * pathString.length()+1, ImGuiCond_Once);
 					ImGui::EndDragDropSource();
 				}
 			}
@@ -355,7 +344,7 @@ namespace EVA
 	{
 		return m_SelectedType == GameObject ? m_SelectedGameObject : nullptr;
 	}
-
+	
 	void EditorWindows::SelectLight(EVA::Light* light)
 	{
 		m_SelectedType = Light;
@@ -551,7 +540,7 @@ namespace EVA
 	void EditorWindows::LightInspector(const float width) const
 	{
 		auto light = SelectedLight();
-		if (light == nullptr)
+		if(light == nullptr)
 			return;
 
 		ImGui::Text(light->GetType() == Light::Directional ? "Directional light" : "Point light");
@@ -559,7 +548,7 @@ namespace EVA
 		ImGui::ColorEdit3("Color", glm::value_ptr(light->color));
 		ImGui::InputFloat("Ambient coefficient", &light->ambientCoefficient);
 
-		if (light->GetType() == Light::Directional)
+		if(light->GetType() == Light::Directional)
 		{
 			ImGui::InputFloat("Shadow distance", &light->directionalShadowDistance);
 			ImGui::InputFloat("Near plane", &light->directionalNearPlane);
@@ -581,7 +570,7 @@ namespace EVA
 	{
 		auto skybox = SelectedSkybox();
 
-		if (skybox == nullptr)
+		if(skybox == nullptr)
 			return;
 
 		ImGui::Text("Skybox");
@@ -589,7 +578,7 @@ namespace EVA
 		skybox->Inspector();
 	}
 
-	void EditorWindows::MaterialInspector(float width) const
+	void EditorWindows::MaterialInspector()
 	{
 		auto material = SelectedMaterial();
 
@@ -599,33 +588,9 @@ namespace EVA
 		ImGui::Text("Material");
 		ImGui::Text(FileSystem::ToString(material->path).c_str());
 
-		auto path = material->textureDiffuse == nullptr ? "" : FileSystem::ToString(material->textureDiffuse->path);
-		if (ComponentInspector::DragDropTargetString("Diffuse texture", path, "file"))
-		{
+		auto path = FileSystem::ToString(material->textureDiffuse->path);
+		if (ComponentInspector::DragDropTargetString("Folder path", path, "file"))
 			material->SetTexture(Texture::Diffuse, path);
-			MaterialParser::Save(material, material->path);
-		}
-
-		path = material->textureSpecular == nullptr ? "" : FileSystem::ToString(material->textureSpecular->path);
-		if (ComponentInspector::DragDropTargetString("Specular texture", path, "file"))
-		{
-			material->SetTexture(Texture::Specular, path);
-			MaterialParser::Save(material, material->path);
-		}
-
-		path = material->textureNormal == nullptr ? "" : FileSystem::ToString(material->textureNormal->path);
-		if (ComponentInspector::DragDropTargetString("Normal texture", path, "file"))
-		{
-			material->SetTexture(Texture::Normal, path);
-			MaterialParser::Save(material, material->path);
-		}
-
-		path = material->textureEmission == nullptr ? "" : FileSystem::ToString(material->textureEmission->path);
-		if (ComponentInspector::DragDropTargetString("Emission texture", path, "file"))
-		{
-			material->SetTexture(Texture::Emission, path);
-			MaterialParser::Save(material, material->path);
-		}
 	}
 
 	void EditorWindows::DisplayFoldersRecursively(const FS::path& path)
