@@ -213,6 +213,9 @@ namespace EVA
 
     void Application::WindowResizeCallback(GLFWwindow *window, const int width, const int height)
     {
+		if(width == 0 || height == 0)
+			return;
+
         m_WindowSize = glm::ivec2(width, height);
 
         glViewport(0, 0, width, height);
