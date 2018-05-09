@@ -19,7 +19,7 @@ namespace EVA
 		std::shared_ptr<Material> m_Material;
 
 		FS::path m_ModelPath;
-		unsigned int m_MeshIndex;
+		unsigned int m_MeshIndex = 0;
 
 	public:
 

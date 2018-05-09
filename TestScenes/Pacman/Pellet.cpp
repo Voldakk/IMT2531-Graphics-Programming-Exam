@@ -15,17 +15,17 @@ void Pellet::Start()
 	if (m_Mesh == nullptr)
 	{
 		m_Mesh = EVA::ModelManager::Primitive(EVA::ModelManager::Sphere)->GetMesh(0);
-		m_Mesh->SetStatic(true);
+		//m_Mesh->SetStatic(true);
 
 		m_Material = std::make_shared<EVA::Material>();
-		m_Material->enableInstancing = true;
+		//m_Material->enableInstancing = true;
 		m_Material->tintDiffuse = { 1.0f, 1.0f, 0.0f, 1.0f };
 		m_Material->shader = EVA::ShaderManager::GetShader("standard_instanced");
 	}
 
 	auto mr = gameObject->AddComponent<EVA::MeshRenderer>();
 	mr->Set(m_Mesh, m_Material);
-	m_Mesh->isDirty = true;
+	//m_Mesh->isDirty = true;
 
 	transform->SetScale(0.1f);
 	transform->SetPosition(TileMap::GetTilePosition(tile) + EVA::YAXIS * transform->scale.y);
@@ -39,7 +39,7 @@ void Pellet::Update(const float deltaTime)
 	{
 		OnPickup();
 		gameObject->Destroy();
-		m_Mesh->isDirty = true;
+		//m_Mesh->isDirty = true;
 	}
 }
 

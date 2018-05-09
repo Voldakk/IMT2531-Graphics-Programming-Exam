@@ -43,4 +43,26 @@ namespace EVA
 			m_Attributes++;
 		}
 	}
+
+	void VertexArray::AddTempBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) const
+	{
+		Bind();
+		vb.Bind();
+
+		const auto& elements = layout.GetElements();
+		unsigned int offset = 0;
+
+		auto attributeCount = m_Attributes;
+
+		for (auto element : elements)
+		{
+			glEnableVertexAttribArray(attributeCount);
+			glVertexAttribPointer(attributeCount, element.count, element.type, element.normalized, layout.GetStride(), (const void*)offset);
+			offset += element.count * VertexBufferElement::GetSizeOfType(element.type);;
+
+			glVertexAttribDivisor(attributeCount, element.divisor);
+
+			attributeCount++;
+		}
+	}
 }

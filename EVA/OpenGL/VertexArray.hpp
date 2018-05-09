@@ -19,5 +19,7 @@ namespace EVA
 		static void Unbind();
 
 		void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
+
+		void AddTempBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) const;
 	};
 }

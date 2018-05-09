@@ -13,6 +13,34 @@ namespace EVA
 	std::shared_ptr<Texture> Material::textureDefaultNormal;
 	std::shared_ptr<Texture> Material::textureDefaultEmission;
 
+	void Material::SetMbo(const std::shared_ptr<Mesh>& mesh, const std::vector<glm::mat4>& models)
+	{
+		if(m_MatrixBuffers.find(mesh) == m_MatrixBuffers.end())
+		{
+			m_MatrixBuffers[mesh] = InstancedMeshData();
+			m_MatrixBuffers[mesh].instanceCount = models.size();
+			m_MatrixBuffers[mesh].matrixBuffer = std::make_unique<VertexBuffer>(&models[0], models.size() * sizeof(glm::mat4));
+		}
+		else
+		{
+			m_MatrixBuffers[mesh].instanceCount = models.size();
+			m_MatrixBuffers[mesh].matrixBuffer->BufferData(&models[0], models.size() * sizeof(glm::mat4));
+		}
+	}
+
+	bool Material::HasMbo(const std::shared_ptr<Mesh>& mesh) const
+	{
+		return m_MatrixBuffers.find(mesh) != m_MatrixBuffers.end();
+	}
+
+	InstancedMeshData* Material::GetMbo(const std::shared_ptr<Mesh>& mesh)
+	{
+		if (m_MatrixBuffers.find(mesh) != m_MatrixBuffers.end())
+			return &m_MatrixBuffers[mesh];
+
+		return nullptr;
+	}
+
 	void Material::SetTexture(const Texture::Type type, const FS::path& path)
 	{
 		const auto t = TextureManager::LoadTexture(path);

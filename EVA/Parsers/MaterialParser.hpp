@@ -26,6 +26,8 @@ namespace EVA
 
 			material->path = path;
 			material->shader = EVA::ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
+			material->shader = EVA::ShaderManager::CreateOrGetShader("standard_instanced", "standard_instanced.vert", "standard_instanced.frag");
+			
 
 			const auto sd = Json::Open(path);
 

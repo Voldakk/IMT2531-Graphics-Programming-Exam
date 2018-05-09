@@ -9,6 +9,8 @@
 #include "../Components/SceneCamera.hpp"
 #include "EditorWindows.hpp"
 #include "../Parsers/SceneParser.hpp"
+#include "../ModelManager.hpp"
+#include "../MaterialManager.hpp"
 
 namespace EVA
 {
@@ -61,6 +63,18 @@ namespace EVA
 				LoadTemplate();
 			else
 				SceneParser::Load(this, path);
+
+			const auto mat = MaterialManager::LoadMaterial("./assets/standard assets/materials/uv.mat");
+			const auto model = ModelManager::Primitive(ModelManager::Monkey);
+
+			for (unsigned int i = 0; i < 1000; ++i)
+			{
+				auto g = CreateGameObject();
+				g->SetName("Monkey " + std::to_string(i));
+				g->transform->SetPosition({ i * 2.0f, 0.0f, 0.0f });
+				auto mr = g->AddComponent<MeshRenderer>();
+				mr->Set(model->GetMesh(0), mat);
+			}
 		}
 
 		void Update(const float deltaTime) override

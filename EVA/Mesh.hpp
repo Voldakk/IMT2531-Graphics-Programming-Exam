@@ -12,6 +12,7 @@
 
 namespace EVA
 {
+	struct InstancedMeshData;
 
 	struct Vertex
 	{
@@ -31,19 +32,12 @@ namespace EVA
 		std::vector<Vertex> m_Vertices;
 		std::vector<unsigned int> m_FaceIndices;
 
-		unsigned int m_InstanceCount;
-
 		std::unique_ptr<VertexArray> m_Va;
 		std::unique_ptr<VertexBuffer> m_Vb;
 		std::unique_ptr<IndexBuffer> m_Ib;
-		std::unique_ptr<VertexBuffer> m_Mb;
-
-		bool m_IsStatic = false;
-
+		
 	public:
 
-		const bool& isStatic = m_IsStatic;
-		bool isDirty = true;
 		std::string name;
 
 		FS::path path;
@@ -57,13 +51,7 @@ namespace EVA
 
 		void Draw() const;
 
-		void DrawInstanced() const;
-
-		void SetMbo(const std::vector<glm::mat4> &models);
-
-		bool HasMbo() const;
-
-		void SetStatic(bool state);
+		void DrawInstanced(const InstancedMeshData* instancedMeshData) const;
 	};
 
 }

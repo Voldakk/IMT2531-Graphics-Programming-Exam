@@ -8,16 +8,14 @@ namespace EVA
 {
 
 	Mesh::Mesh(std::vector<Vertex> vertices, std::string name) 
-		: m_Vertices(std::move(vertices)), m_InstanceCount(0), name(std::move(name))
+		: m_Vertices(std::move(vertices)), name(std::move(name)), index(0)
 	{
-		//CalculateBt();
 		Create();
 	}
 
 	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> faceIndices, std::string name)
-		: m_Vertices(std::move(vertices)), m_FaceIndices(std::move(faceIndices)) , m_InstanceCount(0), name(std::move(name))
+		: m_Vertices(std::move(vertices)), m_FaceIndices(std::move(faceIndices)), name(std::move(name)), index(0)
 	{
-		//CalculateBt();
 		Create();
 	}
 
@@ -61,60 +59,28 @@ namespace EVA
 		m_Va->Unbind();
 	}
 
-	void Mesh::SetMbo(const std::vector<glm::mat4> &models)
-	{
-		m_InstanceCount = models.size();
-
-		m_Va->Bind();
-
-		if(m_Mb)
-		{
-			m_Mb->BufferData(&models[0], models.size() * sizeof(glm::mat4));
-		}
-		else
-		{
-			m_Mb = std::make_unique<VertexBuffer>(&models[0], models.size() * sizeof(glm::mat4));
-
-			VertexBufferLayout layout;
-			layout.Push<float>(4, 1); // Model matrix
-			layout.Push<float>(4, 1); // Model matrix
-			layout.Push<float>(4, 1); // Model matrix
-			layout.Push<float>(4, 1); // Model matrix
-
-			m_Va->AddBuffer(*m_Mb, layout);
-		}
-
-		m_Mb->Unbind();
-		m_Va->Unbind();
-	}
-
-	void Mesh::DrawInstanced() const
+	void Mesh::DrawInstanced(const InstancedMeshData* instancedMeshData) const
 	{
 		// Draw
 		m_Va->Bind();
 
+		VertexBufferLayout layout;
+		layout.Push<float>(4, 1); // Model matrix
+		layout.Push<float>(4, 1); // Model matrix
+		layout.Push<float>(4, 1); // Model matrix
+		layout.Push<float>(4, 1); // Model matrix
+
+		m_Va->AddTempBuffer(*instancedMeshData->matrixBuffer, layout);
+
 		if (!m_FaceIndices.empty())
 		{
 			m_Ib->Bind();
-			glDrawElementsInstanced(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr, m_InstanceCount);
+			glDrawElementsInstanced(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr, instancedMeshData->instanceCount);
 			m_Ib->Unbind();
 		}
 		else
-			glDrawArraysInstanced(GL_TRIANGLES, 0, this->m_Vertices.size(), m_InstanceCount);
+			glDrawArraysInstanced(GL_TRIANGLES, 0, this->m_Vertices.size(), instancedMeshData->instanceCount);
 
 		m_Va->Unbind();
-	}
-
-	bool Mesh::HasMbo() const
-	{
-		return m_Mb != nullptr;
-	}
-
-	void Mesh::SetStatic(const bool state)
-	{
-		m_IsStatic = state;
-
-		if (m_IsStatic)
-			isDirty = true;
 	}
 }

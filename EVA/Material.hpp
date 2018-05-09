@@ -4,14 +4,22 @@
 
 #include "Shader.hpp"
 
+#include "EVA/OpenGL.hpp"
 #include "FileSystem.hpp"
 #include "TextureManager.hpp"
+#include "Mesh.hpp"
 
 namespace EVA
 {
 	class Scene;
 
 	class Transform;
+
+	struct InstancedMeshData
+	{
+		unsigned int instanceCount;
+		std::unique_ptr<VertexBuffer> matrixBuffer;
+	};
 
 	/**
 	 * \brief A material holds a Shader, textures and other material properties
@@ -22,7 +30,17 @@ namespace EVA
 		static Material* m_ActiveMaterial;
 		inline static const FS::path DEFAULT_TEXTURES_PATH = "./assets/standard assets/textures/";
 
+		// Instanced
+		bool m_UseInstancing = true;
+		std::map<std::shared_ptr<Mesh>, InstancedMeshData> m_MatrixBuffers;
+
 	public:
+
+		const bool& useInstancing = m_UseInstancing;
+		void SetMbo(const std::shared_ptr<Mesh>& mesh, const std::vector<glm::mat4>& models);
+		bool HasMbo(const std::shared_ptr<Mesh>& mesh) const;
+		InstancedMeshData* GetMbo(const std::shared_ptr<Mesh>& mesh);
+		// End instanced
 
 		FS::path path;
 
@@ -40,8 +58,6 @@ namespace EVA
 		glm::vec4 tintDiffuse = glm::vec4(1.0f);
 
 		std::shared_ptr<Shader> shader;
-
-		bool enableInstancing = false;
 
 		float materialShininess = 32.0f;
 

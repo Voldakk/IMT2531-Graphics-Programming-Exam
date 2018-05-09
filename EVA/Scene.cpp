@@ -327,7 +327,7 @@ namespace EVA
 		for (auto &material : m_Materials)
 		{
 			// If he material should use GPU instancing
-			if (material[0][0]->material->enableInstancing)
+			if (material[0][0]->material->useInstancing)
 			{
 				// Set material / shader
 				material[0][0]->material->Activate(this, nullptr);
@@ -336,8 +336,7 @@ namespace EVA
 				for (auto &meshes : material)
 				{
 					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->mesh->isStatic || meshes[0]->mesh->isDirty ||
-						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
+					if (!meshes[0]->material->HasMbo(meshes[0]->mesh) /*|| meshes[0]->mesh->isDirty*/)
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -348,13 +347,13 @@ namespace EVA
 							models.push_back(meshRenderer->transform->modelMatrix);
 						}
 						// Set the mesh ibo
-						meshes[0]->mesh->SetMbo(models);
+						meshes[0]->material->SetMbo(meshes[0]->mesh, models);
 
-						meshes[0]->mesh->isDirty = false;
+						//meshes[0]->mesh->isDirty = false;
 					}
 
 					// Draw the mesh
-					meshes[0]->mesh->DrawInstanced();
+					meshes[0]->mesh->DrawInstanced(meshes[0]->material->GetMbo(meshes[0]->mesh));
 				}
 			}
 			else // If not
@@ -375,7 +374,7 @@ namespace EVA
 
 	void Scene::RenderShadowMap(const glm::mat4 lightSpaceMatrix)
 	{
-		for (auto &materials : m_Materials)
+		/*for (auto &materials : m_Materials)
 		{
 			// If the material should use GPU instancing
 			if (materials[0][0]->material->enableInstancing)
@@ -426,12 +425,12 @@ namespace EVA
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	void Scene::RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, const glm::vec3 lightPos, const float farPlane)
 	{
-		for (auto &materials : m_Materials)
+		/*for (auto &materials : m_Materials)
 		{
 			// If the material should use GPU instancing
 			if (materials[0][0]->material->enableInstancing)
@@ -492,7 +491,7 @@ namespace EVA
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	void Scene::RenderUi()

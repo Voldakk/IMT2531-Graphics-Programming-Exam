@@ -14,12 +14,12 @@ void TileMap::Start()
 
 	for (unsigned int i = 0; i < m_Model->MeshCount(); ++i)
 	{
-		m_Model->GetMesh(i)->SetStatic(true);
+		//m_Model->GetMesh(i)->SetStatic(true);
 	}
 
 	// Material
 	m_Material = std::make_shared<EVA::Material>();
-	m_Material->enableInstancing = true;
+	//m_Material->enableInstancing = true;
 	m_Material->SetTexture(EVA::Texture::Diffuse, "./assets/textures/Cement 1/Cement 1_Dif.jpg");
 	m_Material->SetTexture(EVA::Texture::Specular, "./assets/textures/Cement 1/Cement 1_Ref.jpg");
 	m_Material->SetTexture(EVA::Texture::Normal, "./assets/textures/Cement 1/Cement 1_Nor.jpg");
