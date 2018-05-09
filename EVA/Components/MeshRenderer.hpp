@@ -18,7 +18,7 @@ namespace EVA
 		std::shared_ptr<Mesh> m_Mesh;
 		std::shared_ptr<Material> m_Material;
 
-		std::string m_ModelPath;
+		FS::path m_ModelPath;
 		unsigned int m_MeshIndex;
 
 	public:
@@ -54,7 +54,7 @@ namespace EVA
 
 	private:
 
-		void SetMesh(const std::string& modelPath, unsigned int meshIndex);
+		void SetMesh(const FS::path& modelPath, unsigned int meshIndex);
 		
 	};
 }

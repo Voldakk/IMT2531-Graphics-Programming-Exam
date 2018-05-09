@@ -13,6 +13,8 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/prettywriter.h"
 
+#include "./FileSystem.hpp"
+
 namespace EVA
 {
 	
@@ -28,9 +30,18 @@ namespace EVA
 		typedef rapidjson::Document::AllocatorType Allocator;
 		typedef rapidjson::GenericStringRef<char> StringRef;
 
-		static std::shared_ptr<Document> Open(const std::string& path)
+		/**
+		 * \brief Opens a JSON documnet form the current path
+		 * \param path The path to the document
+		 * \return A pointer to the parsed documnet, or nullptr if no document is found
+		 */
+		static std::shared_ptr<Document> Open(const FS::path& path)
 		{
-			const auto fp = fopen(path.c_str(), "rb");
+			const auto fp = fopen(FileSystem::ToString(path).c_str(), "rb");
+
+			if (fp == nullptr)
+				return nullptr;
+			
 			char readBuffer[65536];
 
 			rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
@@ -41,9 +52,9 @@ namespace EVA
 			return d;
 		}
 
-		static bool Save(const Document* d, const std::string& path)
+		static bool Save(const Document* d, const FS::path& path)
 		{
-			const auto fp = fopen(path.c_str(), "wb");
+			const auto fp = fopen(FileSystem::ToString(path).c_str(), "wb");
 			char writeBuffer[65536];
 			rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 			rapidjson::PrettyWriter<rapidjson::FileWriteStream> writer(os);
@@ -211,6 +222,19 @@ namespace EVA
 		void SetString(const Json::StringRef& key, const std::string& value) const
 		{
 			m_Json.AddMember(key, value, *m_Allocator);
+		}
+
+		FS::path GetPath(const char* key, const FS::path& defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsString())
+				return FS::path(m_Json[key].GetString());
+
+			return defaultValue;
+		}
+
+		void SetPath(const Json::StringRef& key, const FS::path& value) const
+		{
+			m_Json.AddMember(key, FileSystem::ToString(value), *m_Allocator);
 		}
 
 	};

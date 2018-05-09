@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 
 #include "Shader.hpp"
+#include "FileSystem.hpp"
 
 namespace EVA
 {
@@ -27,7 +28,7 @@ namespace EVA
 		 * \param fragPath The path to the fragment shader
 		 * \return A std::shared_ptr to the shader
 		 */
-		static std::shared_ptr<Shader> CreateOrGetShader(const std::string& name, const std::string& vertPath, const std::string& fragPath);
+		static std::shared_ptr<Shader> CreateOrGetShader(const std::string& name, const FS::path& vertPath, const FS::path& fragPath);
 
 		/**
 		 * \brief Creates a shader program from the provided shader files
@@ -37,7 +38,7 @@ namespace EVA
 		 * \param geomPath The path to the geometry shader
 		 * \return A std::shared_ptr to the shader
 		 */
-		static std::shared_ptr<Shader> CreateOrGetShader(const std::string& name, const std::string& vertPath, const std::string& fragPath, const std::string& geomPath);
+		static std::shared_ptr<Shader> CreateOrGetShader(const std::string& name, const FS::path& vertPath, const FS::path& fragPath, const FS::path& geomPath);
 
 		/**
 		 * \brief Gets the shader with the specified name
@@ -54,7 +55,7 @@ namespace EVA
 		 * \param pathFragShader The path to the fragment shader
 		 * \return A reference to the shader program
 		 */
-		static unsigned int CreateProgram(const char* pathVertShader, const char* pathFragShader);
+		static unsigned int CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader);
 
 		/**
 		* \brief Creates a shader program from the provided shader files
@@ -63,22 +64,22 @@ namespace EVA
 		* \param pathGeomShader The path to the geometry shader
 		* \return A reference to the shader program
 		*/
-		static unsigned int CreateProgram(const char *pathVertShader, const char *pathFragShader, const char *pathGeomShader);
+		static unsigned int CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader, const FS::path& pathGeomShader);
 
 		/**
 		 * \brief Reads the file and stores the content in the provided buffer
-		 * \param fname The path to the file
+		 * \param path The path to the file
 		 * \param buffer The buffer the contents of the file should be read to
 		 */
-		static void ReadShaderSource(const char *fname, std::vector<char> &buffer);
+		static void ReadShaderSource(const FS::path& path, std::vector<char> &buffer);
 
 		/**
 		 * \brief Loads and comples a shader for use in a program
-		 * \param fname The path to the file
+		 * \param path The path to the file
 		 * \param shaderType The type of shader to be compiled
 		 * \return A refference to the complied shader
 		 */
-		static unsigned int LoadAndCompileShader(const char *fname, GLenum shaderType);
+		static unsigned int LoadAndCompileShader(const FS::path& path, GLenum shaderType);
 	};
 
 }

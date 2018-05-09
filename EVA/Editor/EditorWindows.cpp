@@ -4,7 +4,6 @@
 
 #include "SceneEditor.hpp"
 #include "../Parsers/SceneParser.hpp"
-#include "FileSystem.hpp"
 
 namespace EVA
 {
@@ -169,19 +168,25 @@ namespace EVA
 				if (ImGui::MenuItem("Open"))
 				{
 					char const * filterPatterns[1] = { "*.scene" };
-					const auto path = FileSystem::OpenFileDialog("Open scene", (std::experimental::filesystem::current_path().string() + R"(/assets/scenes/)").c_str(), 1, filterPatterns);
+					const auto path = FileSystem::OpenFileDialog("Open scene", "", 1, filterPatterns);
 					if (!path.empty())
 					{
 						m_Editor->Clear();
-						SceneParser::Load(m_Editor, path.string());
+						SceneParser::Load(m_Editor, path);
 					}
 				}
-				if (ImGui::MenuItem("Save"))
+				if (ImGui::MenuItem("Save as"))
 				{
 					char const * filterPatterns[1] = { "*.scene" };
-					const auto path = FileSystem::SaveFileDialog("Save scene", (std::experimental::filesystem::current_path().string() + R"(/assets/scenes/)").c_str(), 1, filterPatterns);
-					if(!path.empty())
-						SceneParser::Save(m_Editor, path.string());
+					auto path = FileSystem::SaveFileDialog("Save scene", "", 1, filterPatterns);
+					
+					if (!path.empty())
+					{
+						if (!path.has_extension())
+							path += FS::path(".scene");
+
+						SceneParser::Save(m_Editor, path);
+					}
 				}
 				ImGui::EndMenu();
 			}
@@ -300,7 +305,8 @@ namespace EVA
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
 					ImGui::Text(p.path().stem().string().c_str());
-					ImGui::SetDragDropPayload("folder", p.path().string().c_str(), sizeof(char) * p.path().string().length()+1, ImGuiCond_Once);
+					const auto pathString = FileSystem::ToString(p.path());
+					ImGui::SetDragDropPayload("folder", pathString.c_str(), sizeof(char) * pathString.length()+1, ImGuiCond_Once);
 					ImGui::EndDragDropSource();
 				}
 			}
@@ -310,7 +316,8 @@ namespace EVA
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
 					ImGui::Text(p.path().filename().string().c_str());
-					ImGui::SetDragDropPayload("file", p.path().string().c_str(), sizeof(char) * p.path().string().length()+1, ImGuiCond_Once);
+					const auto pathString = FileSystem::ToString(p.path());
+					ImGui::SetDragDropPayload("file", pathString.c_str(), sizeof(char) * pathString.length()+1, ImGuiCond_Once);
 					ImGui::EndDragDropSource();
 				}
 			}

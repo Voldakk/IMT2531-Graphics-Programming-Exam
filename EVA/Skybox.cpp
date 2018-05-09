@@ -20,8 +20,8 @@ namespace EVA
 		glActiveTexture(GL_TEXTURE0);
 		shader->SetUniform1I("material.texture_diffuse", 0);
 
-		if (textureDiffuse.id != 0)
-			glBindTexture(GL_TEXTURE_CUBE_MAP, textureDiffuse.id);
+		if (textureDiffuse != nullptr)
+			glBindTexture(GL_TEXTURE_CUBE_MAP, textureDiffuse->id);
 	}
 
 	Skybox::Skybox(const std::string &folderPath, const std::string &fileType)
@@ -42,7 +42,7 @@ namespace EVA
 
 	void Skybox::Render() const
 	{
-		if(m_Texture == 0)
+		if(m_Texture == nullptr)
 			return;
 
 		m_Transform->SetPosition(Application::mainCamera->transform->position);
@@ -59,11 +59,12 @@ namespace EVA
 		m_FileType = fileType;
 
 		// Texture
-		m_Texture = TextureManager::GetTextureCubemap(folderPath, fileType);
+		m_Texture = TextureManager::LoadTextureCubemap(folderPath, fileType);
+		m_Texture->type = Texture::Diffuse;
 
 		// Material
 		m_Material = std::make_unique<SkyBoxMaterial>();
-		m_Material->SetTexture(Texture::Diffuse, m_Texture);
+		m_Material->SetTexture(m_Texture);
 		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
 	}
 

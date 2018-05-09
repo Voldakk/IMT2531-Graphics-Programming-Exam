@@ -2,8 +2,23 @@
 
 #include <map>
 
+#include "FileSystem.hpp"
+
 namespace EVA
 {
+	// Struct for holding texture info
+	struct Texture
+	{
+		// Different texture types
+		enum Type
+		{
+			Diffuse, Specular, Normal, Emission, Height
+		};
+
+		unsigned int id{};
+		Type type;
+		FS::path path;
+	};
 
 	/**
 	 * \brief A helper class used to load images from file to OpenGL textures
@@ -11,15 +26,24 @@ namespace EVA
 	class TextureManager
 	{
 
-		static std::map<std::string, unsigned int> m_Textures;
+		static std::map<FS::path, std::shared_ptr<Texture>> m_Textures;
 
 	public:
-		/// <summary>Loads an image from file to a GL texture. Immediately returns if texture already exists</summary>
-		/// <param name="path">The path to the image file</param>
-		/// <returns>A refference to the GL texture</returns>
-		static unsigned int GetTexture(const std::string &path);
 
-		static unsigned int GetTextureCubemap(const std::string &folderPath, const std::string &fileType);
+		/**
+		 * \brief Loads an texture from file.
+		 * \param path The path to the texture file
+		 * \return A pointer to the texture, or nullptr if no texture is found
+		 */
+		static std::shared_ptr<Texture> LoadTexture(const FS::path& path);
+
+		/**
+		 * \brief Loads a series of textures from a folder to a cubemap texture.
+		 * \param folderPath The path to the folder
+		 * \param fileType The texture file type
+		 * \return A pointer to the texture, or nullptr if no texture is found
+		 */
+		static std::shared_ptr<Texture> LoadTextureCubemap(const FS::path& folderPath, const std::string &fileType);
 	};
 
 }

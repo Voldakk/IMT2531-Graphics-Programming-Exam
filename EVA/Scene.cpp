@@ -20,7 +20,7 @@ namespace EVA
 		m_ShadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");
 	}
 
-	Scene::Scene(const std::string& path) : Scene()
+	Scene::Scene(const FS::path& path) : Scene()
 	{
 		SceneParser::Load(this, path);
 	}

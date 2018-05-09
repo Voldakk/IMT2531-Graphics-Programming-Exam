@@ -3,6 +3,7 @@
 #include "../Scene.hpp"
 #include "../ModelManager.hpp"
 #include "../Parsers/MaterialParser.hpp"
+#include "../MaterialManager.hpp"
 
 namespace EVA
 {
@@ -82,27 +83,27 @@ namespace EVA
 	void MeshRenderer::Save(DataObject& data)
 	{
 		if (material != nullptr)
-			data.SetString("material", material->path);
+			data.SetString("material", FileSystem::ToString(material->path));
 
 		if(mesh != nullptr)
 		{
-			data.SetString("mesh", mesh->path);
+			data.SetString("mesh", FileSystem::ToString(mesh->path));
 			data.SetInt("meshIndex", mesh->index);
 		}
 	}
 
 	void MeshRenderer::Inspector()
 	{
-		auto materialPath = material != nullptr ? material->path : "";
+		auto materialPath = material != nullptr ? FileSystem::ToString(material->path) : "";
 		if (ComponentInspector::DragDropTargetString("Material", materialPath, "file"))
 		{
 			if (!materialPath.empty())
 			{
-				Set(m_Mesh, MaterialParser::Load(materialPath));
+				Set(m_Mesh, MaterialManager::LoadMaterial(materialPath));
 			}
 		}
 
-		auto modelPath = m_ModelPath;
+		auto modelPath = FileSystem::ToString(m_ModelPath);
 		if (ComponentInspector::DragDropTargetString("Model", modelPath, "file"))
 		{
 			if (!modelPath.empty())
@@ -121,7 +122,7 @@ namespace EVA
 		}
 	}
 
-	void MeshRenderer::SetMesh(const std::string& modelPath, const unsigned meshIndex)
+	void MeshRenderer::SetMesh(const FS::path& modelPath, const unsigned meshIndex)
 	{
 		m_MeshIndex = meshIndex;
 		m_ModelPath = modelPath;

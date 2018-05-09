@@ -50,7 +50,7 @@ namespace EVA
 			SceneParser::Load(this, m_TemplateScenePath);
 		}
 
-		explicit SceneEditor(const std::string& path = "")
+		explicit SceneEditor(const FS::path& path = "")
 		{
 			// Windows
 			m_Ew = std::make_unique<EditorWindows>(this);

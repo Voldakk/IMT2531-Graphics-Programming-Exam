@@ -29,7 +29,7 @@ namespace EVA
 	class Skybox
 	{
 
-		unsigned int m_Texture;
+		std::shared_ptr<Texture> m_Texture;
 
 		std::shared_ptr<Model> m_Model;
 		std::unique_ptr<SkyBoxMaterial> m_Material;

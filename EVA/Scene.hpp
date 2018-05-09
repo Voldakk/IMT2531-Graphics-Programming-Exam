@@ -58,7 +58,7 @@ namespace EVA
 
 		Scene();
 
-		explicit Scene(const std::string& path);
+		explicit Scene(const FS::path& path);
 
 		~Scene();
 

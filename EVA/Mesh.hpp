@@ -8,6 +8,8 @@
 
 #include "EVA/OpenGL.hpp"
 
+#include "FileSystem.hpp"
+
 namespace EVA
 {
 
@@ -44,7 +46,7 @@ namespace EVA
 		bool isDirty = true;
 		std::string name;
 
-		std::string path;
+		FS::path path;
 		unsigned int index;
 
 		explicit Mesh(std::vector<Vertex> vertices, std::string name = "");

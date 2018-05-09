@@ -4,22 +4,11 @@
 
 #include "Shader.hpp"
 
+#include "FileSystem.hpp"
+#include "TextureManager.hpp"
+
 namespace EVA
 {
-	// Struct for holding texture info
-	struct Texture
-	{
-		// Different texture types
-		enum Type
-		{
-			Diffuse, Specular, Normal, Emission, Height
-		};
-
-		unsigned int id{};
-		Type type;
-		std::string path;
-	};
-
 	class Scene;
 
 	class Transform;
@@ -31,21 +20,22 @@ namespace EVA
 	{
 
 		static Material* m_ActiveMaterial;
+		inline static const FS::path DEFAULT_TEXTURES_PATH = "./assets/standard assets/textures/";
 
 	public:
 
-		std::string path;
+		FS::path path;
 
-		static unsigned int textureDefaultDiffuse;
-		static unsigned int textureDefaultSpecular;
-		static unsigned int textureDefaultNormal;
-		static unsigned int textureDefaultEmission;
+		static std::shared_ptr<Texture> textureDefaultDiffuse;
+		static std::shared_ptr<Texture> textureDefaultSpecular;
+		static std::shared_ptr<Texture> textureDefaultNormal;
+		static std::shared_ptr<Texture> textureDefaultEmission;
 
-		Texture textureDiffuse;
-		Texture textureSpecular;
-		Texture textureNormal;
-		Texture textureEmission;
-		Texture textureHeight;
+		std::shared_ptr<Texture> textureDiffuse;
+		std::shared_ptr<Texture> textureSpecular;
+		std::shared_ptr<Texture> textureNormal;
+		std::shared_ptr<Texture> textureEmission;
+		std::shared_ptr<Texture> textureHeight;
 
 		glm::vec4 tintDiffuse = glm::vec4(1.0f);
 
@@ -57,11 +47,9 @@ namespace EVA
 
 		Material() = default;
 
-		void SetTexture(Texture::Type type, const char *path);
+		void SetTexture(Texture::Type type, const FS::path& path);
 
-		void SetTexture(Texture::Type type, unsigned int id);
-
-		void SetTexture(Texture texture);
+		void SetTexture(const std::shared_ptr<Texture>& texture);
 
 		void Activate(Scene* scene, Transform* transform);
 
@@ -72,7 +60,6 @@ namespace EVA
 		void SetTextures() const;
 
 		static void Init();
-
 	};
 
 	class ShadowMaterial : public Material

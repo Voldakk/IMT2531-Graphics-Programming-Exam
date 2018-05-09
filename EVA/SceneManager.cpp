@@ -6,7 +6,7 @@ namespace EVA
 	std::vector<std::shared_ptr<Scene>> SceneManager::m_Scenes;
 	std::vector<Scene*> SceneManager::m_UnloadScenes;
 
-	std::shared_ptr<Scene> SceneManager::CreateScene(std::string path)
+	std::shared_ptr<Scene> SceneManager::CreateScene(const FS::path& path)
 	{
 		std::cout << "SceneManager::CreateScene - Creating scene: " << path << " \n";
 		auto scene = std::make_shared<Scene>(path);
@@ -56,7 +56,7 @@ namespace EVA
 		LoadScene(scene);
 	}
 
-	void SceneManager::ChangeScene(const std::string& path)
+	void SceneManager::ChangeScene(const FS::path& path)
 	{
 		std::cout << "SceneManager::ChangeScene - Changing scene: " << path << " \n";
 		ClearScenes();

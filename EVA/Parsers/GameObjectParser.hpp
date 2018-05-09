@@ -36,7 +36,7 @@ namespace EVA
 		 * \param path The path to the file
 		 * \return A pointer to the GameObject 
 		 */
-		static GameObject* Load(Scene* scene, const std::string& path);
+		static GameObject* Load(Scene* scene, const FS::path& path);
 
 		static void Save(GameObject* gameObject, Json::Generic& d, Json::Allocator& a);
 	};
@@ -113,7 +113,7 @@ namespace EVA
 		return gameObject.get();
 	}
 
-	inline GameObject* GameObjectParser::Load(Scene* scene, const std::string& path)
+	inline GameObject* GameObjectParser::Load(Scene* scene, const FS::path& path)
 	{
 		const auto sd = Json::Open(path);
 

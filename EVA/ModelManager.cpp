@@ -8,20 +8,20 @@
 
 namespace EVA
 {
-	std::map<std::string, std::shared_ptr<Model>> ModelManager::m_Models;
+	std::map<FS::path, std::shared_ptr<Model>> ModelManager::m_Models;
 
-	std::shared_ptr<Model> ModelManager::LoadModel(const std::string& path)
+	std::shared_ptr<Model> ModelManager::LoadModel(const FS::path& path)
 	{
 		// Return the model if it's already loaded
 		if (m_Models.count(path))
 			return m_Models[path];
 
 		
-		std::cout << "ModelManager::LoadModel - " << path << "\n";
+		std::cout << "ModelManager::LoadModel - " << FileSystem::ToString(path) << "\n";
 
 		// Assimp import
 		Assimp::Importer importer;
-		const auto scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+		const auto scene = importer.ReadFile(FileSystem::ToString(path), aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 
 		// Check for errors
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)

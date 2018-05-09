@@ -2,34 +2,28 @@
 
 #include "Scene.hpp"
 #include "Application.hpp"
-#include "TextureManager.hpp"
+
 
 namespace EVA
 {
 
 	Material *Material::m_ActiveMaterial;
 
-	unsigned int Material::textureDefaultDiffuse;
-	unsigned int Material::textureDefaultSpecular;
-	unsigned int Material::textureDefaultNormal;
-	unsigned int Material::textureDefaultEmission;
+	std::shared_ptr<Texture> Material::textureDefaultDiffuse;
+	std::shared_ptr<Texture> Material::textureDefaultSpecular;
+	std::shared_ptr<Texture> Material::textureDefaultNormal;
+	std::shared_ptr<Texture> Material::textureDefaultEmission;
 
-	void Material::SetTexture(const Texture::Type type, const char *path)
+	void Material::SetTexture(const Texture::Type type, const FS::path& path)
 	{
-		Texture t = { 0, type, path };
-		t.id = TextureManager::GetTexture(t.path);
+		const auto t = TextureManager::LoadTexture(path);
+		t->type = type;
 		SetTexture(t);
 	}
 
-	void Material::SetTexture(const Texture::Type type, const unsigned int id)
+	void Material::SetTexture(const std::shared_ptr<Texture>& texture)
 	{
-		const Texture t = { id, type, "" };
-		SetTexture(t);
-	}
-
-	void Material::SetTexture(const Texture texture)
-	{
-		switch (texture.type)
+		switch (texture->type)
 		{
 		case Texture::Diffuse:
 			textureDiffuse = texture;
@@ -146,54 +140,54 @@ namespace EVA
 		glActiveTexture(GL_TEXTURE0);
 		shader->SetUniform1I("material.texture_diffuse", 0);
 
-		if (textureDiffuse.id != 0)
-			glBindTexture(GL_TEXTURE_2D, textureDiffuse.id);
+		if (textureDiffuse != nullptr)
+			glBindTexture(GL_TEXTURE_2D, textureDiffuse->id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultDiffuse);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultDiffuse->id);
 
 		// Specular
 		glActiveTexture(GL_TEXTURE1);
 		shader->SetUniform1I("material.texture_specular", 1);
 
-		if (textureSpecular.id != 0)
-			glBindTexture(GL_TEXTURE_2D, textureSpecular.id);
+		if (textureSpecular != nullptr)
+			glBindTexture(GL_TEXTURE_2D, textureSpecular->id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular->id);
 
 		// Normal
 		glActiveTexture(GL_TEXTURE2);
 		shader->SetUniform1I("material.texture_normal", 2);
 
-		if (textureNormal.id != 0)
-			glBindTexture(GL_TEXTURE_2D, textureNormal.id);
+		if (textureNormal != nullptr)
+			glBindTexture(GL_TEXTURE_2D, textureNormal->id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultNormal);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultNormal->id);
 
 		// Emission
 		glActiveTexture(GL_TEXTURE3);
 		shader->SetUniform1I("material.texture_emission", 3);
 
-		if (textureEmission.id != 0)
-			glBindTexture(GL_TEXTURE_2D, textureEmission.id);
+		if (textureEmission != nullptr)
+			glBindTexture(GL_TEXTURE_2D, textureEmission->id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultEmission);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultEmission->id);
 
 		// Height
 		glActiveTexture(GL_TEXTURE4);
 		shader->SetUniform1I("material.texture_height", 4);
 
-		if (textureHeight.id != 0)
-			glBindTexture(GL_TEXTURE_2D, textureHeight.id);
+		if (textureHeight != nullptr)
+			glBindTexture(GL_TEXTURE_2D, textureHeight->id);
 		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular);
+			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular->id);
 	}
 
 	void Material::Init()
 	{
-		textureDefaultDiffuse = TextureManager::GetTexture("./assets/standard assets/textures/default_diffuse.png");
-		textureDefaultSpecular = TextureManager::GetTexture("./assets/standard assets/textures/default_specular.png");
-		textureDefaultNormal = TextureManager::GetTexture("./assets/standard assets/textures/default_normal.png");
-		textureDefaultEmission = TextureManager::GetTexture("./assets/standard assets/textures/default_emission.png");
+		textureDefaultDiffuse = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_diffuse.png");
+		textureDefaultSpecular = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_specular.png");
+		textureDefaultNormal = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_normal.png");
+		textureDefaultEmission = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_emission.png");
 	}
 
 	void ShadowMaterial::SetMaterialUniforms(Scene* scene) const

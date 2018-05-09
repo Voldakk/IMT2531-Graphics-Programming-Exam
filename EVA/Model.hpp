@@ -16,7 +16,7 @@ namespace EVA
 
 	public:
 
-		std::string path;
+		FS::path path;
 
 		void AddMesh(const std::shared_ptr<Mesh>& mesh);
 

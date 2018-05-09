@@ -6,29 +6,29 @@
 
 namespace EVA
 {
-	std::map<std::string, unsigned int> TextureManager::m_Textures;
+	std::map<FS::path, std::shared_ptr<Texture>> TextureManager::m_Textures;
 
-	unsigned int TextureManager::GetTexture(const std::string &path)
+	std::shared_ptr<Texture> TextureManager::LoadTexture(const FS::path& path)
 	{
 		// Return the id if the texture's already loaded
 		if (m_Textures.count(path))
 			return m_Textures[path];
 
-		// The new texture id
-		unsigned int texture = 0;
+		auto texture = std::make_shared<Texture>();
+		texture->path = path;
 
 		// Load the image
 		stbi_set_flip_vertically_on_load(true);
 
 		int width, height, channels;
-		const auto data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		const auto data = stbi_load(FileSystem::ToString(path).c_str(), &width, &height, &channels, 0);
 
 		// If the image was loaded
 		if (data)
 		{
 			// Create texture
-			glGenTextures(1, &texture);
-			glBindTexture(GL_TEXTURE_2D, texture);
+			glGenTextures(1, &texture->id);
+			glBindTexture(GL_TEXTURE_2D, texture->id);
 
 			// Texture parameters
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -44,37 +44,37 @@ namespace EVA
 			m_Textures[path] = texture;
 			
 			std::cout << "TextureManager::GetTexture - Loaded image: " << path.c_str() << "\n";
-			std::cout << "TextureManager::GetTexture - Texture id:   " << texture << "\n";
+			std::cout << "TextureManager::GetTexture - Texture id:   " << texture->id << "\n";
+
+			stbi_image_free(data);
+			return texture;
 		}
-		else
+		else // If not
 		{
 			std::cout << "TextureManager::GetTexture - Failed to load image: " << path.c_str() << "\n";
+			return nullptr;
 		}
-
-		stbi_image_free(data);
-
-		return texture;
 	}
 
-	unsigned int TextureManager::GetTextureCubemap(const std::string &folderPath, const std::string &fileType)
+	std::shared_ptr<Texture> TextureManager::LoadTextureCubemap(const FS::path& folderPath, const std::string &fileType)
 	{
 		if (folderPath.empty())
-			return 0;
+			return nullptr;
 
-		const auto endSlash = folderPath[folderPath.length() - 1] == '\\' || folderPath[folderPath.length() - 1] == '/';
-
-		const auto slash = endSlash ? "" : "/";
+		const auto path = folderPath / fileType;
 
 		// Return the id if the texture's already loaded
-		if (m_Textures.count(folderPath + slash + fileType))
-			return m_Textures[folderPath + slash + fileType];
+		if (m_Textures.count(path))
+			return m_Textures[path];
+
+		auto texture = std::make_shared<Texture>();
+		texture->path = path;
 
 		// Create texture
-		GLuint texture;
 		glActiveTexture(GL_TEXTURE0);
 		glEnable(GL_TEXTURE_CUBE_MAP);
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+		glGenTextures(1, &texture->id);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texture->id);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -95,8 +95,7 @@ namespace EVA
 
 		for (unsigned int i = 0; i < 6; i++)
 		{
-			auto fullPath = folderPath + slash + sideNames[i];
-			fullPath.append(fileType);
+			const auto fullPath = FileSystem::ToString(folderPath / sideNames[i]) + fileType;
 
 			int width, height, channels;
 
@@ -114,17 +113,15 @@ namespace EVA
 				stbi_image_free(data);
 
 				std::cout << "TextureManager::GetTextureCubemap - Failed to load image: " << fullPath.c_str() << "\n";
-				glDeleteTextures(1, &texture);
-				return 0;
+				glDeleteTextures(1, &texture->id);
+				return nullptr;
 			}
-
-			
 		}
 
-		std::cout << "TextureManager::GetTextureCubemap - Texture id:   " << texture << "\n";
+		std::cout << "TextureManager::GetTextureCubemap - Loaded cubemap, id:   " << texture << "\n";
 
 		// Save and return the id
-		m_Textures[folderPath + fileType] = texture;
+		m_Textures[path] = texture;
 		return texture;
 	}
 

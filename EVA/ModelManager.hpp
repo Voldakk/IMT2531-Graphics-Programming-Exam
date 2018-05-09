@@ -19,7 +19,7 @@ namespace EVA
 	 */
 	class ModelManager
 	{
-		static std::map<std::string, std::shared_ptr<Model>> m_Models;
+		static std::map<FS::path, std::shared_ptr<Model>> m_Models;
 
 	public:
 
@@ -36,7 +36,7 @@ namespace EVA
 		 * \param path The path to the model
 		 * \return A pointer to the model
 		 */
-		static std::shared_ptr<Model> LoadModel(const std::string& path);
+		static std::shared_ptr<Model> LoadModel(const FS::path& path);
 		
 		/**
 		 * \brief Loads a primitive model

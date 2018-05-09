@@ -10,11 +10,11 @@
 namespace EVA
 {
 
-	const std::string SHADER_PATH = "./assets/standard assets/shaders/";
+	const FS::path SHADER_PATH = "./assets/standard assets/shaders/";
 
 	std::map<std::string, std::shared_ptr<Shader>> ShaderManager::m_Shaders;
 
-	std::shared_ptr<Shader> ShaderManager::CreateOrGetShader(const std::string& name, const std::string& vertPath, const std::string& fragPath)
+	std::shared_ptr<Shader> ShaderManager::CreateOrGetShader(const std::string& name, const FS::path& vertPath, const FS::path& fragPath)
 	{
 		if (m_Shaders.count(name))
 			return m_Shaders[name];
@@ -27,7 +27,7 @@ namespace EVA
 		return shader;
 	}
 
-	std::shared_ptr<Shader> ShaderManager::CreateOrGetShader(const std::string& name, const std::string& vertPath, const std::string& fragPath, const std::string& geomPath)
+	std::shared_ptr<Shader> ShaderManager::CreateOrGetShader(const std::string& name, const FS::path& vertPath, const FS::path& fragPath, const FS::path& geomPath)
 	{
 		if (m_Shaders.count(name))
 			return m_Shaders[name];
@@ -48,11 +48,11 @@ namespace EVA
 		return nullptr;
 	}
 
-	unsigned int ShaderManager::CreateProgram(const char *pathVertShader, const char *pathFragShader)
+	unsigned int ShaderManager::CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader)
 	{
 		// Load and compile the vertex and fragment shaders
-		const auto vertexShader = LoadAndCompileShader((SHADER_PATH + pathVertShader).c_str(), GL_VERTEX_SHADER);
-		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH + pathFragShader).c_str(), GL_FRAGMENT_SHADER);
+		const auto vertexShader = LoadAndCompileShader((SHADER_PATH / pathVertShader).c_str(), GL_VERTEX_SHADER);
+		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH / pathFragShader).c_str(), GL_FRAGMENT_SHADER);
 
 		// Create a program object and attach the two shaders we have compiled, the program object contains
 		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
@@ -73,12 +73,12 @@ namespace EVA
 		return shaderProgram;
 	}
 
-	unsigned int ShaderManager::CreateProgram(const char *pathVertShader, const char *pathFragShader, const char *pathGeomShader)
+	unsigned int ShaderManager::CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader, const FS::path& pathGeomShader)
 	{
 		// Load and compile the vertex and fragment shaders
-		const auto vertexShader =   LoadAndCompileShader((SHADER_PATH + pathVertShader).c_str(), GL_VERTEX_SHADER);
-		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH + pathFragShader).c_str(), GL_FRAGMENT_SHADER);
-		const auto geometryShader = LoadAndCompileShader((SHADER_PATH + pathGeomShader).c_str(), GL_GEOMETRY_SHADER);
+		const auto vertexShader =   LoadAndCompileShader((SHADER_PATH / pathVertShader).c_str(), GL_VERTEX_SHADER);
+		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH / pathFragShader).c_str(), GL_FRAGMENT_SHADER);
+		const auto geometryShader = LoadAndCompileShader((SHADER_PATH / pathGeomShader).c_str(), GL_GEOMETRY_SHADER);
 
 		// Create a program object and attach the two shaders we have compiled, the program object contains
 		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
@@ -101,10 +101,10 @@ namespace EVA
 		return shaderProgram;
 	}
 
-	void ShaderManager::ReadShaderSource(const char *fname, std::vector<char> &buffer)
+	void ShaderManager::ReadShaderSource(const FS::path& path, std::vector<char> &buffer)
 	{
 		std::ifstream in;
-		in.open(fname, std::ios::binary);
+		in.open(FileSystem::ToString(path).c_str(), std::ios::binary);
 
 		if (!in.fail())
 		{
@@ -123,19 +123,19 @@ namespace EVA
 			buffer[length] = '\0';
 		} else
 		{
-			std::cerr << "Unable to open " << fname << " I'm out!" << std::endl;
+			std::cerr << "Unable to open " << FileSystem::ToString(path).c_str() << " I'm out!" << std::endl;
 			//std::cerr << "Unable to open " << fname << " I'm out!" << std::endl;
 			exit(-1);
 		}
 	}
 
-	unsigned int ShaderManager::LoadAndCompileShader(const char *fname, const GLenum shaderType)
+	unsigned int ShaderManager::LoadAndCompileShader(const FS::path& path, const GLenum shaderType)
 	{
-		std::cout << "ShaderLoad::LoadAndCompileShader - " << fname << "\n";
+		std::cout << "ShaderLoad::LoadAndCompileShader - " << FileSystem::ToString(path).c_str() << "\n";
 
 		// Load a shader from an external file
 		std::vector<char> buffer;
-		ReadShaderSource(fname, buffer);
+		ReadShaderSource(path, buffer);
 		const char *src = &buffer[0];
 
 		// Create shaders

@@ -18,17 +18,17 @@ namespace EVA
 		 * \param scene The scene to load to 
 		 * \param path The path to the file 
 		 */
-		static void Load(Scene* scene, const std::string& path);
+		static void Load(Scene* scene, const FS::path& path);
 
 		/**
 		 * \brief Saves a scene to a scene asset file
 		 * \param scene The scene to save
 		 * \param path The path to the file 
 		 */
-		static void Save(Scene* scene, const std::string& path);
+		static void Save(Scene* scene, const FS::path& path);
 	};
 
-	inline void SceneParser::Load(Scene* scene, const std::string& path)
+	inline void SceneParser::Load(Scene* scene, const FS::path& path)
 	{
 		const auto sd = Json::Open(path);
 		auto& d = *sd;
@@ -73,7 +73,7 @@ namespace EVA
 		}
 	}
 
-	inline void SceneParser::Save(Scene* scene, const std::string& path)
+	inline void SceneParser::Save(Scene* scene, const FS::path& path)
 	{
 		// Create document
 		Json::Document d;
