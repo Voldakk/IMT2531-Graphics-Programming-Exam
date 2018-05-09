@@ -19,7 +19,7 @@ namespace EVA
 		if (m_Shaders.count(name))
 			return m_Shaders[name];
 
-		auto shaderId = CreateProgram(vertPath.c_str(), fragPath.c_str());
+		auto shaderId = CreateProgram(vertPath, fragPath);
 		const auto shader = std::make_shared<Shader>(shaderId);
 		
 		m_Shaders[name] = shader;
@@ -32,7 +32,7 @@ namespace EVA
 		if (m_Shaders.count(name))
 			return m_Shaders[name];
 
-		auto shaderId = CreateProgram(vertPath.c_str(), fragPath.c_str(), geomPath.c_str());
+		auto shaderId = CreateProgram(vertPath, fragPath, geomPath);
 		const auto shader = std::make_shared<Shader>(shaderId);
 
 		m_Shaders[name] = shader;
@@ -51,8 +51,8 @@ namespace EVA
 	unsigned int ShaderManager::CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader)
 	{
 		// Load and compile the vertex and fragment shaders
-		const auto vertexShader = LoadAndCompileShader((SHADER_PATH / pathVertShader).c_str(), GL_VERTEX_SHADER);
-		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH / pathFragShader).c_str(), GL_FRAGMENT_SHADER);
+		const auto vertexShader = LoadAndCompileShader(SHADER_PATH / pathVertShader, GL_VERTEX_SHADER);
+		const auto fragmentShader = LoadAndCompileShader(SHADER_PATH / pathFragShader, GL_FRAGMENT_SHADER);
 
 		// Create a program object and attach the two shaders we have compiled, the program object contains
 		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
@@ -76,9 +76,9 @@ namespace EVA
 	unsigned int ShaderManager::CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader, const FS::path& pathGeomShader)
 	{
 		// Load and compile the vertex and fragment shaders
-		const auto vertexShader =   LoadAndCompileShader((SHADER_PATH / pathVertShader).c_str(), GL_VERTEX_SHADER);
-		const auto fragmentShader = LoadAndCompileShader((SHADER_PATH / pathFragShader).c_str(), GL_FRAGMENT_SHADER);
-		const auto geometryShader = LoadAndCompileShader((SHADER_PATH / pathGeomShader).c_str(), GL_GEOMETRY_SHADER);
+		const auto vertexShader =   LoadAndCompileShader(SHADER_PATH / pathVertShader, GL_VERTEX_SHADER);
+		const auto fragmentShader = LoadAndCompileShader(SHADER_PATH / pathFragShader, GL_FRAGMENT_SHADER);
+		const auto geometryShader = LoadAndCompileShader(SHADER_PATH / pathGeomShader, GL_GEOMETRY_SHADER);
 
 		// Create a program object and attach the two shaders we have compiled, the program object contains
 		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
@@ -119,12 +119,13 @@ namespace EVA
 			buffer.resize(length + 1);
 			in.read(&buffer[0], length);
 			in.close();
+
 			// Add a valid C - string end
 			buffer[length] = '\0';
-		} else
+		} 
+		else
 		{
 			std::cerr << "Unable to open " << FileSystem::ToString(path).c_str() << " I'm out!" << std::endl;
-			//std::cerr << "Unable to open " << fname << " I'm out!" << std::endl;
 			exit(-1);
 		}
 	}
