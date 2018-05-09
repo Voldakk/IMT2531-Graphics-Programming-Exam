@@ -599,6 +599,8 @@ namespace EVA
 		ImGui::Text("Material");
 		ImGui::Text(FileSystem::ToString(material->path).c_str());
 
+		ComponentInspector::Float("Shininess", material->materialShininess);
+
 		auto path = material->textureDiffuse == nullptr ? "" : FileSystem::ToString(material->textureDiffuse->path);
 		if (ComponentInspector::DragDropTargetString("Diffuse texture", path, "file"))
 		{

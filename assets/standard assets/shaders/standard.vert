@@ -47,6 +47,7 @@ void main()
     // Apply all matrix transformations to vert
     gl_Position = projection * view * model * vec4(vert, 1);
 
+	// Calculate TBN matrix
 	vec3 T = normalize(vec3(model * vec4(vertTangent,   0.0)));
 	vec3 B = normalize(vec3(model * vec4(vertBitangent, 0.0)));
 	vec3 N = normalize(vec3(model * vec4(vertNormal,    0.0)));

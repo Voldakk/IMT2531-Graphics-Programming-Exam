@@ -43,7 +43,7 @@ namespace EVA
 
 		bool enableInstancing = false;
 
-		float materialShininess = 1000.0f;
+		float materialShininess = 32.0f;
 
 		Material() = default;
 

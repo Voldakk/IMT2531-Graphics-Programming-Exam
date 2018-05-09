@@ -150,26 +150,23 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
 
 void main()
 {
-    vec3 normal = normalize(transpose(inverse(mat3(model))) * fragNormal);
-    vec3 surfacePos = fragVert;
-    vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
-
-    vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord) * material.tint_diffuse;
-    vec3 specularMap = texture(material.texture_specular, fragTexCoord).rgb;
-    vec3 emissionMap = texture(material.texture_emission, fragTexCoord).rgb;
-
-	// Obtain normal from normal map in range [0,1]
-    normal = texture(material.texture_normal, fragTexCoord).rgb;
-    // Transform normal vector to range [-1,1]
+    // Normal map
+    vec3 normal = texture(material.texture_normal, fragTexCoord).rgb;
     normal = normalize(normal * 2.0 - 1.0);   
 	normal = normalize(fragTBN * normal); 
 
 	// Emission
-    vec3 linearColor = emissionMap;
+    vec3 linearColor = texture(material.texture_emission, fragTexCoord).rgb;
 
+	// Read diffuse and specular maps
+    vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord) * material.tint_diffuse;
+    vec3 specularMap = texture(material.texture_specular, fragTexCoord).rgb;
+
+	// Lights
+    vec3 surfaceToCamera = normalize(cameraPosition - fragVert);
     for(int i = 0; i < numLights; ++i)
     {
-        linearColor += ApplyLight(allLights[i], normal, surfacePos, surfaceToCamera, diffuseMap.rgb, specularMap, i);
+        linearColor += ApplyLight(allLights[i], normal, fragVert, surfaceToCamera, diffuseMap.rgb, specularMap, i);
     }
     
     // Final color (after gamma correction)
