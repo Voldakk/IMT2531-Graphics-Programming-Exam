@@ -43,15 +43,15 @@ namespace EVA
 			// Save the id
 			m_Textures[path] = texture;
 			
-			std::cout << "TextureManager::GetTexture - Loaded image: " << path.c_str() << "\n";
-			std::cout << "TextureManager::GetTexture - Texture id:   " << texture->id << "\n";
+			std::cout << "TextureManager::LoadTexture - Loaded image: " << FileSystem::ToString(path) << "\n";
+			std::cout << "TextureManager::LoadTexture - Texture id:   " << texture->id << "\n";
 
 			stbi_image_free(data);
 			return texture;
 		}
 		else // If not
 		{
-			std::cout << "TextureManager::GetTexture - Failed to load image: " << path.c_str() << "\n";
+			std::cout << "TextureManager::LoadTexture - Failed to load image: " << FileSystem::ToString(path) << "\n";
 			return nullptr;
 		}
 	}
@@ -106,19 +106,19 @@ namespace EVA
 				glTexImage2D(sideIds[i], 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
 				stbi_image_free(data);
 
-				std::cout << "TextureManager::GetTextureCubemap - Loaded image: " << fullPath.c_str() << "\n";
+				std::cout << "TextureManager::LoadTextureCubemap - Loaded texture: " << fullPath << "\n";
 			}
 			else
 			{
 				stbi_image_free(data);
 
-				std::cout << "TextureManager::GetTextureCubemap - Failed to load image: " << fullPath.c_str() << "\n";
+				std::cout << "TextureManager::LoadTextureCubemap - Failed to load texture: " << fullPath << "\n";
 				glDeleteTextures(1, &texture->id);
 				return nullptr;
 			}
 		}
 
-		std::cout << "TextureManager::GetTextureCubemap - Loaded cubemap, id:   " << texture << "\n";
+		std::cout << "TextureManager::LoadTextureCubemap - Loaded cubemap, id: " << texture->id << "\n";
 
 		// Save and return the id
 		m_Textures[path] = texture;
