@@ -8,6 +8,8 @@
 #include "ShaderManager.hpp"
 #include "Parsers/SceneParser.hpp"
 #include "Components/Collider.hpp"
+#include "ModelManager.hpp"
+#include "MaterialManager.hpp"
 
 namespace EVA
 {
@@ -324,9 +326,10 @@ namespace EVA
 			skybox->Render();
 		}
 
+		// For each material
 		for (auto &material : m_Materials)
 		{
-			// If he material should use GPU instancing
+			// If the material should use GPU instancing
 			if (material[0][0]->material->useInstancing)
 			{
 				// Set material / shader
@@ -335,8 +338,8 @@ namespace EVA
 				// For each mesh
 				for (auto &meshes : material)
 				{
-					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->material->HasMbo(meshes[0]->mesh) /*|| meshes[0]->mesh->isDirty*/)
+					// If missing mbo or the mesh/material combo is marked dirty
+					if (!meshes[0]->material->HasMbo(meshes[0]->mesh) || meshes[0]->material->IsDirty(meshes[0]->mesh))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -346,10 +349,12 @@ namespace EVA
 						{
 							models.push_back(meshRenderer->transform->modelMatrix);
 						}
-						// Set the mesh ibo
+
+						// Set the mbo
 						meshes[0]->material->SetMbo(meshes[0]->mesh, models);
 
-						//meshes[0]->mesh->isDirty = false;
+						// Set not dirty
+						meshes[0]->material->SetDirty(meshes[0]->mesh, false);
 					}
 
 					// Draw the mesh
@@ -374,21 +379,20 @@ namespace EVA
 
 	void Scene::RenderShadowMap(const glm::mat4 lightSpaceMatrix)
 	{
-		/*for (auto &materials : m_Materials)
+		for (auto &material : m_Materials)
 		{
 			// If the material should use GPU instancing
-			if (materials[0][0]->material->enableInstancing)
+			if (material[0][0]->material->useInstancing)
 			{
 				// Set material / shader
 				m_ShadowMaterialInstanced.Activate(this, nullptr);
 				m_ShadowMaterialInstanced.shader->SetUniformMatrix4Fv("lightSpaceMatrix", lightSpaceMatrix);
 
 				// For each mesh
-				for (auto &meshes : materials)
+				for (auto &meshes : material)
 				{
-					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->mesh->isStatic || meshes[0]->mesh->isDirty ||
-						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
+					// If missing mbo or the mesh/material combo is marked dirty
+					if (!meshes[0]->material->HasMbo(meshes[0]->mesh) || meshes[0]->material->IsDirty(meshes[0]->mesh))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -398,14 +402,16 @@ namespace EVA
 						{
 							models.push_back(meshRenderer->transform->modelMatrix);
 						}
-						// Set the mesh ibo
-						meshes[0]->mesh->SetMbo(models);
 
-						meshes[0]->mesh->isDirty = false;
+						// Set the mbo
+						meshes[0]->material->SetMbo(meshes[0]->mesh, models);
+
+						// Set not dirty
+						meshes[0]->material->SetDirty(meshes[0]->mesh, false);
 					}
 
 					// Draw the mesh
-					meshes[0]->mesh->DrawInstanced();
+					meshes[0]->mesh->DrawInstanced(meshes[0]->material->GetMbo(meshes[0]->mesh));
 				}
 			}
 			else // If not
@@ -414,7 +420,7 @@ namespace EVA
 				m_ShadowMaterial.shader->SetUniformMatrix4Fv("lightSpaceMatrix", lightSpaceMatrix);
 
 				// For each mesh
-				for (auto &meshes : materials)
+				for (auto &meshes : material)
 				{
 					// For each MeshRenderer that use the mesh
 					for (auto &meshRenderer : meshes)
@@ -425,15 +431,15 @@ namespace EVA
 					}
 				}
 			}
-		}*/
+		}
 	}
 
 	void Scene::RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, const glm::vec3 lightPos, const float farPlane)
 	{
-		/*for (auto &materials : m_Materials)
+		for (auto &material : m_Materials)
 		{
 			// If the material should use GPU instancing
-			if (materials[0][0]->material->enableInstancing)
+			if (material[0][0]->material->useInstancing)
 			{
 				// Set material / shader
 				m_ShadowMaterialCubeInstanced.Activate(this, nullptr);
@@ -445,11 +451,10 @@ namespace EVA
 				}
 
 				// For each mesh
-				for (auto &meshes : materials)
+				for (auto &meshes : material)
 				{
-					// If the mesh isn't static or the static mesh is missing the ibo
-					if (!meshes[0]->mesh->isStatic || meshes[0]->mesh->isDirty ||
-						(meshes[0]->mesh->isStatic && !meshes[0]->mesh->HasMbo()))
+					// If missing mbo or the mesh/material combo is marked dirty
+					if (!meshes[0]->material->HasMbo(meshes[0]->mesh) || meshes[0]->material->IsDirty(meshes[0]->mesh))
 					{
 						// Get the model matrices from all the objects
 						std::vector<glm::mat4> models;
@@ -459,14 +464,16 @@ namespace EVA
 						{
 							models.push_back(meshRenderer->transform->modelMatrix);
 						}
-						// Set the mesh ibo
-						meshes[0]->mesh->SetMbo(models);
 
-						meshes[0]->mesh->isDirty = false;
+						// Set the mbo
+						meshes[0]->material->SetMbo(meshes[0]->mesh, models);
+
+						// Set not dirty
+						meshes[0]->material->SetDirty(meshes[0]->mesh, false);
 					}
 
 					// Draw the mesh
-					meshes[0]->mesh->DrawInstanced();
+					meshes[0]->mesh->DrawInstanced(meshes[0]->material->GetMbo(meshes[0]->mesh));
 				}
 			}
 			else // If not
@@ -480,7 +487,7 @@ namespace EVA
 				}
 
 				// For each mesh
-				for (auto &meshes : materials)
+				for (auto &meshes : material)
 				{
 					// For each MeshRenderer that use the mesh
 					for (auto &meshRenderer : meshes)
@@ -491,7 +498,7 @@ namespace EVA
 					}
 				}
 			}
-		}*/
+		}
 	}
 
 	void Scene::RenderUi()

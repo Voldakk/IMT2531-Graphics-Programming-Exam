@@ -17,9 +17,11 @@ namespace EVA
 
 	struct InstancedMeshData
 	{
-		unsigned int instanceCount;
+		unsigned int instanceCount = 0;
 		std::unique_ptr<VertexBuffer> matrixBuffer;
+		bool dirty = true;
 	};
+
 
 	/**
 	 * \brief A material holds a Shader, textures and other material properties
@@ -31,7 +33,7 @@ namespace EVA
 		inline static const FS::path DEFAULT_TEXTURES_PATH = "./assets/standard assets/textures/";
 
 		// Instanced
-		bool m_UseInstancing = true;
+		bool m_UseInstancing = false;
 		std::map<std::shared_ptr<Mesh>, InstancedMeshData> m_MatrixBuffers;
 
 	public:
@@ -40,6 +42,8 @@ namespace EVA
 		void SetMbo(const std::shared_ptr<Mesh>& mesh, const std::vector<glm::mat4>& models);
 		bool HasMbo(const std::shared_ptr<Mesh>& mesh) const;
 		InstancedMeshData* GetMbo(const std::shared_ptr<Mesh>& mesh);
+		void SetDirty(const std::shared_ptr<Mesh>& mesh, bool value = true);
+		bool IsDirty(const std::shared_ptr<Mesh>& mesh);
 		// End instanced
 
 		FS::path path;

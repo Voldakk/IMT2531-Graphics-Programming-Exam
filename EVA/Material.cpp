@@ -41,6 +41,20 @@ namespace EVA
 		return nullptr;
 	}
 
+	void Material::SetDirty(const std::shared_ptr<Mesh>& mesh, const bool value)
+	{
+		if (m_MatrixBuffers.find(mesh) != m_MatrixBuffers.end())
+			m_MatrixBuffers[mesh].dirty = value;
+	}
+
+	bool Material::IsDirty(const std::shared_ptr<Mesh>& mesh)
+	{
+		if (m_MatrixBuffers.find(mesh) != m_MatrixBuffers.end())
+			return m_MatrixBuffers[mesh].dirty;
+
+		return false;
+	}
+
 	void Material::SetTexture(const Texture::Type type, const FS::path& path)
 	{
 		const auto t = TextureManager::LoadTexture(path);

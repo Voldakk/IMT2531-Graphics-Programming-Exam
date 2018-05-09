@@ -11,6 +11,7 @@
 #include "../Parsers/SceneParser.hpp"
 #include "../ModelManager.hpp"
 #include "../MaterialManager.hpp"
+#include "../ShaderManager.hpp"
 
 namespace EVA
 {
@@ -64,17 +65,17 @@ namespace EVA
 			else
 				SceneParser::Load(this, path);
 
-			const auto mat = MaterialManager::LoadMaterial("./assets/standard assets/materials/uv.mat");
-			const auto model = ModelManager::Primitive(ModelManager::Monkey);
+			/*const auto material = MaterialManager::LoadMaterial("./assets/standard assets/materials/uv.mat");
+			const auto mesh = ModelManager::Primitive(ModelManager::Monkey)->GetMesh(0);
 
-			for (unsigned int i = 0; i < 1000; ++i)
+			for (unsigned int x = 0; x < 1000; ++x)
 			{
 				auto g = CreateGameObject();
-				g->SetName("Monkey " + std::to_string(i));
-				g->transform->SetPosition({ i * 2.0f, 0.0f, 0.0f });
+				g->SetName("Monkey " + std::to_string(x));
+				g->transform->SetPosition({ x * 2.0f, 2.0f, 2.0f });
 				auto mr = g->AddComponent<MeshRenderer>();
-				mr->Set(model->GetMesh(0), mat);
-			}
+				mr->Set(mesh, material);
+			}*/
 		}
 
 		void Update(const float deltaTime) override
