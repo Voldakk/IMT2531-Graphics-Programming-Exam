@@ -50,23 +50,21 @@ namespace EVA
 
 	unsigned int ShaderManager::CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader)
 	{
-		// Load and compile the vertex and fragment shaders
+		// Load and compile the shaders
 		const auto vertexShader = LoadAndCompileShader(SHADER_PATH / pathVertShader, GL_VERTEX_SHADER);
 		const auto fragmentShader = LoadAndCompileShader(SHADER_PATH / pathFragShader, GL_FRAGMENT_SHADER);
 
-		// Create a program object and attach the two shaders we have compiled, the program object contains
-		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
+		// Create a program object and attach the two shaders we have compiled
 		const auto shaderProgram = glCreateProgram();
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragmentShader);
 
-		// Now that the fragment and vertex shader has been attached, we no longer need these two separate objects and should delete them.
+		// Now that the shaders has been attached, we no longer need these two separate objects and should delete them.
 		// The attachment to the shader program will keep them alive, as long as we keep the shaderProgram.
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
 
-		// Link the different shaders that are bound to this program, this creates a final shader that
-		// we can use to render geometry with.
+		// Link the different shaders that are bound to this program.
 		glLinkProgram(shaderProgram);
 		glUseProgram(shaderProgram);
 
@@ -75,26 +73,20 @@ namespace EVA
 
 	unsigned int ShaderManager::CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader, const FS::path& pathGeomShader)
 	{
-		// Load and compile the vertex and fragment shaders
 		const auto vertexShader =   LoadAndCompileShader(SHADER_PATH / pathVertShader, GL_VERTEX_SHADER);
 		const auto fragmentShader = LoadAndCompileShader(SHADER_PATH / pathFragShader, GL_FRAGMENT_SHADER);
 		const auto geometryShader = LoadAndCompileShader(SHADER_PATH / pathGeomShader, GL_GEOMETRY_SHADER);
 
-		// Create a program object and attach the two shaders we have compiled, the program object contains
-		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
 		const auto shaderProgram = glCreateProgram();
+
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragmentShader);
 		glAttachShader(shaderProgram, geometryShader);
 
-		// Now that the fragment and vertex shader has been attached, we no longer need these two separate objects and should delete them.
-		// The attachment to the shader program will keep them alive, as long as we keep the shaderProgram.
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
 		glDeleteShader(geometryShader);
 
-		// Link the different shaders that are bound to this program, this creates a final shader that
-		// we can use to render geometry with.
 		glLinkProgram(shaderProgram);
 		glUseProgram(shaderProgram);
 
@@ -125,14 +117,14 @@ namespace EVA
 		} 
 		else
 		{
-			std::cerr << "Unable to open " << FileSystem::ToString(path).c_str() << " I'm out!" << std::endl;
+			std::cerr << "ShaderManager::ReadShaderSource - Unable to open file: " << FileSystem::ToString(path).c_str() << " I'm out!" << std::endl;
 			exit(-1);
 		}
 	}
 
 	unsigned int ShaderManager::LoadAndCompileShader(const FS::path& path, const GLenum shaderType)
 	{
-		std::cout << "ShaderLoad::LoadAndCompileShader - " << FileSystem::ToString(path).c_str() << "\n";
+		std::cout << "ShaderManager::LoadAndCompileShader - " << FileSystem::ToString(path).c_str() << "\n";
 
 		// Load a shader from an external file
 		std::vector<char> buffer;
@@ -141,19 +133,21 @@ namespace EVA
 
 		// Create shaders
 		const auto shader = glCreateShader(shaderType);
-		//attach the shader source code to the shader objec
+
+		//Attach the shader source code to the shader object
 		glShaderSource(shader, 1, &src, nullptr);
 
 		// Compile the shader
 		glCompileShader(shader);
+
 		// Comile the shader, translates into internal representation and checks for errors.
-		GLint compileOK;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOK);
-		if (!compileOK)
+		int compileOk;
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
+		if (!compileOk)
 		{
 			char infolog[1024];;
 			glGetShaderInfoLog(shader, 1024, nullptr, infolog);
-			std::cout << "The program failed to compile with the error:" << std::endl << infolog << std::endl;
+			std::cout << "ShaderManager::LoadAndCompileShader - The program failed to compile with the error:" << std::endl << infolog << std::endl;
 			glfwTerminate();
 			getchar();
 			exit(-1);
