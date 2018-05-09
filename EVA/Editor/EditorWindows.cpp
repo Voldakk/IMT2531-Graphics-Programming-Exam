@@ -194,11 +194,10 @@ namespace EVA
 					newGameObject->SetName("New GameObject");
 				}
 
-				if (ImGui::BeginMenu("Component"))
+				if (ImGui::BeginMenu("Component", SelectedGameObject() != nullptr))
 				{
 					auto ids = ComponentMap::GetComponentIds();
 					
-
 					for (const auto& id : ids)
 					{
 						if (ImGui::MenuItem(id.c_str()) && SelectedGameObject() != nullptr)
