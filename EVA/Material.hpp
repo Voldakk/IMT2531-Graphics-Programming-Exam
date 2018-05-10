@@ -80,6 +80,8 @@ namespace EVA
 		void SetTextures() const;
 
 		static void Init();
+
+		static void SetNoActive();
 	};
 
 	class ShadowMaterial : public Material

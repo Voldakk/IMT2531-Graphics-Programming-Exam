@@ -119,6 +119,9 @@ namespace EVA
 
 		// UI
 		RenderUi();
+
+		// Reset the active material
+		Material::SetNoActive();
 	}
 
 	std::shared_ptr<GameObject> Scene::CreateGameObject()

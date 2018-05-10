@@ -256,6 +256,11 @@ namespace EVA
 		textureDefaultEmission = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_emission.png");
 	}
 
+	void Material::SetNoActive()
+	{
+		m_ActiveMaterial = nullptr;
+	}
+
 	void ShadowMaterial::SetMaterialUniforms(Scene* scene) const
 	{
 
