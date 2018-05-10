@@ -38,6 +38,8 @@ namespace EVA
 		unsigned int m_ShadowMapSize;
 
 	public:
+
+		glm::vec2& rotation = m_Rotation;
 		
 		static const unsigned int DEFAULT_SHADOW_MAP_SIZE = 4096;
 		

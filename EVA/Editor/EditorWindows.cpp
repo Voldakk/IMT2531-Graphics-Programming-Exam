@@ -561,6 +561,10 @@ namespace EVA
 
 		if (light->GetType() == Light::Directional)
 		{
+			auto rot = light->rotation;
+			ImGui::InputFloat2("Rotation", glm::value_ptr(rot));
+			light->SetRotation(rot);
+
 			ImGui::InputFloat("Shadow distance", &light->directionalShadowDistance);
 			ImGui::InputFloat("Near plane", &light->directionalNearPlane);
 			ImGui::InputFloat("Far plane", &light->directionalFarPlane);

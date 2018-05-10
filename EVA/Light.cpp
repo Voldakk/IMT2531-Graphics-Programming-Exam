@@ -3,6 +3,7 @@
 #include "GL/glew.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Application.hpp"
+#include "Input.hpp"
 
 EVA::Light::Light(const Type type, const bool shadows, const unsigned int shadowSize)
 {
@@ -61,19 +62,23 @@ EVA::Light::Light(const Type type, const bool shadows, const unsigned int shadow
 
 EVA::Light::Light(DataObject data) 
 	: Light(
-	data.GetString("type", "directional") == "point" ? Point : Directional, 
+	data.GetString("type", "directional") == "directional" ? Directional : Point,
 	data.GetBool("shadows", true), 
 	data.GetInt("shadowMapSize", DEFAULT_SHADOW_MAP_SIZE))
 {
-	SetRotation(data.GetVec2("rotation", glm::vec2(0.0f)));
-	SetPosition(data.GetVec3("position", glm::vec3(0.0f)));
-
 	color = data.GetVec3("color", color);
+	ambientCoefficient = data.GetFloat("ambientCoefficient", ambientCoefficient);
+	
+	SetRotation(data.GetVec2("rotation", glm::vec2(0.0f)));
 
 	directionalShadowDistance = data.GetFloat("directionalShadowDistance", directionalShadowDistance);
 
 	directionalNearPlane = data.GetFloat("directionalNearPlane", directionalNearPlane);
 	directionalFarPlane = data.GetFloat("directionalFarPlane", directionalFarPlane);
+
+	SetPosition(data.GetVec3("position", glm::vec3(0.0f)));
+
+	attenuation = data.GetFloat("attenuation", attenuation);
 
 	pointNearPlane = data.GetFloat("pointNearPlane", pointNearPlane);
 	pointFarPlane = data.GetFloat("pointFarPlane", pointFarPlane);
@@ -99,12 +104,12 @@ void EVA::Light::SetRotation(const glm::vec2 rotation)
 
 void EVA::Light::Save(DataObject& data) const
 {
+	data.SetString("type", m_Type == Directional ? "directional" : "point");
+	data.SetVec3("color", color);
+	data.SetFloat("ambientCoefficient", ambientCoefficient);
+
 	if(m_Type == Directional)
 	{
-		data.SetString("type", "Directional");
-
-		data.SetVec3("color", color);
-
 		data.SetVec2("rotation", m_Rotation);
 
 		data.SetFloat("directionalShadowDistance", directionalShadowDistance);
@@ -114,10 +119,6 @@ void EVA::Light::Save(DataObject& data) const
 	}
 	else
 	{
-		data.SetString("type", "Point");
-
-		data.SetVec3("color", color);
-
 		data.SetVec3("position", m_Position);
 
 		data.SetFloat("attenuation", attenuation);
@@ -125,8 +126,6 @@ void EVA::Light::Save(DataObject& data) const
 		data.SetFloat("pointNearPlane", pointNearPlane);
 		data.SetFloat("pointFarPlane", pointFarPlane);
 	}
-
-	data.SetFloat("ambientCoefficient", ambientCoefficient);
 
 	data.SetBool("shadows", m_Shadows);
 	if(m_Shadows)

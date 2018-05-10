@@ -5,58 +5,40 @@
     },
     "lights": [
         {
-            "type": "directional",
+            "type": "point",
             "color": [
-                0.5,
-                0.5,
-                0.5
+                1.0,
+                0.0,
+                0.0
             ],
-            "ambientCoefficient": 0.004999999888241291,
-            "rotation": [
-                60.0,
-                -80.0
+            "ambientCoefficient": 0.009999999776482582,
+            "position": [
+                -2.0,
+                1.0,
+                -2.0
             ],
-            "directionalShadowDistance": 20.0,
-            "directionalNearPlane": 1.0,
-            "directionalFarPlane": 100.0,
-            "shadows": true,
-            "shadowMapSize": 4096
+            "attenuation": 0.0010000000474974514,
+            "pointNearPlane": 0.10000000149011612,
+            "pointFarPlane": 25.0,
+            "shadows": false
         },
         {
-            "type": "directional",
+            "type": "point",
             "color": [
-                0.5,
-                0.5,
-                0.5
+                0.0,
+                0.17864012718200684,
+                1.0
             ],
             "ambientCoefficient": 0.004999999888241291,
-            "rotation": [
-                60.0,
-                -200.0
+            "position": [
+                2.0,
+                1.0,
+                2.0
             ],
-            "directionalShadowDistance": 20.0,
-            "directionalNearPlane": 1.0,
-            "directionalFarPlane": 100.0,
-            "shadows": true,
-            "shadowMapSize": 4096
-        },
-        {
-            "type": "directional",
-            "color": [
-                0.5,
-                0.5,
-                0.5
-            ],
-            "ambientCoefficient": 0.004999999888241291,
-            "rotation": [
-                60.0,
-                -320.0
-            ],
-            "directionalShadowDistance": 20.0,
-            "directionalNearPlane": 1.0,
-            "directionalFarPlane": 100.0,
-            "shadows": true,
-            "shadowMapSize": 4096
+            "attenuation": 0.5,
+            "pointNearPlane": 0.10000000149011612,
+            "pointFarPlane": 25.0,
+            "shadows": false
         }
     ],
     "gameObjects": [
