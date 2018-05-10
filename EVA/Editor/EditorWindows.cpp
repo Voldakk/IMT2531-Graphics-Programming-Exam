@@ -307,6 +307,14 @@ namespace EVA
 
 		unsigned int i = 100;
 
+		if(m_SelectedAssetFolder != "./assets")
+		{
+			if (ImGui::Selectable(".."))
+			{
+				m_SelectedAssetFolder = m_SelectedAssetFolder.parent_path();
+			}
+		}
+
 		for (const auto& p : FS::directory_iterator(m_SelectedAssetFolder))
 		{
 			ImGui::BeginGroup();
