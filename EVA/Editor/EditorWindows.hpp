@@ -33,6 +33,9 @@ namespace EVA
 
 		FS::path m_SelectedAssetFolder = "./assets";
 
+		FS::path m_RenamePath = "";
+		FS::path m_DeletePath = "";
+
 	public:
 
 		explicit EditorWindows(SceneEditor* editor);
@@ -66,6 +69,7 @@ namespace EVA
 		void DisplayFoldersRecursively(const FS::path& path);
 
 		void DisplayGameObjectsRecursively(EVA::GameObject* gameObject);
+		
 		void GameObjectInspector(float width) const;
 
 		void LightInspector() const;

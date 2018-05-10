@@ -294,19 +294,43 @@ namespace EVA
 
 		ImGui::SetNextWindowPos({ m_HierarchyWidth, (float)screenSize.y }, 0, { 0.0f, 1.0f });
 
-		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse;
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar;
 		ImGui::Begin("Assets", nullptr, flags);
 
+		// Folder tree
 		ImGui::BeginChild(ImGui::GetID((void*)nullptr), ImVec2(200.0f, ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y), true);
 
 		DisplayFoldersRecursively("./assets");
 
 		ImGui::EndChild();
 		ImGui::SameLine();
+
+		// Current folder view
 		ImGui::BeginChild(ImGui::GetID((void*)1), ImVec2(ImGui::GetWindowWidth() - 225.0f, ImGui::GetWindowContentRegionMax().y - ImGui::GetWindowContentRegionMin().y), true);
 
-		unsigned int i = 100;
+		// Window context menu
+		if (ImGui::BeginPopupContextWindow("Asset folder context"))
+		{
+			if (ImGui::BeginMenu("New"))
+			{
+				if (ImGui::MenuItem("Folder"))
+				{
 
+				}
+				if (ImGui::MenuItem("Material"))
+				{
+
+				}
+				if (ImGui::MenuItem("Shader"))
+				{
+
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndPopup();
+		}
+
+		// Back button
 		if(m_SelectedAssetFolder != "./assets")
 		{
 			if (ImGui::Selectable(".."))
@@ -315,6 +339,7 @@ namespace EVA
 			}
 		}
 
+		// Files and folders list
 		for (const auto& p : FS::directory_iterator(m_SelectedAssetFolder))
 		{
 			ImGui::BeginGroup();
@@ -346,12 +371,86 @@ namespace EVA
 					ImGui::EndDragDropSource();
 				}
 			}
+
+			// Item context menu
+			if (ImGui::BeginPopupContextItem(FileSystem::ToString(p.path()).c_str()))
+			{
+				if (ImGui::MenuItem("Rename"))
+				{
+					m_RenamePath = p.path();
+					
+				}
+				if (ImGui::MenuItem("Delete"))
+				{
+					m_DeletePath = p.path();
+				}
+				ImGui::EndPopup();
+			}
 			ImGui::EndGroup();
 		}
 
 		ImGui::EndChild();
 
 		ImGui::End();
+
+
+		// Rename popup
+		if(!m_RenamePath.empty())
+			ImGui::OpenPopup("Rename");
+
+		if (ImGui::BeginPopupModal("Rename", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::Text(("Renaming: " + m_RenamePath.filename().string()).c_str());
+
+			const auto newName = new char[10000];
+
+			std::strcpy(newName, m_RenamePath.filename().string().c_str());
+
+			if (ImGui::InputText("##NewName", newName, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				FS::rename(m_RenamePath, m_RenamePath.parent_path() / newName);
+
+				m_RenamePath = "";
+				ImGui::CloseCurrentPopup();
+			}
+
+			delete[] newName;
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Cancel", ImVec2(120, 0)))
+			{
+				m_RenamePath = "";
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+
+		// Delete popup
+		if (!m_DeletePath.empty())
+			ImGui::OpenPopup("Delete");
+
+		if (ImGui::BeginPopupModal("Delete", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::Text(("Deleting: " + m_DeletePath.filename().string()).c_str());
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Ok", ImVec2(120, 0)))
+			{
+				FS::remove(m_DeletePath);
+
+				m_DeletePath = "";
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", ImVec2(120, 0)))
+			{
+				m_DeletePath = "";
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
 	}
 
 	void EditorWindows::SelectGameObject(EVA::GameObject* gameObject)
