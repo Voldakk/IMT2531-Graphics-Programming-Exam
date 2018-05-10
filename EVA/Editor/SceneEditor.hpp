@@ -90,7 +90,7 @@ namespace EVA
 			m_Ew->MenuBar();
 			m_Ew->AssetBrowser();
 
-			ImGui::ShowDemoWindow();
+			//ImGui::ShowDemoWindow();
 
 			// Usualy done in Scene::Update
 			ProcessDestroyQueue();

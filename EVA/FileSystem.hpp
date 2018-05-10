@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <algorithm>
 #include <experimental/filesystem>
 
 #include "tinyfiledialogs.h"
@@ -12,8 +11,6 @@ namespace EVA
 {
 	class FileSystem
 	{
-
-		static const int PATH_LENGTH = 1024;
 
 	public:
 
