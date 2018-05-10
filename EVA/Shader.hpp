@@ -5,21 +5,33 @@
 
 #include <glm/glm.hpp>
 
+#include "FileSystem.hpp"
+
 namespace EVA
 {
+
+	struct ShaderPaths
+	{
+		FS::path shader;
+		FS::path vertex;
+		FS::path fragment;
+		FS::path geometry;
+	};
 
 	/**
 	 * \brief Used to interact with an OpenGL shader program
 	 */
 	class Shader
 	{
-
 		unsigned int m_ShaderId;
 		std::unordered_map<std::string, int> m_UniformLocationMap;
+		std::shared_ptr<ShaderPaths> m_Paths;
 
 	public:
 
-		explicit Shader(const unsigned int shaderId);
+		std::shared_ptr<ShaderPaths>& paths = m_Paths;
+
+		explicit Shader(const unsigned int shaderId, std::shared_ptr<ShaderPaths> paths);
 
 		~Shader();
 

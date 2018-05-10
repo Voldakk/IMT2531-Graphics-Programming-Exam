@@ -16,7 +16,7 @@ namespace EVA
 	{
 		if (m_Shader == nullptr)
 		{
-			m_Shader = ShaderManager::CreateOrGetShader("sprite", "sprite.vert", "sprite.frag");
+			m_Shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "sprite.shader");
 
 			float vertices[6][4] = 
 			{

@@ -113,6 +113,9 @@ namespace EVA
 
 	void Material::Activate(Scene *scene, Transform *transform)
 	{
+		if (shader == nullptr)
+			return;
+
 		if (m_ActiveMaterial != this)
 		{
 			m_ActiveMaterial = this;

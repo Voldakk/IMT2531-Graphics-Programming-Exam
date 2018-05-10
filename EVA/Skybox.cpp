@@ -66,7 +66,7 @@ namespace EVA
 		// Material
 		m_Material = std::make_unique<SkyBoxMaterial>();
 		m_Material->SetTexture(m_Texture);
-		m_Material->shader = ShaderManager::CreateOrGetShader("skybox", "skybox.vert", "skybox.frag");
+		m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
 	}
 
 	void Skybox::Save(DataObject& data) const

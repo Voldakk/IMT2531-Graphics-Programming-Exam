@@ -7,8 +7,8 @@
 namespace EVA
 {
 
-	Shader::Shader(const unsigned int shaderId) 
-		: m_ShaderId(shaderId)
+	Shader::Shader(const unsigned int shaderId, std::shared_ptr<ShaderPaths> paths)
+		: m_ShaderId(shaderId), m_Paths(std::move(paths))
 	{
 
 	}

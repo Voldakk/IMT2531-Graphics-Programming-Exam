@@ -74,7 +74,7 @@ namespace EVA
 		FT_Done_Face(face);
 		FT_Done_FreeType(ft);
 
-		m_Shader = EVA::ShaderManager::CreateOrGetShader("text", "text.vert", "text.frag");
+		m_Shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "text.shader");
 	}
 
 	Text::Text()

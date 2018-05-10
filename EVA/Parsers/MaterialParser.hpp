@@ -25,9 +25,6 @@ namespace EVA
 			auto material = std::make_shared<Material>();
 
 			material->path = path;
-			material->shader = ShaderManager::CreateOrGetShader("standard", "standard.vert", "standard.frag");
-			//material->shader = ShaderManager::CreateOrGetShader("standard_instanced", "standard_instanced.vert", "standard_instanced.frag");
-			
 
 			const auto sd = Json::Open(path);
 
@@ -37,7 +34,13 @@ namespace EVA
 			auto& d = (*sd);
 
 			DataObject data(d);
-			
+
+
+			// Shader
+			const auto shaderPath = data.GetPath("shader", "");
+			if (!shaderPath.empty())
+				material->shader = ShaderManager::LoadShader(shaderPath);
+
 			// Tint
 			material->tintDiffuse = data.GetVec4("tintDiffuse", material->tintDiffuse);
 
@@ -72,6 +75,9 @@ namespace EVA
 			auto& a = d.GetAllocator();
 
 			DataObject data(d, &a);
+
+			if (material->shader != nullptr)
+				data.SetString("shader", FileSystem::ToString(material->shader->paths->shader));
 
 			if (material->tintDiffuse != glm::vec4(1.0f))
 				data.SetVec4("tintDiffuse", material->tintDiffuse);

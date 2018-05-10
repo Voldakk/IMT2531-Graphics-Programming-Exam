@@ -6,99 +6,72 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "Parsers/ShaderParser.hpp"
 
 namespace EVA
 {
+	std::map<FS::path, std::shared_ptr<Shader>> ShaderManager::m_Shaders;
 
-	const FS::path SHADER_PATH = "./assets/standard assets/shaders/";
-
-	std::map<std::string, std::shared_ptr<Shader>> ShaderManager::m_Shaders;
-
-	std::shared_ptr<Shader> ShaderManager::CreateOrGetShader(const std::string& name, const FS::path& vertPath, const FS::path& fragPath)
+	std::shared_ptr<Shader> ShaderManager::LoadShader(const FS::path& path)
 	{
-		if (m_Shaders.count(name))
-			return m_Shaders[name];
+		if (m_Shaders.count(path))
+			return m_Shaders[path];
 
-		auto shaderId = CreateProgram(vertPath, fragPath);
-		const auto shader = std::make_shared<Shader>(shaderId);
-		
-		m_Shaders[name] = shader;
+		const auto pathList = ShaderParser::LoadShader(path);
+		if (pathList == nullptr)
+			return nullptr;
 
-		return shader;
-	}
-
-	std::shared_ptr<Shader> ShaderManager::CreateOrGetShader(const std::string& name, const FS::path& vertPath, const FS::path& fragPath, const FS::path& geomPath)
-	{
-		if (m_Shaders.count(name))
-			return m_Shaders[name];
-
-		auto shaderId = CreateProgram(vertPath, fragPath, geomPath);
-		const auto shader = std::make_shared<Shader>(shaderId);
-
-		m_Shaders[name] = shader;
-
-		return shader;
-	}
-
-	std::shared_ptr<Shader> ShaderManager::GetShader(const std::string& name)
-	{
-		if (m_Shaders.count(name))
-			return m_Shaders[name];
-
-		return nullptr;
-	}
-
-	unsigned int ShaderManager::CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader)
-	{
-		// Load and compile the vertex and fragment shaders
-		const auto vertexShader = LoadAndCompileShader(SHADER_PATH / pathVertShader, GL_VERTEX_SHADER);
-		const auto fragmentShader = LoadAndCompileShader(SHADER_PATH / pathFragShader, GL_FRAGMENT_SHADER);
-
-		// Create a program object and attach the two shaders we have compiled, the program object contains
-		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
 		const auto shaderProgram = glCreateProgram();
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
 
-		// Now that the fragment and vertex shader has been attached, we no longer need these two separate objects and should delete them.
-		// The attachment to the shader program will keep them alive, as long as we keep the shaderProgram.
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
+		if (!pathList->vertex.empty())
+		{
+			const auto vertexShader = LoadAndCompileShader(pathList->vertex, GL_VERTEX_SHADER);
+			glAttachShader(shaderProgram, vertexShader);
+			glDeleteShader(vertexShader);
+		}
 
-		// Link the different shaders that are bound to this program, this creates a final shader that
-		// we can use to render geometry with.
+		if (!pathList->fragment.empty())
+		{
+			const auto fragmentShader = LoadAndCompileShader(pathList->fragment, GL_FRAGMENT_SHADER);
+			glAttachShader(shaderProgram, fragmentShader);
+			glDeleteShader(fragmentShader);
+		}
+
+		if (!pathList->geometry.empty())
+		{
+			const auto geometryShader = LoadAndCompileShader(pathList->geometry, GL_GEOMETRY_SHADER);
+			glAttachShader(shaderProgram, geometryShader);
+			glDeleteShader(geometryShader);
+		}
+
 		glLinkProgram(shaderProgram);
 		glUseProgram(shaderProgram);
 
-		return shaderProgram;
+		const auto shader = std::make_shared<Shader>(shaderProgram, pathList);
+
+		m_Shaders[path] = shader;
+		return shader;
 	}
 
-	unsigned int ShaderManager::CreateProgram(const FS::path& pathVertShader, const FS::path& pathFragShader, const FS::path& pathGeomShader)
+	void ShaderManager::SaveShader(Shader* shader, const FS::path& path)
 	{
-		// Load and compile the vertex and fragment shaders
-		const auto vertexShader =   LoadAndCompileShader(SHADER_PATH / pathVertShader, GL_VERTEX_SHADER);
-		const auto fragmentShader = LoadAndCompileShader(SHADER_PATH / pathFragShader, GL_FRAGMENT_SHADER);
-		const auto geometryShader = LoadAndCompileShader(SHADER_PATH / pathGeomShader, GL_GEOMETRY_SHADER);
+		Json::Document d;
+		d.SetObject();
 
-		// Create a program object and attach the two shaders we have compiled, the program object contains
-		// both vertex and fragment shaders as well as information about uniforms and attributes common to both.
-		const auto shaderProgram = glCreateProgram();
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		glAttachShader(shaderProgram, geometryShader);
+		auto& a = d.GetAllocator();
 
-		// Now that the fragment and vertex shader has been attached, we no longer need these two separate objects and should delete them.
-		// The attachment to the shader program will keep them alive, as long as we keep the shaderProgram.
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-		glDeleteShader(geometryShader);
+		DataObject data(d, &a);
 
-		// Link the different shaders that are bound to this program, this creates a final shader that
-		// we can use to render geometry with.
-		glLinkProgram(shaderProgram);
-		glUseProgram(shaderProgram);
+		if (!shader->paths->vertex.empty())
+			data.SetString("vertex", FileSystem::ToString(shader->paths->vertex));
 
-		return shaderProgram;
+		if (!shader->paths->fragment.empty())
+			data.SetString("fragment", FileSystem::ToString(shader->paths->fragment));
+
+		if (!shader->paths->geometry.empty())
+			data.SetString("geometry", FileSystem::ToString(shader->paths->geometry));
+
+		Json::Save(&d, path);
 	}
 
 	void ShaderManager::ReadShaderSource(const FS::path& path, std::vector<char> &buffer)
@@ -147,9 +120,9 @@ namespace EVA
 		// Compile the shader
 		glCompileShader(shader);
 		// Comile the shader, translates into internal representation and checks for errors.
-		GLint compileOK;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOK);
-		if (!compileOK)
+		GLint compileOk;
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
+		if (!compileOk)
 		{
 			char infolog[1024];;
 			glGetShaderInfoLog(shader, 1024, nullptr, infolog);

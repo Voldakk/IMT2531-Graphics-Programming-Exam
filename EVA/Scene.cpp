@@ -15,11 +15,17 @@ namespace EVA
 {
 	Scene::Scene()
 	{
-		m_ShadowMaterial.shader = ShaderManager::CreateOrGetShader("scene_shadow", "shadow.vert", "shadow.frag");
+		/*m_ShadowMaterial.shader = ShaderManager::CreateOrGetShader("scene_shadow", "shadow.vert", "shadow.frag");
 		m_ShadowMaterialInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_instanced", "shadow_instanced.vert", "shadow.frag");
 	
 		m_ShadowMaterialCube.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube", "shadow_cube.vert", "shadow_cube.frag", "shadow_cube.geom");
-		m_ShadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");
+		m_ShadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");*/
+
+		m_ShadowMaterial.shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "shadow.shader");
+		m_ShadowMaterialInstanced.shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "shadow_instaced.shader");
+
+		m_ShadowMaterialCube.shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "shadow_cube.shader");
+		m_ShadowMaterialCubeInstanced.shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "shadow_cube_instanced.shader");
 	}
 
 	Scene::Scene(const FS::path& path) : Scene()
@@ -382,6 +388,9 @@ namespace EVA
 
 	void Scene::RenderShadowMap(const glm::mat4 lightSpaceMatrix)
 	{
+		if(m_ShadowMaterialInstanced.shader == nullptr || m_ShadowMaterial.shader == nullptr)
+			return;
+
 		for (auto &material : m_Materials)
 		{
 			// If the material should use GPU instancing
@@ -439,6 +448,9 @@ namespace EVA
 
 	void Scene::RenderShadowCubeMap(const std::vector<glm::mat4>& shadowMatrices, const glm::vec3 lightPos, const float farPlane)
 	{
+		if (m_ShadowMaterialCubeInstanced.shader == nullptr || m_ShadowMaterialCube.shader == nullptr)
+			return;
+
 		for (auto &material : m_Materials)
 		{
 			// If the material should use GPU instancing
