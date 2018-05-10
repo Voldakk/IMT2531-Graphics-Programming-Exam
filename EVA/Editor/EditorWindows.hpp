@@ -31,14 +31,24 @@ namespace EVA
 		float m_HierarchyWidth = 0.0f;
 		float m_InspectorWidth = 0.0f;
 
+		// Assets browser
 		FS::path m_SelectedAssetFolder = "./assets";
+
+		enum NewAssetType { Folder, Material, Shader };
+		NewAssetType m_NewAssetType;
+		FS::path m_NewPath = "";
 
 		FS::path m_RenamePath = "";
 		FS::path m_DeletePath = "";
 
+		const unsigned int m_NameBufferSize = 10000;
+		char* m_NameBuffer = "";
+
 	public:
 
 		explicit EditorWindows(SceneEditor* editor);
+
+		~EditorWindows();
 
 		void SceneHierarchy();
 
@@ -79,6 +89,12 @@ namespace EVA
 		void MaterialInspector() const;
 
 		void ShaderInspector() const;
+
+		void NewAssetPopup();
+
+		void RenameAssetPopup();
+
+		void DeleteAssetPopup();
 
 	};
 

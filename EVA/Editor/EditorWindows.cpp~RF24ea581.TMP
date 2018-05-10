@@ -14,7 +14,7 @@ namespace EVA
 	{
 		m_Editor = editor;
 
-		m_NameBuffer = new char[m_NameBufferSize];
+		m_NameBuffer = new char[1000];
 	}
 
 	EditorWindows::~EditorWindows()
@@ -324,19 +324,16 @@ namespace EVA
 				{
 					m_NewAssetType = Folder;
 					m_NewPath = m_SelectedAssetFolder;
-					std::strcpy(m_NameBuffer, "New folder");
 				}
 				if (ImGui::MenuItem("Material"))
 				{
 					m_NewAssetType = Material;
 					m_NewPath = m_SelectedAssetFolder;
-					std::strcpy(m_NameBuffer, "New material");
 				}
 				if (ImGui::MenuItem("Shader"))
 				{
 					m_NewAssetType = Shader;
 					m_NewPath = m_SelectedAssetFolder;
-					std::strcpy(m_NameBuffer, "New Shader");
 				}
 				ImGui::EndMenu();
 			}
@@ -391,7 +388,6 @@ namespace EVA
 				if (ImGui::MenuItem("Rename"))
 				{
 					m_RenamePath = p.path();
-					std::strcpy(m_NameBuffer, m_RenamePath.filename().string().c_str());
 					
 				}
 				if (ImGui::MenuItem("Delete"))
@@ -822,7 +818,11 @@ namespace EVA
 
 	void EditorWindows::NewAssetPopup()
 	{
-		if (ImGui::InputText("##NewName", m_NameBuffer, m_NameBufferSize, ImGuiInputTextFlags_EnterReturnsTrue))
+		std::string assetTypeString;
+
+		std::strcpy(m_NameBuffer, "new");
+
+		if (ImGui::InputText("##NewName", m_NameBuffer, m_NameBufferSize))
 		{
 			auto path = m_NewPath / m_NameBuffer;
 			switch (m_NewAssetType)
@@ -889,7 +889,6 @@ namespace EVA
 			m_NewPath = "";
 			ImGui::CloseCurrentPopup();
 		}
-		ImGui::SetItemDefaultFocus();
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel"))
 		{
@@ -900,24 +899,19 @@ namespace EVA
 
 	void EditorWindows::RenameAssetPopup()
 	{
-		ImGui::Text(m_RenamePath.filename().string().c_str());
+		ImGui::Text(("Renaming: " + m_RenamePath.filename().string()).c_str());
 
-		if (ImGui::InputText("##NewName", m_NameBuffer, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
+		const auto newName = new char[10000];
+
+		std::strcpy(newName, m_RenamePath.filename().string().c_str());
+
+		if (ImGui::InputText("##NewName", newName, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			if (m_SelectedPath == m_RenamePath)
 				SelectPath("");
 
-			const auto newPath = m_RenamePath.parent_path() / m_NameBuffer;
-
-			try
-			{
-				FS::rename(m_RenamePath, newPath);
-			}
-			catch (const std::exception& e)
-			{
-				std::cout << "EditorWindows::RenameAssetPopup - Failed to rename asset: '" << m_RenamePath << "' to '" << newPath << "'" << std::endl
-					<< e.what() << std::endl;
-			}
+			const auto newPath = m_RenamePath.parent_path() / newName;
+			FS::rename(m_RenamePath, newPath);
 
 			m_RenamePath = "";
 			ImGui::CloseCurrentPopup();
@@ -925,38 +919,18 @@ namespace EVA
 
 		ImGui::Separator();
 
-		if (ImGui::Button("Ok", ImVec2(120, 0)))
-		{
-			if (m_SelectedPath == m_RenamePath)
-				SelectPath("");
-
-			const auto newPath = m_RenamePath.parent_path() / m_NameBuffer;
-
-			try
-			{
-				FS::rename(m_RenamePath, newPath);
-			}
-			catch (const std::exception& e)
-			{
-				std::cout << "EditorWindows::RenameAssetPopup - Failed to rename asset: '" << m_RenamePath << "' to '" << newPath << "'" << std::endl
-					<< e.what() << std::endl;
-			}
-
-			m_RenamePath = "";
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::SetItemDefaultFocus();
-		ImGui::SameLine();
 		if (ImGui::Button("Cancel", ImVec2(120, 0)))
 		{
 			m_RenamePath = "";
 			ImGui::CloseCurrentPopup();
 		}
+
+		delete[] newName;
 	}
 
 	void EditorWindows::DeleteAssetPopup()
 	{
-		ImGui::Text(m_DeletePath.filename().string().c_str());
+		ImGui::Text(("Deleting: " + m_DeletePath.filename().string()).c_str());
 
 		ImGui::Separator();
 
@@ -965,20 +939,11 @@ namespace EVA
 			if (m_SelectedPath == m_DeletePath)
 				SelectPath("");
 
-			try
-			{
-				FS::remove(m_DeletePath);
-			}
-			catch(const std::exception& e)
-			{
-				std::cout << "EditorWindows::DeleteAssetPopup - Failed to delete asset: " << m_DeletePath << std::endl
-				<< e.what() << std::endl;
-			}
+			FS::remove(m_DeletePath);
 
 			m_DeletePath = "";
 			ImGui::CloseCurrentPopup();
 		}
-		ImGui::SetItemDefaultFocus();
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel", ImVec2(120, 0)))
 		{

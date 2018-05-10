@@ -21,9 +21,18 @@ namespace EVA
 			const auto sd = Json::Open(path);
 
 			if (sd == nullptr)
+			{
+				std::cout << "ShaderParser::LoadShader - Invalid shader file: " << FileSystem::ToString(path) << std::endl;
 				return nullptr;
+			}
 
 			auto& d = (*sd);
+
+			if (!d.IsObject())
+			{
+				std::cout << "ShaderParser::LoadShader - Invalid shader file: " << FileSystem::ToString(path) << std::endl;
+				return nullptr;
+			}
 
 			DataObject data(d);
 

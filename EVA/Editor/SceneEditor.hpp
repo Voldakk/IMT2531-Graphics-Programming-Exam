@@ -5,13 +5,10 @@
 #include <iostream>
 #include <memory>
 
-#include "../Physics.hpp"
-#include "../Components/SceneCamera.hpp"
 #include "EditorWindows.hpp"
 #include "../Parsers/SceneParser.hpp"
-#include "../ModelManager.hpp"
-#include "../MaterialManager.hpp"
-#include "../ShaderManager.hpp"
+#include "../Components/SceneCamera.hpp"
+#include "../Physics.hpp"
 
 namespace EVA
 {
@@ -64,18 +61,6 @@ namespace EVA
 				LoadTemplate();
 			else
 				SceneParser::Load(this, path);
-
-			/*const auto material = MaterialManager::LoadMaterial("./assets/standard assets/materials/uv.mat");
-			const auto mesh = ModelManager::Primitive(ModelManager::Monkey)->GetMesh(0);
-
-			for (unsigned int x = 0; x < 1000; ++x)
-			{
-				auto g = CreateGameObject();
-				g->SetName("Monkey " + std::to_string(x));
-				g->transform->SetPosition({ x * 2.0f, 2.0f, 2.0f });
-				auto mr = g->AddComponent<MeshRenderer>();
-				mr->Set(mesh, material);
-			}*/
 		}
 
 		void Update(const float deltaTime) override
@@ -84,7 +69,7 @@ namespace EVA
 			m_SceneCameraGameObject->Update(deltaTime);
 
 			// Check for clicked object
-			if (Input::MouseButtonDown(Input::MouseLeft))
+			if (Input::MouseButtonDown(Input::MouseLeft) && !ImGui::IsMouseHoveringAnyWindow())
 			{
 				const auto mousePos = Input::MousePosition();
 				const auto ray = Physics::ScreenPosToWorldRay(mousePos, Application::mainCamera);
@@ -105,8 +90,9 @@ namespace EVA
 			m_Ew->MenuBar();
 			m_Ew->AssetBrowser();
 
-			//ImGui::ShowDemoWindow();
+			ImGui::ShowDemoWindow();
 
+			// Usualy done in Scene::Update
 			ProcessDestroyQueue();
 		}
 

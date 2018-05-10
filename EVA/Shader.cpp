@@ -6,6 +6,10 @@
 
 namespace EVA
 {
+	Shader::Shader()
+	{
+		SetPaths(std::make_shared<ShaderPaths>());
+	}
 
 	Shader::Shader(const std::shared_ptr<ShaderPaths>& paths)
 	{

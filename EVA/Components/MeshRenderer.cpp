@@ -129,6 +129,13 @@ namespace EVA
 		if (!modelPath.empty())
 		{
 			const auto model = ModelManager::LoadModel(modelPath);
+			if (model == nullptr)
+			{
+				m_ModelPath = "";
+				Set(nullptr, m_Material);
+				return;
+			}
+
 			if (model->MeshCount() > meshIndex)
 			{
 				const auto mesh	= model->GetMesh(meshIndex);

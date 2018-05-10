@@ -49,6 +49,7 @@ namespace EVA
 			auto d = std::make_shared<Document>();
 			d->ParseStream(is);
 
+			fclose(fp);
 			return d;
 		}
 
@@ -59,8 +60,8 @@ namespace EVA
 			rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 			rapidjson::PrettyWriter<rapidjson::FileWriteStream> writer(os);
 			const auto r = d->Accept(writer);
-			fclose(fp);
 
+			fclose(fp);
 			return r;
 		}
 

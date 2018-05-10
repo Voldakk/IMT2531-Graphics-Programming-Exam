@@ -31,6 +31,7 @@ namespace EVA
 
 		std::shared_ptr<ShaderPaths>& paths = m_Paths;
 
+		Shader();
 		explicit Shader(const std::shared_ptr<ShaderPaths>& paths);
 
 		void SetPaths(const std::shared_ptr<ShaderPaths>& paths);
