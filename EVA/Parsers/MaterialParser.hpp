@@ -41,6 +41,12 @@ namespace EVA
 			if (!shaderPath.empty())
 				material->shader = ShaderManager::LoadShader(shaderPath);
 
+			// Instancing
+			material->SetUseInstancing(data.GetBool("useInstancing", false));
+
+			// Shininess
+			material->materialShininess = data.GetFloat("shininess", material->materialShininess);
+
 			// Tint
 			material->tintDiffuse = data.GetVec4("tintDiffuse", material->tintDiffuse);
 
@@ -78,6 +84,10 @@ namespace EVA
 
 			if (material->shader != nullptr)
 				data.SetString("shader", FileSystem::ToString(material->shader->paths->shader));
+
+			data.SetBool("useInstancing", material->useInstancing);
+
+			data.SetFloat("shininess", material->materialShininess);
 
 			if (material->tintDiffuse != glm::vec4(1.0f))
 				data.SetVec4("tintDiffuse", material->tintDiffuse);

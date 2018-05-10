@@ -41,6 +41,11 @@ namespace EVA
 		return nullptr;
 	}
 
+	void Material::SetDirtyAll()
+	{
+		m_MatrixBuffers.clear();
+	}
+
 	void Material::SetDirty(const std::shared_ptr<Mesh>& mesh, const bool value)
 	{
 		if (m_MatrixBuffers.find(mesh) != m_MatrixBuffers.end())
@@ -53,6 +58,16 @@ namespace EVA
 			return m_MatrixBuffers[mesh].dirty;
 
 		return false;
+	}
+
+	void Material::SetUseInstancing(const bool value)
+	{
+		if(m_UseInstancing == value)
+			return;
+
+		m_UseInstancing = value;
+
+		m_MatrixBuffers.clear();
 	}
 
 	void Material::SetTexture(const Texture::Type type, const FS::path& path)

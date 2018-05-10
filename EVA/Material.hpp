@@ -42,8 +42,11 @@ namespace EVA
 		void SetMbo(const std::shared_ptr<Mesh>& mesh, const std::vector<glm::mat4>& models);
 		bool HasMbo(const std::shared_ptr<Mesh>& mesh) const;
 		InstancedMeshData* GetMbo(const std::shared_ptr<Mesh>& mesh);
+		void SetDirtyAll();
 		void SetDirty(const std::shared_ptr<Mesh>& mesh, bool value = true);
 		bool IsDirty(const std::shared_ptr<Mesh>& mesh);
+
+		void SetUseInstancing(bool value);
 		// End instanced
 
 		FS::path path;

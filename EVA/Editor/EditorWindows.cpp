@@ -600,12 +600,28 @@ namespace EVA
 		if (material == nullptr)
 			return;
 
-		ImGui::Text("Material");
-		ImGui::Text(FileSystem::ToString(material->path).c_str());
+		ImGui::Text(("Material: " + FileSystem::ToString(material->path.filename())).c_str());
 
-		ComponentInspector::Float("Shininess", material->materialShininess);
+		auto path = material->shader == nullptr ? "" : FileSystem::ToString(material->shader->paths->shader);
+		if (ComponentInspector::DragDropTargetString("Shader", path, "file"))
+		{
+			material->shader = ShaderManager::LoadShader(path);
+			MaterialParser::Save(material, material->path);
+		}
 
-		auto path = material->textureDiffuse == nullptr ? "" : FileSystem::ToString(material->textureDiffuse->path);
+		auto useInstancing = material->useInstancing;
+		if(ImGui::Checkbox("Use instancing", &useInstancing))
+		{
+			material->SetUseInstancing(useInstancing);
+			MaterialParser::Save(material, material->path);
+		}
+
+		if(ImGui::InputFloat("Shininess", &material->materialShininess))
+		{
+			MaterialParser::Save(material, material->path);
+		}
+
+		path = material->textureDiffuse == nullptr ? "" : FileSystem::ToString(material->textureDiffuse->path);
 		if (ComponentInspector::DragDropTargetString("Diffuse texture", path, "file"))
 		{
 			material->SetTexture(Texture::Diffuse, path);
