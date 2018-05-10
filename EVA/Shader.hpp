@@ -23,7 +23,7 @@ namespace EVA
 	 */
 	class Shader
 	{
-		unsigned int m_ShaderId;
+		int m_ShaderId = -1;
 		std::unordered_map<std::string, int> m_UniformLocationMap;
 		std::shared_ptr<ShaderPaths> m_Paths;
 
@@ -31,7 +31,9 @@ namespace EVA
 
 		std::shared_ptr<ShaderPaths>& paths = m_Paths;
 
-		explicit Shader(const unsigned int shaderId, std::shared_ptr<ShaderPaths> paths);
+		explicit Shader(const std::shared_ptr<ShaderPaths>& paths);
+
+		void SetPaths(const std::shared_ptr<ShaderPaths>& paths);
 
 		~Shader();
 

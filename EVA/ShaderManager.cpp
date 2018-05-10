@@ -20,33 +20,7 @@ namespace EVA
 		if (pathList == nullptr)
 			return nullptr;
 
-		const auto shaderProgram = glCreateProgram();
-
-		if (!pathList->vertex.empty())
-		{
-			const auto vertexShader = LoadAndCompileShader(pathList->vertex, GL_VERTEX_SHADER);
-			glAttachShader(shaderProgram, vertexShader);
-			glDeleteShader(vertexShader);
-		}
-
-		if (!pathList->fragment.empty())
-		{
-			const auto fragmentShader = LoadAndCompileShader(pathList->fragment, GL_FRAGMENT_SHADER);
-			glAttachShader(shaderProgram, fragmentShader);
-			glDeleteShader(fragmentShader);
-		}
-
-		if (!pathList->geometry.empty())
-		{
-			const auto geometryShader = LoadAndCompileShader(pathList->geometry, GL_GEOMETRY_SHADER);
-			glAttachShader(shaderProgram, geometryShader);
-			glDeleteShader(geometryShader);
-		}
-
-		glLinkProgram(shaderProgram);
-		glUseProgram(shaderProgram);
-
-		const auto shader = std::make_shared<Shader>(shaderProgram, pathList);
+		const auto shader = std::make_shared<Shader>(pathList);
 
 		m_Shaders[path] = shader;
 		return shader;

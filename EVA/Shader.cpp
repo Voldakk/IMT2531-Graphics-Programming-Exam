@@ -3,14 +3,48 @@
 
 #include "GL/glew.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "ShaderManager.hpp"
 
 namespace EVA
 {
 
-	Shader::Shader(const unsigned int shaderId, std::shared_ptr<ShaderPaths> paths)
-		: m_ShaderId(shaderId), m_Paths(std::move(paths))
+	Shader::Shader(const std::shared_ptr<ShaderPaths>& paths)
 	{
+		SetPaths(paths);
+	}
 
+	void Shader::SetPaths(const std::shared_ptr<ShaderPaths>& paths)
+	{
+		if (m_ShaderId != -1)
+			glDeleteProgram(m_ShaderId);
+
+		m_Paths = paths;
+
+		m_ShaderId = glCreateProgram();
+
+		if (!paths->vertex.empty())
+		{
+			const auto vertexShader = ShaderManager::LoadAndCompileShader(paths->vertex, GL_VERTEX_SHADER);
+			glAttachShader(m_ShaderId, vertexShader);
+			glDeleteShader(vertexShader);
+		}
+
+		if (!paths->fragment.empty())
+		{
+			const auto fragmentShader = ShaderManager::LoadAndCompileShader(paths->fragment, GL_FRAGMENT_SHADER);
+			glAttachShader(m_ShaderId, fragmentShader);
+			glDeleteShader(fragmentShader);
+		}
+
+		if (!paths->geometry.empty())
+		{
+			const auto geometryShader = ShaderManager::LoadAndCompileShader(paths->geometry, GL_GEOMETRY_SHADER);
+			glAttachShader(m_ShaderId, geometryShader);
+			glDeleteShader(geometryShader);
+		}
+
+		glLinkProgram(m_ShaderId);
+		glUseProgram(m_ShaderId);
 	}
 
 	Shader::~Shader()
