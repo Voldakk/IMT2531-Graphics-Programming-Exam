@@ -42,7 +42,7 @@ namespace EVA
 		 * \param shaderType The type of shader to be compiled
 		 * \return A refference to the complied shader
 		 */
-		static unsigned int LoadAndCompileShader(const FS::path& path, GLenum shaderType);
+		static int LoadAndCompileShader(const FS::path& path, GLenum shaderType);
 
 	private:
 
@@ -51,7 +51,7 @@ namespace EVA
 		 * \param path The path to the file
 		 * \param buffer The buffer the contents of the file should be read to
 		 */
-		static void ReadShaderSource(const FS::path& path, std::vector<char> &buffer);
+		static bool ReadShaderSource(const FS::path& path, std::vector<char> &buffer);
 	};
 
 }

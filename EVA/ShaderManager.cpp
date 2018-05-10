@@ -47,7 +47,7 @@ namespace EVA
 		Json::Save(&d, path);
 	}
 
-	void ShaderManager::ReadShaderSource(const FS::path& path, std::vector<char> &buffer)
+	bool ShaderManager::ReadShaderSource(const FS::path& path, std::vector<char> &buffer)
 	{
 		std::ifstream in;
 		in.open(FileSystem::ToString(path).c_str(), std::ios::binary);
@@ -72,18 +72,23 @@ namespace EVA
 		else
 		{
 			std::cout << "ShaderManager::ReadShaderSource - Unable to open file: " << FileSystem::ToString(path).c_str() << std::endl;
-			std::system("PAUSE");
-			exit(EXIT_FAILURE);
+			return false;
 		}
+
+		return true;
 	}
 
-	unsigned int ShaderManager::LoadAndCompileShader(const FS::path& path, const GLenum shaderType)
+	int ShaderManager::LoadAndCompileShader(const FS::path& path, const GLenum shaderType)
 	{
 		std::cout << "ShaderManager::LoadAndCompileShader - " << FileSystem::ToString(path).c_str() << std::endl;
 
 		// Load a shader from an external file
 		std::vector<char> buffer;
-		ReadShaderSource(path, buffer);
+		if(!ReadShaderSource(path, buffer))
+		{
+			return -1;
+		}
+
 		const char *src = &buffer[0];
 
 		// Create shaders
@@ -103,8 +108,9 @@ namespace EVA
 			char infolog[1024];;
 			glGetShaderInfoLog(shader, 1024, nullptr, infolog);
 			std::cout << "The program failed to compile with the error:" << std::endl << infolog << std::endl;
-			std::system("PAUSE");
-			exit(EXIT_FAILURE);
+
+			glDeleteShader(shader);
+			return -1;
 		}
 		return shader;
 	}

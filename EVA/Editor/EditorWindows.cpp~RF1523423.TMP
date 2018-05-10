@@ -152,8 +152,6 @@ namespace EVA
 				const auto extension = FileSystem::ToString(m_SelectedPath.extension());
 				if (extension == ".mat")
 					MaterialInspector();
-				if (extension == ".shader")
-					ShaderInspector();
 			}
 			break;
 		default:
@@ -307,15 +305,12 @@ namespace EVA
 
 		unsigned int i = 100;
 
-		for (const auto& p : FS::directory_iterator(m_SelectedAssetFolder))
+		for (auto p : FS::directory_iterator(m_SelectedAssetFolder))
 		{
 			ImGui::BeginGroup();
 			if (is_directory(p))
 			{
-				if (ImGui::Selectable(("-> " + p.path().stem().string()).c_str()))
-				{
-					m_SelectedAssetFolder = p.path();
-				}
+				ImGui::Text(("-> " + p.path().stem().string()).c_str());
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
 					ImGui::Text(p.path().stem().string().c_str());
@@ -694,37 +689,6 @@ namespace EVA
 
 	void EditorWindows::ShaderInspector() const
 	{
-		auto shader = ShaderManager::LoadShader(m_SelectedPath);
 
-		if (shader == nullptr)
-			return;
-
-		ImGui::Text(("Shader: " + FileSystem::ToString(shader->paths->shader.filename())).c_str());
-
-		auto paths = shader->paths;
-		
-		auto path = FileSystem::ToString(shader->paths->vertex);
-		if (ComponentInspector::DragDropTargetString("Vertex", path, "file"))
-		{
-			paths->vertex = path;
-			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
-		}
-
-		path = FileSystem::ToString(shader->paths->fragment);
-		if (ComponentInspector::DragDropTargetString("Fragment", path, "file"))
-		{
-			paths->fragment = path;
-			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
-		}
-
-		path = FileSystem::ToString(shader->paths->geometry);
-		if (ComponentInspector::DragDropTargetString("Geometry", path, "file"))
-		{
-			paths->geometry = path;
-			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
-		}
 	}
 }

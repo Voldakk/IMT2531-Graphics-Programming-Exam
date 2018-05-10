@@ -708,7 +708,6 @@ namespace EVA
 		{
 			paths->vertex = path;
 			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
 		}
 
 		path = FileSystem::ToString(shader->paths->fragment);
@@ -716,7 +715,6 @@ namespace EVA
 		{
 			paths->fragment = path;
 			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
 		}
 
 		path = FileSystem::ToString(shader->paths->geometry);
@@ -724,7 +722,6 @@ namespace EVA
 		{
 			paths->geometry = path;
 			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
 		}
 	}
 }

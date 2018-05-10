@@ -22,25 +22,40 @@ namespace EVA
 
 		m_ShaderId = glCreateProgram();
 
-		if (!paths->vertex.empty())
+		if (!m_Paths->vertex.empty())
 		{
-			const auto vertexShader = ShaderManager::LoadAndCompileShader(paths->vertex, GL_VERTEX_SHADER);
-			glAttachShader(m_ShaderId, vertexShader);
-			glDeleteShader(vertexShader);
+			const auto vertexShader = ShaderManager::LoadAndCompileShader(m_Paths->vertex, GL_VERTEX_SHADER);
+			if (vertexShader != -1)
+			{
+				glAttachShader(m_ShaderId, vertexShader);
+				glDeleteShader(vertexShader);
+			}
+			else
+				m_Paths->vertex = "";
 		}
 
-		if (!paths->fragment.empty())
+		if (!m_Paths->fragment.empty())
 		{
-			const auto fragmentShader = ShaderManager::LoadAndCompileShader(paths->fragment, GL_FRAGMENT_SHADER);
-			glAttachShader(m_ShaderId, fragmentShader);
-			glDeleteShader(fragmentShader);
+			const auto fragmentShader = ShaderManager::LoadAndCompileShader(m_Paths->fragment, GL_FRAGMENT_SHADER);
+			if (fragmentShader != -1)
+			{
+				glAttachShader(m_ShaderId, fragmentShader);
+				glDeleteShader(fragmentShader);
+			}
+			else
+				m_Paths->fragment = "";
 		}
 
-		if (!paths->geometry.empty())
+		if (!m_Paths->geometry.empty())
 		{
-			const auto geometryShader = ShaderManager::LoadAndCompileShader(paths->geometry, GL_GEOMETRY_SHADER);
-			glAttachShader(m_ShaderId, geometryShader);
-			glDeleteShader(geometryShader);
+			const auto geometryShader = ShaderManager::LoadAndCompileShader(m_Paths->geometry, GL_GEOMETRY_SHADER);
+			if (geometryShader != -1)
+			{
+				glAttachShader(m_ShaderId, geometryShader);
+				glDeleteShader(geometryShader);
+			}
+			else
+				m_Paths->geometry = "";
 		}
 
 		glLinkProgram(m_ShaderId);

@@ -73,7 +73,7 @@ namespace EVA
 			return material;
 		}
 
-		static void Save(Material* material, const FS::path& path)
+		static void Save(const std::shared_ptr<Material>& material, const FS::path& path)
 		{
 			Json::Document d;
 			d.SetObject();

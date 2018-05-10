@@ -142,19 +142,13 @@ namespace EVA
 			GameObjectInspector(windowSize.x);
 			break;
 		case Light:
-			LightInspector();
+			LightInspector(windowSize.x);
 			break;
 		case Skybox:
-			SkyboxInspector();
+			SkyboxInspector(windowSize.x);
 			break;
-		case Path:
-			{
-				const auto extension = FileSystem::ToString(m_SelectedPath.extension());
-				if (extension == ".mat")
-					MaterialInspector();
-				if (extension == ".shader")
-					ShaderInspector();
-			}
+		case Material:
+			MaterialInspector(windowSize.x);
 			break;
 		default:
 			break;
@@ -307,15 +301,12 @@ namespace EVA
 
 		unsigned int i = 100;
 
-		for (const auto& p : FS::directory_iterator(m_SelectedAssetFolder))
+		for (auto p : FS::directory_iterator(m_SelectedAssetFolder))
 		{
 			ImGui::BeginGroup();
 			if (is_directory(p))
 			{
-				if (ImGui::Selectable(("-> " + p.path().stem().string()).c_str()))
-				{
-					m_SelectedAssetFolder = p.path();
-				}
+				ImGui::Text(("-> " + p.path().stem().string()).c_str());
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
 					ImGui::Text(p.path().stem().string().c_str());
@@ -328,7 +319,10 @@ namespace EVA
 			{
 				if (ImGui::Selectable(p.path().filename().string().c_str()))
 				{
-					SelectPath(p.path());
+					if (p.path().has_extension() && p.path().extension().string() == ".mat")
+					{
+						SelectMaterial(MaterialManager::LoadMaterial(p).get());
+					}
 				}
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
@@ -408,42 +402,6 @@ namespace EVA
 	FS::path EditorWindows::SelectedPath() const
 	{
 		return m_SelectedType == Path ? m_SelectedPath : "";
-	}
-
-	void EditorWindows::DisplayFoldersRecursively(const FS::path& path)
-	{
-		auto hasChildDirectories = false;
-		for (auto& p : FS::directory_iterator(path))
-		{
-			if (is_directory(p))
-			{
-				hasChildDirectories = true;
-				break;
-			}
-		}
-
-		const auto nodeFlags =
-			ImGuiTreeNodeFlags_OpenOnDoubleClick |
-			ImGuiTreeNodeFlags_OpenOnArrow |
-			(path == m_SelectedAssetFolder ? ImGuiTreeNodeFlags_Selected : 0) |
-			(hasChildDirectories ? 0 : ImGuiTreeNodeFlags_Leaf);
-
-		if (ImGui::TreeNodeEx(path.stem().string().c_str(), nodeFlags))
-		{
-			// Select on click
-			if (ImGui::IsItemClicked())
-				m_SelectedAssetFolder = path;
-
-			for (auto& p : FS::directory_iterator(path))
-			{
-				if (is_directory(p))
-				{
-					DisplayFoldersRecursively(p.path());
-				}
-			}
-
-			ImGui::TreePop();
-		}
 	}
 
 	void EditorWindows::DisplayGameObjectsRecursively(EVA::GameObject* gameObject)
@@ -692,39 +650,39 @@ namespace EVA
 		}
 	}
 
-	void EditorWindows::ShaderInspector() const
+	void EditorWindows::DisplayFoldersRecursively(const FS::path& path)
 	{
-		auto shader = ShaderManager::LoadShader(m_SelectedPath);
-
-		if (shader == nullptr)
-			return;
-
-		ImGui::Text(("Shader: " + FileSystem::ToString(shader->paths->shader.filename())).c_str());
-
-		auto paths = shader->paths;
-		
-		auto path = FileSystem::ToString(shader->paths->vertex);
-		if (ComponentInspector::DragDropTargetString("Vertex", path, "file"))
+		auto hasChildDirectories = false;
+		for (auto& p : FS::directory_iterator(path))
 		{
-			paths->vertex = path;
-			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
+			if (is_directory(p))
+			{
+				hasChildDirectories = true;
+				break;
+			}
 		}
 
-		path = FileSystem::ToString(shader->paths->fragment);
-		if (ComponentInspector::DragDropTargetString("Fragment", path, "file"))
-		{
-			paths->fragment = path;
-			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
-		}
+		const auto nodeFlags =
+			ImGuiTreeNodeFlags_OpenOnDoubleClick |
+			ImGuiTreeNodeFlags_OpenOnArrow |
+			(path == m_SelectedAssetFolder ? ImGuiTreeNodeFlags_Selected : 0) |
+			(hasChildDirectories ? 0 : ImGuiTreeNodeFlags_Leaf);
 
-		path = FileSystem::ToString(shader->paths->geometry);
-		if (ComponentInspector::DragDropTargetString("Geometry", path, "file"))
+		if (ImGui::TreeNodeEx(path.stem().string().c_str(), nodeFlags))
 		{
-			paths->geometry = path;
-			shader->SetPaths(paths);
-			ShaderManager::SaveShader(shader.get(), paths->shader);
+			// Select on click
+			if (ImGui::IsItemClicked())
+				m_SelectedAssetFolder = path;
+
+			for (auto& p : FS::directory_iterator(path))
+			{
+				if (is_directory(p))
+				{
+					DisplayFoldersRecursively(p.path());
+				}
+			}
+
+			ImGui::TreePop();
 		}
 	}
 }
