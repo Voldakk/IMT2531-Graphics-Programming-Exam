@@ -5,7 +5,6 @@
 #include <iostream>
 
 #include "GL/glew.h"
-#include "GLFW/glfw3.h"
 #include "Parsers/ShaderParser.hpp"
 
 namespace EVA
@@ -93,19 +92,20 @@ namespace EVA
 			in.read(&buffer[0], length);
 			in.close();
 
-			// Add a valid C - string end
+			// Add a valid C-string end
 			buffer[length] = '\0';
 		} 
 		else
 		{
-			std::cerr << "Unable to open " << FileSystem::ToString(path).c_str() << " I'm out!" << std::endl;
-			exit(-1);
+			std::cout << "ShaderManager::ReadShaderSource - Unable to open file: " << FileSystem::ToString(path).c_str() << std::endl;
+			std::system("PAUSE");
+			exit(EXIT_FAILURE);
 		}
 	}
 
 	unsigned int ShaderManager::LoadAndCompileShader(const FS::path& path, const GLenum shaderType)
 	{
-		std::cout << "ShaderLoad::LoadAndCompileShader - " << FileSystem::ToString(path).c_str() << "\n";
+		std::cout << "ShaderManager::LoadAndCompileShader - " << FileSystem::ToString(path).c_str() << std::endl;
 
 		// Load a shader from an external file
 		std::vector<char> buffer;
@@ -114,11 +114,13 @@ namespace EVA
 
 		// Create shaders
 		const auto shader = glCreateShader(shaderType);
-		//attach the shader source code to the shader objec
+
+		//Attach the shader source code to the shader object
 		glShaderSource(shader, 1, &src, nullptr);
 
 		// Compile the shader
 		glCompileShader(shader);
+
 		// Comile the shader, translates into internal representation and checks for errors.
 		GLint compileOk;
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
@@ -127,9 +129,8 @@ namespace EVA
 			char infolog[1024];;
 			glGetShaderInfoLog(shader, 1024, nullptr, infolog);
 			std::cout << "The program failed to compile with the error:" << std::endl << infolog << std::endl;
-			glfwTerminate();
-			getchar();
-			exit(-1);
+			std::system("PAUSE");
+			exit(EXIT_FAILURE);
 		}
 		return shader;
 	}
