@@ -42,7 +42,7 @@ namespace EVA
 		FS::path m_DeletePath = "";
 
 		const unsigned int m_NameBufferSize = 10000;
-		char* m_NameBuffer = "";
+		char* m_NameBuffer;
 
 	public:
 
