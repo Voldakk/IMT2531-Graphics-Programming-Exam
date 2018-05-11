@@ -31,6 +31,9 @@ void EnviromentManager::Awake()
 
 void EnviromentManager::Load(const EVA::DataObject data)
 {
+	m_SecondsPerDay = data.GetFloat("secondsPerDay", m_SecondsPerDay);
+	m_SecondsPerYear = data.GetFloat("secondsPerYear", m_SecondsPerYear);
+
 	m_MiddayAngle = data.GetFloat("middayAngle", m_MiddayAngle);
 
 	m_SunriseColor = data.GetVec3("sunriseColor", m_SunriseColor);
@@ -41,6 +44,9 @@ void EnviromentManager::Load(const EVA::DataObject data)
 
 void EnviromentManager::Save(EVA::DataObject& data)
 {
+	data.SetFloat("secondsPerDay", m_SecondsPerDay);
+	data.SetFloat("secondsPerYear", m_SecondsPerYear);
+
 	data.SetFloat("middayAngle", m_MiddayAngle);
 
 	data.SetVec3("sunriseColor", m_SunriseColor);
@@ -55,6 +61,7 @@ void EnviromentManager::Inspector()
 	ComponentInspector::DragFloat("Time", m_Time, 0.0f, 24.0f);
 
 	ComponentInspector::Float("Seconds per day", m_SecondsPerDay);
+	ComponentInspector::Float("Seconds per year", m_SecondsPerYear);
 
 	ComponentInspector::Float("Midday angle", m_MiddayAngle);
 
@@ -87,6 +94,10 @@ void EnviromentManager::Update(const float deltaTime)
 	m_Time += (deltaTime * 24.0f) / m_SecondsPerDay;
 	if (m_Time >= 24.0f)
 		m_Time -= 24.0f;
+
+	m_Time += (deltaTime * 12.0f) / m_SecondsPerYear;
+	if (m_Time >= 12.0f)
+		m_Time -= 12.0f;
 
 	UpdateTime();
 }

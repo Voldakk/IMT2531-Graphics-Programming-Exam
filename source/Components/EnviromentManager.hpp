@@ -47,6 +47,7 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 	float m_Season = 0.0f;
 	float m_Time = 12.0f;
 	float m_SecondsPerDay = 10.0f;
+	float m_SecondsPerYear = 40.0f;
 
 	float m_MiddayAngle = 60.0f;
 
