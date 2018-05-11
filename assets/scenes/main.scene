@@ -117,6 +117,9 @@
                 {
                     "id": "Terrain",
                     "heightMap": "./assets/heightmaps/height100.png"
+                },
+                {
+                    "id": "EVA::MeshRenderer"
                 }
             ]
         }

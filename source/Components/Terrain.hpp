@@ -13,6 +13,8 @@ class Terrain : public EVA::Component
 
 	std::vector<std::vector<float>> m_HeightData;
 
+	EVA::MeshRenderer* m_MeshRenderer = nullptr;
+
 public:
 
 	void Start() override;
@@ -26,5 +28,5 @@ private:
 	void LoadHeightMapData(const std::shared_ptr<EVA::RawTexture>& texture);
 	void CreateMesh();
 
-	float HeightData(unsigned int x, unsigned int y);
+	float HeightData(float x, float y);
 };

@@ -4,13 +4,13 @@ REGISTER_COMPONENT_CPP(Terrain, "Terrain");
 
 void Terrain::Start()
 {
-
+	m_MeshRenderer = gameObject->GetComponentOfType<EVA::MeshRenderer>();
+	SetHeightMap(m_HeightMapPath);
 }
 
 void Terrain::Load(const EVA::DataObject data)
 {
-	const auto heightMapPath = data.GetPath("heightMap", "");
-	SetHeightMap(heightMapPath);
+	m_HeightMapPath = data.GetPath("heightMap", "");
 }
 
 void Terrain::Save(EVA::DataObject& data)
@@ -77,7 +77,7 @@ void Terrain::CreateMesh()
 	{
 		for (unsigned int x = 0; x < verticesX; ++x)
 		{
-			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, HeightData(x / verticesX, y / verticesY), y / verticesPerUnit);
+			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, HeightData((float)x / (float)verticesX, (float)y / (float)verticesY), y / verticesPerUnit);
 		}
 	}
 
@@ -89,18 +89,24 @@ void Terrain::CreateMesh()
 	{
 		for (unsigned int x = 0; x < verticesX - 1; ++x)
 		{
-			indices.push_back(x + y * verticesX);
-			indices.push_back((x + 1) + (y + 1) * verticesX);
 			indices.push_back(x + (y + 1) * verticesX);
-
-			indices.push_back(x + y * verticesX);
-			indices.push_back((x + 1) + y * verticesX);
 			indices.push_back((x + 1) + (y + 1) * verticesX);
+			indices.push_back(x + y * verticesX);
+
+			indices.push_back((x + 1) + (y + 1) * verticesX);
+			indices.push_back((x + 1) + y * verticesX);
+			indices.push_back(x + y * verticesX);
 		}
 	}
+
+	const auto mesh = std::make_shared<EVA::Mesh>(vertices, indices);
+	const auto material = EVA::MaterialManager::LoadMaterial("./assets/materials/terrain.mat");
+
+	if(m_MeshRenderer != nullptr)
+		m_MeshRenderer->Set(mesh, material);
 }
 
-float Terrain::HeightData(const unsigned int x, const unsigned int y)
+float Terrain::HeightData(const float x, const float y)
 {
-	return m_HeightData[y*m_HeightData.size()][x*m_HeightData[0].size()];
+	return m_HeightData[y*m_HeightData.size()][x*m_HeightData[0].size()] / 255.0f;
 }
