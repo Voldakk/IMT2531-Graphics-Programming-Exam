@@ -117,4 +117,9 @@ public:
 
 		return false;
 	}
+
+	static bool ColorPicker(const char* name, glm::vec3& value)
+	{
+		return ImGui::ColorPicker3(name, glm::value_ptr(value));
+	}
 };

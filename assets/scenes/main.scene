@@ -7,14 +7,14 @@
         {
             "type": "directional",
             "color": [
-                0.5,
-                0.5,
-                0.5
+                0.9929824471473694,
+                0.8774367570877075,
+                0.7805273532867432
             ],
-            "ambientCoefficient": 0.004999999888241291,
+            "ambientCoefficient": 0.019999999552965165,
             "rotation": [
-                90.0,
-                0.0
+                42.000003814697269,
+                207.0
             ],
             "directionalShadowDistance": 20.0,
             "directionalNearPlane": 1.0,
@@ -87,33 +87,30 @@
                     "material": "./assets/materials/terrain.mat",
                     "mesh": "",
                     "meshIndex": 0
-                }
-            ]
-        },
-        {
-            "name": "Sphere",
-            "position": [
-                20.0,
-                20.0,
-                20.0
-            ],
-            "scale": [
-                5.0,
-                5.0,
-                5.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
+                },
                 {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/uv.mat",
-                    "mesh": "./assets/standard assets/models/sphere.obj",
-                    "meshIndex": 0
+                    "id": "EnviromentManager",
+                    "midDayAngle": 60.0,
+                    "sunriseColor": [
+                        1.0,
+                        0.763157844543457,
+                        0.5
+                    ],
+                    "middayColor": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "sunsetColor": [
+                        0.976608157157898,
+                        0.5914556980133057,
+                        0.26842448115348818
+                    ],
+                    "nightColor": [
+                        0.009999999776482582,
+                        0.009999999776482582,
+                        0.009999999776482582
+                    ]
                 }
             ]
         }

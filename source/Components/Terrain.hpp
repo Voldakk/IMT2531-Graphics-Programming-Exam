@@ -5,6 +5,8 @@
 #include "EVA.hpp"
 #include "EVA/ResourceManagers.hpp"
 
+#include "EnviromentManager.hpp"
+
 class Terrain : public EVA::Component
 {
 	REGISTER_COMPONENT_HPP(Terrain);
@@ -14,6 +16,7 @@ class Terrain : public EVA::Component
 	std::vector<std::vector<float>> m_HeightData;
 
 	EVA::MeshRenderer* m_MeshRenderer = nullptr;
+	EnviromentManager* m_EnviromentManager = nullptr;
 
 public:
 

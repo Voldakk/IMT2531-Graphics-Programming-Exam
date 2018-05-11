@@ -5,6 +5,8 @@ REGISTER_COMPONENT_CPP(Terrain, "Terrain");
 void Terrain::Start()
 {
 	m_MeshRenderer = gameObject->GetComponentOfType<EVA::MeshRenderer>();
+	m_EnviromentManager = gameObject->GetComponentOfType<EnviromentManager>();
+
 	SetHeightMap(m_HeightMapPath);
 }
 
@@ -76,13 +78,13 @@ void Terrain::CreateMesh()
 			const auto height = HeightData((float)x / (float)verticesX, (float)y / (float)verticesY);
 
 			glm::vec3 color;
-			if (height < 0.1)
+			if (height < 0.1) // Water
 				color = { 0.0f, 0.0f, 1.0f };
-			else if (height < 0.2f)
+			else if (height < 0.2f) // Vegetation
 				color = { 0.0f, 1.0f, 0.0f };
-			else if (height < 0.3f)
-				color = { 0.5f, 0.5f, 0.5f };
-			else
+			else if (height < 0.3f) // Scarse
+				color = { 0.6f, 0.4f, 0.2f };
+			else // Snow
 				color = { 1.0f, 1.0f, 1.0f };
 
 			vertices[y*verticesX + x].color = color;
