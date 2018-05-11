@@ -18,7 +18,11 @@ class Terrain : public EVA::Component
 	EVA::MeshRenderer* m_MeshRenderer = nullptr;
 	EnviromentManager* m_EnviromentManager = nullptr;
 
+	std::shared_ptr<EVA::Material> m_Material;
+
 public:
+
+	float maxTerrainHeight = 40.0f;
 
 	void Start() override;
 	void Load(const EVA::DataObject data) override;

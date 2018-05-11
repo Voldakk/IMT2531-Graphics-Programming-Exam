@@ -120,7 +120,7 @@ public:
 
 	static bool ColorPicker(const char* name, glm::vec3& value)
 	{
-		return ImGui::ColorPicker3(name, glm::value_ptr(value));
+		return ImGui::ColorEdit3(name, glm::value_ptr(value));
 	}
 
 	static bool DragFloat(const char* name, float& value, const float min = 0.0f, const float max = 1.0f, const float step = 0.01f)

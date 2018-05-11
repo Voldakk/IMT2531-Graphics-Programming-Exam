@@ -1,11 +1,17 @@
 #include "Terrain.hpp"
-
+#include "../../EVA/ShaderManager.hpp"
 REGISTER_COMPONENT_CPP(Terrain, "Terrain");
+
+#include "../TerrainMaterial.hpp"
 
 void Terrain::Start()
 {
 	m_MeshRenderer = gameObject->GetComponentOfType<EVA::MeshRenderer>();
 	m_EnviromentManager = gameObject->GetComponentOfType<EnviromentManager>();
+
+
+	m_Material = std::make_shared<TerrainMaterial>(this, m_EnviromentManager);
+	m_Material->shader = EVA::ShaderManager::LoadShader("./assets/shaders/terrain.shader");
 
 	SetHeightMap(m_HeightMapPath);
 }
@@ -61,7 +67,6 @@ void Terrain::CreateMesh()
 	const auto verticesPerUnit = 1.0f;
 	const auto terrainWidth = 100;
 	const auto terrainLength = (float)terrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
-	const auto terrainMaxHeight = 40.0f;
 
 	const auto verticesY = (unsigned int)std::floorf(terrainLength * verticesPerUnit);
 	const auto verticesX = (unsigned int)std::floorf(terrainWidth * verticesPerUnit);
@@ -77,19 +82,7 @@ void Terrain::CreateMesh()
 		{
 			const auto height = HeightData((float)x / (float)verticesX, (float)y / (float)verticesY);
 
-			glm::vec3 color;
-			if (height < 0.1) // Water
-				color = { 0.0f, 0.0f, 1.0f };
-			else if (height < 0.2f) // Vegetation
-				color = { 0.0f, 1.0f, 0.0f };
-			else if (height < 0.3f) // Scarse
-				color = { 0.6f, 0.4f, 0.2f };
-			else // Snow
-				color = { 1.0f, 1.0f, 1.0f };
-
-			vertices[y*verticesX + x].color = color;
-
-			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, terrainMaxHeight * height, y / verticesPerUnit);
+			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, height, y / verticesPerUnit);
 		}
 	}
 
@@ -133,10 +126,9 @@ void Terrain::CreateMesh()
 	}
 
 	const auto mesh = std::make_shared<EVA::Mesh>(vertices, indices);
-	const auto material = EVA::MaterialManager::LoadMaterial("./assets/materials/terrain.mat");
 
 	if(m_MeshRenderer != nullptr)
-		m_MeshRenderer->Set(mesh, material);
+		m_MeshRenderer->Set(mesh, m_Material);
 }
 
 float Terrain::HeightData(const float x, const float y)

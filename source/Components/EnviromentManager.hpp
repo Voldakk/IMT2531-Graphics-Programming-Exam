@@ -5,11 +5,19 @@
 class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 {
 	REGISTER_COMPONENT_HPP(EnviromentManager)
+	
+	struct Region
+	{
+		float minHeight;
+		float maxHeight;
+		glm::vec3 color;
+	};
+
 
 	EVA::Light* m_Sun = nullptr;
 	
 	float m_Season = 0.0f;
-	float m_Time = 0.0f;
+	float m_Time = 12.0f;
 	float m_SecondsPerDay = 10.0f;
 
 	float m_MiddayAngle = 60.0f;
@@ -19,7 +27,12 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 	glm::vec3 m_SunsetColor = glm::vec3(1.0f, 0.5f, 0.5f);
 	glm::vec3 m_NightColor = glm::vec3(0.01f);
 
+	std::vector<Region> m_Regions;
+
 public:
+
+	float regionBlendAmount = 0.01f;
+	const std::vector<Region>& regions = m_Regions;
 
 	void Awake() override;
 	

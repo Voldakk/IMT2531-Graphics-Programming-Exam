@@ -6,6 +6,11 @@ void EnviromentManager::Awake()
 {
 	m_Sun = scene->GetLights()[0].get();
 	UpdateTime();
+
+	m_Regions.push_back({ 0.0f, 0.1f,{ 0.0f, 0.0f, 1.0f } });
+	m_Regions.push_back({ 0.1f, 0.2f,{ 0.0f, 1.0f, 0.0f } });
+	m_Regions.push_back({ 0.2f, 0.3f,{ 0.6f, 0.4f, 0.2f } });
+	m_Regions.push_back({ 0.3f, 1.0f,{ 1.0f, 1.0f, 1.0f } });
 }
 
 void EnviromentManager::Load(const EVA::DataObject data)

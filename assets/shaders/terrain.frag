@@ -31,10 +31,22 @@ in vec4 allFragPosLightSpace [MAX_LIGHTS];
 in vec3 fragVert;
 in vec3 fragColor;
 in vec3 fragNormal;
+in float fragHeight;
 uniform mat4 model;
 
 // Out color
 out vec4 finalColor;
+
+// Regions
+uniform float regionBlendAmount;
+uniform int numRegions;
+#define MAX_REGIONS 10
+uniform struct Region
+{
+   float minHeight;
+   float maxHeight;
+   vec3 color;
+} regions[MAX_REGIONS];
 
 vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseColor, int lightIndex)
 {
@@ -64,16 +76,27 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
 
 void main()
 {
+	vec3 surfaceColor;
+
+	// Regions
+	for(int i = 0; i < numRegions; ++i)
+    {
+		float regionRange = regions[i].maxHeight - regions[i].minHeight;
+		float regionWeight = (regionRange - abs(fragHeight - regions[i].maxHeight)) / (regionRange);
+		regionWeight = max(0.0, regionWeight);
+		surfaceColor += regionWeight * regions[i].color;
+	}
+
     // Normal
     vec3 normal = fragNormal;
 
-	vec3 linearColor = vec3(0);
 
 	// Lights
+	vec3 linearColor = vec3(0);
     vec3 surfaceToCamera = normalize(cameraPosition - fragVert);
     for(int i = 0; i < numLights; ++i)
     {
-        linearColor += ApplyLight(allLights[i], normal, fragVert, surfaceToCamera, fragColor.rgb, i);
+        linearColor += ApplyLight(allLights[i], normal, fragVert, surfaceToCamera, surfaceColor, i);
     }
     
     // Final color (after gamma correction)
