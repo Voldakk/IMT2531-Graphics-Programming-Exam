@@ -2,8 +2,6 @@
 #include "EVA/SceneManager.hpp"
 #include "../EVA/Editor/SceneEditor.hpp"
 
-#include "Components/Terrain.hpp"
-
 /**
  * \brief The entry point of the program
  * \return An exit code indicating how the program exited

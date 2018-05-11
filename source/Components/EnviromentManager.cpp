@@ -1,5 +1,6 @@
 #include "EnviromentManager.hpp"
-#include "../../EVA/Input.hpp"
+
+#include "EVA/Input.hpp"
 
 REGISTER_COMPONENT_CPP(EnviromentManager, "EnviromentManager")
 

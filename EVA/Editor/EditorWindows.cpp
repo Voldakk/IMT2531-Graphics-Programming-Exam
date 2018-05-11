@@ -28,7 +28,7 @@ namespace EVA
 		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y - m_MenuBarHeight }, { (float)screenSize.x, (float)screenSize.y - m_MenuBarHeight });
 		ImGui::SetNextWindowPos({ 0.0f, m_MenuBarHeight });
 
-		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse;
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide /*| ImGuiWindowFlags_NoCollapse*/;
 		ImGui::Begin("Scene Hierarchy", nullptr, flags);
 
 		const auto windowSize = ImGui::GetWindowSize();
@@ -137,7 +137,7 @@ namespace EVA
 		ImGui::SetNextWindowSizeConstraints({ 300.0f, (float)screenSize.y - m_MenuBarHeight }, { (float)screenSize.x, (float)screenSize.y - m_MenuBarHeight });
 		ImGui::SetNextWindowPos({ (float)screenSize.x, m_MenuBarHeight }, 0, { 1.0f, 0.0f });
 
-		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse;
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide /*| ImGuiWindowFlags_NoCollapse*/;
 		ImGui::Begin("Inspector", nullptr, flags);
 
 		const auto windowSize = ImGui::GetWindowSize();
@@ -301,7 +301,7 @@ namespace EVA
 
 		ImGui::SetNextWindowPos({ m_HierarchyWidth, (float)screenSize.y }, 0, { 0.0f, 1.0f });
 
-		const auto flags = ImGuiWindowFlags_ResizeFromAnySide | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar;
+		const auto flags = ImGuiWindowFlags_ResizeFromAnySide/* | ImGuiWindowFlags_NoCollapse*/ | ImGuiWindowFlags_MenuBar;
 		ImGui::Begin("Assets", nullptr, flags);
 
 		// Folder tree
@@ -618,8 +618,8 @@ namespace EVA
 
 		ImGui::Text("Rotation");
 		auto rotation = gameObject->transform->localRotation;
-		ImGui::InputFloat3("InspectorTransformRotation", glm::value_ptr(rotation), "%.7g");
-		gameObject->transform->SetOrientation(rotation);
+		if(ImGui::InputFloat3("InspectorTransformRotation", glm::value_ptr(rotation), "%.7g"))
+			gameObject->transform->SetOrientation(rotation);
 
 
 		ImGui::Text("Scale");

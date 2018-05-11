@@ -9,7 +9,7 @@
 
 class Terrain : public EVA::Component, public EVA::IUpdateComponent
 {
-	REGISTER_COMPONENT_HPP(Terrain);
+	REGISTER_COMPONENT_HPP(Terrain)
 
 	FS::path m_HeightMapPath;
 
