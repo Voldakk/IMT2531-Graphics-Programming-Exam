@@ -73,6 +73,9 @@ void EnviromentManager::Inspector()
 	ComponentInspector::Float("Seconds per day", m_SecondsPerDay);
 	ComponentInspector::Float("Seconds per year", m_SecondsPerYear);
 
+	ComponentInspector::Float("Day length summer", m_DayLengthSummer);
+	ComponentInspector::Float("Day length winter", m_DayLengthWinter);
+
 	ComponentInspector::Float("Midday angle", m_MiddayAngle);
 
 	ComponentInspector::ColorPicker("Sunrise color", m_SunriseColor);
@@ -152,37 +155,48 @@ void EnviromentManager::UpdateTime() const
 	if (m_Sun == nullptr)
 		return;
 
+	auto daylength = 0.0f;
+	if (season <= 6)
+		daylength = glm::mix(m_DayLengthWinter, m_DayLengthSummer, season / 6.0f);
+	else
+		daylength = glm::mix(m_DayLengthSummer, m_DayLengthWinter, (season - 6.0f) / 6.0f);
+
+	const auto nightLength = 24.0f - daylength;
+
+	const auto dayTransitionLength = daylength / 2.0f;
+	const auto nightTransitionLength = nightLength / 2.0f;
+
 	auto yaw = 0.0f;
 	auto pitch = 0.0f;
 	auto color = m_Sun->color;
 
-	if (m_Time <= 6.0f) // 00-06
+	if (m_Time <= nightTransitionLength) // Midnight to sunrise
 	{
-		const auto t = m_Time / 6.0f;
+		const auto t = m_Time / nightTransitionLength;
 
 		yaw = 0.0f;
 		pitch = glm::mix(-90.0f, 0.0f, t);
 		color = glm::mix(m_NightColor, m_SunriseColor, t);
 	}
-	else if (m_Time <= 12) // 06-12
+	else if (m_Time <= 12) // Sunrise to noon
 	{
-		const auto t = (m_Time - 6.0f) / 6.0f;
+		const auto t = (m_Time - nightTransitionLength) / dayTransitionLength;
 
 		yaw = glm::mix(0.0f, 90.0f, t);
 		pitch = glm::mix(0.0f, m_MiddayAngle, t);
 		color = glm::mix(m_SunriseColor, m_MiddayColor, t);
 	}
-	else if (m_Time <= 18.0f) // 12-18
+	else if (m_Time <= 12 + dayTransitionLength) // Noon to sunset
 	{
-		const auto t = (m_Time - 12.0f) / 6.0f;
+		const auto t = (m_Time - 12.0f) / dayTransitionLength;
 
 		yaw = glm::mix(90.0f, 180.0f, t);
 		pitch = glm::mix(m_MiddayAngle, 0.0f, t);
 		color = glm::mix(m_MiddayColor, m_SunsetColor, t);
 	}
-	else // 18-24
+	else // Sunset to midnight
 	{
-		const auto t = (m_Time - 18.0f) / 6.0f;
+		const auto t = (m_Time - (12.0f + dayTransitionLength)) / nightTransitionLength;
 
 		yaw = 180.0f;
 		pitch = glm::mix(0.0f, -90.0f, t);
