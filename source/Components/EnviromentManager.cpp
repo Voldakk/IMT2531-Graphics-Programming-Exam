@@ -45,6 +45,15 @@ void EnviromentManager::Inspector()
 	ComponentInspector::ColorPicker("Sunset color", m_SunsetColor);
 	ComponentInspector::ColorPicker("Night color", m_NightColor);
 
+	ComponentInspector::Text("Regions");
+
+
+	for (unsigned int i = 0; i < m_Regions.size(); ++i)
+	{
+		ComponentInspector::RangeFloat(("Range##" + std::to_string(i)).c_str(), m_Regions[i].minHeight, m_Regions[i].maxHeight);
+		ComponentInspector::ColorPicker(("Color##" + std::to_string(i)).c_str(), m_Regions[i].color);
+	}
+
 	UpdateTime();
 }
 

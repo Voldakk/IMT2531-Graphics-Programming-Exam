@@ -127,4 +127,8 @@ public:
 	{
 		return ImGui::DragFloat(name, &value, step, min, max);
 	}
+	static bool RangeFloat(const char* name, float& min, float& max, const float step = 0.01f)
+	{
+		return ImGui::DragFloatRange2(name, &min, &max, step);
+	}
 };
