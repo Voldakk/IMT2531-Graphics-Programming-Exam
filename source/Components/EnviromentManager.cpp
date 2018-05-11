@@ -28,6 +28,15 @@ void EnviromentManager::Awake()
 		0.3f, 1.0f,
 		{ 1.0f, 1.0f, 1.0f },
 		{ 1.0f, 1.0f, 1.0f } });
+
+	// Labels
+	m_TimeLabel = scene->CreateUiElement<EVA::Label>("Time:");
+	m_TimeLabel->SetAnchorAndPivot(-1.0f, 1.0f); // Top left
+	m_TimeLabel->SetOffsetFromAnchor(0.05f);
+
+	m_SeasonLabel = scene->CreateUiElement<EVA::Label>("Month:");
+	m_SeasonLabel->SetAnchorAndPivot(1.0f, 1.0f); // Top right
+	m_SeasonLabel->SetOffsetFromAnchor(0.05f);
 }
 
 void EnviromentManager::Load(const EVA::DataObject data)
@@ -130,7 +139,12 @@ void EnviromentManager::Update(const float deltaTime)
 		if (m_Time >= 24.0f)
 			m_Time -= 24.0f;
 	}
+
 	UpdateTime();
+
+	// Labels
+	m_TimeLabel->SetText("Time: " + std::to_string((int)ceilf(m_Time)));
+	m_SeasonLabel->SetText("Month: " + std::to_string((int)ceilf(m_Season)));
 }
 
 void EnviromentManager::UpdateTime() const

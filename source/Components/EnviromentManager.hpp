@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EVA.hpp"
+#include "EVA/UI.hpp"
 
 class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 {
@@ -60,6 +61,9 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 	glm::vec3 m_NightColor = glm::vec3(0.01f);
 
 	std::vector<Region> m_Regions;
+
+	EVA::Label* m_TimeLabel = nullptr;
+	EVA::Label* m_SeasonLabel = nullptr;
 
 public:
 
