@@ -7,10 +7,26 @@ void EnviromentManager::Awake()
 	m_Sun = scene->GetLights()[0].get();
 	UpdateTime();
 
-	m_Regions.push_back({ 0.0f, 0.1f,{ 0.0f, 0.0f, 1.0f } });
-	m_Regions.push_back({ 0.1f, 0.2f,{ 0.0f, 1.0f, 0.0f } });
-	m_Regions.push_back({ 0.2f, 0.3f,{ 0.6f, 0.4f, 0.2f } });
-	m_Regions.push_back({ 0.3f, 1.0f,{ 1.0f, 1.0f, 1.0f } });
+	m_Regions.push_back({ 
+		0.0f, 0.1f, 
+		0.0f, 0.1f,
+		{ 0.0f, 0.0f, 1.0f },
+		{ 0.0f, 0.0f, 1.0f } });
+	m_Regions.push_back({ 
+		0.1f, 0.2f,
+		0.1f, 0.2f,
+		{ 0.0f, 1.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f } });
+	m_Regions.push_back({ 
+		0.2f, 0.3f,
+		0.2f, 0.3f,
+		{ 0.6f, 0.4f, 0.2f },
+		{ 0.6f, 0.4f, 0.2f } });
+	m_Regions.push_back({ 
+		0.3f, 1.0f,
+		0.3f, 1.0f,
+		{ 1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f } });
 }
 
 void EnviromentManager::Load(const EVA::DataObject data)
@@ -38,6 +54,8 @@ void EnviromentManager::Inspector()
 	ComponentInspector::DragFloat("Season", m_Season, 0.0f, 12.0f);
 	ComponentInspector::DragFloat("Time", m_Time, 0.0f, 24.0f);
 
+	ComponentInspector::Float("Seconds per day", m_SecondsPerDay);
+
 	ComponentInspector::Float("Midday angle", m_MiddayAngle);
 
 	ComponentInspector::ColorPicker("Sunrise color", m_SunriseColor);
@@ -54,8 +72,11 @@ void EnviromentManager::Inspector()
 
 	for (unsigned int i = 0; i < m_Regions.size(); ++i)
 	{
-		ComponentInspector::RangeFloat(("Range##" + std::to_string(i)).c_str(), m_Regions[i].minHeight, m_Regions[i].maxHeight);
-		ComponentInspector::ColorPicker(("Color##" + std::to_string(i)).c_str(), m_Regions[i].color);
+		ComponentInspector::Text(("Region #" + std::to_string(i)).c_str());
+		ComponentInspector::RangeFloat(("Range summer##" + std::to_string(i)).c_str(), m_Regions[i].minHeightSummer, m_Regions[i].maxHeightSummer);
+		ComponentInspector::RangeFloat(("Range winter##" + std::to_string(i)).c_str(), m_Regions[i].minHeightWinter, m_Regions[i].maxHeightWinter);
+		ComponentInspector::ColorPicker(("Color summer##" + std::to_string(i)).c_str(), m_Regions[i].colorSummer);
+		ComponentInspector::ColorPicker(("Color winter##" + std::to_string(i)).c_str(), m_Regions[i].colorWinter);
 	}
 
 	UpdateTime();
@@ -84,7 +105,7 @@ void EnviromentManager::UpdateTime() const
 		const auto t = m_Time / 6.0f;
 
 		yaw = 0.0f;
-		pitch = 0.0f;
+		pitch = glm::mix(-90.0f, 0.0f, t);
 		color = glm::mix(m_NightColor, m_SunriseColor, t);
 	}
 	else if (m_Time <= 12) // 06-12
@@ -108,7 +129,7 @@ void EnviromentManager::UpdateTime() const
 		const auto t = (m_Time - 18.0f) / 6.0f;
 
 		yaw = 180.0f;
-		pitch = 0.0f;
+		pitch = glm::mix(0.0f, -90.0f, t);
 		color = glm::mix(m_SunsetColor, m_NightColor, t);
 	}
 

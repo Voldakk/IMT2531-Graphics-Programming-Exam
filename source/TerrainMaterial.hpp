@@ -32,9 +32,9 @@ public:
 		{
 			const auto regionNum = "regions[" + std::to_string(i) + "].";
 
-			shader->SetUniform1F(regionNum + "minHeight", m_EnviromentManager->regions[i].minHeight);
-			shader->SetUniform1F(regionNum + "maxHeight", m_EnviromentManager->regions[i].maxHeight);
-			shader->SetUniform3Fv(regionNum + "color", m_EnviromentManager->regions[i].color);
+			shader->SetUniform1F(regionNum + "minHeight", m_EnviromentManager->regions[i].MinHeight(m_EnviromentManager->season));
+			shader->SetUniform1F(regionNum + "maxHeight", m_EnviromentManager->regions[i].MaxHeight(m_EnviromentManager->season));
+			shader->SetUniform3Fv(regionNum + "color", m_EnviromentManager->regions[i].Color(m_EnviromentManager->season));
 		}
 	}
 };

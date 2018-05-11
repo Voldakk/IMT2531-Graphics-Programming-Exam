@@ -65,6 +65,8 @@ namespace EVA
 
 		void Update(const float deltaTime) override
 		{
+			FindGameObjectByName("Terrain")->Update(deltaTime);
+
 			// Move camera
 			m_SceneCameraGameObject->Update(deltaTime);
 

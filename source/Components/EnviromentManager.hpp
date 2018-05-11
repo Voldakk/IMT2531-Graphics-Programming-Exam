@@ -8,9 +8,37 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 	
 	struct Region
 	{
-		float minHeight;
-		float maxHeight;
-		glm::vec3 color;
+		float minHeightWinter;
+		float maxHeightWinter;
+		float minHeightSummer;
+		float maxHeightSummer;
+
+		glm::vec3 colorWinter;
+		glm::vec3 colorSummer;
+
+		float MinHeight(const float season) const
+		{
+			if (season <= 6)
+				return glm::mix(minHeightWinter, minHeightSummer, season / 6.0f);
+
+			return glm::mix(minHeightSummer, minHeightWinter, (season - 6.0f) / 6.0f);
+		}
+
+		float MaxHeight(const float season) const
+		{
+			if (season <= 6)
+				return glm::mix(maxHeightWinter, maxHeightSummer, season / 6.0f);
+
+			return glm::mix(maxHeightSummer, maxHeightWinter, (season - 6.0f) / 6.0f);
+		}
+
+		glm::vec3 Color(const float season) const
+		{
+			if (season <= 6)
+				return glm::mix(colorWinter, colorSummer, season / 6.0f);
+
+			return glm::mix(colorSummer, colorWinter, (season - 6.0f) / 6.0f);
+		}
 	};
 
 
@@ -33,6 +61,8 @@ public:
 
 	float regionBlendAmount = 0.01f;
 	const std::vector<Region>& regions = m_Regions;
+
+	const float& season = m_Season;
 
 	void Awake() override;
 	
