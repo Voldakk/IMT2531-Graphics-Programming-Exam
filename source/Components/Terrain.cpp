@@ -50,9 +50,38 @@ void Terrain::LoadHeightMapData(const std::shared_ptr<EVA::RawTexture>& texture)
 			m_HeightData[y][x] = texture->data[y*texture->width + x * texture->channels];
 		}
 	}
+
+	CreateMesh();
 }
 
 void Terrain::CreateMesh()
 {
+	if (m_HeightData.empty() && m_HeightData[0].empty())
+		return;
 
+	const auto dataWidth = m_HeightData[0].size();
+	const auto dataHeight = m_HeightData.size();
+
+	const auto verticesPerUnit = 10.0f;
+	const auto terrainWidth = 10;
+	const auto terrainHeight = (float)terrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
+
+	const auto verticesY = std::floorf(terrainHeight * verticesPerUnit);
+	const auto verticesX = std::floorf(terrainWidth * verticesPerUnit);
+
+	std::vector<EVA::Vertex> vertices;
+	vertices.resize(verticesY * verticesX);
+
+	for (unsigned int y = 0; y < verticesY; ++y)
+	{
+		for (unsigned int x = 0; x < verticesX; ++x)
+		{
+			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, HeightData(x / verticesX, y / verticesY), y / verticesPerUnit);
+		}
+	}
+}
+
+float Terrain::HeightData(const unsigned int x, const unsigned int y)
+{
+	return m_HeightData[y*m_HeightData.size()][x*m_HeightData[0].size()];
 }

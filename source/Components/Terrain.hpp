@@ -20,8 +20,11 @@ public:
 	void Save(EVA::DataObject& data) override;
 	void Inspector() override;
 
-	void SetHeightMap(const FS::path& newHeightMapPath);
 private:
+	
+	void SetHeightMap(const FS::path& newHeightMapPath);
 	void LoadHeightMapData(const std::shared_ptr<EVA::RawTexture>& texture);
 	void CreateMesh();
+
+	float HeightData(unsigned int x, unsigned int y);
 };
