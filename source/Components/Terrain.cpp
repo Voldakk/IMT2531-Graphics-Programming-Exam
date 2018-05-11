@@ -1,8 +1,13 @@
 #include "Terrain.hpp"
-#include "../../EVA/ShaderManager.hpp"
-REGISTER_COMPONENT_CPP(Terrain, "Terrain");
+
+#include "EVA/Input.hpp"
+#include "EVA/ResourceManagers.hpp"
 
 #include "../TerrainMaterial.hpp"
+
+
+REGISTER_COMPONENT_CPP(Terrain, "Terrain");
+
 
 void Terrain::Start()
 {
@@ -33,6 +38,12 @@ void Terrain::Inspector()
 	{
 		SetHeightMap(heightMapPath);
 	}
+}
+
+void Terrain::Update(float deltaTime)
+{
+	if (EVA::Input::KeyDown(EVA::Input::O))
+		contourLines = !contourLines;
 }
 
 void Terrain::SetHeightMap(const FS::path& newHeightMapPath)

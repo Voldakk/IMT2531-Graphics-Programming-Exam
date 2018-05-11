@@ -48,6 +48,8 @@ uniform struct Region
    vec3 color;
 } regions[MAX_REGIONS];
 
+uniform bool contourLines;
+
 vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseColor, int lightIndex)
 {
     float attenuation = 1.0;
@@ -85,6 +87,15 @@ void main()
 		float regionWeight = (regionRange - abs(fragHeight - regions[i].maxHeight)) / (regionRange);
 		regionWeight = max(0.0, regionWeight);
 		surfaceColor += regionWeight * regions[i].color;
+	}
+
+	if(contourLines)
+	{
+		for(int i = 0; i < numRegions; ++i)
+		{
+			if(abs(fragHeight - regions[i].maxHeight) <= 0.001)
+				surfaceColor = vec3(0);
+		}
 	}
 
     // Normal

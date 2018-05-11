@@ -7,7 +7,7 @@
 
 #include "EnviromentManager.hpp"
 
-class Terrain : public EVA::Component
+class Terrain : public EVA::Component, public EVA::IUpdateComponent
 {
 	REGISTER_COMPONENT_HPP(Terrain);
 
@@ -20,14 +20,18 @@ class Terrain : public EVA::Component
 
 	std::shared_ptr<EVA::Material> m_Material;
 
+
 public:
 
+	bool contourLines = false;
 	float maxTerrainHeight = 40.0f;
 
 	void Start() override;
 	void Load(const EVA::DataObject data) override;
 	void Save(EVA::DataObject& data) override;
 	void Inspector() override;
+	
+	void Update(float deltaTime) override;
 
 private:
 	
