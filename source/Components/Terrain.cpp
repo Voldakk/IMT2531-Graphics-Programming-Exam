@@ -66,9 +66,10 @@ void Terrain::CreateMesh()
 	const auto terrainWidth = 10;
 	const auto terrainHeight = (float)terrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
 
-	const auto verticesY = std::floorf(terrainHeight * verticesPerUnit);
-	const auto verticesX = std::floorf(terrainWidth * verticesPerUnit);
+	const auto verticesY = (unsigned int)std::floorf(terrainHeight * verticesPerUnit);
+	const auto verticesX = (unsigned int)std::floorf(terrainWidth * verticesPerUnit);
 
+	// Vertices
 	std::vector<EVA::Vertex> vertices;
 	vertices.resize(verticesY * verticesX);
 
@@ -77,6 +78,24 @@ void Terrain::CreateMesh()
 		for (unsigned int x = 0; x < verticesX; ++x)
 		{
 			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, HeightData(x / verticesX, y / verticesY), y / verticesPerUnit);
+		}
+	}
+
+	// Indices
+	std::vector<unsigned int> indices;
+	indices.reserve((verticesY-1) * (verticesX-1) * 6);
+
+	for (unsigned int y = 0; y < verticesY - 1; ++y)
+	{
+		for (unsigned int x = 0; x < verticesX - 1; ++x)
+		{
+			indices.push_back(x + y * verticesX);
+			indices.push_back((x + 1) + (y + 1) * verticesX);
+			indices.push_back(x + (y + 1) * verticesX);
+
+			indices.push_back(x + y * verticesX);
+			indices.push_back((x + 1) + y * verticesX);
+			indices.push_back((x + 1) + (y + 1) * verticesX);
 		}
 	}
 }
