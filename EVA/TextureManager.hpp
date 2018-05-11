@@ -3,6 +3,7 @@
 #include <map>
 
 #include "FileSystem.hpp"
+#include "stb_image.h"
 
 namespace EVA
 {
@@ -18,6 +19,27 @@ namespace EVA
 		unsigned int id{};
 		Type type;
 		FS::path path;
+	};
+
+	struct RawTexture
+	{
+		unsigned char* data;
+		unsigned int width;
+		unsigned int height;
+		unsigned int channels;
+
+		RawTexture(unsigned char* data, const unsigned int width, const unsigned int height, const unsigned int channels)
+		{
+			this->data = data;
+			this->width = width;
+			this->height = height;
+			this->channels = channels;
+		}
+
+		~RawTexture()
+		{
+			stbi_image_free(data);
+		}
 	};
 
 	/**
@@ -44,6 +66,8 @@ namespace EVA
 		 * \return A pointer to the texture, or nullptr if no texture is found
 		 */
 		static std::shared_ptr<Texture> LoadTextureCubemap(const FS::path& folderPath, const std::string &fileType);
+
+		static std::shared_ptr<RawTexture> LoadRaw(const FS::path& path);
 	};
 
 }
