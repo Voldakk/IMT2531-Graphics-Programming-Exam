@@ -44,6 +44,7 @@ endif(WINDOWS)
 # Main executeable
 file(GLOB SOURCES
 	source/*
+	source/*/*
 	EVA/*
 	EVA/*/*
 	TestScenes/*

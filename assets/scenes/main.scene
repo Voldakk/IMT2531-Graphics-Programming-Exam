@@ -1,0 +1,124 @@
+{
+    "skybox": {
+        "folderPath": "./assets/standard assets/skybox",
+        "fileExtension": ".png"
+    },
+    "lights": [
+        {
+            "type": "directional",
+            "color": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "ambientCoefficient": 0.004999999888241291,
+            "rotation": [
+                60.0,
+                -80.0
+            ],
+            "directionalShadowDistance": 20.0,
+            "directionalNearPlane": 1.0,
+            "directionalFarPlane": 100.0,
+            "shadows": true,
+            "shadowMapSize": 4096
+        },
+        {
+            "type": "directional",
+            "color": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "ambientCoefficient": 0.004999999888241291,
+            "rotation": [
+                60.0,
+                -200.0
+            ],
+            "directionalShadowDistance": 20.0,
+            "directionalNearPlane": 1.0,
+            "directionalFarPlane": 100.0,
+            "shadows": true,
+            "shadowMapSize": 4096
+        },
+        {
+            "type": "directional",
+            "color": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "ambientCoefficient": 0.004999999888241291,
+            "rotation": [
+                60.0,
+                -320.0
+            ],
+            "directionalShadowDistance": 20.0,
+            "directionalNearPlane": 1.0,
+            "directionalFarPlane": 100.0,
+            "shadows": true,
+            "shadowMapSize": 4096
+        }
+    ],
+    "gameObjects": [
+        {
+            "name": "Freelook camera",
+            "position": [
+                0.0,
+                2.0,
+                -5.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::Camera",
+                    "fov": 90.0,
+                    "near": 0.10000000149011612,
+                    "far": 100.0
+                },
+                {
+                    "id": "EVA::FreeLook",
+                    "wasd": true,
+                    "mouseSensitivity": 50.0,
+                    "movementSpeed": 10.0,
+                    "pitch": 0.0,
+                    "yaw": 0.0
+                }
+            ]
+        },
+        {
+            "name": "Terrain",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "Terrain",
+                    "heightMap": "./assets/heightmaps/height100.png"
+                }
+            ]
+        }
+    ]
+}

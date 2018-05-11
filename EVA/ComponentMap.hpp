@@ -10,14 +10,14 @@ namespace EVA
 {
 	// Macro for registering a component. Should be put inside the class declaration
 	#define REGISTER_COMPONENT_HPP(TYPE) \
-    static ComponentRegister<TYPE> m_Register;\
+    static EVA::ComponentRegister<TYPE> m_Register;\
 	public:\
 	std::string GetTypeId() override;\
 	private:
 
 	// Macro for registering a component
 	#define REGISTER_COMPONENT_CPP(TYPE, NAME) \
-    ComponentRegister<TYPE> TYPE::m_Register(NAME);\
+    EVA::ComponentRegister<TYPE> TYPE::m_Register(NAME);\
 	std::string TYPE::GetTypeId()\
 	{\
 		return m_Register.typeId;\
