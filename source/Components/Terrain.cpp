@@ -65,7 +65,7 @@ void Terrain::CreateMesh()
 	const auto verticesX = (unsigned int)std::floorf(terrainWidth * verticesPerUnit);
 
 	// Vertices
-	std::vector<EVA::Vertex> vertices;
+	std::vector<EVA::ColorVertex> vertices;
 	vertices.resize(verticesY * verticesX);
 
 	// Position
@@ -73,7 +73,21 @@ void Terrain::CreateMesh()
 	{
 		for (unsigned int x = 0; x < verticesX; ++x)
 		{
-			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, terrainMaxHeight * HeightData((float)x / (float)verticesX, (float)y / (float)verticesY), y / verticesPerUnit);
+			const auto height = HeightData((float)x / (float)verticesX, (float)y / (float)verticesY);
+
+			glm::vec3 color;
+			if (height < 0.1)
+				color = { 0.0f, 0.0f, 1.0f };
+			else if (height < 0.2f)
+				color = { 0.0f, 1.0f, 0.0f };
+			else if (height < 0.3f)
+				color = { 0.5f, 0.5f, 0.5f };
+			else
+				color = { 1.0f, 1.0f, 1.0f };
+
+			vertices[y*verticesX + x].color = color;
+
+			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, terrainMaxHeight * height, y / verticesPerUnit);
 		}
 	}
 

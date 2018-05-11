@@ -6,10 +6,10 @@ uniform mat4 projection;
 
 layout (location = 0) in vec3 vert;
 layout (location = 1) in vec3 vertNormal;
-layout (location = 2) in vec2 vertTexCoord;
+layout (location = 2) in vec3 vertColor;
 
 out vec3 fragVert;
-out vec2 fragTexCoord;
+out vec3 fragColor;
 out vec3 fragNormal;
 
 // Lights
@@ -32,7 +32,7 @@ void main()
 {
     // Pass some variables to the fragment shader
 	fragVert = vec3(model * vec4(vert, 1));
-    fragTexCoord = vertTexCoord;
+    fragColor = vertColor;
     fragNormal = mat3(transpose(inverse(model))) * vertNormal;  
     
 	for(int i = 0; i < numLights; ++i)
