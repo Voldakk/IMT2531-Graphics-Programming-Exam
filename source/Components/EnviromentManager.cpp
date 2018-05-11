@@ -5,6 +5,7 @@ REGISTER_COMPONENT_CPP(EnviromentManager, "EnviromentManager")
 void EnviromentManager::Awake()
 {
 	m_Sun = scene->GetLights()[0].get();
+	UpdateTime();
 }
 
 void EnviromentManager::Load(const EVA::DataObject data)
@@ -29,8 +30,8 @@ void EnviromentManager::Save(EVA::DataObject& data)
 
 void EnviromentManager::Inspector()
 {
-	ImGui::DragFloat("Time", &m_Time, 0.01f, 0.0f, 2.0f);
-	ComponentInspector::Float("Season", m_Season);
+	ComponentInspector::DragFloat("Season", m_Season, 0.0f, 12.0f);
+	ComponentInspector::DragFloat("Time", m_Time, 0.0f, 24.0f);
 
 	ComponentInspector::Float("Midday angle", m_MiddayAngle);
 
@@ -44,9 +45,9 @@ void EnviromentManager::Inspector()
 
 void EnviromentManager::Update(const float deltaTime)
 {
-	m_Time += deltaTime / m_SecondsPerDay;
-	if (m_Time >= 1.0f)
-		m_Time -= 1.0f;
+	m_Time += (deltaTime * 24.0f) / m_SecondsPerDay;
+	if (m_Time >= 24.0f)
+		m_Time -= 24.0f;
 
 	UpdateTime();
 }
@@ -56,34 +57,34 @@ void EnviromentManager::UpdateTime() const
 	if (m_Sun == nullptr)
 		return;
 
-	const auto yaw = m_Time * 180.0f; // 0 - 360 degrees
+	const auto yaw = (m_Time / 24.0f) * 360.0f; // 0 - 360 degrees
 	auto pitch = 0.0f;
 	auto color = m_Sun->color;
 
-	if (m_Time <= 0.5f) // 00-06
+	if (m_Time <= 6.0f) // 00-06
 	{
-		const auto t = m_Time * 2.0f;
+		const auto t = m_Time / 6.0f;
 
 		pitch = 0.0f;
 		color = glm::mix(m_NightColor, m_SunriseColor, t);
 	}
-	else if (m_Time <= 1.0f) // 06-12
+	else if (m_Time <= 12) // 06-12
 	{
-		const auto t = m_Time * 2.0f - 1.0f;
+		const auto t = (m_Time - 6.0f) / 6.0f;
 
 		pitch = glm::mix(0.0f, m_MiddayAngle, t);
 		color = glm::mix(m_SunriseColor, m_MiddayColor, t);
 	}
-	else if (m_Time <= 1.5f) // 12-18
+	else if (m_Time <= 18.0f) // 12-18
 	{
-		const auto t = (m_Time - 1.0f) * 2.0f;
+		const auto t = (m_Time - 12.0f) / 6.0f;
 
 		pitch = glm::mix(m_MiddayAngle, 0.0f, t);
 		color = glm::mix(m_MiddayColor, m_SunsetColor, t);
 	}
 	else // 18-24
 	{
-		const auto t = m_Time * 2.0f - 3.0f;
+		const auto t = (m_Time - 18.0f) / 6.0f;
 
 		pitch = 0.0f;
 		color = glm::mix(m_SunsetColor, m_NightColor, t);

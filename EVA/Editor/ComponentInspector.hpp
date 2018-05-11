@@ -122,4 +122,9 @@ public:
 	{
 		return ImGui::ColorPicker3(name, glm::value_ptr(value));
 	}
+
+	static bool DragFloat(const char* name, float& value, const float min = 0.0f, const float max = 1.0f, const float step = 0.01f)
+	{
+		return ImGui::DragFloat(name, &value, step, min, max);
+	}
 };
