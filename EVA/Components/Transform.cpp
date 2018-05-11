@@ -64,9 +64,9 @@ namespace EVA
 
 	void Transform::Rotate(const glm::vec3 euler)
 	{
-		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.z), ZAXIS);
-		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.x), XAXIS);
-		m_LocalOrientation *= glm::angleAxis(glm::radians(euler.y), YAXIS);
+		m_LocalOrientation = glm::angleAxis(glm::radians(euler.z), ZAXIS) * m_LocalOrientation;
+		m_LocalOrientation = glm::angleAxis(glm::radians(euler.x), XAXIS) * m_LocalOrientation;
+		m_LocalOrientation = glm::angleAxis(glm::radians(euler.y), YAXIS) * m_LocalOrientation;
 
 		m_LocalRotation = glm::eulerAngles(m_LocalOrientation) * glm::degrees(1.0f);
 	}
@@ -151,18 +151,18 @@ namespace EVA
 		m_ModelMatrix = glm::translate(m_ModelMatrix, m_LocalPosition);
 
 		// Orientation
-		auto o = m_LocalOrientation;
+		/*auto o = m_LocalOrientation;
 		o.y *= -1;
-		o.z *= -1;
-		m_ModelMatrix = m_ModelMatrix * glm::toMat4(o);
+		o.z *= -1;*/
+		m_ModelMatrix = m_ModelMatrix * glm::toMat4(m_LocalOrientation);
 
 		// Scale
 		m_ModelMatrix = glm::scale(m_ModelMatrix, m_LocalScale);
 
 		// Directions
-		m_Forward = glm::normalize(ZAXIS * orientation);
-		m_Right = glm::normalize(-XAXIS * orientation);
-		m_Up = glm::normalize(YAXIS * orientation);
+		m_Forward = glm::normalize(m_LocalOrientation * ZAXIS);
+		m_Right = glm::normalize(m_LocalOrientation * -XAXIS);
+		m_Up = glm::normalize(m_LocalOrientation * YAXIS);
 
 		// Update the children
 		for (auto child : m_Children)

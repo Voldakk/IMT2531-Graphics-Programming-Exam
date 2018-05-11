@@ -8,13 +8,13 @@
             "type": "directional",
             "color": [
                 1.0,
-                1.0,
-                1.0
+                0.8911630511283875,
+                0.770233154296875
             ],
             "ambientCoefficient": 0.019999999552965165,
             "rotation": [
-                60.0,
-                90.0
+                32.427974700927737,
+                48.641963958740237
             ],
             "directionalShadowDistance": 20.0,
             "directionalNearPlane": 1.0,
@@ -129,9 +129,9 @@
             ],
             "orientation": [
                 0.0,
-                1.0,
                 0.0,
-                -4.371138828673793e-8
+                0.0,
+                1.0
             ],
             "components": [
                 {
@@ -199,6 +199,87 @@
                     "material": "./assets/models/materials/chrono.mat",
                     "mesh": "./assets/models/ask21mi.fbx",
                     "meshIndex": 16
+                }
+            ]
+        },
+        {
+            "name": "F",
+            "position": [
+                20.0,
+                20.0,
+                20.0
+            ],
+            "scale": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
+                }
+            ]
+        },
+        {
+            "name": "R",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
+                }
+            ]
+        },
+        {
+            "name": "U",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
                 }
             ]
         }

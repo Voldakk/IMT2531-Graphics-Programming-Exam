@@ -2,6 +2,7 @@
 
 #include "EVA/Input.hpp"
 #include "Transformer.hpp"
+#include "Transform.hpp"
 
 namespace EVA
 {
@@ -47,7 +48,7 @@ namespace EVA
 		// Look
 		const auto mouseMovement = Input::MouseMovement();
 		pitch -= mouseMovement.y * mouseSensitivity * deltaTime;
-		yaw += mouseMovement.x * mouseSensitivity * deltaTime;
+		yaw -= mouseMovement.x * mouseSensitivity * deltaTime;
 
 		// Clamp
 		pitch = glm::clamp(pitch, -89.0f, 89.0f);
@@ -56,7 +57,8 @@ namespace EVA
 		else if (yaw > 360.0f)
 			yaw -= 360.0f;
 
-		transform->SetOrientation(pitch, yaw, 0.0f);
+		transform->SetOrientation(YAXIS, yaw);
+		transform->Rotate(transform->right, pitch);
 
 		if (m_Camera != nullptr)
 			m_Camera->fov -= Input::GetScroll().y;
