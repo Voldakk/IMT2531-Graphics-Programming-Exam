@@ -101,7 +101,7 @@ void Terrain::CreateMesh()
 			glm::vec3 normal;
 			normal.x = xm - xp;
 			normal.z = ym - yp;
-			normal.y = 2.0;
+			normal.y = 2.0 / maxTerrainHeight;
 
 			vertices[y*verticesX + x].normal = glm::normalize(normal);
 		}

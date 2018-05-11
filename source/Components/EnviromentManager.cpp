@@ -47,6 +47,10 @@ void EnviromentManager::Inspector()
 
 	ComponentInspector::Text("Regions");
 
+	int numRegions = m_Regions.size();
+	if (ComponentInspector::EnterInt("Number of regions", numRegions))
+		m_Regions.resize(numRegions);
+
 
 	for (unsigned int i = 0; i < m_Regions.size(); ++i)
 	{
@@ -71,7 +75,7 @@ void EnviromentManager::UpdateTime() const
 	if (m_Sun == nullptr)
 		return;
 
-	const auto yaw = (m_Time / 24.0f) * 360.0f; // 0 - 360 degrees
+	auto yaw = 0.0f;
 	auto pitch = 0.0f;
 	auto color = m_Sun->color;
 
@@ -79,6 +83,7 @@ void EnviromentManager::UpdateTime() const
 	{
 		const auto t = m_Time / 6.0f;
 
+		yaw = 0.0f;
 		pitch = 0.0f;
 		color = glm::mix(m_NightColor, m_SunriseColor, t);
 	}
@@ -86,6 +91,7 @@ void EnviromentManager::UpdateTime() const
 	{
 		const auto t = (m_Time - 6.0f) / 6.0f;
 
+		yaw = glm::mix(0.0f, 90.0f, t);
 		pitch = glm::mix(0.0f, m_MiddayAngle, t);
 		color = glm::mix(m_SunriseColor, m_MiddayColor, t);
 	}
@@ -93,6 +99,7 @@ void EnviromentManager::UpdateTime() const
 	{
 		const auto t = (m_Time - 12.0f) / 6.0f;
 
+		yaw = glm::mix(90.0f, 180.0f, t);
 		pitch = glm::mix(m_MiddayAngle, 0.0f, t);
 		color = glm::mix(m_MiddayColor, m_SunsetColor, t);
 	}
@@ -100,6 +107,7 @@ void EnviromentManager::UpdateTime() const
 	{
 		const auto t = (m_Time - 18.0f) / 6.0f;
 
+		yaw = 180.0f;
 		pitch = 0.0f;
 		color = glm::mix(m_SunsetColor, m_NightColor, t);
 	}
