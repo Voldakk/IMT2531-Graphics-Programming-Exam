@@ -7,14 +7,14 @@
         {
             "type": "directional",
             "color": [
-                0.9929824471473694,
-                0.8774367570877075,
-                0.7805273532867432
+                1.0,
+                1.0,
+                1.0
             ],
             "ambientCoefficient": 0.019999999552965165,
             "rotation": [
-                42.000003814697269,
-                207.0
+                60.0,
+                90.0
             ],
             "directionalShadowDistance": 20.0,
             "directionalNearPlane": 1.0,
@@ -51,7 +51,6 @@
                 },
                 {
                     "id": "EVA::FreeLook",
-                    "wasd": true,
                     "mouseSensitivity": 50.0,
                     "movementSpeed": 10.0,
                     "pitch": 0.0,
@@ -84,13 +83,15 @@
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/materials/terrain.mat",
+                    "material": "",
                     "mesh": "",
                     "meshIndex": 0
                 },
                 {
                     "id": "EnviromentManager",
-                    "midDayAngle": 60.0,
+                    "secondsPerDay": 10.0,
+                    "secondsPerYear": 40.0,
+                    "middayAngle": 60.0,
                     "sunriseColor": [
                         1.0,
                         0.763157844543457,
@@ -111,6 +112,93 @@
                         0.009999999776482582,
                         0.009999999776482582
                     ]
+                }
+            ]
+        },
+        {
+            "name": "Glider",
+            "position": [
+                20.0,
+                20.0,
+                20.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                1.0,
+                0.0,
+                -4.371138828673793e-8
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/body.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 3
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/string.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 7
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/interior.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 8
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/chrono.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 9
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/compass.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 11
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/turn.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 12
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/varo.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 13
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/asi.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 14
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/alt.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 15
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/sc.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 16
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/materials/chrono.mat",
+                    "mesh": "./assets/models/ask21mi.fbx",
+                    "meshIndex": 16
                 }
             ]
         }
