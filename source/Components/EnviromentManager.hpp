@@ -49,6 +49,9 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 	float m_SecondsPerDay = 10.0f;
 	float m_SecondsPerYear = 40.0f;
 
+	bool m_TimePaused = false;
+	bool m_SeasonPaused = false;
+
 	float m_MiddayAngle = 60.0f;
 
 	glm::vec3 m_SunriseColor = glm::vec3(1.0f, 0.5f, 0.5f);

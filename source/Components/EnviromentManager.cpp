@@ -1,4 +1,5 @@
 #include "EnviromentManager.hpp"
+#include "../../EVA/Input.hpp"
 
 REGISTER_COMPONENT_CPP(EnviromentManager, "EnviromentManager")
 
@@ -91,14 +92,44 @@ void EnviromentManager::Inspector()
 
 void EnviromentManager::Update(const float deltaTime)
 {
-	m_Time += (deltaTime * 24.0f) / m_SecondsPerDay;
-	if (m_Time >= 24.0f)
-		m_Time -= 24.0f;
+	// Season controls
+	if (EVA::Input::KeyDown(EVA::Input::Alpha1))
+		m_Season = 3.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha2))
+		m_Season = 6.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha3))
+		m_Season = 9.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha4))
+		m_Season = 0.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha5))
+		m_SeasonPaused = !m_SeasonPaused;
 
-	m_Time += (deltaTime * 12.0f) / m_SecondsPerYear;
-	if (m_Time >= 12.0f)
-		m_Time -= 12.0f;
+	// Time controls
+	if (EVA::Input::KeyDown(EVA::Input::Alpha6))
+		m_Time = 6.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha7))
+		m_Time = 12.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha8))
+		m_Time = 18.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha9))
+		m_Time = 0.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha0))
+		m_TimePaused = !m_TimePaused;
 
+	// Update
+	if (!m_SeasonPaused)
+	{
+		m_Season += (deltaTime * 12.0f) / m_SecondsPerYear;
+		if (m_Season >= 12.0f)
+			m_Season -= 12.0f;
+	}
+	
+	if (!m_TimePaused)
+	{
+		m_Time += (deltaTime * 24.0f) / m_SecondsPerDay;
+		if (m_Time >= 24.0f)
+			m_Time -= 24.0f;
+	}
 	UpdateTime();
 }
 
