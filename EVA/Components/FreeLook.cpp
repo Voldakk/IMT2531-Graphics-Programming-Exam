@@ -19,27 +19,27 @@ namespace EVA
 		glm::vec3 movement;
 
 		// Front
-		if (Input::Key(wasd ? Input::W : Input::Up))
+		if (Input::Key(keyBindings[Forward]))
 			movement += transform->forward;
 
 		// Back
-		if (Input::Key(wasd ? Input::S : Input::Down))
+		if (Input::Key(keyBindings[Back]))
 			movement -= transform->forward;
 
 		// Right
-		if (Input::Key(wasd ? Input::D : Input::Right))
+		if (Input::Key(keyBindings[Right]))
 			movement += transform->right;
 
 		// Left
-		if (Input::Key(wasd ? Input::A : Input::Left))
+		if (Input::Key(keyBindings[Left]))
 			movement -= transform->right;
 
 		// Up
-		if (Input::Key(wasd ? Input::Space : Input::RightShift))
+		if (Input::Key(keyBindings[Up]))
 			movement += transform->up;
 
 		// Down
-		if (Input::Key(wasd ? Input::LeftShift : Input::RightControl))
+		if (Input::Key(keyBindings[Down]))
 			movement -= transform->up;
 
 		transform->Translate(movement * movementSpeed * deltaTime);
@@ -64,7 +64,6 @@ namespace EVA
 
 	void FreeLook::Load(const DataObject data)
 	{
-		wasd = data.GetBool("wasd", true);
 		mouseSensitivity = data.GetFloat("mouseSensitivity", 50.0f);
 		movementSpeed = data.GetFloat("movementSpeed", 10.0f);
 
@@ -74,7 +73,6 @@ namespace EVA
 
 	void FreeLook::Save(DataObject& data)
 	{
-		data.SetBool("wasd", wasd);
 		data.SetFloat("mouseSensitivity", mouseSensitivity);
 		data.SetFloat("movementSpeed", movementSpeed);
 
@@ -84,7 +82,6 @@ namespace EVA
 
 	void FreeLook::Inspector()
 	{
-		ComponentInspector::Bool("WASD", wasd);
 		ComponentInspector::Float("Mouse sensitivity", mouseSensitivity);
 		ComponentInspector::Float("Movement speed", movementSpeed);
 	}
