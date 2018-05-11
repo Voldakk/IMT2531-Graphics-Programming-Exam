@@ -1,0 +1,5 @@
+{
+    "shader": "./assets/shaders/terrain.shader",
+    "useInstancing": false,
+    "shininess": 100.0
+}

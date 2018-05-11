@@ -25,7 +25,6 @@ public:
 private:
 	
 	void SetHeightMap(const FS::path& newHeightMapPath);
-	void LoadHeightMapData(const std::shared_ptr<EVA::RawTexture>& texture);
 	void CreateMesh();
 
 	float HeightData(float x, float y);

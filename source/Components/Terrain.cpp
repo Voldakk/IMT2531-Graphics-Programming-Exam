@@ -33,21 +33,18 @@ void Terrain::SetHeightMap(const FS::path& newHeightMapPath)
 
 	const auto data = EVA::TextureManager::LoadRaw(m_HeightMapPath);
 
-	if(data != nullptr)
-		LoadHeightMapData(data);
-}
+	if(data == nullptr)
+		return;
 
-void Terrain::LoadHeightMapData(const std::shared_ptr<EVA::RawTexture>& texture)
-{
 	m_HeightData.clear();
 
-	m_HeightData.resize(texture->height);
-	for (unsigned int y = 0; y < texture->height; ++y)
+	m_HeightData.resize(data->height);
+	for (unsigned int y = 0; y < data->height; ++y)
 	{
-		m_HeightData[y].resize(texture->width);
-		for (unsigned int x = 0; x < texture->width; ++x)
+		m_HeightData[y].resize(data->width);
+		for (unsigned int x = 0; x < data->width; ++x)
 		{
-			m_HeightData[y][x] = texture->data[y*texture->width + x * texture->channels];
+			m_HeightData[y][x] = data->data[y*data->width + x * data->channels];
 		}
 	}
 
@@ -59,25 +56,45 @@ void Terrain::CreateMesh()
 	if (m_HeightData.empty() && m_HeightData[0].empty())
 		return;
 
-	const auto dataWidth = m_HeightData[0].size();
-	const auto dataHeight = m_HeightData.size();
+	const auto verticesPerUnit = 1.0f;
+	const auto terrainWidth = 100;
+	const auto terrainLength = (float)terrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
+	const auto terrainMaxHeight = 40.0f;
 
-	const auto verticesPerUnit = 10.0f;
-	const auto terrainWidth = 10;
-	const auto terrainHeight = (float)terrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
-
-	const auto verticesY = (unsigned int)std::floorf(terrainHeight * verticesPerUnit);
+	const auto verticesY = (unsigned int)std::floorf(terrainLength * verticesPerUnit);
 	const auto verticesX = (unsigned int)std::floorf(terrainWidth * verticesPerUnit);
 
 	// Vertices
 	std::vector<EVA::Vertex> vertices;
 	vertices.resize(verticesY * verticesX);
 
+	// Position
 	for (unsigned int y = 0; y < verticesY; ++y)
 	{
 		for (unsigned int x = 0; x < verticesX; ++x)
 		{
-			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, HeightData((float)x / (float)verticesX, (float)y / (float)verticesY), y / verticesPerUnit);
+			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, terrainMaxHeight * HeightData((float)x / (float)verticesX, (float)y / (float)verticesY), y / verticesPerUnit);
+		}
+	}
+
+	// Normals
+	for (unsigned int y = 1; y < verticesY-1; ++y)
+	{
+		for (unsigned int x = 1; x < verticesX-1; ++x)
+		{
+			// Read neightbor heights
+			const auto xm = vertices[y*verticesX + x - 1].position.y;
+			const auto xp = vertices[y*verticesX + x + 1].position.y;
+			const auto ym = vertices[(y-1)*verticesX + x].position.y;
+			const auto yp = vertices[(y+1)*verticesX + x].position.y;
+
+			// Deduce terrain normal
+			glm::vec3 normal;
+			normal.x = xm - xp;
+			normal.z = ym - yp;
+			normal.y = 2.0;
+
+			vertices[y*verticesX + x].normal = glm::normalize(normal);
 		}
 	}
 

@@ -13,44 +13,8 @@
             ],
             "ambientCoefficient": 0.004999999888241291,
             "rotation": [
-                60.0,
-                -80.0
-            ],
-            "directionalShadowDistance": 20.0,
-            "directionalNearPlane": 1.0,
-            "directionalFarPlane": 100.0,
-            "shadows": true,
-            "shadowMapSize": 4096
-        },
-        {
-            "type": "directional",
-            "color": [
-                0.5,
-                0.5,
-                0.5
-            ],
-            "ambientCoefficient": 0.004999999888241291,
-            "rotation": [
-                60.0,
-                -200.0
-            ],
-            "directionalShadowDistance": 20.0,
-            "directionalNearPlane": 1.0,
-            "directionalFarPlane": 100.0,
-            "shadows": true,
-            "shadowMapSize": 4096
-        },
-        {
-            "type": "directional",
-            "color": [
-                0.5,
-                0.5,
-                0.5
-            ],
-            "ambientCoefficient": 0.004999999888241291,
-            "rotation": [
-                60.0,
-                -320.0
+                90.0,
+                0.0
             ],
             "directionalShadowDistance": 20.0,
             "directionalNearPlane": 1.0,
@@ -119,7 +83,37 @@
                     "heightMap": "./assets/heightmaps/height100.png"
                 },
                 {
-                    "id": "EVA::MeshRenderer"
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/materials/terrain.mat",
+                    "mesh": "",
+                    "meshIndex": 0
+                }
+            ]
+        },
+        {
+            "name": "Sphere",
+            "position": [
+                20.0,
+                20.0,
+                20.0
+            ],
+            "scale": [
+                5.0,
+                5.0,
+                5.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/standard assets/models/sphere.obj",
+                    "meshIndex": 0
                 }
             ]
         }

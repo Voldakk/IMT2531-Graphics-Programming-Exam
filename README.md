@@ -98,3 +98,4 @@ To run them simply uncomment the line in source/main.cpp
 * [opengl-tutorial - Picking with custom Ray-OBB function](http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/)
 * [Stack Overflow - String to type mapping](https://stackoverflow.com/a/582456)
 * [Stack Overflow - Full path to the executing app](https://stackoverflow.com/a/198099)
+* [Stack Overflow - How to calculate normals in a terrain height grid](https://stackoverflow.com/a/13983431)
