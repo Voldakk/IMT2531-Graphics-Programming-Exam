@@ -24,11 +24,19 @@ void Terrain::Start()
 void Terrain::Load(const EVA::DataObject data)
 {
 	m_HeightMapPath = data.GetPath("heightMap", "");
+	
+	m_TerrainWidth = data.GetFloat("terrainWidth", m_TerrainWidth);
+	m_MaxTerrainHeight = data.GetFloat("maxTerrainHeight", m_MaxTerrainHeight);
+	m_VerticesPerUnit = data.GetFloat("verticesPerUnit", m_VerticesPerUnit);
 }
 
 void Terrain::Save(EVA::DataObject& data)
 {
 	data.SetString("heightMap", EVA::FileSystem::ToString(m_HeightMapPath));
+
+	data.SetFloat("terrainWidth", m_TerrainWidth);
+	data.SetFloat("maxTerrainHeight", m_MaxTerrainHeight);
+	data.SetFloat("verticesPerUnit", m_VerticesPerUnit);
 }
 
 void Terrain::Inspector()
@@ -37,6 +45,15 @@ void Terrain::Inspector()
 	if(ComponentInspector::DragDropTargetString("Height map", heightMapPath, "file"))
 	{
 		SetHeightMap(heightMapPath);
+	}
+
+	ComponentInspector::Float("Terrain width", m_TerrainWidth);
+	ComponentInspector::Float("Max terrain height", m_MaxTerrainHeight);
+	ComponentInspector::Float("Vertices per unit", m_VerticesPerUnit);
+
+	if(ComponentInspector::Button("Regenerate"))
+	{
+		CreateMesh();
 	}
 }
 
@@ -75,12 +92,10 @@ void Terrain::CreateMesh()
 	if (m_HeightData.empty() && m_HeightData[0].empty())
 		return;
 
-	const auto verticesPerUnit = 1.0f;
-	const auto terrainWidth = 100;
-	const auto terrainLength = (float)terrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
+	const auto terrainLength = (float)m_TerrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
 
-	const auto verticesY = (unsigned int)std::floorf(terrainLength * verticesPerUnit);
-	const auto verticesX = (unsigned int)std::floorf(terrainWidth * verticesPerUnit);
+	const auto verticesY = (unsigned int)std::floorf(terrainLength * m_VerticesPerUnit);
+	const auto verticesX = (unsigned int)std::floorf(m_TerrainWidth * m_VerticesPerUnit);
 
 	// Vertices
 	std::vector<EVA::ColorVertex> vertices;
@@ -93,7 +108,7 @@ void Terrain::CreateMesh()
 		{
 			const auto height = HeightData((float)x / (float)verticesX, (float)y / (float)verticesY);
 
-			vertices[y*verticesX + x].position = glm::vec3(x / verticesPerUnit, height, y / verticesPerUnit);
+			vertices[y*verticesX + x].position = glm::vec3(x / m_VerticesPerUnit, height, y / m_VerticesPerUnit);
 		}
 	}
 
@@ -112,7 +127,7 @@ void Terrain::CreateMesh()
 			glm::vec3 normal;
 			normal.x = xm - xp;
 			normal.z = ym - yp;
-			normal.y = 2.0 / maxTerrainHeight;
+			normal.y = 2.0 / m_MaxTerrainHeight;
 
 			vertices[y*verticesX + x].normal = glm::normalize(normal);
 		}

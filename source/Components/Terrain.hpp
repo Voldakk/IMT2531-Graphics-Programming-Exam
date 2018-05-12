@@ -20,11 +20,13 @@ class Terrain : public EVA::Component, public EVA::IUpdateComponent
 
 	std::shared_ptr<EVA::Material> m_Material;
 
+	float m_VerticesPerUnit = 1.0f;
+	float m_TerrainWidth = 100.0f;
+	float m_MaxTerrainHeight = 40.0f;
 
 public:
-
+	const float& maxTerrainHeight = m_MaxTerrainHeight;
 	bool contourLines = false;
-	float maxTerrainHeight = 40.0f;
 
 	void Start() override;
 	void Load(const EVA::DataObject data) override;

@@ -131,4 +131,9 @@ public:
 	{
 		return ImGui::DragFloatRange2(name, &min, &max, step);
 	}
+
+	static bool Button(const char* name)
+	{
+		return ImGui::Button(name);
+	}
 };

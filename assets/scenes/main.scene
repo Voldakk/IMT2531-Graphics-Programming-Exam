@@ -8,13 +8,13 @@
             "type": "directional",
             "color": [
                 1.0,
-                1.0,
-                1.0
+                0.8792104721069336,
+                0.7450000047683716
             ],
             "ambientCoefficient": 0.019999999552965165,
             "rotation": [
-                60.0,
-                90.0
+                29.400001525878908,
+                44.10000228881836
             ],
             "directionalShadowDistance": 20.0,
             "directionalNearPlane": 1.0,
@@ -92,7 +92,10 @@
             "components": [
                 {
                     "id": "Terrain",
-                    "heightMap": "./assets/heightmaps/height100.png"
+                    "heightMap": "./assets/heightmaps/height10.png",
+                    "terrainWidth": 1000.0,
+                    "maxTerrainHeight": 200.0,
+                    "verticesPerUnit": 1.0
                 },
                 {
                     "id": "EVA::MeshRenderer",
