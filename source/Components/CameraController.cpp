@@ -25,6 +25,8 @@ void CameraController::LateUpdate()
 		m_CurrentCamera++;
 		if (m_CurrentCamera == Last)
 			m_CurrentCamera = 0;
+
+		UpdateCameras();
 	}
 }
 

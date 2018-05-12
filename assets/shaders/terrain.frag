@@ -96,7 +96,9 @@ void main()
 		for(int i = 0; i < numRegions; ++i)
 		{
 			if(abs(fragHeight - regions[i].maxHeight) <= 0.001)
-				surfaceColor = vec3(0);
+				surfaceColor = regions[i].color;
+			else if(abs(fragHeight - regions[i].minHeight) <= 0.001)
+				surfaceColor = regions[i].color;
 		}
 	}
 

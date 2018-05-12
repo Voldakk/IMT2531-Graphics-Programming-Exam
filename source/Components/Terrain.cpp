@@ -57,6 +57,8 @@ void Terrain::Inspector()
 	{
 		CreateMesh();
 	}
+
+	ComponentInspector::Bool("Contour lines", contourLines);
 }
 
 void Terrain::Update(float deltaTime)

@@ -225,12 +225,6 @@
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/string.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
-                    "meshIndex": 7
-                },
-                {
-                    "id": "EVA::MeshRenderer",
                     "material": "./assets/models/materials/interior.mat",
                     "mesh": "./assets/models/ask21mi.fbx",
                     "meshIndex": 8
@@ -312,12 +306,6 @@
                             "fov": 90.0,
                             "near": 0.10000000149011612,
                             "far": 1000.0
-                        },
-                        {
-                            "id": "EVA::MeshRenderer",
-                            "material": "./assets/standard assets/materials/uv.mat",
-                            "mesh": "./assets/models/arrow.fbx",
-                            "meshIndex": 0
                         }
                     ]
                 }
