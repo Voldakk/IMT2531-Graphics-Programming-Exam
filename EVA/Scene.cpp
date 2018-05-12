@@ -61,6 +61,9 @@ namespace EVA
 		// Update
 		for (auto &gameObject : m_GameObjects)
 		{
+			if (!gameObject->active)
+				return;
+
 			gameObject->Update(deltaTime);
 		}
 
@@ -79,6 +82,9 @@ namespace EVA
 		// Update
 		for (auto &gameObject : m_GameObjects)
 		{
+			if (!gameObject->active)
+				return;
+
 			gameObject->LateUpdate();
 		}
 
@@ -297,9 +303,9 @@ namespace EVA
 
 	void Scene::AddCollider(Collider* collider)
 	{
-		for (unsigned int i = 0; i < m_Colliders.size(); ++i)
+		for (auto& c : m_Colliders)
 		{
-			if (m_Colliders[i] == collider)
+			if (c == collider)
 			{
 				return;
 			}
@@ -378,6 +384,9 @@ namespace EVA
 					// For each MeshRenderer that use the mesh
 					for (auto &meshRenderer : meshes)
 					{
+						if(!meshRenderer->active)
+							continue;
+
 						// Render the mesh at the MeshRenderers position
 						meshRenderer->Render();
 					}
@@ -437,6 +446,9 @@ namespace EVA
 					// For each MeshRenderer that use the mesh
 					for (auto &meshRenderer : meshes)
 					{
+						if (!meshRenderer->active)
+							continue;
+
 						// Render the mesh at the MeshRenderers position
 						m_ShadowMaterial.SetObjectUniforms(meshRenderer->transform.Get());
 						meshRenderer->mesh->Draw();
@@ -507,6 +519,9 @@ namespace EVA
 					// For each MeshRenderer that use the mesh
 					for (auto &meshRenderer : meshes)
 					{
+						if (!meshRenderer->active)
+							continue;
+
 						// Render the mesh at the MeshRenderers position
 						m_ShadowMaterialCube.SetObjectUniforms(meshRenderer->transform.Get());
 						meshRenderer->mesh->Draw();

@@ -28,9 +28,12 @@ namespace EVA
 
 		std::string m_Name;
 
+		bool m_Active = true;
+
     public:
 
 		// Public read only fields
+		const bool& active = m_Active;
 		const ConstPointer<Scene> scene = &m_Scene;
 		const std::unique_ptr<Transform>& transform = m_Transform;
 		
@@ -115,6 +118,8 @@ namespace EVA
 		std::string GetName() const;
 
 		std::vector<std::shared_ptr<Component>>& GetComponents();
+
+		void SetActive(bool value);
     };
 
     template<class T>

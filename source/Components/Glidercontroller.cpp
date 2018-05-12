@@ -12,6 +12,16 @@ void GilderController::Start()
 
 	m_StartLocation = transform->position;
 	m_StartOrientation = transform->orientation;
+
+	auto go = scene->FindGameObjectByName("TeleportPoint1");
+	auto i = 1;
+	while (go != nullptr)
+	{
+		m_TeleportPoints.push_back(go->transform.get());
+
+		i++;
+		go = scene->FindGameObjectByName("TeleportPoint" + std::to_string(i));
+	}
 }
 
 void GilderController::Load(const EVA::DataObject data)
@@ -68,6 +78,20 @@ void GilderController::Update(const float deltaTime)
 		transform->SetPosition(m_StartLocation);
 		transform->SetOrientation(m_StartOrientation);
 		m_CurrentSpeed = m_MinSpeed;
+	}
+
+	// Teleport
+	if(m_TeleportPoints.empty())
+		return;
+
+	if(EVA::Input::KeyDown(EVA::Input::F))
+	{
+		m_CurrentTeleportPoint++;
+		if (m_CurrentTeleportPoint >= m_TeleportPoints.size())
+			m_CurrentTeleportPoint = 0;
+
+		transform->SetPosition(m_TeleportPoints[m_CurrentTeleportPoint]->position);
+		transform->SetOrientation(m_TeleportPoints[m_CurrentTeleportPoint]->orientation);
 	}
 
 }

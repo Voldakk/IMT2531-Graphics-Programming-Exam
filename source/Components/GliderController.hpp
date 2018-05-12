@@ -22,6 +22,9 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 	glm::vec3 m_StartLocation;
 	glm::quat m_StartOrientation;
 
+	std::vector<EVA::Transform*> m_TeleportPoints;
+	unsigned int m_CurrentTeleportPoint = 0;
+
 public:
 
 	void Start() override;

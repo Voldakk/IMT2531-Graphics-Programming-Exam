@@ -21,7 +21,16 @@ namespace EVA
 
 		// Assimp import
 		Assimp::Importer importer;
-		const auto scene = importer.ReadFile(FileSystem::ToString(path), aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+		const aiScene* scene;
+		try
+		{
+			scene = importer.ReadFile(FileSystem::ToString(path), aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+		}
+		catch(std::exception& e)
+		{
+			std::cout << "ModelManager::LoadMesh - Error importing mesh:" << e.what() << std::endl;
+			return nullptr;
+		}
 
 		// Check for errors
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)

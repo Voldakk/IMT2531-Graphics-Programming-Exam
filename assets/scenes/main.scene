@@ -8,13 +8,13 @@
             "type": "directional",
             "color": [
                 1.0,
-                0.8792104721069336,
-                0.7450000047683716
+                1.0,
+                1.0
             ],
             "ambientCoefficient": 0.019999999552965165,
             "rotation": [
-                29.400001525878908,
-                44.10000228881836
+                60.0,
+                90.0
             ],
             "directionalShadowDistance": 20.0,
             "directionalNearPlane": 1.0,
@@ -218,6 +218,216 @@
                 },
                 {
                     "id": "GilderController"
+                }
+            ]
+        },
+        {
+            "name": "TeleportPoint1",
+            "position": [
+                110.0,
+                30.0,
+                70.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                -0.2164396047592163,
+                0.0,
+                0.9762960076332092
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/models/arrow.fbx",
+                    "meshIndex": 0
+                },
+				{
+                    "id": "EVA::HideOnStart"
+                }
+            ]
+        },
+        {
+            "name": "TeleportPoint2",
+            "position": [
+                70.0,
+                50.0,
+                860.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.7372773885726929,
+                0.0,
+                0.6755901575088501
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/models/arrow.fbx",
+                    "meshIndex": 0
+                },
+				{
+                    "id": "EVA::HideOnStart"
+                }
+            ]
+        },
+        {
+            "name": "TeleportPoint3",
+            "position": [
+                960.0,
+                30.0,
+                1050.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                -0.6883545517921448,
+                0.0,
+                0.7253744006156921
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/models/arrow.fbx",
+                    "meshIndex": 0
+                },
+				{
+                    "id": "EVA::HideOnStart"
+                }
+            ]
+        },
+        {
+            "name": "TeleportPoint4",
+            "position": [
+                835.0,
+                30.0,
+                1900.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                1.0,
+                0.0,
+                -4.371138828673793e-8
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/models/arrow.fbx",
+                    "meshIndex": 0
+                },
+				{
+                    "id": "EVA::HideOnStart"
+                }
+            ]
+        },
+        {
+            "name": "TeleportPoint5",
+            "position": [
+                225.0,
+                45.0,
+                1620.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.9998477101325989,
+                0.0,
+                0.017452383413910867
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/models/arrow.fbx",
+                    "meshIndex": 0
+                },
+				{
+                    "id": "EVA::HideOnStart"
+                }
+            ]
+        },
+        {
+            "name": "TeleportPoint6",
+            "position": [
+                770.0,
+                80.0,
+                50.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                -0.258819043636322,
+                0.0,
+                0.9659258127212524
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/models/arrow.fbx",
+                    "meshIndex": 0
+                },
+				{
+                    "id": "EVA::HideOnStart"
+                }
+            ]
+        },
+        {
+            "name": "TeleportPoint7",
+            "position": [
+                490.0,
+                65.0,
+                30.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.258819043636322,
+                0.0,
+                0.9659258127212524
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/models/arrow.fbx",
+                    "meshIndex": 0
+                },
+				{
+                    "id": "EVA::HideOnStart"
                 }
             ]
         }

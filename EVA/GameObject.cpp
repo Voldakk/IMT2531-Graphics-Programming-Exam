@@ -162,4 +162,14 @@ namespace EVA
 	{
 		return m_Components;
 	}
+
+	void GameObject::SetActive(const bool value)
+	{
+		m_Active = value;
+
+		for (auto& component : m_Components)
+		{
+			component->SetActive(value);
+		}
+	}
 }
