@@ -96,7 +96,11 @@ namespace EVA
 	{
 		Json::Generic& m_Json;
 		Json::Allocator* m_Allocator;
+
 	public:
+
+		Json::Generic& json = m_Json;
+		Json::Allocator* allocator = m_Allocator;
 
 		explicit DataObject(Json::Generic& json) : m_Json(json), m_Allocator(nullptr)
 		{}

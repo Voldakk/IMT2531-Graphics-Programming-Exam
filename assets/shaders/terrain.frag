@@ -83,10 +83,12 @@ void main()
 	// Regions
 	for(int i = 0; i < numRegions; ++i)
     {
-		float regionRange = regions[i].maxHeight - regions[i].minHeight;
-		float regionWeight = (regionRange - abs(fragHeight - regions[i].maxHeight)) / (regionRange);
-		regionWeight = max(0.0, regionWeight);
-		surfaceColor += regionWeight * regions[i].color;
+		if(fragHeight < regions[i].maxHeight && fragHeight > regions[i].minHeight)
+		{		
+			float dist = min(abs(regions[i].maxHeight - fragHeight), abs(fragHeight - regions[i].minHeight)) * regionBlendAmount;
+			float weight = clamp(dist, 0, 1);
+			surfaceColor += regions[i].color * weight;
+		}
 	}
 
 	if(contourLines)

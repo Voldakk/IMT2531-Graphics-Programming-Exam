@@ -9,27 +9,6 @@ void EnviromentManager::Awake()
 	m_Sun = scene->GetLights()[0].get();
 	UpdateTime();
 
-	m_Regions.push_back({ 
-		0.0f, 0.1f, 
-		0.0f, 0.1f,
-		{ 0.0f, 0.0f, 1.0f },
-		{ 0.0f, 0.0f, 1.0f } });
-	m_Regions.push_back({ 
-		0.1f, 0.2f,
-		0.1f, 0.2f,
-		{ 0.0f, 1.0f, 0.0f },
-		{ 0.0f, 1.0f, 0.0f } });
-	m_Regions.push_back({ 
-		0.2f, 0.3f,
-		0.2f, 0.3f,
-		{ 0.6f, 0.4f, 0.2f },
-		{ 0.6f, 0.4f, 0.2f } });
-	m_Regions.push_back({ 
-		0.3f, 0.5f,
-		0.3f, 0.5f,
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 1.0f, 1.0f } });
-
 	// Labels
 	m_TimeLabel = scene->CreateUiElement<EVA::Label>("Time:");
 	m_TimeLabel->SetAnchorAndPivot(-1.0f, 1.0f); // Top left
@@ -51,6 +30,27 @@ void EnviromentManager::Load(const EVA::DataObject data)
 	m_MiddayColor = data.GetVec3("middayColor", m_MiddayColor);
 	m_SunsetColor = data.GetVec3("sunsetColor", m_SunsetColor);
 	m_NightColor = data.GetVec3("nightColor", m_NightColor);
+
+	// Regions
+	regionBlendAmount = data.GetFloat("regionBlendAmount", regionBlendAmount);
+
+	if (data.json.HasMember("regions") && data.json["regions"].IsArray())
+	{
+		auto regions = data.json["regions"].GetArray();
+		m_Regions.resize(regions.Size());
+
+		for (size_t i = 0; i < regions.Size(); i++)
+		{
+			EVA::DataObject regionData(regions[i]);
+			m_Regions[i].minHeightSummer = regionData.GetFloat("minHeightSummer", 0.0f);
+			m_Regions[i].maxHeightSummer = regionData.GetFloat("maxHeightSummer", 0.0f);
+			m_Regions[i].colorSummer = regionData.GetVec3("colorSummer", glm::vec3(1.0f));
+
+			m_Regions[i].minHeightWinter = regionData.GetFloat("minHeightWinter", 0.0f);
+			m_Regions[i].maxHeightWinter = regionData.GetFloat("maxHeightWinter", 0.0f);
+			m_Regions[i].colorWinter = regionData.GetVec3("colorWinter", glm::vec3(1.0f));
+		}
+	}
 }
 
 void EnviromentManager::Save(EVA::DataObject& data)
@@ -64,6 +64,34 @@ void EnviromentManager::Save(EVA::DataObject& data)
 	data.SetVec3("middayColor", m_MiddayColor);
 	data.SetVec3("sunsetColor", m_SunsetColor);
 	data.SetVec3("nightColor", m_NightColor);
+
+	// Regions
+	data.SetFloat("regionBlendAmount", regionBlendAmount);
+
+	EVA::Json::Value regionsArray;
+	regionsArray.SetArray();
+
+	for (auto& region : m_Regions)
+	{
+		// Create a data object
+		EVA::Json::Value regionValue;
+		regionValue.SetObject();
+		EVA::DataObject regionData(regionValue, data.allocator);
+
+		// Set values
+		regionData.SetFloat("minHeightSummer", region.minHeightSummer);
+		regionData.SetFloat("maxHeightSummer", region.maxHeightSummer);
+		regionData.SetVec3("colorSummer", region.colorSummer);
+
+		regionData.SetFloat("minHeightWinter", region.minHeightWinter);
+		regionData.SetFloat("maxHeightWinter", region.maxHeightWinter);
+		regionData.SetVec3("colorWinter", region.colorWinter);
+
+		// Add to array
+		regionsArray.PushBack(regionValue, *data.allocator);
+	}
+
+	data.json.AddMember("regions", regionsArray, *data.allocator);
 }
 
 void EnviromentManager::Inspector()
@@ -85,6 +113,8 @@ void EnviromentManager::Inspector()
 	ComponentInspector::ColorPicker("Night color", m_NightColor);
 
 	ComponentInspector::Text("Regions");
+
+	ComponentInspector::Float("Region blend amount", regionBlendAmount);
 
 	int numRegions = m_Regions.size();
 	if (ComponentInspector::EnterInt("Number of regions", numRegions))

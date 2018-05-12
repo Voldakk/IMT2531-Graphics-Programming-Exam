@@ -127,6 +127,73 @@
                         0.009999999776482582,
                         0.009999999776482582,
                         0.009999999776482582
+                    ],
+                    "regionBlendAmount": 100.0,
+                    "regions": [
+                        {
+                            "minHeightSummer": 0.0,
+                            "maxHeightSummer": 0.11999999731779099,
+                            "colorSummer": [
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "minHeightWinter": 0.0,
+                            "maxHeightWinter": 0.10000000149011612,
+                            "colorWinter": [
+                                0.0,
+                                0.00006318092346191406,
+                                1.0
+                            ]
+                        },
+                        {
+                            "minHeightSummer": 0.10999999940395355,
+                            "maxHeightSummer": 0.23999999463558198,
+                            "colorSummer": [
+                                0.0,
+                                1.0,
+                                0.0
+                            ],
+                            "minHeightWinter": 0.09000000357627869,
+                            "maxHeightWinter": 0.23999999463558198,
+                            "colorWinter": [
+                                0.7941176295280457,
+                                0.5845964550971985,
+                                0.0817473828792572
+                            ]
+                        },
+                        {
+                            "minHeightSummer": 0.23000000417232514,
+                            "maxHeightSummer": 1.0,
+                            "colorSummer": [
+                                0.6000000238418579,
+                                0.4000000059604645,
+                                0.20000000298023225
+                            ],
+                            "minHeightWinter": 0.23000000417232514,
+                            "maxHeightWinter": 1.0,
+                            "colorWinter": [
+                                0.6000000238418579,
+                                0.4000000059604645,
+                                0.20000000298023225
+                            ]
+                        },
+                        {
+                            "minHeightSummer": 0.4000000059604645,
+                            "maxHeightSummer": 1.0,
+                            "colorSummer": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "minHeightWinter": 0.20999999344348908,
+                            "maxHeightWinter": 1.0,
+                            "colorWinter": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
                     ]
                 }
             ]
@@ -240,12 +307,12 @@
                         1.0
                     ],
                     "components": [
-						{
-							"id": "EVA::Camera",
-							"fov": 90.0,
-							"near": 0.10000000149011612,
-							"far": 1000.0
-						},
+                        {
+                            "id": "EVA::Camera",
+                            "fov": 90.0,
+                            "near": 0.10000000149011612,
+                            "far": 1000.0
+                        },
                         {
                             "id": "EVA::MeshRenderer",
                             "material": "./assets/standard assets/materials/uv.mat",
