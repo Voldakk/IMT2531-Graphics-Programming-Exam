@@ -16,6 +16,11 @@ namespace EVA
 
 	void FreeLook::Update(const float deltaTime)
 	{
+		if (Input::Key(keyBindings[Forward]))
+			currentMovementSpeed *= 1.0 + deltaTime;
+		if (Input::KeyUp(keyBindings[Forward]))
+			currentMovementSpeed = minMovementSpeed;
+
 		// Movement
 		glm::vec3 movement;
 
@@ -43,7 +48,7 @@ namespace EVA
 		if (Input::Key(keyBindings[Down]))
 			movement -= transform->up;
 
-		transform->Translate(movement * movementSpeed * deltaTime);
+		transform->Translate(movement * currentMovementSpeed * deltaTime);
 
 		// Look
 		const auto mouseMovement = Input::MouseMovement();
@@ -66,8 +71,9 @@ namespace EVA
 
 	void FreeLook::Load(const DataObject data)
 	{
-		mouseSensitivity = data.GetFloat("mouseSensitivity", 50.0f);
-		movementSpeed = data.GetFloat("movementSpeed", 10.0f);
+		mouseSensitivity = data.GetFloat("mouseSensitivity", mouseSensitivity);
+		minMovementSpeed = data.GetFloat("movementSpeed", minMovementSpeed);
+		currentMovementSpeed = minMovementSpeed;
 
 		pitch = data.GetFloat("pitch", 0.0f);
 		yaw = data.GetFloat("yaw", 0.0f);
@@ -76,7 +82,7 @@ namespace EVA
 	void FreeLook::Save(DataObject& data)
 	{
 		data.SetFloat("mouseSensitivity", mouseSensitivity);
-		data.SetFloat("movementSpeed", movementSpeed);
+		data.SetFloat("movementSpeed", minMovementSpeed);
 
 		data.SetFloat("pitch", pitch);
 		data.SetFloat("yaw", yaw);
@@ -85,6 +91,6 @@ namespace EVA
 	void FreeLook::Inspector()
 	{
 		ComponentInspector::Float("Mouse sensitivity", mouseSensitivity);
-		ComponentInspector::Float("Movement speed", movementSpeed);
+		ComponentInspector::Float("Movement speed", minMovementSpeed);
 	}
 }

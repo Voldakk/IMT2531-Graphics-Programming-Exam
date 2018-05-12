@@ -28,7 +28,8 @@ namespace EVA
 		};
 
 		float mouseSensitivity = 50.0f;
-		float movementSpeed = 10.0f;
+		float minMovementSpeed = 10.0f;
+		float currentMovementSpeed = minMovementSpeed;
 
 		float pitch = 0.0f;
 		float yaw = 0.0f;
