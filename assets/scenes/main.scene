@@ -92,7 +92,7 @@
             "components": [
                 {
                     "id": "Terrain",
-                    "heightMap": "./assets/heightmaps/height10.png",
+                    "heightMap": "./assets/heightmaps/height100.png",
                     "terrainWidth": 1000.0,
                     "maxTerrainHeight": 200.0,
                     "verticesPerUnit": 1.0,
@@ -203,6 +203,74 @@
                             ],
                             "textureTiling": 100.0,
                             "diffuseTexture": "./assets/textures/Snow.jpg"
+                        }
+                    ]
+                }
+            ],
+            "gameObjects": [
+                {
+                    "name": "Spruce",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "components": [
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/models/spruce/branches.mat",
+                            "mesh": "./assets/models/spruce/Spruce.fbx",
+                            "meshIndex": 0
+                        },
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/models/spruce/trunk.mat",
+                            "mesh": "./assets/models/spruce/Spruce.fbx",
+                            "meshIndex": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "Oak",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "components": [
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/models/oak/Bark.mat",
+                            "mesh": "./assets/models/oak/Oak.fbx",
+                            "meshIndex": 1
+                        },
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/models/oak/Leafs.mat",
+                            "mesh": "./assets/models/oak/Oak.fbx",
+                            "meshIndex": 0
                         }
                     ]
                 }

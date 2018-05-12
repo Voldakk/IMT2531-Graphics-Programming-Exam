@@ -1,0 +1,7 @@
+{
+    "shader": "./assets/standard assets/shaders/standard.shader",
+    "useInstancing": false,
+    "shininess": 32.0,
+    "textureDiffuse": "./assets/models/oak/tileable_tree_bark_texture_by_ftourini-d3l69hz.jpg",
+    "textureNormal": "./assets/models/oak/tileable_tree_bark_texture_by_ftourini-d3l69hznor.jpg"
+}
