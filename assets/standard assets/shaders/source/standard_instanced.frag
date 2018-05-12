@@ -13,6 +13,7 @@ uniform struct Material
 
    vec4 tint_diffuse;
    float shininess;
+   float alphaCutoff;
 
 } material;
 
@@ -162,7 +163,7 @@ void main()
     vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord) * material.tint_diffuse;
     vec3 specularMap = texture(material.texture_specular, fragTexCoord).rgb;
 
-	if (diffuseMap.a == 0.0)
+	if (diffuseMap.a <= material.alphaCutoff)
 	{
 		discard;
 	}

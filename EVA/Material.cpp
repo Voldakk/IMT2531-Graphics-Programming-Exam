@@ -149,6 +149,7 @@ namespace EVA
 		// Material
 		shader->SetUniform1F("material.shininess", materialShininess);
 		shader->SetUniform4Fv("material.tint_diffuse", tintDiffuse);
+		shader->SetUniform1F("material.alphaCutoff", alphaCutoff);
 
 		// Textures
 		SetTextures();

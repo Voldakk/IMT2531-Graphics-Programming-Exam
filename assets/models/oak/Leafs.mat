@@ -1,7 +1,8 @@
 {
-    "shader": "./assets/standard assets/shaders/standard.shader",
-    "useInstancing": false,
+    "shader": "./assets/standard assets/shaders/standard_instanced.shader",
+    "useInstancing": true,
     "shininess": 32.0,
+    "alphaCutoff": 0.8999999761581421,
     "textureDiffuse": "./assets/models/oak/TexturesCom_Branches0018_1_alphamasked_S.png",
     "textureNormal": "./assets/models/oak/TexturesCom_Branches0018_1_alphamasked_Snor.png"
 }

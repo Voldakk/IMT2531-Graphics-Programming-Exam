@@ -750,7 +750,12 @@ namespace EVA
 			MaterialParser::Save(material, material->path);
 		}
 
-		if(ImGui::InputFloat("Shininess", &material->materialShininess))
+		if (ImGui::InputFloat("Shininess", &material->materialShininess))
+		{
+			MaterialParser::Save(material, material->path);
+		}
+
+		if (ImGui::InputFloat("Alpha cutoff", &material->alphaCutoff))
 		{
 			MaterialParser::Save(material, material->path);
 		}

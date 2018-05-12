@@ -67,6 +67,7 @@ namespace EVA
 		std::shared_ptr<Shader> shader;
 
 		float materialShininess = 32.0f;
+		float alphaCutoff = 0.0f;
 
 		Material() = default;
 
