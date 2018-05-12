@@ -16,9 +16,9 @@
                 60.0,
                 90.0
             ],
-            "directionalShadowDistance": 20.0,
+            "directionalShadowDistance": 200.0,
             "directionalNearPlane": 1.0,
-            "directionalFarPlane": 100.0,
+            "directionalFarPlane": 500.0,
             "shadows": true,
             "shadowMapSize": 4096
         }

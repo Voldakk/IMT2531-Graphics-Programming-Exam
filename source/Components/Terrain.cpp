@@ -119,7 +119,7 @@ void Terrain::CreateMesh()
 		{
 			const auto height = HeightData((float)x / (float)verticesX, (float)y / (float)verticesY);
 
-			vertices[y*verticesX + x].position = glm::vec3(x / m_VerticesPerUnit, height, y / m_VerticesPerUnit);
+			vertices[y*verticesX + x].position = glm::vec3(x / m_VerticesPerUnit, height * maxTerrainHeight, y / m_VerticesPerUnit);
 			vertices[y*verticesX + x].texCoords = glm::vec2((float)x / (float)verticesX, (float)y/ (float)verticesY);
 		}
 	}
@@ -140,7 +140,7 @@ void Terrain::CreateMesh()
 			glm::vec3 normal;
 			normal.x = xm - xp;
 			normal.z = ym - yp;
-			normal.y = 2.0 / m_MaxTerrainHeight;
+			normal.y = 2.0;
 
 			vertices[y*verticesX + x].normal = glm::normalize(normal);
 		}

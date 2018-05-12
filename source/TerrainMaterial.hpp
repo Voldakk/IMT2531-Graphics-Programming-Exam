@@ -23,7 +23,6 @@ public:
 	{
 		Material::SetMaterialUniforms(scene);
 
-
 		shader->SetUniform1I("contourLines", m_Terrain->contourLines);
 		shader->SetUniform1F("maxTerrainHeight", m_Terrain->maxTerrainHeight);
 		shader->SetUniform1I("numRegions", m_EnviromentManager->regions.size());

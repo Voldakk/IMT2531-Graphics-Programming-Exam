@@ -24,6 +24,7 @@ uniform struct Light
    vec3 color;
    float attenuation;
    float ambientCoefficient;
+   sampler2D shadowMap;
    mat4 lightSpaceMatrix;
    float farPlane;
 
@@ -33,13 +34,10 @@ out vec4 allFragPosLightSpace [MAX_LIGHTS];
 
 void main() 
 {
-	fragHeight = vert.y;
-
-	vec3 vertPos = vert;
-	vertPos.y *= maxTerrainHeight;
+	fragHeight = vert.y / maxTerrainHeight;
 
     // Pass some variables to the fragment shader
-	fragVert = vec3(model * vec4(vertPos, 1));
+	fragVert = vec3(model * vec4(vert, 1));
     fragTexCoord = vertTexCoord;
     fragNormal = mat3(transpose(inverse(model))) * vertNormal;  
     
@@ -49,5 +47,5 @@ void main()
     }
 
     // Apply all matrix transformations to vert
-    gl_Position = projection * view * model * vec4(vertPos, 1);
+    gl_Position = projection * view * model * vec4(vert, 1);
 }

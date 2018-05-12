@@ -96,6 +96,7 @@ namespace EVA
 	{
 
 		// Shadows 
+		glDisable(GL_CULL_FACE);
 		for (auto& light : m_Lights)
 		{
 			if (light->GetType() == Light::Directional && light->Shadows())
@@ -119,6 +120,7 @@ namespace EVA
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			}
 		}
+		glEnable(GL_CULL_FACE);
 
 		// Scene
 		RenderScene();
