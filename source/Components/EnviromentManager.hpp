@@ -3,6 +3,9 @@
 #include "EVA.hpp"
 #include "EVA/UI.hpp"
 
+
+class Terrain;
+
 class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 {
 	REGISTER_COMPONENT_HPP(EnviromentManager)
@@ -20,6 +23,9 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 		std::shared_ptr<EVA::Texture> diffuseTexture;
 
 		float textureTiling = 1.0f;
+
+		std::string treeName;
+		float treeDensity;
 
 		float MinHeight(const float season) const
 		{
@@ -48,6 +54,7 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 
 
 	EVA::Light* m_Sun = nullptr;
+	Terrain* m_Terrain = nullptr;
 	
 	float m_Season = 0.0f;
 	float m_Time = 12.0f;
@@ -88,4 +95,6 @@ public:
 	void Update(float deltaTime) override;
 
 	void UpdateTime() const;
+
+	void PlaceTrees();
 };

@@ -39,7 +39,7 @@ public:
 
 	static void Float(const char* name, float& value)
 	{
-		ImGui::InputFloat(name, &value);
+		ImGui::InputFloat(name, &value, 0.0f, 0.0f, "%.5f");
 	}
 
 	static void Float2(const char* name, glm::vec2& value)

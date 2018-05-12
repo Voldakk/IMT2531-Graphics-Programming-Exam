@@ -2,6 +2,8 @@
 
 #include "EVA/Input.hpp"
 
+#include "Terrain.hpp"
+
 REGISTER_COMPONENT_CPP(EnviromentManager, "EnviromentManager")
 
 void EnviromentManager::Awake()
@@ -17,6 +19,8 @@ void EnviromentManager::Awake()
 	m_SeasonLabel = scene->CreateUiElement<EVA::Label>("Month:");
 	m_SeasonLabel->SetAnchorAndPivot(1.0f, 1.0f); // Top right
 	m_SeasonLabel->SetOffsetFromAnchor(0.05f);
+
+	m_Terrain = gameObject->GetComponentOfType<Terrain>();
 }
 
 void EnviromentManager::Load(const EVA::DataObject data)
@@ -53,6 +57,9 @@ void EnviromentManager::Load(const EVA::DataObject data)
 			m_Regions[i].textureTiling = regionData.GetFloat("textureTiling", 1.0f);
 
 			m_Regions[i].diffuseTexture = EVA::TextureManager::LoadTexture(regionData.GetString("diffuseTexture", ""));
+
+			m_Regions[i].treeDensity = regionData.GetFloat("treeDensity", m_Regions[i].treeDensity);
+			m_Regions[i].treeName = regionData.GetString("treeName", m_Regions[i].treeName);
 		}
 	}
 }
@@ -93,6 +100,9 @@ void EnviromentManager::Save(EVA::DataObject& data)
 
 		regionData.SetFloat("textureTiling", region.textureTiling);
 		regionData.SetPath("diffuseTexture", region.diffuseTexture->path);
+
+		regionData.SetFloat("treeDensity", region.treeDensity);
+		regionData.SetString("treeName", region.treeName);
 
 		// Add to array
 		regionsArray.PushBack(regionValue, *data.allocator);
@@ -143,6 +153,19 @@ void EnviromentManager::Inspector()
 		{
 			m_Regions[i].diffuseTexture = EVA::TextureManager::LoadTexture(path);
 		}
+
+		auto name = m_Regions[i].treeName;
+		if (ComponentInspector::EnterString(("Tree name##" + std::to_string(i)).c_str(), name))
+		{
+			m_Regions[i].treeName = name;
+		}
+
+		ComponentInspector::Float(("Tree density##" + std::to_string(i)).c_str(), m_Regions[i].treeDensity);
+	}
+
+	if(ComponentInspector::Button("Place trees"))
+	{
+		PlaceTrees();
 	}
 
 	UpdateTime();
@@ -251,4 +274,49 @@ void EnviromentManager::UpdateTime() const
 
 	m_Sun->SetRotation({ pitch, yaw });
 	m_Sun->color = color;
+}
+
+void EnviromentManager::PlaceTrees()
+{
+	for(auto& region : m_Regions)
+	{
+		if (region.treeName.empty() || region.treeDensity == 0.0f)
+			continue;
+
+		// Find the tree
+		auto go = scene->FindGameObjectByName(region.treeName);
+		if (go == nullptr)
+			continue;
+
+		auto treeTransform = go->transform.get();
+
+		// Positions
+		std::vector<glm::mat4> positions;
+
+		for (size_t x = 0; x < m_Terrain->terrainWidth; x++)
+		{
+			for (size_t z = 0; z < m_Terrain->terrainLength; z++)
+			{
+				if (std::rand() % 100000 > region.treeDensity * 100000.0f)
+					continue;
+
+				const auto height = m_Terrain->HeightData(x / m_Terrain->terrainWidth, z / m_Terrain->terrainLength);
+
+				if (height > region.MinHeight(m_Season) && height < region.MaxHeight(m_Season))
+				{
+					treeTransform->SetPosition(glm::vec3(x, height * m_Terrain->maxTerrainHeight, z));
+					positions.push_back(treeTransform->modelMatrix);
+				}
+			}
+		}
+
+		// Set the material MBOs
+		auto meshRenderers = go->GetComponentsOfType<EVA::MeshRenderer>();
+		for (auto& mr : meshRenderers)
+		{
+			auto material = mr->material.get();
+
+			material->SetMbo(mr->mesh, positions);
+		}
+	}
 }

@@ -111,9 +111,9 @@ void Terrain::CreateMesh()
 
 	std::cout << "Terrain::CreateMesh - Generating mesh..." << std::endl;
 
-	const auto terrainLength = (float)m_TerrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
+	m_TerrainLength = (float)m_TerrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
 
-	const auto verticesY = (unsigned int)std::floorf(terrainLength * m_VerticesPerUnit);
+	const auto verticesY = (unsigned int)std::floorf(m_TerrainLength * m_VerticesPerUnit);
 	const auto verticesX = (unsigned int)std::floorf(m_TerrainWidth * m_VerticesPerUnit);
 
 	// Vertices

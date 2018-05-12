@@ -162,6 +162,11 @@ void main()
     vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord) * material.tint_diffuse;
     vec3 specularMap = texture(material.texture_specular, fragTexCoord).rgb;
 
+	if (diffuseMap.a == 0.0)
+	{
+		discard;
+	}
+
 	// Lights
     vec3 surfaceToCamera = normalize(cameraPosition - fragVert);
     for(int i = 0; i < numLights; ++i)

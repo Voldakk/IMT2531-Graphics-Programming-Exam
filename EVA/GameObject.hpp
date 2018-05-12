@@ -86,13 +86,21 @@ namespace EVA
 
 		void RemoveComponent(Component* component);
 
-	    /**
-		 * \brief Gets a component of the given type form the game object
-		 * \tparam T The type of component
-		 * \return A pointer to the component, or nullptr
-		 */
+		/**
+		* \brief Gets a component of the given type from the game object
+		* \tparam T The type of component
+		* \return A pointer to the component, or nullptr
+		*/
 		template<class T>
 		T* GetComponentOfType();
+
+		/**
+		* \brief Gets the components of the given type from the game object
+		* \tparam T The type of component
+		* \return A list of pointers to the components
+		*/
+		template<class T>
+		std::vector<T*> GetComponentsOfType();
 
 	    /**
          * \brief Sets the parent of the gameobject's transform
@@ -143,5 +151,19 @@ namespace EVA
 		}
 
 		return nullptr;
+	}
+	template<class T>
+	inline std::vector<T*> GameObject::GetComponentsOfType()
+	{
+		std::vector<T*> components;
+
+		for (auto component : m_Components)
+		{
+			T* pointer = dynamic_cast<T*>(component.get());
+			if (pointer != nullptr)
+				components.push_back(pointer);
+		}
+
+		return components;
 	}
 }

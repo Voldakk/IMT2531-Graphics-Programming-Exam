@@ -95,7 +95,7 @@
                     "heightMap": "./assets/heightmaps/height100.png",
                     "terrainWidth": 1000.0,
                     "maxTerrainHeight": 200.0,
-                    "verticesPerUnit": 1.0,
+                    "verticesPerUnit": 0.5,
                     "materialShininess": 32.0,
                     "specularStrength": 0.0
                 },
@@ -148,7 +148,9 @@
                                 1.0
                             ],
                             "textureTiling": 100.0,
-                            "diffuseTexture": "./assets/textures/Sand (Beach Wet2).jpg"
+                            "diffuseTexture": "./assets/textures/Sand (Beach Wet2).jpg",
+                            "treeDensity": 0.0,
+                            "treeName": ""
                         },
                         {
                             "minHeightSummer": 0.10999999940395355,
@@ -166,7 +168,9 @@
                                 0.0923202708363533
                             ],
                             "textureTiling": 100.0,
-                            "diffuseTexture": "./assets/textures/Grass (Hill).jpg"
+                            "diffuseTexture": "./assets/textures/Grass (Hill).jpg",
+                            "treeDensity": 0.0010000000474974514,
+                            "treeName": "Oak"
                         },
                         {
                             "minHeightSummer": 0.23000000417232514,
@@ -184,7 +188,9 @@
                                 0.9999899864196777
                             ],
                             "textureTiling": 100.0,
-                            "diffuseTexture": "./assets/textures/Rock (Moss).jpg"
+                            "diffuseTexture": "./assets/textures/Rock (Moss).jpg",
+                            "treeDensity": 0.00019999999494757503,
+                            "treeName": "Spruce"
                         },
                         {
                             "minHeightSummer": 0.4000000059604645,
@@ -202,7 +208,9 @@
                                 1.0
                             ],
                             "textureTiling": 100.0,
-                            "diffuseTexture": "./assets/textures/Snow.jpg"
+                            "diffuseTexture": "./assets/textures/Snow.jpg",
+                            "treeDensity": 0.0,
+                            "treeName": ""
                         }
                     ]
                 }
@@ -211,9 +219,9 @@
                 {
                     "name": "Spruce",
                     "position": [
-                        0.0,
-                        0.0,
-                        0.0
+                        997.0,
+                        58.03921890258789,
+                        486.0
                     ],
                     "scale": [
                         1.0,
@@ -244,9 +252,9 @@
                 {
                     "name": "Oak",
                     "position": [
-                        0.0,
-                        0.0,
-                        0.0
+                        999.0,
+                        39.2156867980957,
+                        1589.0
                     ],
                     "scale": [
                         1.0,
