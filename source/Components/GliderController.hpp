@@ -15,12 +15,12 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 
 	float m_PitchSpeed = 45.0f;
 	float m_YawSpeed = 45.0f;
-
-	float m_Pitch = 0.0f;
-	float m_Yaw = 0.0f;
-	float m_Roll = 0.0f;
+	float m_RollSpeed = 45.0f;
 
 	EVA::Label* m_SpeedLabel = nullptr;
+
+	glm::vec3 m_StartLocation;
+	glm::quat m_StartOrientation;
 
 public:
 
