@@ -1,5 +1,7 @@
 #include "Terrain.hpp"
 
+#include <iostream>
+
 #include "EVA/Input.hpp"
 #include "EVA/ResourceManagers.hpp"
 
@@ -77,12 +79,16 @@ void Terrain::SetHeightMap(const FS::path& newHeightMapPath)
 	m_HeightData.resize(data->height);
 	for (unsigned int y = 0; y < data->height; ++y)
 	{
+		if(y % 100 == 0)
+			std::cout << "Terrain::SetHeightMap - Reading height data: " << y << "/" << data->height << std::endl;
+		
 		m_HeightData[y].resize(data->width);
 		for (unsigned int x = 0; x < data->width; ++x)
 		{
 			m_HeightData[y][x] = data->data[y*data->width + x * data->channels];
 		}
 	}
+	std::cout << "Terrain::SetHeightMap - Reading height data: done" << std::endl;
 
 	CreateMesh();
 }
@@ -91,6 +97,8 @@ void Terrain::CreateMesh()
 {
 	if (m_HeightData.empty() && m_HeightData[0].empty())
 		return;
+
+	std::cout << "Terrain::CreateMesh - Generating mesh..." << std::endl;
 
 	const auto terrainLength = (float)m_TerrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
 
@@ -102,6 +110,7 @@ void Terrain::CreateMesh()
 	vertices.resize(verticesY * verticesX);
 
 	// Position
+	std::cout << "Terrain::CreateMesh - Vertex positions" << std::endl;
 	for (unsigned int y = 0; y < verticesY; ++y)
 	{
 		for (unsigned int x = 0; x < verticesX; ++x)
@@ -113,6 +122,7 @@ void Terrain::CreateMesh()
 	}
 
 	// Normals
+	std::cout << "Terrain::CreateMesh - Normals" << std::endl;
 	for (unsigned int y = 1; y < verticesY-1; ++y)
 	{
 		for (unsigned int x = 1; x < verticesX-1; ++x)
@@ -134,6 +144,7 @@ void Terrain::CreateMesh()
 	}
 
 	// Indices
+	std::cout << "Terrain::CreateMesh - Indices" << std::endl;
 	std::vector<unsigned int> indices;
 	indices.reserve((verticesY-1) * (verticesX-1) * 6);
 

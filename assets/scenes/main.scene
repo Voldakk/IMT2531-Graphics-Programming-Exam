@@ -47,7 +47,7 @@
                     "id": "EVA::Camera",
                     "fov": 90.0,
                     "near": 0.10000000149011612,
-                    "far": 100.0
+                    "far": 1000.0
                 },
                 {
                     "id": "EVA::FreeLook",
