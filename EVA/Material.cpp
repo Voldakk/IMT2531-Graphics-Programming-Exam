@@ -135,8 +135,23 @@ namespace EVA
 		{
 			m_ActiveMaterial = this;
 
+			// Shader
 			shader->Bind();
 
+			// Culling
+			if(cullBack && !cullFront)
+				glCullFace(GL_BACK);
+			else if (cullFront && !cullBack)
+				glCullFace(GL_FRONT);
+			else if(cullFront && cullBack)
+				glCullFace(GL_FRONT_AND_BACK);
+
+			if (cullFront || cullBack)
+				glEnable(GL_CULL_FACE);
+			else
+				glDisable(GL_CULL_FACE);
+
+			// Set uniforms
 			SetMaterialUniforms(scene);
 		}
 

@@ -44,6 +44,10 @@ namespace EVA
 			// Instancing
 			material->SetUseInstancing(data.GetBool("useInstancing", false));
 
+			// Culling 
+			material->cullFront = data.GetBool("cullFront", material->cullFront);
+			material->cullBack = data.GetBool("cullBack", material->cullBack);
+
 			// Shininess
 			material->materialShininess = data.GetFloat("shininess", material->materialShininess);
 
@@ -89,6 +93,11 @@ namespace EVA
 				data.SetString("shader", FileSystem::ToString(material->shader->paths->shader));
 
 			data.SetBool("useInstancing", material->useInstancing);
+
+			// Culling 
+			data.SetBool("cullFront", material->cullFront);
+			data.SetBool("cullBack", material->cullBack);
+
 
 			data.SetFloat("shininess", material->materialShininess);
 

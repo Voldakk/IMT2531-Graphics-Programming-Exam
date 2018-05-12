@@ -69,6 +69,9 @@ namespace EVA
 		float materialShininess = 32.0f;
 		float alphaCutoff = 0.0f;
 
+		bool cullFront = false;
+		bool cullBack = true;
+
 		Material() = default;
 
 		void SetTexture(Texture::Type type, const FS::path& path);

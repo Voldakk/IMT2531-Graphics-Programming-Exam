@@ -744,11 +744,17 @@ namespace EVA
 		}
 
 		auto useInstancing = material->useInstancing;
-		if(ImGui::Checkbox("Use instancing", &useInstancing))
+		if (ImGui::Checkbox("Use instancing", &useInstancing))
 		{
 			material->SetUseInstancing(useInstancing);
 			MaterialParser::Save(material, material->path);
 		}
+
+		if (ImGui::Checkbox("Cull front", &material->cullFront))
+			MaterialParser::Save(material, material->path);
+
+		if (ImGui::Checkbox("Cull back", &material->cullBack))
+			MaterialParser::Save(material, material->path);
 
 		if (ImGui::InputFloat("Shininess", &material->materialShininess))
 		{

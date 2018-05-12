@@ -305,62 +305,62 @@
             "components": [
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/body.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/body.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 3
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/interior.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/interior.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 8
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/chrono.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/chrono.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 9
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/compass.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/compass.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 11
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/turn.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/turn.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 12
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/varo.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/varo.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 13
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/asi.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/asi.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 14
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/alt.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/alt.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 15
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/sc.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/sc.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 16
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/materials/chrono.mat",
-                    "mesh": "./assets/models/ask21mi.fbx",
+                    "material": "./assets/models/glider/materials/chrono.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 16
                 },
                 {

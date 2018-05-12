@@ -1,6 +1,8 @@
 {
     "shader": "./assets/standard assets/shaders/standard_instanced.shader",
     "useInstancing": true,
+    "cullFront": false,
+    "cullBack": false,
     "shininess": 32.0,
     "alphaCutoff": 0.800000011920929,
     "textureDiffuse": "./assets/models/spruce/Spruce branches.png"

@@ -2,5 +2,5 @@
     "shader": "./assets/standard assets/shaders/standard.shader",
     "useInstancing": false,
     "shininess": 32.0,
-    "textureDiffuse": "./assets/models/textures/asi.png"
+    "textureDiffuse": "./assets/models/glider/textures/asi.png"
 }
