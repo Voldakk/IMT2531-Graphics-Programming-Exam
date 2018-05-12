@@ -36,6 +36,13 @@ public:
 			shader->SetUniform1F(regionNum + "minHeight", m_EnviromentManager->regions[i].MinHeight(m_EnviromentManager->season));
 			shader->SetUniform1F(regionNum + "maxHeight", m_EnviromentManager->regions[i].MaxHeight(m_EnviromentManager->season));
 			shader->SetUniform3Fv(regionNum + "color", m_EnviromentManager->regions[i].Color(m_EnviromentManager->season));
+
+			glActiveTexture(GL_TEXTURE0 + i);
+			shader->SetUniform1I(regionNum + "texture_diffuse", i);
+			if (m_EnviromentManager->regions[i].diffuseTexture != nullptr)
+				glBindTexture(GL_TEXTURE_2D, m_EnviromentManager->regions[i].diffuseTexture->id);
+			else
+				glBindTexture(GL_TEXTURE_2D, textureDefaultDiffuse->id);
 		}
 	}
 };

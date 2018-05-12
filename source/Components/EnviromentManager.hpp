@@ -17,6 +17,8 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 		glm::vec3 colorWinter;
 		glm::vec3 colorSummer;
 
+		std::shared_ptr<EVA::Texture> diffuseTexture;
+
 		float MinHeight(const float season) const
 		{
 			if (season <= 6)

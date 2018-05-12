@@ -29,8 +29,8 @@ in vec4 allFragPosLightSpace [MAX_LIGHTS];
 
 // Model
 in vec3 fragVert;
-in vec3 fragColor;
 in vec3 fragNormal;
+in vec2 fragTexCoord;
 in float fragHeight;
 uniform mat4 model;
 
@@ -46,6 +46,7 @@ uniform struct Region
    float minHeight;
    float maxHeight;
    vec3 color;
+   sampler2D texture_diffuse;
 } regions[MAX_REGIONS];
 
 uniform bool contourLines;
@@ -87,7 +88,7 @@ void main()
 		{		
 			float dist = min(abs(regions[i].maxHeight - fragHeight), abs(fragHeight - regions[i].minHeight)) * regionBlendAmount;
 			float weight = clamp(dist, 0, 1);
-			surfaceColor += regions[i].color * weight;
+			surfaceColor += texture(regions[i].texture_diffuse, fragTexCoord).rgb * weight;
 		}
 	}
 

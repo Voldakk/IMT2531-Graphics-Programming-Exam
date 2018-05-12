@@ -128,6 +128,12 @@ void EnviromentManager::Inspector()
 		ComponentInspector::RangeFloat(("Range winter##" + std::to_string(i)).c_str(), m_Regions[i].minHeightWinter, m_Regions[i].maxHeightWinter);
 		ComponentInspector::ColorPicker(("Color summer##" + std::to_string(i)).c_str(), m_Regions[i].colorSummer);
 		ComponentInspector::ColorPicker(("Color winter##" + std::to_string(i)).c_str(), m_Regions[i].colorWinter);
+
+		auto path = m_Regions[i].diffuseTexture == nullptr ? "" : EVA::FileSystem::ToString(m_Regions[i].diffuseTexture->path);
+		if (ComponentInspector::DragDropTargetString("Diffuse texture", path, "file"))
+		{
+			m_Regions[i].diffuseTexture = EVA::TextureManager::LoadTexture(path);
+		}
 	}
 
 	UpdateTime();
