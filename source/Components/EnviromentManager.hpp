@@ -86,7 +86,7 @@ public:
 
 	const float& season = m_Season;
 
-	void Awake() override;
+	void Start() override;
 	
 	void Load(const EVA::DataObject data) override;
 	void Save(EVA::DataObject& data) override;

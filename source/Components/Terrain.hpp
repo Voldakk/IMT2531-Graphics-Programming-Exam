@@ -37,7 +37,7 @@ public:
 	const float& specularStrength = m_SpecularStrength;
 	bool contourLines = false;
 
-	void Start() override;
+	void Awake() override;
 	void Load(const EVA::DataObject data) override;
 	void Save(EVA::DataObject& data) override;
 	void Inspector() override;

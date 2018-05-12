@@ -11,7 +11,7 @@
 REGISTER_COMPONENT_CPP(Terrain, "Terrain");
 
 
-void Terrain::Start()
+void Terrain::Awake()
 {
 	m_MeshRenderer = gameObject->GetComponentOfType<EVA::MeshRenderer>();
 	m_EnviromentManager = gameObject->GetComponentOfType<EnviromentManager>();

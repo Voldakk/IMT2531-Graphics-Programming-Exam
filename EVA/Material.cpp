@@ -26,6 +26,8 @@ namespace EVA
 			m_MatrixBuffers[mesh].instanceCount = models.size();
 			m_MatrixBuffers[mesh].matrixBuffer->BufferData(&models[0], models.size() * sizeof(glm::mat4));
 		}
+
+		m_MatrixBuffers[mesh].dirty = false;
 	}
 
 	bool Material::HasMbo(const std::shared_ptr<Mesh>& mesh) const

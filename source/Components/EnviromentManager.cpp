@@ -6,7 +6,7 @@
 
 REGISTER_COMPONENT_CPP(EnviromentManager, "EnviromentManager")
 
-void EnviromentManager::Awake()
+void EnviromentManager::Start()
 {
 	m_Sun = scene->GetLights()[0].get();
 	UpdateTime();
@@ -21,6 +21,8 @@ void EnviromentManager::Awake()
 	m_SeasonLabel->SetOffsetFromAnchor(0.05f);
 
 	m_Terrain = gameObject->GetComponentOfType<Terrain>();
+
+	PlaceTrees();
 }
 
 void EnviromentManager::Load(const EVA::DataObject data)
