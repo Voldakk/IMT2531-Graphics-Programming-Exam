@@ -160,9 +160,9 @@ namespace EVA
 		m_ModelMatrix = glm::scale(m_ModelMatrix, m_LocalScale);
 
 		// Directions
-		m_Forward = glm::normalize(m_LocalOrientation * ZAXIS);
-		m_Right = glm::normalize(m_LocalOrientation * -XAXIS);
-		m_Up = glm::normalize(m_LocalOrientation * YAXIS);
+		m_Forward = glm::normalize(m_Orientation * ZAXIS);
+		m_Right = glm::normalize(m_Orientation * -XAXIS);
+		m_Up = glm::normalize(m_Orientation * YAXIS);
 
 		// Update the children
 		for (auto child : m_Children)

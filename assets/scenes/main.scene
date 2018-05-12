@@ -219,6 +219,41 @@
                 {
                     "id": "GilderController"
                 }
+            ],
+            "gameObjects": [
+                {
+                    "name": "FPP Camera",
+                    "position": [
+                        0.0,
+                        0.20000000298023225,
+                        2.799999952316284
+                    ],
+                    "scale": [
+                        0.10000000149011612,
+                        0.10000000149011612,
+                        0.019999999552965165
+                    ],
+                    "orientation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "components": [
+						{
+							"id": "EVA::Camera",
+							"fov": 90.0,
+							"near": 0.10000000149011612,
+							"far": 1000.0
+						},
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/standard assets/materials/uv.mat",
+                            "mesh": "./assets/models/arrow.fbx",
+                            "meshIndex": 0
+                        }
+                    ]
+                }
             ]
         },
         {
@@ -246,7 +281,7 @@
                     "mesh": "./assets/models/arrow.fbx",
                     "meshIndex": 0
                 },
-				{
+                {
                     "id": "EVA::HideOnStart"
                 }
             ]
@@ -276,7 +311,7 @@
                     "mesh": "./assets/models/arrow.fbx",
                     "meshIndex": 0
                 },
-				{
+                {
                     "id": "EVA::HideOnStart"
                 }
             ]
@@ -306,7 +341,7 @@
                     "mesh": "./assets/models/arrow.fbx",
                     "meshIndex": 0
                 },
-				{
+                {
                     "id": "EVA::HideOnStart"
                 }
             ]
@@ -336,7 +371,7 @@
                     "mesh": "./assets/models/arrow.fbx",
                     "meshIndex": 0
                 },
-				{
+                {
                     "id": "EVA::HideOnStart"
                 }
             ]
@@ -366,7 +401,7 @@
                     "mesh": "./assets/models/arrow.fbx",
                     "meshIndex": 0
                 },
-				{
+                {
                     "id": "EVA::HideOnStart"
                 }
             ]
@@ -396,7 +431,7 @@
                     "mesh": "./assets/models/arrow.fbx",
                     "meshIndex": 0
                 },
-				{
+                {
                     "id": "EVA::HideOnStart"
                 }
             ]
@@ -426,7 +461,7 @@
                     "mesh": "./assets/models/arrow.fbx",
                     "meshIndex": 0
                 },
-				{
+                {
                     "id": "EVA::HideOnStart"
                 }
             ]
