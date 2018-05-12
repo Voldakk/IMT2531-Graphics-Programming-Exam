@@ -19,6 +19,8 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 
 		std::shared_ptr<EVA::Texture> diffuseTexture;
 
+		float textureTiling = 1.0f;
+
 		float MinHeight(const float season) const
 		{
 			if (season <= 6)

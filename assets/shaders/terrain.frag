@@ -46,6 +46,7 @@ uniform struct Region
    float minHeight;
    float maxHeight;
    vec3 color;
+   float textureTiling;
    sampler2D texture_diffuse;
 } regions[MAX_REGIONS];
 
@@ -88,7 +89,7 @@ void main()
 		{		
 			float dist = min(abs(regions[i].maxHeight - fragHeight), abs(fragHeight - regions[i].minHeight)) * regionBlendAmount;
 			float weight = clamp(dist, 0, 1);
-			surfaceColor += texture(regions[i].texture_diffuse, fragTexCoord).rgb * weight;
+			surfaceColor += texture(regions[i].texture_diffuse, fragTexCoord * regions[i].textureTiling).rgb * regions[i].color * weight;
 		}
 	}
 

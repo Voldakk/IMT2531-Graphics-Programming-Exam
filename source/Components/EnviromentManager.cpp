@@ -49,6 +49,10 @@ void EnviromentManager::Load(const EVA::DataObject data)
 			m_Regions[i].minHeightWinter = regionData.GetFloat("minHeightWinter", 0.0f);
 			m_Regions[i].maxHeightWinter = regionData.GetFloat("maxHeightWinter", 0.0f);
 			m_Regions[i].colorWinter = regionData.GetVec3("colorWinter", glm::vec3(1.0f));
+
+			m_Regions[i].textureTiling = regionData.GetFloat("textureTiling", 1.0f);
+
+			m_Regions[i].diffuseTexture = EVA::TextureManager::LoadTexture(regionData.GetString("diffuseTexture", ""));
 		}
 	}
 }
@@ -86,6 +90,9 @@ void EnviromentManager::Save(EVA::DataObject& data)
 		regionData.SetFloat("minHeightWinter", region.minHeightWinter);
 		regionData.SetFloat("maxHeightWinter", region.maxHeightWinter);
 		regionData.SetVec3("colorWinter", region.colorWinter);
+
+		regionData.SetFloat("textureTiling", region.textureTiling);
+		regionData.SetPath("diffuseTexture", region.diffuseTexture->path);
 
 		// Add to array
 		regionsArray.PushBack(regionValue, *data.allocator);
@@ -128,6 +135,8 @@ void EnviromentManager::Inspector()
 		ComponentInspector::RangeFloat(("Range winter##" + std::to_string(i)).c_str(), m_Regions[i].minHeightWinter, m_Regions[i].maxHeightWinter);
 		ComponentInspector::ColorPicker(("Color summer##" + std::to_string(i)).c_str(), m_Regions[i].colorSummer);
 		ComponentInspector::ColorPicker(("Color winter##" + std::to_string(i)).c_str(), m_Regions[i].colorWinter);
+
+		ComponentInspector::Float(("Texture tiling##" + std::to_string(i)).c_str(), m_Regions[i].textureTiling);
 
 		auto path = m_Regions[i].diffuseTexture == nullptr ? "" : EVA::FileSystem::ToString(m_Regions[i].diffuseTexture->path);
 		if (ComponentInspector::DragDropTargetString("Diffuse texture", path, "file"))
