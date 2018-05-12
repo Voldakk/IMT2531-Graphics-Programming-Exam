@@ -6,7 +6,9 @@ REGISTER_COMPONENT_CPP(GilderController, "GilderController")
 
 void GilderController::Start()
 {
-
+	m_SpeedLabel = scene->CreateUiElement<EVA::Label>("Speed:");
+	m_SpeedLabel->SetAnchorAndPivot(-1.0f, -1.0f); // Bottom left
+	m_SpeedLabel->SetOffsetFromAnchor(0.05f);
 }
 
 void GilderController::Load(const EVA::DataObject data)
@@ -44,6 +46,15 @@ void GilderController::Update(const float deltaTime)
 
 	if (EVA::Input::Key(EVA::Input::E))
 		transform->Rotate(transform->forward, m_YawSpeed * deltaTime);
+
+	if (EVA::Input::Key(EVA::Input::Comma))
+		m_CurrentSpeed += deltaTime * (m_MaxSpeed - m_MinSpeed) / m_AccelerationTime;
+
+	if (EVA::Input::Key(EVA::Input::Period))
+		m_CurrentSpeed -= deltaTime * (m_MaxSpeed - m_MinSpeed) / m_AccelerationTime;
+
+	m_CurrentSpeed = glm::clamp(m_CurrentSpeed, m_MinSpeed, m_MaxSpeed);
+	m_SpeedLabel->SetText("Speed: " + std::to_string((int)std::roundf(100 * (m_CurrentSpeed - m_MinSpeed) / (m_MaxSpeed - m_MinSpeed))) + "%");
 
 	// Speed
 	transform->Translate(transform->forward * m_CurrentSpeed * deltaTime);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EVA.hpp"
+#include "EVA/UI.hpp"
 
 class GilderController : public EVA::Component, public EVA::IUpdateComponent
 {
@@ -10,12 +11,16 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 	float m_MaxSpeed = 10.0f;
 	float m_CurrentSpeed = m_MinSpeed;
 
+	float m_AccelerationTime = 3.0f;
+
 	float m_PitchSpeed = 45.0f;
 	float m_YawSpeed = 45.0f;
 
 	float m_Pitch = 0.0f;
 	float m_Yaw = 0.0f;
 	float m_Roll = 0.0f;
+
+	EVA::Label* m_SpeedLabel = nullptr;
 
 public:
 
