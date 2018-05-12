@@ -38,23 +38,23 @@ void GilderController::Update(const float deltaTime)
 	if (EVA::Input::Key(EVA::Input::S))
 		transform->Rotate(transform->right, m_PitchSpeed * deltaTime);
 
-	if (EVA::Input::Key(EVA::Input::A))
+	if (EVA::Input::Key(EVA::Input::Q))
 		transform->Rotate(transform->up, m_YawSpeed * deltaTime);
 
-	if (EVA::Input::Key(EVA::Input::D))
+	if (EVA::Input::Key(EVA::Input::E))
 		transform->Rotate(transform->up, -m_YawSpeed * deltaTime);
 
-	if (EVA::Input::Key(EVA::Input::Q))
+	if (EVA::Input::Key(EVA::Input::A))
 		transform->Rotate(transform->forward, -m_RollSpeed * deltaTime);
 
-	if (EVA::Input::Key(EVA::Input::E))
+	if (EVA::Input::Key(EVA::Input::D))
 		transform->Rotate(transform->forward, m_RollSpeed * deltaTime);
 
 	// Speed
-	if (EVA::Input::Key(EVA::Input::Comma))
+	if (EVA::Input::Key(EVA::Input::Period))
 		m_CurrentSpeed += deltaTime * (m_MaxSpeed - m_MinSpeed) / m_AccelerationTime;
 
-	if (EVA::Input::Key(EVA::Input::Period))
+	if (EVA::Input::Key(EVA::Input::Comma))
 		m_CurrentSpeed -= deltaTime * (m_MaxSpeed - m_MinSpeed) / m_AccelerationTime;
 
 	m_CurrentSpeed = glm::clamp(m_CurrentSpeed, m_MinSpeed, m_MaxSpeed);

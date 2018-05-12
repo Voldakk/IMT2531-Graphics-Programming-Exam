@@ -65,13 +65,13 @@ namespace EVA
 
 		void Update(const float deltaTime) override
 		{
-			FindGameObjectByName("Terrain")->Update(deltaTime);
-			auto glider = FindGameObjectByName("Glider");
+			/*FindGameObjectByName("Terrain")->Update(deltaTime);
+			const auto glider = FindGameObjectByName("Glider");
 			glider->Update(deltaTime);
 
 			FindGameObjectByName("F")->transform->SetPosition(glider->transform->position + glider->transform->forward * 3.0f);
 			FindGameObjectByName("R")->transform->SetPosition(glider->transform->position + glider->transform->right * 3.0f);
-			FindGameObjectByName("U")->transform->SetPosition(glider->transform->position + glider->transform->up * 3.0f);
+			FindGameObjectByName("U")->transform->SetPosition(glider->transform->position + glider->transform->up * 3.0f);*/
 
 			// Move camera
 			m_SceneCameraGameObject->Update(deltaTime);

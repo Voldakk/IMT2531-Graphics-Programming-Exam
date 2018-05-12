@@ -220,7 +220,7 @@ namespace EVA
 	{
 		const auto o = orientation;
 
-		return localPosition * o;
+		return o * localPosition;
 	}
 
 	std::vector<Transform*>& Transform::GetChildren()

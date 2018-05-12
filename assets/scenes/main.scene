@@ -8,13 +8,13 @@
             "type": "directional",
             "color": [
                 1.0,
-                0.8911630511283875,
-                0.770233154296875
+                1.0,
+                1.0
             ],
             "ambientCoefficient": 0.019999999552965165,
             "rotation": [
-                32.427974700927737,
-                48.641963958740237
+                60.0,
+                90.0
             ],
             "directionalShadowDistance": 20.0,
             "directionalNearPlane": 1.0,
@@ -25,7 +25,7 @@
     ],
     "gameObjects": [
         {
-            "name": "Freelook camera",
+            "name": "Camera",
             "position": [
                 0.0,
                 2.0,
@@ -55,6 +55,19 @@
                     "movementSpeed": 10.0,
                     "pitch": 0.0,
                     "yaw": 0.0
+                },
+                {
+                    "id": "EVA::FollowTarget",
+                    "offset": [
+                        0.0,
+                        3.0,
+                        -10.0
+                    ],
+                    "scalar": 10.0,
+                    "targetName": "Glider"
+                },
+                {
+                    "id": "CameraController"
                 }
             ]
         },
@@ -199,87 +212,9 @@
                     "material": "./assets/models/materials/chrono.mat",
                     "mesh": "./assets/models/ask21mi.fbx",
                     "meshIndex": 16
-                }
-            ]
-        },
-        {
-            "name": "F",
-            "position": [
-                20.0,
-                20.0,
-                20.0
-            ],
-            "scale": [
-                0.5,
-                0.5,
-                0.5
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
+                },
                 {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/uv.mat",
-                    "mesh": "./assets/standard assets/models/cube.obj",
-                    "meshIndex": 0
-                }
-            ]
-        },
-        {
-            "name": "R",
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                0.5,
-                0.5,
-                0.5
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/uv.mat",
-                    "mesh": "./assets/standard assets/models/cube.obj",
-                    "meshIndex": 0
-                }
-            ]
-        },
-        {
-            "name": "U",
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                0.5,
-                0.5,
-                0.5
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/uv.mat",
-                    "mesh": "./assets/standard assets/models/cube.obj",
-                    "meshIndex": 0
+                    "id": "GilderController"
                 }
             ]
         }
