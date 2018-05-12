@@ -24,8 +24,12 @@ class Terrain : public EVA::Component, public EVA::IUpdateComponent
 	float m_TerrainWidth = 100.0f;
 	float m_MaxTerrainHeight = 40.0f;
 
+	float m_MaterialShininess = 32;
+	float m_SpecularStrength = 1.0f;
+
 public:
 	const float& maxTerrainHeight = m_MaxTerrainHeight;
+	const float& specularStrength = m_SpecularStrength;
 	bool contourLines = false;
 
 	void Start() override;

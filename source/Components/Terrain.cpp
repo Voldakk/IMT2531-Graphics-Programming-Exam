@@ -19,6 +19,7 @@ void Terrain::Start()
 
 	m_Material = std::make_shared<TerrainMaterial>(this, m_EnviromentManager);
 	m_Material->shader = EVA::ShaderManager::LoadShader("./assets/shaders/terrain.shader");
+	m_Material->materialShininess = m_MaterialShininess;
 
 	SetHeightMap(m_HeightMapPath);
 }
@@ -30,6 +31,8 @@ void Terrain::Load(const EVA::DataObject data)
 	m_TerrainWidth = data.GetFloat("terrainWidth", m_TerrainWidth);
 	m_MaxTerrainHeight = data.GetFloat("maxTerrainHeight", m_MaxTerrainHeight);
 	m_VerticesPerUnit = data.GetFloat("verticesPerUnit", m_VerticesPerUnit);
+	m_MaterialShininess = data.GetFloat("materialShininess", m_MaterialShininess);
+	m_SpecularStrength = data.GetFloat("specularStrength", m_SpecularStrength);
 }
 
 void Terrain::Save(EVA::DataObject& data)
@@ -39,6 +42,8 @@ void Terrain::Save(EVA::DataObject& data)
 	data.SetFloat("terrainWidth", m_TerrainWidth);
 	data.SetFloat("maxTerrainHeight", m_MaxTerrainHeight);
 	data.SetFloat("verticesPerUnit", m_VerticesPerUnit);
+	data.SetFloat("materialShininess", m_MaterialShininess);
+	data.SetFloat("specularStrength", m_SpecularStrength);
 }
 
 void Terrain::Inspector()
@@ -59,6 +64,10 @@ void Terrain::Inspector()
 	}
 
 	ComponentInspector::Bool("Contour lines", contourLines);
+	ComponentInspector::Float("Material shininess", m_MaterialShininess);
+	m_Material->materialShininess = m_MaterialShininess;
+
+	ComponentInspector::Float("Specular strength", m_SpecularStrength);
 }
 
 void Terrain::Update(float deltaTime)

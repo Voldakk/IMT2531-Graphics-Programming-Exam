@@ -27,6 +27,7 @@ public:
 		shader->SetUniform1F("maxTerrainHeight", m_Terrain->maxTerrainHeight);
 		shader->SetUniform1I("numRegions", m_EnviromentManager->regions.size());
 		shader->SetUniform1F("regionBlendAmount", m_EnviromentManager->regionBlendAmount);
+		shader->SetUniform1F("specularStrength", m_Terrain->specularStrength);
 
 		for (unsigned int i = 0; i < m_EnviromentManager->regions.size(); ++i)
 		{

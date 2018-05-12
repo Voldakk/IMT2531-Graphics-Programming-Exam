@@ -95,7 +95,9 @@
                     "heightMap": "./assets/heightmaps/height10.png",
                     "terrainWidth": 1000.0,
                     "maxTerrainHeight": 200.0,
-                    "verticesPerUnit": 1.0
+                    "verticesPerUnit": 1.0,
+                    "materialShininess": 32.0,
+                    "specularStrength": 0.0
                 },
                 {
                     "id": "EVA::MeshRenderer",

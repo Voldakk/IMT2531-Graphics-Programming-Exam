@@ -52,6 +52,7 @@ uniform struct Region
 } regions[MAX_REGIONS];
 
 uniform bool contourLines;
+uniform float specularStrength;
 
 float ShadowCalculation(vec3 normal, vec3 lightDir, sampler2D shadowMap, vec4 fragPosLightSpace)
 {
@@ -115,7 +116,7 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
 
     // Specular
     float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess);
-	vec3 specular = spec * 0.5 * light.color;
+	vec3 specular = spec * light.color * specularStrength;
 
     return attenuation * ambient + (1.0 - shadow) * (attenuation * ( diffuse + specular));
 }
@@ -140,9 +141,9 @@ void main()
 		for(int i = 0; i < numRegions; ++i)
 		{
 			if(abs(fragHeight - regions[i].maxHeight) <= 0.001)
-				surfaceColor = regions[i].color;
+				surfaceColor = vec3(0);
 			else if(abs(fragHeight - regions[i].minHeight) <= 0.001)
-				surfaceColor = regions[i].color;
+				surfaceColor = vec3(0);
 		}
 	}
 
