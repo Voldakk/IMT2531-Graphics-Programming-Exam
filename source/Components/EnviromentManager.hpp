@@ -63,6 +63,7 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 
 	float m_DayLengthSummer = 16.0f;
 	float m_DayLengthWinter = 8.0f;
+	float m_TransitionLength = 1.0f;
 
 	bool m_TimePaused = true;
 	bool m_SeasonPaused = true;

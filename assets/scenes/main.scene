@@ -13,8 +13,8 @@
             ],
             "ambientCoefficient": 0.019999999552965165,
             "rotation": [
-                60.0,
-                90.0
+                12.913043975830079,
+                16.125
             ],
             "directionalShadowDistance": 200.0,
             "directionalNearPlane": 1.0,
@@ -92,7 +92,7 @@
             "components": [
                 {
                     "id": "Terrain",
-                    "heightMap": "./assets/heightmaps/height100.png",
+                    "heightMap": "./assets/heightmaps/height10.png",
                     "terrainWidth": 1000.0,
                     "maxTerrainHeight": 200.0,
                     "verticesPerUnit": 0.5,
@@ -107,8 +107,11 @@
                 },
                 {
                     "id": "EnviromentManager",
-                    "secondsPerDay": 10.0,
-                    "secondsPerYear": 40.0,
+                    "secondsPerDay": 30.0,
+                    "secondsPerYear": 60.0,
+                    "dayLengthSummer": 16.0,
+                    "dayLengthWinter": 4.0,
+                    "transitionLength": 2.0,
                     "middayAngle": 60.0,
                     "sunriseColor": [
                         1.0,
@@ -219,9 +222,9 @@
                 {
                     "name": "Spruce",
                     "position": [
-                        996.0,
-                        51.76470947265625,
-                        703.0
+                        997.0,
+                        50.98039627075195,
+                        707.0
                     ],
                     "scale": [
                         1.0,
@@ -253,8 +256,8 @@
                     "name": "Oak",
                     "position": [
                         999.0,
-                        28.23529624938965,
-                        1779.0
+                        40.0,
+                        1917.0
                     ],
                     "scale": [
                         1.0,
@@ -287,9 +290,9 @@
         {
             "name": "Glider",
             "position": [
-                50.0,
-                80.0,
-                50.0
+                500.0,
+                100.0,
+                100.0
             ],
             "scale": [
                 1.0,
@@ -857,7 +860,7 @@
             "name": "Water",
             "position": [
                 0.0,
-                18.0,
+                20.0,
                 0.0
             ],
             "scale": [
@@ -881,17 +884,17 @@
                 {
                     "id": "Water",
                     "timeScale": 5.0,
-                    "m_VerticesPerUnit": 1.0,
+                    "m_VerticesPerUnit": 0.5,
                     "summerProperties.height": 20.0,
                     "summerProperties.waveLength": 1.0,
                     "summerProperties.amplitude": 0.10000000149011612,
                     "summerProperties.specularStrength": 1.0,
                     "summerProperties.materialShininess": 32.0,
                     "summerProperties.color": [
-                        0.22462517023086549,
-                        0.5994700193405151,
-                        0.8039215803146362,
-                        0.7607843279838562
+                        0.11764705926179886,
+                        0.4117647111415863,
+                        0.5686274766921997,
+                        0.5411764979362488
                     ],
                     "winterProperties.height": 18.0,
                     "winterProperties.waveLength": 1.0,
