@@ -55,10 +55,20 @@ void Water::GenerateMesh() const
 	std::vector<unsigned int> indices;
 	indices.reserve((verticesY - 1) * (verticesX - 1) * 6);
 
+	const auto maxHeight = glm::max(summerProperties.height, winterProperties.height) + m_Terrain->maxTerrainHeight * 0.01f;
+
 	for (unsigned int y = 0; y < verticesY - 1; ++y)
 	{
 		for (unsigned int x = 0; x < verticesX - 1; ++x)
 		{
+			const auto height1 = m_Terrain->HeightData((float)x / (float)verticesX, (float)y / (float)verticesY) * m_Terrain->maxTerrainHeight;
+			const auto height2 = m_Terrain->HeightData((float)(x+1) / (float)verticesX, (float)y / (float)verticesY) * m_Terrain->maxTerrainHeight;
+			const auto height3 = m_Terrain->HeightData((float)x / (float)verticesX, (float)(y+1) / (float)verticesY) * m_Terrain->maxTerrainHeight;
+			const auto height4 = m_Terrain->HeightData((float)(x+1) / (float)verticesX, (float)(y+1) / (float)verticesY) * m_Terrain->maxTerrainHeight;
+
+			if(height1 > maxHeight && height2 > maxHeight && height3 > maxHeight && height4 > maxHeight)
+				continue;
+
 			indices.push_back(x + (y + 1) * verticesX);
 			indices.push_back((x + 1) + (y + 1) * verticesX);
 			indices.push_back(x + y * verticesX);

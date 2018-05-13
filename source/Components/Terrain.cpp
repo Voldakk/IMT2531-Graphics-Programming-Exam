@@ -182,5 +182,7 @@ void Terrain::CreateMesh()
 
 float Terrain::HeightData(const float x, const float y)
 {
-	return m_HeightData[y*m_HeightData.size()][x*m_HeightData[0].size()] / 255.0f;
+	const unsigned int indexX = glm::clamp(x * m_HeightData[0].size(), 0.0f, (float)m_HeightData[0].size() - 1.0f);
+	const unsigned int indexY = glm::clamp(y * m_HeightData.size(), 0.0f, (float)m_HeightData.size() - 1.0f);
+	return m_HeightData[indexY][indexX] / 255.0f;
 }
