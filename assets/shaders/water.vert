@@ -35,16 +35,31 @@ uniform struct Light
 
 out vec4 allFragPosLightSpace [MAX_LIGHTS];
 
+float GetHeight(float x, float z)
+{
+	float height = (sin((x + time) / waveLength) + sin((z + time) / waveLength)) * amplitude;
+	return height;
+}
+
 void main() 
 {
 	// Position
 	vec3 vertPos =  vert;
-	vertPos.y = (sin((vertPos.x) / waveLength) + sin((vertPos.z+time) / waveLength)) * amplitude;
+	vertPos.y = GetHeight(vert.x, vert.z);
 	
 	fragVert = vec3(model * vec4(vertPos, 1));
 
 	// Normal
-	fragNormal = vec3(0.0, 1.0, 0.0);
+	float xm = GetHeight(vert.x - (1/verticesPerUnit), vert.z);
+	float xp = GetHeight(vert.x + (1/verticesPerUnit), vert.z);
+	float zm = GetHeight(vert.x, vert.z - (1/verticesPerUnit));
+	float zp = GetHeight(vert.x, vert.z + (1/verticesPerUnit));
+
+	// Deduce normal
+	fragNormal.x = xm - xp;
+	fragNormal.z = zm - zp;
+	fragNormal.y = 2.0;
+	fragNormal = normalize(fragNormal);
 
 	// UV
     fragTexCoord = vertTexCoord;

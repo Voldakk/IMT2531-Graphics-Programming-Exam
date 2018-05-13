@@ -11,6 +11,8 @@ uniform struct Material
 
 } material;
 
+uniform float specularStrength;
+
 // Lights
 #define MAX_LIGHTS 10
 uniform int numLights;
@@ -60,14 +62,14 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
 
     // Specular
     float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess);
-	vec3 specular = spec * light.color;
+	vec3 specular = spec * specularStrength * light.color;
 
     return attenuation * ambient + (attenuation * ( diffuse + specular));
 }
 
 void main()
 {
-	vec3 surfaceColor = vec3(0.0, 0.6, 0.8);
+	vec3 surfaceColor = material.tint_diffuse.rgb;
 
     // Normal
     vec3 normal = fragNormal;
@@ -82,5 +84,5 @@ void main()
     
     // Final color (after gamma correction)
     vec3 gamma = vec3(1.0/2.2);
-    finalColor = vec4(pow(linearColor, gamma), 1.0);
+    finalColor = vec4(pow(linearColor, gamma), material.tint_diffuse.a);
 }

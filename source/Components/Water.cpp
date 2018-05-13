@@ -11,8 +11,11 @@ void Water::Start()
 	m_Terrain = scene->FindComponentOfType<Terrain>();
 	m_MeshRenderer = gameObject->GetComponentOfType<EVA::MeshRenderer>();
 
-	m_Material = std::make_shared<WaterMaterial>(this);
-	m_Material->shader = EVA::ShaderManager::LoadShader("./assets/shaders/water.shader");
+	if (m_Material == nullptr)
+	{
+		m_Material = std::make_shared<WaterMaterial>(this);
+		m_Material->shader = EVA::ShaderManager::LoadShader("./assets/shaders/water.shader");
+	}
 
 	GenerateMesh();
 }
@@ -75,6 +78,16 @@ void Water::Load(const EVA::DataObject data)
 	waveLength = data.GetFloat("waveLength", waveLength);
 	amplitude = data.GetFloat("amplitude", amplitude);
 	m_TimeScale = data.GetFloat("timeScale", m_TimeScale);
+	specularStrength = data.GetFloat("specularStrength", specularStrength);
+
+	if (m_Material == nullptr)
+	{
+		m_Material = std::make_shared<WaterMaterial>(this);
+		m_Material->shader = EVA::ShaderManager::LoadShader("./assets/shaders/water.shader");
+	}
+
+	m_Material->materialShininess = data.GetFloat("materialShininess", m_Material->materialShininess);
+	m_Material->tintDiffuse = data.GetVec4("tintDiffuse", m_Material->tintDiffuse);
 }
 
 void Water::Save(EVA::DataObject& data)
@@ -82,6 +95,9 @@ void Water::Save(EVA::DataObject& data)
 	data.SetFloat("waveLength", waveLength);
 	data.SetFloat("amplitude", amplitude);
 	data.SetFloat("timeScale", m_TimeScale);
+	data.SetFloat("specularStrength", specularStrength);
+	data.SetFloat("materialShininess", m_Material->materialShininess);
+	data.SetVec4("tintDiffuse", m_Material->tintDiffuse);
 }
 
 void Water::Inspector()
@@ -89,4 +105,8 @@ void Water::Inspector()
 	ComponentInspector::Float("Wave length", waveLength);
 	ComponentInspector::Float("Amplitude", amplitude);
 	ComponentInspector::Float("Time scale", m_TimeScale);
+	ComponentInspector::Float("Specular strength", specularStrength);
+
+	ComponentInspector::Float("Shininess", m_Material->materialShininess);
+	ComponentInspector::ColorPicker("Color", m_Material->tintDiffuse);
 }

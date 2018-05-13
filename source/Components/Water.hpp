@@ -17,10 +17,12 @@ class Water : public EVA::Component , public EVA::IUpdateComponent
 
 public:
 	const float& verticesPerUnit = m_VerticesPerUnit;
-	
+
 	float time = 0.0f;
 	float waveLength = 100.0f;
 	float amplitude = 5.0f;
+
+	float specularStrength = 1.0f;
 	
 	void Start() override;
 

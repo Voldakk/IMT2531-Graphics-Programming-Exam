@@ -611,7 +611,7 @@
             "name": "Water",
             "position": [
                 0.0,
-                17.0,
+                16.0,
                 0.0
             ],
             "scale": [
@@ -634,9 +634,17 @@
                 },
                 {
                     "id": "Water",
-                    "waveLength": 1.0,
-                    "amplitude": 0.10000000149011612,
-                    "timeScale": 1.0
+                    "waveLength": 2.0,
+                    "amplitude": 0.5,
+                    "timeScale": 5.0,
+                    "specularStrength": 1.0,
+                    "materialShininess": 50.0,
+                    "tintDiffuse": [
+                        0.05882352963089943,
+                        0.4470588266849518,
+                        0.5490196347236633,
+                        0.3764705955982208
+                    ]
                 }
             ]
         }

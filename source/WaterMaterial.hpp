@@ -19,9 +19,11 @@ public:
 		Material::SetMaterialUniforms(scene);
 
 		shader->SetUniform1F("time", m_Water->time);
-
+		
 		shader->SetUniform1F("waveLength", m_Water->waveLength);
 		shader->SetUniform1F("amplitude", m_Water->amplitude);
 		shader->SetUniform1F("verticesPerUnit", m_Water->verticesPerUnit);
+
+		shader->SetUniform1F("specularStrength", m_Water->specularStrength);
 	}
 };
