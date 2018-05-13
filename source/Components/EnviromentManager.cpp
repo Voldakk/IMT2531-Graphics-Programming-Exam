@@ -276,6 +276,9 @@ void EnviromentManager::UpdateTime() const
 
 	m_Sun->SetRotation({ pitch, yaw });
 	m_Sun->color = color;
+
+	if (scene->skybox != nullptr)
+		scene->skybox->SetTint(color);
 }
 
 void EnviromentManager::PlaceTrees()

@@ -16,6 +16,8 @@ namespace EVA
 		shader->SetUniformMatrix4Fv("view", Application::mainCamera->viewMatrix);
 		shader->SetUniformMatrix4Fv("projection", Application::GetPerspectiveMatrix());
 
+		shader->SetUniform4Fv("skyTint", skyTint);
+
 		// Cubemap
 		glActiveTexture(GL_TEXTURE0);
 		shader->SetUniform1I("material.texture_diffuse", 0);
@@ -69,6 +71,18 @@ namespace EVA
 		m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
 	}
 
+	void Skybox::SetTint(const glm::vec4 tint) const
+	{
+		if (m_Material != nullptr)
+			m_Material->skyTint = tint;
+	}
+
+	void Skybox::SetTint(const glm::vec3 tint) const
+	{
+		if (m_Material != nullptr)
+			m_Material->skyTint = glm::vec4(tint, 1.0f);
+	}
+
 	void Skybox::Save(DataObject& data) const
 	{
 		if (!m_FolderPath.empty())
@@ -85,5 +99,8 @@ namespace EVA
 		{
 			Set(m_FolderPath, m_FileType);
 		}
+
+		if(m_Material != nullptr)
+			ComponentInspector::ColorPicker("Tint", m_Material->skyTint);
 	}
 }

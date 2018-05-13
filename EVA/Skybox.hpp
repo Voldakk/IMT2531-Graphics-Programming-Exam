@@ -18,6 +18,8 @@ namespace EVA
 
 	public:
 
+		glm::vec4 skyTint = glm::vec4(1.0f);
+
 		SkyBoxMaterial() = default;
 
 		void SetMaterialUniforms(Scene* scene) const override;
@@ -49,6 +51,10 @@ namespace EVA
 		void Render() const;
 
 		void Set(const std::string &folderPath, const std::string &fileType);
+
+		void SetTint(glm::vec4 tint) const;
+
+		void SetTint(glm::vec3 tint) const;
 
 		/**
 		* \brief Saves Skybox values to the given DataObject

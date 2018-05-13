@@ -109,7 +109,7 @@ void Terrain::CreateMesh()
 	if (m_HeightData.empty() && m_HeightData[0].empty())
 		return;
 
-	std::cout << "Terrain::CreateMesh - Generating mesh..." << std::endl;
+	std::cout << "Terrain::CreateMesh - Generating mesh" << std::endl;
 
 	m_TerrainLength = (float)m_TerrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
 
