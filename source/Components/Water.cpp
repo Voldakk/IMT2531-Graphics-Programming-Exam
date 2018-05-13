@@ -19,7 +19,7 @@ void Water::Start()
 
 void Water::Update(const float deltaTime)
 {
-	time += deltaTime;
+	time += deltaTime * m_TimeScale;
 }
 
 void Water::GenerateMesh() const
@@ -68,4 +68,25 @@ void Water::GenerateMesh() const
 
 	const auto mesh = std::make_shared<EVA::Mesh>(vertices, indices);
 	m_MeshRenderer->Set(mesh, m_Material);
+}
+
+void Water::Load(const EVA::DataObject data)
+{
+	waveLength = data.GetFloat("waveLength", waveLength);
+	amplitude = data.GetFloat("amplitude", amplitude);
+	m_TimeScale = data.GetFloat("timeScale", m_TimeScale);
+}
+
+void Water::Save(EVA::DataObject& data)
+{
+	data.SetFloat("waveLength", waveLength);
+	data.SetFloat("amplitude", amplitude);
+	data.SetFloat("timeScale", m_TimeScale);
+}
+
+void Water::Inspector()
+{
+	ComponentInspector::Float("Wave length", waveLength);
+	ComponentInspector::Float("Amplitude", amplitude);
+	ComponentInspector::Float("Time scale", m_TimeScale);
 }

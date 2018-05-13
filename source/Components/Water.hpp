@@ -11,6 +11,7 @@ class Water : public EVA::Component , public EVA::IUpdateComponent
 	EVA::MeshRenderer* m_MeshRenderer = nullptr;
 
 	float m_VerticesPerUnit = 1.0f;
+	float m_TimeScale = 1.0f;
 
 	std::shared_ptr<EVA::Material> m_Material;
 
@@ -26,4 +27,8 @@ public:
 	void Update(float deltaTime) override;
 
 	void GenerateMesh() const;
+
+	void Load(const EVA::DataObject data) override;
+	void Save(EVA::DataObject& data) override;
+	void Inspector() override;
 };
