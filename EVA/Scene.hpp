@@ -19,7 +19,6 @@ namespace EVA
 	class Scene
 	{
 		bool m_Abort = false;
-		bool m_Started = false;
 
 		ShadowMaterial m_ShadowMaterial;
 		ShadowMaterial m_ShadowMaterialInstanced;
@@ -28,6 +27,8 @@ namespace EVA
 		ShadowMaterial m_ShadowMaterialCubeInstanced;
 
 	protected:
+		
+		bool m_Started = false;
 
 		std::vector<std::vector<std::vector<MeshRenderer *>>> m_Materials;
 		std::vector<std::shared_ptr<GameObject>> m_GameObjects;

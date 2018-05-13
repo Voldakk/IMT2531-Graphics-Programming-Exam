@@ -32,6 +32,7 @@ namespace EVA
 			m_Lights.clear();
 			skybox = nullptr;
 			m_Ew->SelectGameObject(nullptr);
+			m_Started = false;
 
 			// Camera
 			m_SceneCameraGameObject = CreateGameObject().get();
@@ -101,7 +102,8 @@ namespace EVA
 		void LateUpdate() override
 		{
 			// Move camera
-			m_SceneCameraGameObject->LateUpdate();
+			if(m_SceneCameraGameObject != nullptr)
+				m_SceneCameraGameObject->LateUpdate();
 		}
 	};
 
