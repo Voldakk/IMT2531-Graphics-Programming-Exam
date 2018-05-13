@@ -3,7 +3,7 @@
 #include "EVA.hpp"
 #include "EVA/Components.hpp"
 
-class CameraController : public EVA::Component, public EVA::ILateUpdateComponent
+class CameraController : public EVA::Component, public EVA::IUpdateComponent, public EVA::ILateUpdateComponent
 {
 
 	REGISTER_COMPONENT_HPP(CameraController);
@@ -22,5 +22,6 @@ public:
 	void Start() override;
 	void LateUpdate() override;
 
+	void Update(float deltaTime) override;
 	void UpdateCameras();
 };

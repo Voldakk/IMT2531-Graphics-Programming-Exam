@@ -18,6 +18,20 @@ void CameraController::Start()
 	UpdateCameras();
 }
 
+void CameraController::Update(const float deltaTime)
+{
+	if (EVA::Input::Key(EVA::Input::M))
+	{
+		m_Camera->fov += deltaTime * 20.0f;
+	}
+	if (EVA::Input::Key(EVA::Input::N))
+	{
+		m_Camera->fov -= deltaTime * 20.0f;
+	}
+
+	m_Camera->fov = glm::clamp(m_Camera->fov, 30.0f, 120.0f);
+}
+
 void CameraController::LateUpdate()
 {
 	if(EVA::Input::KeyDown(EVA::Input::Slash))
@@ -28,6 +42,8 @@ void CameraController::LateUpdate()
 
 		UpdateCameras();
 	}
+
+	
 }
 
 void CameraController::UpdateCameras()
