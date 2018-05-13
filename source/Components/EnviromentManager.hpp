@@ -56,7 +56,7 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 	EVA::Light* m_Sun = nullptr;
 	Terrain* m_Terrain = nullptr;
 	
-	float m_Season = 0.0f;
+	float m_Season = 6.0f;
 	float m_Time = 12.0f;
 	float m_SecondsPerDay = 10.0f;
 	float m_SecondsPerYear = 40.0f;
