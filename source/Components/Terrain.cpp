@@ -113,8 +113,8 @@ void Terrain::CreateMesh()
 
 	m_TerrainLength = (float)m_TerrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
 
-	const auto verticesY = (unsigned int)std::floorf(m_TerrainLength * m_VerticesPerUnit);
-	const auto verticesX = (unsigned int)std::floorf(m_TerrainWidth * m_VerticesPerUnit);
+	const auto verticesY = (unsigned int)std::floor(m_TerrainLength * m_VerticesPerUnit);
+	const auto verticesX = (unsigned int)std::floor(m_TerrainWidth * m_VerticesPerUnit);
 
 	// Vertices
 	std::vector<EVA::Vertex> vertices;

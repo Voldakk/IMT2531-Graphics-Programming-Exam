@@ -32,8 +32,8 @@ void Water::GenerateMesh() const
 
 	std::cout << "Water::GenerateMesh - Generating mesh" << std::endl;
 
-	const auto verticesY = (unsigned int)std::floorf(m_Terrain->terrainLength * m_VerticesPerUnit);
-	const auto verticesX = (unsigned int)std::floorf(m_Terrain->terrainWidth * m_VerticesPerUnit);
+	const auto verticesY = (unsigned int)std::floor(m_Terrain->terrainLength * m_VerticesPerUnit);
+	const auto verticesX = (unsigned int)std::floor(m_Terrain->terrainWidth * m_VerticesPerUnit);
 
 	// Vertices
 	std::vector<EVA::Vertex> vertices;
