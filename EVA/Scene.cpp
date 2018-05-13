@@ -62,7 +62,7 @@ namespace EVA
 		for (auto &gameObject : m_GameObjects)
 		{
 			if (!gameObject->active)
-				return;
+				continue;;
 
 			gameObject->Update(deltaTime);
 		}
@@ -83,7 +83,7 @@ namespace EVA
 		for (auto &gameObject : m_GameObjects)
 		{
 			if (!gameObject->active)
-				return;
+				continue;
 
 			gameObject->LateUpdate();
 		}
