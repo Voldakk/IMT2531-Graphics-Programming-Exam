@@ -13,8 +13,8 @@ int main()
 {
     EVA::Application::Init("EVA-Engine");
 
-	EVA::SceneManager::CreateScene<EVA::SceneEditor>("./assets/scenes/main.scene");
-	//EVA::SceneManager::CreateScene<EVA::Scene>("./assets/scenes/main.scene");
+	//EVA::SceneManager::CreateScene<EVA::SceneEditor>("./assets/scenes/main.scene");
+	EVA::SceneManager::CreateScene<EVA::Scene>("./assets/scenes/main.scene");
 
     EVA::Application::Run();
 

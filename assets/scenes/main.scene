@@ -219,9 +219,9 @@
                 {
                     "name": "Spruce",
                     "position": [
-                        991.0,
-                        49.411766052246097,
-                        565.0
+                        996.0,
+                        51.76470947265625,
+                        703.0
                     ],
                     "scale": [
                         1.0,
@@ -253,8 +253,8 @@
                     "name": "Oak",
                     "position": [
                         999.0,
-                        39.2156867980957,
-                        1879.0
+                        28.23529624938965,
+                        1779.0
                     ],
                     "scale": [
                         1.0,
@@ -287,9 +287,9 @@
         {
             "name": "Glider",
             "position": [
-                20.0,
-                20.0,
-                20.0
+                50.0,
+                80.0,
+                50.0
             ],
             "scale": [
                 1.0,
@@ -307,61 +307,55 @@
                     "id": "EVA::MeshRenderer",
                     "material": "./assets/models/glider/materials/body.mat",
                     "mesh": "./assets/models/glider/ask21mi.fbx",
-                    "meshIndex": 3
+                    "meshIndex": 6
                 },
                 {
                     "id": "EVA::MeshRenderer",
                     "material": "./assets/models/glider/materials/interior.mat",
                     "mesh": "./assets/models/glider/ask21mi.fbx",
-                    "meshIndex": 8
+                    "meshIndex": 10
                 },
                 {
                     "id": "EVA::MeshRenderer",
                     "material": "./assets/models/glider/materials/chrono.mat",
-                    "mesh": "./assets/models/glider/ask21mi.fbx",
-                    "meshIndex": 9
-                },
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/glider/materials/compass.mat",
                     "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 11
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/glider/materials/turn.mat",
-                    "mesh": "./assets/models/glider/ask21mi.fbx",
-                    "meshIndex": 12
-                },
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/glider/materials/varo.mat",
+                    "material": "./assets/models/glider/materials/compass.mat",
                     "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 13
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/glider/materials/asi.mat",
+                    "material": "./assets/models/glider/materials/turn.mat",
                     "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 14
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/glider/materials/alt.mat",
+                    "material": "./assets/models/glider/materials/varo.mat",
                     "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 15
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/glider/materials/sc.mat",
+                    "material": "./assets/models/glider/materials/asi.mat",
                     "mesh": "./assets/models/glider/ask21mi.fbx",
                     "meshIndex": 16
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/models/glider/materials/chrono.mat",
+                    "material": "./assets/models/glider/materials/alt.mat",
                     "mesh": "./assets/models/glider/ask21mi.fbx",
-                    "meshIndex": 16
+                    "meshIndex": 17
+                },
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/models/glider/materials/sc.mat",
+                    "mesh": "./assets/models/glider/ask21mi.fbx",
+                    "meshIndex": 18
                 },
                 {
                     "id": "GilderController"
@@ -392,6 +386,258 @@
                             "fov": 90.0,
                             "near": 0.10000000149011612,
                             "far": 1000.0
+                        }
+                    ]
+                },
+                {
+                    "name": "AileronRightHolder",
+                    "position": [
+                        -6.566939830780029,
+                        0.4501180052757263,
+                        1.0045700073242188
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        -0.001786820008419454,
+                        0.05143343657255173,
+                        -0.034673478454351428,
+                        0.9980727434158325
+                    ],
+                    "gameObjects": [
+                        {
+                            "name": "AileronRight",
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "orientation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "components": [
+                                {
+                                    "id": "EVA::MeshRenderer",
+                                    "material": "./assets/models/glider/materials/body.mat",
+                                    "mesh": "./assets/models/glider/ask21mi.fbx",
+                                    "meshIndex": 0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "AileronLeftHolder",
+                    "position": [
+                        6.566939830780029,
+                        0.4501180052757263,
+                        1.0045700073242188
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        -0.001786820008419454,
+                        -0.05143343657255173,
+                        0.034673478454351428,
+                        0.9980727434158325
+                    ],
+                    "gameObjects": [
+                        {
+                            "name": "AileronLeft",
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "orientation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "components": [
+                                {
+                                    "id": "EVA::MeshRenderer",
+                                    "material": "./assets/models/glider/materials/body.mat",
+                                    "mesh": "./assets/models/glider/ask21mi.fbx",
+                                    "meshIndex": 4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Profondeur",
+                    "position": [
+                        0.0,
+                        1.2339999675750733,
+                        -3.809999942779541
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "components": [
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/models/glider/materials/body.mat",
+                            "mesh": "./assets/models/glider/ask21mi.fbx",
+                            "meshIndex": 5
+                        }
+                    ]
+                },
+                {
+                    "name": "Direction",
+                    "position": [
+                        0.0,
+                        0.4399999976158142,
+                        -3.809999942779541
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "components": [
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/models/glider/materials/body.mat",
+                            "mesh": "./assets/models/glider/ask21mi.fbx",
+                            "meshIndex": 8
+                        }
+                    ]
+                },
+                {
+                    "name": "Propeller",
+                    "position": [
+                        0.0,
+                        1.100000023841858,
+                        0.4000000059604645
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "components": [
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/models/glider/materials/body.mat",
+                            "mesh": "./assets/models/glider/ask21mi.fbx",
+                            "meshIndex": 7
+                        }
+                    ]
+                },
+                {
+                    "name": "Stick",
+                    "position": [
+                        0.0,
+                        -0.25999999046325686,
+                        3.200000047683716
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "components": [
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/models/glider/materials/interior.mat",
+                            "mesh": "./assets/models/glider/ask21mi.fbx",
+                            "meshIndex": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "ThrottleHolder",
+                    "position": [
+                        0.2709999978542328,
+                        -0.07000000029802323,
+                        2.9200000762939455
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "orientation": [
+                        0.08705537766218186,
+                        -0.04779556021094322,
+                        -0.004181569442152977,
+                        0.9950474500656128
+                    ],
+                    "gameObjects": [
+                        {
+                            "name": "Throttle",
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.2800000011920929
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "orientation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "components": [
+                                {
+                                    "id": "EVA::MeshRenderer",
+                                    "material": "./assets/models/glider/materials/interior.mat",
+                                    "mesh": "./assets/models/glider/ask21mi.fbx",
+                                    "meshIndex": 1
+                                }
+                            ]
                         }
                     ]
                 }
@@ -611,7 +857,7 @@
             "name": "Water",
             "position": [
                 0.0,
-                18.0,
+                20.0,
                 0.0
             ],
             "scale": [
