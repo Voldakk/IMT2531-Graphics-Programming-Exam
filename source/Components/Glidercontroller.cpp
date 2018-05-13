@@ -6,13 +6,16 @@ REGISTER_COMPONENT_CPP(GilderController, "GilderController")
 
 void GilderController::Start()
 {
+	// Label
 	m_SpeedLabel = scene->CreateUiElement<EVA::Label>("Speed:");
 	m_SpeedLabel->SetAnchorAndPivot(-1.0f, -1.0f); // Bottom left
 	m_SpeedLabel->SetOffsetFromAnchor(0.05f);
 
+	// Rememder start
 	m_StartLocation = transform->position;
 	m_StartOrientation = transform->orientation;
 
+	// Teleport points
 	auto go = scene->FindGameObjectByName("TeleportPoint1");
 	auto i = 1;
 	while (go != nullptr)
@@ -22,6 +25,19 @@ void GilderController::Start()
 		i++;
 		go = scene->FindGameObjectByName("TeleportPoint" + std::to_string(i));
 	}
+
+	// Find parts
+	m_Propeller = scene->FindGameObjectByName("Propeller")->transform.get();
+
+	m_AileronLeft = scene->FindGameObjectByName("AileronLeft")->transform.get();
+	m_AileronRight = scene->FindGameObjectByName("AileronRight")->transform.get();
+
+	m_Profondeur = scene->FindGameObjectByName("Profondeur")->transform.get();
+	m_Direction = scene->FindGameObjectByName("Direction")->transform.get();
+
+	m_Stick = scene->FindGameObjectByName("Stick")->transform.get();
+	m_Throtle = scene->FindGameObjectByName("Throttle")->transform.get();
+	m_MaxThrottle = m_Throtle->localPosition.z;
 }
 
 void GilderController::Load(const EVA::DataObject data)
@@ -41,24 +57,42 @@ void GilderController::Inspector()
 
 void GilderController::Update(const float deltaTime)
 {
+	auto pitch = 0.0f;
+	auto yaw = 0.0f;
+	auto roll = 0.0f;
+
 	// Turn
 	if (EVA::Input::Key(EVA::Input::W))
-		transform->Rotate(transform->right, -m_PitchSpeed * deltaTime);
+		pitch--;
 
 	if (EVA::Input::Key(EVA::Input::S))
-		transform->Rotate(transform->right, m_PitchSpeed * deltaTime);
+		pitch++;
 
 	if (EVA::Input::Key(EVA::Input::Q))
-		transform->Rotate(transform->up, m_YawSpeed * deltaTime);
+		yaw++;
 
 	if (EVA::Input::Key(EVA::Input::E))
-		transform->Rotate(transform->up, -m_YawSpeed * deltaTime);
+		yaw--;
 
 	if (EVA::Input::Key(EVA::Input::A))
-		transform->Rotate(transform->forward, -m_RollSpeed * deltaTime);
+		roll--;
 
 	if (EVA::Input::Key(EVA::Input::D))
-		transform->Rotate(transform->forward, m_RollSpeed * deltaTime);
+		roll++;
+
+
+	transform->Rotate(transform->right, pitch * m_PitchSpeed * deltaTime);
+	transform->Rotate(transform->up, yaw * m_YawSpeed * deltaTime);
+	transform->Rotate(transform->forward, roll * m_RollSpeed * deltaTime);
+
+	m_Stick->SetOrientation(-pitch * 30.0f, 0.0f, roll * 30.0f);
+
+	m_Direction->SetOrientation(EVA::YAXIS, -yaw * 30.0f);
+	m_Profondeur->SetOrientation(EVA::XAXIS, pitch * 30.0f);
+
+	m_AileronLeft->SetOrientation(EVA::XAXIS, -pitch * 30.0f - roll * 30.0f);
+	m_AileronRight->SetOrientation(EVA::XAXIS, -pitch * 30.0f + roll * 30.0f);
+
 
 	// Speed
 	if (EVA::Input::Key(EVA::Input::Period))
@@ -68,9 +102,14 @@ void GilderController::Update(const float deltaTime)
 		m_CurrentSpeed -= deltaTime * (m_MaxSpeed - m_MinSpeed) / m_AccelerationTime;
 
 	m_CurrentSpeed = glm::clamp(m_CurrentSpeed, m_MinSpeed, m_MaxSpeed);
-	m_SpeedLabel->SetText("Speed: " + std::to_string((int)std::roundf(100 * (m_CurrentSpeed - m_MinSpeed) / (m_MaxSpeed - m_MinSpeed))) + "%");
+
+	const auto speedPersent = 100 * (m_CurrentSpeed - m_MinSpeed) / (m_MaxSpeed - m_MinSpeed);
+	m_SpeedLabel->SetText("Speed: " + std::to_string((int)std::roundf(speedPersent)) + "%");
 
 	transform->Translate(transform->forward * m_CurrentSpeed * deltaTime);
+
+	m_Throtle->SetPosition({ 0.0f, 0.0f, glm::mix(0.0f, m_MaxThrottle, speedPersent / 100.0f) });
+	m_Propeller->Rotate(EVA::ZAXIS, m_CurrentSpeed * deltaTime * 100.0f);
 
 	// Reset
 	if (EVA::Input::Key(EVA::Input::R))

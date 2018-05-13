@@ -7,7 +7,7 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 {
 	REGISTER_COMPONENT_HPP(GilderController)
 
-	float m_MinSpeed = 1.0f;
+	float m_MinSpeed = 10.0f;
 	float m_MaxSpeed = 100.0f;
 	float m_CurrentSpeed = m_MinSpeed;
 
@@ -15,7 +15,7 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 
 	float m_PitchSpeed = 45.0f;
 	float m_YawSpeed = 45.0f;
-	float m_RollSpeed = 45.0f;
+	float m_RollSpeed = 90.0f;
 
 	EVA::Label* m_SpeedLabel = nullptr;
 
@@ -24,6 +24,19 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 
 	std::vector<EVA::Transform*> m_TeleportPoints;
 	unsigned int m_CurrentTeleportPoint = 0;
+
+	// Glider parts
+	EVA::Transform* m_Propeller = nullptr;
+
+	EVA::Transform* m_AileronLeft = nullptr;
+	EVA::Transform* m_AileronRight = nullptr;
+
+	EVA::Transform* m_Profondeur = nullptr;
+	EVA::Transform* m_Direction = nullptr;
+
+	EVA::Transform* m_Stick = nullptr;
+	EVA::Transform* m_Throtle = nullptr;
+	float m_MaxThrottle = 0.0f;
 
 public:
 
