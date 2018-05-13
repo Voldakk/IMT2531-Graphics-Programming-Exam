@@ -266,11 +266,18 @@ void EnviromentManager::UpdateTime() const
 		pitch = glm::mix(180.0f, 270.0f, t);
 		color = m_NightColor;
 	}
-	else if (m_Time >= 12 - halfDayLength && m_Time <= 12 + halfDayLength) // Day
+	else if (m_Time >= 12 - halfDayLength && m_Time <= 12) // Day
 	{
-		const auto t = (m_Time - (12 - halfDayLength)) / daylength;
+		const auto t = (m_Time - (12 - halfDayLength)) / halfDayLength;
 
-		pitch = glm::mix(m_TransitionLength * degPerHour, 180.0f - m_TransitionLength * degPerHour, t);
+		pitch = glm::mix(m_TransitionLength * degPerHour, m_MiddayAngle, t);
+		color = m_MiddayColor;
+	}
+	else if (m_Time >= 12 && m_Time <= 12 + halfDayLength) // Day
+	{
+		const auto t = (m_Time - 12) / halfDayLength;
+
+		pitch = glm::mix(m_MiddayAngle, 180.0f - m_TransitionLength * degPerHour, t);
 		color = m_MiddayColor;
 	}
 	else if(m_Time < 12) // Sunrise
