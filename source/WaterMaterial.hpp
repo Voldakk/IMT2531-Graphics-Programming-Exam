@@ -11,7 +11,7 @@ public:
 	explicit WaterMaterial(Water* water)
 		: m_Water(water)
 	{
-
+		castShadows = false;
 	}
 
 	void SetMaterialUniforms(EVA::Scene* scene) const override

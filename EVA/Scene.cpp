@@ -404,6 +404,9 @@ namespace EVA
 
 		for (auto &material : m_Materials)
 		{
+			if(!material[0][0]->material->castShadows)
+				continue;
+
 			// If the material should use GPU instancing
 			if (material[0][0]->material->useInstancing)
 			{
@@ -467,6 +470,9 @@ namespace EVA
 
 		for (auto &material : m_Materials)
 		{
+			if (!material[0][0]->material->castShadows)
+				continue;
+
 			// If the material should use GPU instancing
 			if (material[0][0]->material->useInstancing)
 			{

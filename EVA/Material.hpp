@@ -72,6 +72,8 @@ namespace EVA
 		bool cullFront = false;
 		bool cullBack = true;
 
+		bool castShadows = true;
+
 		Material() = default;
 
 		void SetTexture(Texture::Type type, const FS::path& path);
