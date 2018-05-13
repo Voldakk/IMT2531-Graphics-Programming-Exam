@@ -116,6 +116,7 @@ void Terrain::CreateMesh()
 	const auto verticesY = (unsigned int)std::floor(m_TerrainLength * m_VerticesPerUnit);
 	const auto verticesX = (unsigned int)std::floor(m_TerrainWidth * m_VerticesPerUnit);
 
+
 	// Vertices
 	std::vector<EVA::Vertex> vertices;
 	vertices.resize(verticesY * verticesX);
@@ -132,6 +133,7 @@ void Terrain::CreateMesh()
 			vertices[y*verticesX + x].texCoords = glm::vec2((float)x / (float)verticesX, (float)y/ (float)verticesY);
 		}
 	}
+	std::cout << "Terrain::CreateMesh - " << vertices.size() << " vertices" << std::endl;
 
 	// Normals
 	std::cout << "Terrain::CreateMesh - Normals" << std::endl;
@@ -174,6 +176,8 @@ void Terrain::CreateMesh()
 		}
 	}
 
+	std::cout << "Terrain::CreateMesh - " << indices.size() / 3 << " faces" << std::endl;
+	
 	const auto mesh = std::make_shared<EVA::Mesh>(vertices, indices);
 
 	if(m_MeshRenderer != nullptr)

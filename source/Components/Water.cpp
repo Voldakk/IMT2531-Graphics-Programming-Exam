@@ -50,6 +50,8 @@ void Water::GenerateMesh() const
 		}
 	}
 
+	std::cout << "Water::GenerateMesh - " << vertices.size() << " vertices" << std::endl;
+
 	// Indices
 	std::cout << "Water::GenerateMesh - Indices" << std::endl;
 	std::vector<unsigned int> indices;
@@ -78,6 +80,7 @@ void Water::GenerateMesh() const
 			indices.push_back(x + y * verticesX);
 		}
 	}
+	std::cout << "Water::GenerateMesh - " << indices.size() / 3 << " faces" << std::endl;
 
 	const auto mesh = std::make_shared<EVA::Mesh>(vertices, indices);
 	m_MeshRenderer->Set(mesh, m_Material);
@@ -124,6 +127,10 @@ void Water::Save(EVA::DataObject& data)
 
 void Water::Inspector()
 {
+	if(ComponentInspector::Button("Regenerate"))
+		GenerateMesh();
+
+	ComponentInspector::Float("Vertices per unit", m_VerticesPerUnit);
 	ComponentInspector::Float("Time scale", m_TimeScale);
 	
 	ComponentInspector::Text("Summer");
