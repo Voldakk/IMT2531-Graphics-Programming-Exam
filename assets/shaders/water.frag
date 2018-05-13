@@ -39,6 +39,41 @@ uniform mat4 model;
 // Out color
 out vec4 finalColor;
 
+float ShadowCalculation(vec3 normal, vec3 lightDir, sampler2D shadowMap, vec4 fragPosLightSpace)
+{
+	// Perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+
+    // Transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+
+    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+
+    // Get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+
+    // Check whether current frag pos is in shadow
+    float bias = max(0.01 * (1.0 - dot(normal, lightDir)), 0.005);
+	
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+		}    
+	}
+	shadow /= 9.0;
+
+	if(projCoords.z > 1.0)
+        shadow = 0.0;
+
+    return shadow;
+}
+
 vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera, vec3 diffuseColor, int lightIndex)
 {
     float attenuation = 1.0;
@@ -52,6 +87,10 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
         float distanceToLight = length(light.position.xyz - surfacePos);
         attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 4));
     }
+	else
+	{
+		shadow = ShadowCalculation(normal, surfaceToLight, light.shadowMap, allFragPosLightSpace[lightIndex]);
+	}
 
     // Ambient
     vec3 ambient = light.ambientCoefficient * diffuseColor * light.color;
@@ -64,7 +103,7 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
     float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess);
 	vec3 specular = spec * specularStrength * light.color;
 
-    return attenuation * ambient + (attenuation * ( diffuse + specular));
+    return attenuation * ambient + (1.0 - shadow) * (attenuation * ( diffuse + specular));
 }
 
 void main()
