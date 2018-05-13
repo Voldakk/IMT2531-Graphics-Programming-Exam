@@ -134,7 +134,7 @@
                     "regions": [
                         {
                             "minHeightSummer": 0.0,
-                            "maxHeightSummer": 0.11999999731779099,
+                            "maxHeightSummer": 0.10999999940395355,
                             "colorSummer": [
                                 0.9999899864196777,
                                 0.9999899864196777,
@@ -153,7 +153,7 @@
                             "treeName": ""
                         },
                         {
-                            "minHeightSummer": 0.10999999940395355,
+                            "minHeightSummer": 0.10000000149011612,
                             "maxHeightSummer": 0.23999999463558198,
                             "colorSummer": [
                                 0.6803633570671082,
@@ -219,9 +219,9 @@
                 {
                     "name": "Spruce",
                     "position": [
-                        996.0,
-                        51.76470947265625,
-                        703.0
+                        991.0,
+                        49.411766052246097,
+                        565.0
                     ],
                     "scale": [
                         1.0,
@@ -253,8 +253,8 @@
                     "name": "Oak",
                     "position": [
                         999.0,
-                        28.23529624938965,
-                        1779.0
+                        39.2156867980957,
+                        1879.0
                     ],
                     "scale": [
                         1.0,
@@ -611,7 +611,7 @@
             "name": "Water",
             "position": [
                 0.0,
-                16.0,
+                18.0,
                 0.0
             ],
             "scale": [
@@ -634,16 +634,29 @@
                 },
                 {
                     "id": "Water",
-                    "waveLength": 2.0,
-                    "amplitude": 0.5,
                     "timeScale": 5.0,
-                    "specularStrength": 1.0,
-                    "materialShininess": 50.0,
-                    "tintDiffuse": [
-                        0.05882352963089943,
-                        0.4470588266849518,
-                        0.5490196347236633,
-                        0.3764705955982208
+                    "m_VerticesPerUnit": 1.0,
+                    "summerProperties.height": 20.0,
+                    "summerProperties.waveLength": 1.0,
+                    "summerProperties.amplitude": 0.10000000149011612,
+                    "summerProperties.specularStrength": 1.0,
+                    "summerProperties.materialShininess": 32.0,
+                    "summerProperties.color": [
+                        0.22462517023086549,
+                        0.5994700193405151,
+                        0.8039215803146362,
+                        0.7607843279838562
+                    ],
+                    "winterProperties.height": 18.0,
+                    "winterProperties.waveLength": 1.0,
+                    "winterProperties.amplitude": 0.0,
+                    "winterProperties.specularStrength": 0.5,
+                    "winterProperties.materialShininess": 100.0,
+                    "winterProperties.color": [
+                        0.8135092258453369,
+                        0.883397102355957,
+                        0.8970588445663452,
+                        1.0
                     ]
                 }
             ]
