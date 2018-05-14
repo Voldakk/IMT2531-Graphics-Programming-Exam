@@ -15,7 +15,7 @@
 * The skybox is tinted the same color as the sun. Orange sunrise and sunset
 
 #### Day/night & season cycle and region settings
-![Image of the settings in the scene editor](https://i.imgur.com/gfJYtp3.jpg)
+![Image of the settings in the scene editor](https://i.imgur.com/pKbBopC.jpg)
 
 Per region settings:
 * Range summer/winter: The min and max height for the region in the summer and winter, between 0 and 1
