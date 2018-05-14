@@ -31,10 +31,10 @@ namespace EVA
 
 	glm::vec2 Application::m_OrthographicBounds;
 
-    void Application::Init(const std::string &title)
+	bool Application::Init(const std::string &title)
     {
         if (!CreateWindow(title))
-            return;
+            return false;
 
         // Camera
         m_DefaultCamera = m_DefaultCameraObject.AddComponent<Camera>();
@@ -62,6 +62,8 @@ namespace EVA
 	    auto& io = ImGui::GetIO(); (void)io;
 		ImGui_ImplGlfwGL3_Init(m_Window, true);
 		ImGui::StyleColorsDark();
+
+		return true;
     }
 
 	bool Application::CreateWindow(const std::string &title)

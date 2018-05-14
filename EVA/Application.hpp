@@ -44,7 +44,7 @@ namespace EVA
         static Camera* mainCamera;
 
         /// <summary>Initializes the application</summary>
-        static void Init(const std::string &title);
+        static bool Init(const std::string &title);
 
         /// <summary>Starts the game loop</summary>
         static void Run();

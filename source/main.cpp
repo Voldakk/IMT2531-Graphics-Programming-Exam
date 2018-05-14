@@ -9,18 +9,27 @@
 int main()
 {
 
-	if constexpr (false)
-	{
-		EVA::Application::Init("IMT2531 - Graphics Programming Take-Home Exam");
-		EVA::SceneManager::CreateScene<EVA::Scene>("./assets/scenes/main.scene");
-	}
-	else
-	{
-		EVA::Application::Init("EVA-Engine");
-		EVA::SceneManager::CreateScene<EVA::SceneEditor>("./assets/scenes/main.scene");
-	}
-    
+//#define EDITOR
+
+#ifdef EDITOR
+
+	#include "../EVA/Editor/SceneEditor.hpp"
+
+	if(!EVA::Application::Init("EVA-Engine"))
+		return EXIT_FAILURE;
+
+	EVA::SceneManager::CreateScene<EVA::SceneEditor>("./assets/scenes/main.scene");
+
+#else
+	
+	if(!EVA::Application::Init("IMT2531 - Graphics Programming Take-Home Exam"))
+		return EXIT_FAILURE;
+
+	EVA::SceneManager::CreateScene<EVA::Scene>("./assets/scenes/main.scene");
+
+#endif
+
 	EVA::Application::Run();
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }

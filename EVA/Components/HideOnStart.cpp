@@ -6,6 +6,11 @@ namespace EVA
 
 	void HideOnStart::Update(float deltaTime)
 	{
-		gameObject->SetActive(false);
+		const auto mrs = gameObject->GetComponentsOfType<MeshRenderer>();
+
+		for (auto& mr : mrs)
+		{
+			mr->SetActive(false);
+		}
 	}
 }

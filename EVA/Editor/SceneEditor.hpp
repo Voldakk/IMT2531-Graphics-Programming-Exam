@@ -69,8 +69,6 @@ namespace EVA
 			// Move camera
 			m_SceneCameraGameObject->Update(deltaTime);
 
-			FindGameObjectByName("Water")->Update(deltaTime);
-
 			// Check for clicked object
 			if (Input::MouseButtonDown(Input::MouseLeft) && !ImGui::IsMouseHoveringAnyWindow())
 			{

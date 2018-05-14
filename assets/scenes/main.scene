@@ -13,8 +13,8 @@
             ],
             "ambientCoefficient": 0.019999999552965165,
             "rotation": [
-                12.913043975830079,
-                16.125
+                60.0,
+                90.0
             ],
             "directionalShadowDistance": 200.0,
             "directionalNearPlane": 1.0,
@@ -108,7 +108,7 @@
                 {
                     "id": "EnviromentManager",
                     "secondsPerDay": 30.0,
-                    "secondsPerYear": 60.0,
+                    "secondsPerYear": 120.0,
                     "dayLengthSummer": 16.0,
                     "dayLengthWinter": 4.0,
                     "transitionLength": 2.0,
@@ -370,7 +370,7 @@
                     "position": [
                         0.0,
                         0.20000000298023225,
-                        2.799999952316284
+                        2.700000047683716
                     ],
                     "scale": [
                         0.10000000149011612,
@@ -389,6 +389,15 @@
                             "fov": 90.0,
                             "near": 0.10000000149011612,
                             "far": 1000.0
+                        },
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/standard assets/materials/uv.mat",
+                            "mesh": "./assets/models/arrow.fbx",
+                            "meshIndex": 0
+                        },
+                        {
+                            "id": "EVA::HideOnStart"
                         }
                     ]
                 },
@@ -641,6 +650,78 @@
                                     "meshIndex": 1
                                 }
                             ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Tail Camera",
+                    "position": [
+                        0.0,
+                        1.7999999523162842,
+                        -5.0
+                    ],
+                    "scale": [
+                        0.10000000149011612,
+                        0.10000000149011612,
+                        0.019999999552965165
+                    ],
+                    "orientation": [
+                        0.04361938685178757,
+                        0.0,
+                        0.0,
+                        0.9990482330322266
+                    ],
+                    "components": [
+                        {
+                            "id": "EVA::Camera",
+                            "fov": 90.0,
+                            "near": 0.10000000149011612,
+                            "far": 1000.0
+                        },
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/standard assets/materials/uv.mat",
+                            "mesh": "./assets/models/arrow.fbx",
+                            "meshIndex": 0
+                        },
+                        {
+                            "id": "EVA::HideOnStart"
+                        }
+                    ]
+                },
+                {
+                    "name": "Wing Camera",
+                    "position": [
+                        -8.5,
+                        0.8,
+                        1.3300000429153443
+                    ],
+                    "scale": [
+                        0.10000000149011612,
+                        0.10000000149011612,
+                        0.019999999552965165
+                    ],
+                    "orientation": [
+                        0.0,
+                        0.7071067690849304,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "components": [
+                        {
+                            "id": "EVA::Camera",
+                            "fov": 90.0,
+                            "near": 0.10000000149011612,
+                            "far": 1000.0
+                        },
+                        {
+                            "id": "EVA::MeshRenderer",
+                            "material": "./assets/standard assets/materials/uv.mat",
+                            "mesh": "./assets/models/arrow.fbx",
+                            "meshIndex": 0
+                        },
+                        {
+                            "id": "EVA::HideOnStart"
                         }
                     ]
                 }

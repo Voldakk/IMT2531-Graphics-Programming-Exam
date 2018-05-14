@@ -13,8 +13,10 @@ class CameraController : public EVA::Component, public EVA::IUpdateComponent, pu
 	EVA::FreeLook* m_FreeLook = nullptr;
 	EVA::FollowTarget* m_FollowTarget = nullptr;
 	EVA::Camera* m_FppCamera = nullptr;
+	EVA::Camera* m_TailCamera = nullptr;
+	EVA::Camera* m_WingCamera = nullptr;
 
-	enum CameraType { FreeLook, Follow, Fpp, Last };
+	enum CameraType { Fpp, Tail, Wing, Follow, FreeLook, Last };
 	int m_CurrentCamera = 0;
 
 public:
@@ -23,5 +25,7 @@ public:
 	void LateUpdate() override;
 
 	void Update(float deltaTime) override;
-	void UpdateCameras();
+	void UpdateCameras() const;
+
+	void DeactivateAll() const;
 };

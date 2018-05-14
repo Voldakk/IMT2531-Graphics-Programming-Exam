@@ -141,7 +141,7 @@ namespace EVA
 	{
 		// Updates the world position, orientation and scale
 		m_Position = m_Parent == nullptr ? m_LocalPosition : glm::vec3(m_Parent->modelMatrix * glm::vec4(m_LocalPosition, 1.0f));
-		m_Orientation = m_Parent == nullptr ? m_LocalOrientation : m_LocalOrientation * m_Parent->m_Orientation;
+		m_Orientation = m_Parent == nullptr ? m_LocalOrientation : m_Parent->m_Orientation * m_LocalOrientation;
 		m_Scale = m_Parent == nullptr ? m_LocalScale : m_Parent->m_Scale * m_LocalScale;
 		
 		// Parent

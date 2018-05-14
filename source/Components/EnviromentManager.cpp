@@ -1,5 +1,7 @@
 #include "EnviromentManager.hpp"
 
+#include <iostream>
+
 #include "EVA/Input.hpp"
 
 #include "Terrain.hpp"
@@ -310,6 +312,8 @@ void EnviromentManager::UpdateTime() const
 
 void EnviromentManager::PlaceTrees()
 {
+	unsigned int treeCount = 0;
+
 	for(auto& region : m_Regions)
 	{
 		if (region.treeName.empty() || region.treeDensity == 0.0f)
@@ -350,5 +354,9 @@ void EnviromentManager::PlaceTrees()
 
 			material->SetMbo(mr->mesh, positions);
 		}
+
+		treeCount += positions.size();
 	}
+
+	std::cout << "EnviromentManager::PlaceTrees - Placed " << treeCount << " trees" << std::endl;
 }
