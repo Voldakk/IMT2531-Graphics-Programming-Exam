@@ -30,6 +30,7 @@ Per region settings:
 * Pitch, roll and yaw controlls.
 * Moving parts: joystick, throttle, propeller, alierons and tail fin.
 * Cockpit, tail, wing and chase camera
+* Pseudo gravity and drag
 
 ## Controls
 
@@ -95,7 +96,7 @@ GPU Instancing is also supported
 ### Prerequisites
 Complier with support for C++ 17 and std::filesystem / std::experimental::filesystem
 
-### Windows - Visual Studio 2017
+### Windows - Visual Studio 2017 with Visual Studio Tools for CMake
 1. File -> Open -> Folder - Select the root folder
 2. Select "main" as the startup item
 
