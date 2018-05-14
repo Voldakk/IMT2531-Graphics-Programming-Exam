@@ -42,6 +42,9 @@ void GilderController::Start()
 	m_Stick = scene->FindGameObjectByName("Stick")->transform.get();
 	m_Throttle = scene->FindGameObjectByName("Throttle")->transform.get();
 	m_MaxThrottlePositionZ = m_Throttle->localPosition.z;
+
+	// Start throttle
+	m_CurrentSpeed = glm::mix(m_MinSpeed, m_MaxSpeed, 0.5f);
 }
 
 void GilderController::Update(const float deltaTime)
@@ -92,19 +95,33 @@ void GilderController::Update(const float deltaTime)
 	m_CurrentSpeed = glm::clamp(m_CurrentSpeed, m_MinSpeed, m_MaxSpeed);
 
 
-	// "Physics"
-	m_Velocity += transform->forward * m_CurrentSpeed * deltaTime;
-	m_Velocity += -EVA::YAXIS * deltaTime * 9.81f;
-
-	const auto drag = -glm::normalize(m_Velocity) * glm::length(m_Velocity) * glm::length(m_Velocity) * 0.01f;
-	m_Velocity += drag * deltaTime;
-
-	transform->Translate(m_Velocity * deltaTime);
-
-	// Labels
 	const auto speedPersent = 100 * (m_CurrentSpeed - m_MinSpeed) / (m_MaxSpeed - m_MinSpeed);
 	m_ThrottleLabel->SetText("Throttle: " + std::to_string((int)std::roundf(speedPersent)) + "%");
-	m_SpeedLabel->SetText("Speed: " + std::to_string((int)std::roundf(glm::length(m_Velocity))));
+
+	// "Physics"
+	if (EVA::Input::KeyDown(EVA::Input::P))
+	{
+		m_Physics = !m_Physics;
+		m_Velocity = transform->forward * m_CurrentSpeed;
+	}
+	if (m_Physics)
+	{
+		m_Velocity += transform->forward * m_CurrentSpeed * deltaTime;
+		m_Velocity += -EVA::YAXIS * deltaTime * 9.81f;
+
+		const auto drag = -glm::normalize(m_Velocity) * glm::length(m_Velocity) * glm::length(m_Velocity) * 0.01f;
+		m_Velocity += drag * deltaTime;
+
+		transform->Translate(m_Velocity * deltaTime);
+
+		// Labels
+		m_SpeedLabel->SetText("Speed: " + std::to_string((int)std::roundf(glm::length(m_Velocity))));
+	}
+	else
+	{
+		transform->Translate(transform->forward * m_CurrentSpeed * deltaTime);
+		m_SpeedLabel->SetText("");
+	}
 
 	// Throttle and porpeller objects
 	m_Throttle->SetPosition({ 0.0f, 0.0f, glm::mix(0.0f, m_MaxThrottlePositionZ, speedPersent / 100.0f) });
@@ -115,7 +132,8 @@ void GilderController::Update(const float deltaTime)
 	{
 		transform->SetPosition(m_StartLocation);
 		transform->SetOrientation(m_StartOrientation);
-		m_CurrentSpeed = m_MinSpeed;
+		m_CurrentSpeed = glm::mix(m_MinSpeed, m_MaxSpeed, 0.5f);
+		m_Velocity = glm::vec3(0.0f);
 	}
 
 	// Teleport
@@ -130,6 +148,8 @@ void GilderController::Update(const float deltaTime)
 
 		transform->SetPosition(m_TeleportPoints[m_CurrentTeleportPoint]->position);
 		transform->SetOrientation(m_TeleportPoints[m_CurrentTeleportPoint]->orientation);
+		m_CurrentSpeed = glm::mix(m_MinSpeed, m_MaxSpeed, 0.5f);
+		m_Velocity = glm::vec3(0.0f);
 	}
 
 }

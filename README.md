@@ -56,6 +56,7 @@ Gilder:
 * Throttle: , / .
 * Reset position: R
 * Cycle waypoints: F
+* Toggle physics: P
 
 Freelook camera:
 * Forward: I

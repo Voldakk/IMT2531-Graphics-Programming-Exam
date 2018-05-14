@@ -41,6 +41,8 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 
 	glm::vec3 m_Velocity;
 
+	bool m_Physics = true;
+
 public:
 
 	void Start() override;
