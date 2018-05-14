@@ -1,28 +1,87 @@
-# EVA Engine
+# IMT2531 – Take-Home Exam 2018
 
-A C++ OpenGL game engine
+## Task 1 - Terrain & Enviroment
 
-### Architecture/Framework
+### Terrain
+* Textures
+* Trees
+* Water
+* Arbitrary regions, they can also overlap
+
+### Enviroment
+* Days are longer in the summer
+* Rising water level in the summer, the water turns to ice in the winter
+* The skybox is tinted the same color as the sun. Orange sunrise and sunset
+
+#### Day/night & season cycle and region settings
+![Image of the settings in the scene editor](https://i.imgur.com/gfJYtp3.jpg)
+
+## Task 2 - Glider
+![Image of the glider in the scene editor](https://i.imgur.com/2GMIQGI.png)
+
+## Controls
+
+Day/Night cycle
+* 0600: 1
+* 1200: 2
+* 1800: 3
+* 2400: 4
+* Toggle cycle: 5
+
+Seasons
+* Month 3:  6
+* Month 6:  7
+* Month 9:  8
+* Month 12: 9
+* Toggle cycle: 0
+
+Toggle contour lines: O
+
+Gilder:
+* Pitch: W / S
+* Roll: A / D
+* Yaw: Q / E
+* Throttle: , / .
+* Reset position: R
+* Cycle waypoints: F
+
+Freelook camera:
+* Forward: I
+* Back: K
+* Left: J
+* Right: L
+* Up: Y
+* Down H
+
+Cycle cameras: -
+
+Freelook and chase camera zoom: N/M
+
+## Framework
+
+### The framework was buildt as part of assignment 1 & 2
+
 * Component based system where each 'game object' is only responsible for managing the components attached to it.  
 Some component like the Transform and MeshRenderer receives special treatment, but the user is free to create any sort of component they want.
 * Transforms can have a parent and translates/scales/rotates correctly with the parent. This is shown in the Transforms test scene.
 * The SceneManager provides an easy way to create multiple seperate scenes and change between them. Multiple scenes can be loaded at once.
 * The Model-, Shader- and TextureManagers help load their respective kind of asset and prevents duplication if multiple components use the same asset.
 * There are a few UI elements (Button, Label, Layout and padding) that makes setting up a simple menu or HUD a pretty trivial task.  
-The UI elements can be anchored to any part of the screen and the position is automaticly updated when the windows is resized. This is shown in the UITest test scene.
+The UI elements can be anchored to any part of the screen and the position is automaticly updated when the windows is resized.
 * InputManager for eays access to both mouse and keyboard input.
 * The MeshRenderer components are sorted by material and mesh to reduse the overhead of repeatedly switching materials.  
 GPU Instancing is also supported
-
-### Aesthetics/Quality of Graphics
-The engine uses the Phong lighting model. It supports: 
-* Diffuse, specular, emission and normal maps.
+* Scene editor with custom component inspectors
+* Phong lighting model with diffuse, specular, emission and normal maps.
 * Multiple directional and point lights.
 * Multiple directional shadow maps and a single cube map.
-* A skybox.
+* Skybox.
 * FreeType text.
 
 ## Setup
+
+### Prerequisites
+Complier with support for C++ 17 and std::filesystem / std::experimental::filesystem
 
 ### Windows - Visual Studio 2017
 1. File -> Open -> Folder - Select the root folder
@@ -60,10 +119,6 @@ make
 cd bin
 ./main
 ```
-## Test scenes
-
-Thera are 3 test scenes in addition to a pacman game.
-To run them simply uncomment the line in source/main.cpp
 
 ## Built With
 
