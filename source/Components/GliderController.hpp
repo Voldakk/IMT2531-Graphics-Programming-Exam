@@ -18,6 +18,7 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 	float m_RollSpeed = 90.0f;
 
 	EVA::Label* m_ThrottleLabel = nullptr;
+	EVA::Label* m_SpeedLabel = nullptr;
 
 	glm::vec3 m_StartLocation;
 	glm::quat m_StartOrientation;
@@ -35,8 +36,10 @@ class GilderController : public EVA::Component, public EVA::IUpdateComponent
 	EVA::Transform* m_Direction = nullptr;
 
 	EVA::Transform* m_Stick = nullptr;
-	EVA::Transform* m_Throtle = nullptr;
+	EVA::Transform* m_Throttle = nullptr;
 	float m_MaxThrottlePositionZ = 0.0f;
+
+	glm::vec3 m_Velocity;
 
 public:
 

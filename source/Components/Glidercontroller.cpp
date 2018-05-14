@@ -11,6 +11,10 @@ void GilderController::Start()
 	m_ThrottleLabel->SetAnchorAndPivot(-1.0f, -1.0f); // Bottom left
 	m_ThrottleLabel->SetOffsetFromAnchor(0.05f);
 
+	m_SpeedLabel = scene->CreateUiElement<EVA::Label>("Speed:");
+	m_SpeedLabel->SetAnchorAndPivot(-1.0f, -1.0f); // Bottom left
+	m_SpeedLabel->SetOffset(0.05, 0.15); // And a bit up
+
 	// Rememder start
 	m_StartLocation = transform->position;
 	m_StartOrientation = transform->orientation;
@@ -36,8 +40,8 @@ void GilderController::Start()
 	m_Direction = scene->FindGameObjectByName("Direction")->transform.get();
 
 	m_Stick = scene->FindGameObjectByName("Stick")->transform.get();
-	m_Throtle = scene->FindGameObjectByName("Throttle")->transform.get();
-	m_MaxThrottlePositionZ = m_Throtle->localPosition.z;
+	m_Throttle = scene->FindGameObjectByName("Throttle")->transform.get();
+	m_MaxThrottlePositionZ = m_Throttle->localPosition.z;
 }
 
 void GilderController::Update(const float deltaTime)
@@ -69,6 +73,7 @@ void GilderController::Update(const float deltaTime)
 	transform->Rotate(transform->up, yaw * m_YawSpeed * deltaTime);
 	transform->Rotate(transform->forward, roll * m_RollSpeed * deltaTime);
 
+	// Orientate game objects
 	m_Stick->SetOrientation(-pitch * 30.0f, 0.0f, roll * 30.0f);
 
 	m_Direction->SetOrientation(EVA::YAXIS, -yaw * 30.0f);
@@ -86,12 +91,23 @@ void GilderController::Update(const float deltaTime)
 
 	m_CurrentSpeed = glm::clamp(m_CurrentSpeed, m_MinSpeed, m_MaxSpeed);
 
+
+	// "Physics"
+	m_Velocity += transform->forward * m_CurrentSpeed * deltaTime;
+	m_Velocity += -EVA::YAXIS * deltaTime * 9.81f;
+
+	const auto drag = -glm::normalize(m_Velocity) * glm::length(m_Velocity) * glm::length(m_Velocity) * 0.01f;
+	m_Velocity += drag * deltaTime;
+
+	transform->Translate(m_Velocity * deltaTime);
+
+	// Labels
 	const auto speedPersent = 100 * (m_CurrentSpeed - m_MinSpeed) / (m_MaxSpeed - m_MinSpeed);
 	m_ThrottleLabel->SetText("Throttle: " + std::to_string((int)std::roundf(speedPersent)) + "%");
+	m_SpeedLabel->SetText("Speed: " + std::to_string((int)std::roundf(glm::length(m_Velocity))));
 
-	transform->Translate(transform->forward * m_CurrentSpeed * deltaTime);
-
-	m_Throtle->SetPosition({ 0.0f, 0.0f, glm::mix(0.0f, m_MaxThrottlePositionZ, speedPersent / 100.0f) });
+	// Throttle and porpeller objects
+	m_Throttle->SetPosition({ 0.0f, 0.0f, glm::mix(0.0f, m_MaxThrottlePositionZ, speedPersent / 100.0f) });
 	m_Propeller->Rotate(EVA::ZAXIS, m_CurrentSpeed * deltaTime * 100.0f);
 
 	// Reset
