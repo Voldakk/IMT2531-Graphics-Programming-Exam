@@ -30,6 +30,18 @@ Per region settings:
 * Pitch, roll and yaw controlls.
 * Moving parts: joystick, throttle, propeller, alierons and tail fin.
 * Cockpit, tail, wing and chase camera
+* Pseudo gravity and drag
+
+## Scene editor
+To access the scene editor uncomment the line " //#define EDITOR " in source/main.cpp  
+Controls:  
+Hold the right mouse button to move around
+* Forward: I
+* Back: K
+* Left: J
+* Right: L
+* Up: Y
+* Down H
 
 ## Controls
 
@@ -72,7 +84,7 @@ Freelook and chase camera zoom: N/M
 
 ## Framework
 
-### The framework was buildt as part of assignment 1 & 2
+### The framework was buildt as part of assignment 1 & 2. The scene editor in the last two weeks
 
 * Component based system where each 'game object' is only responsible for managing the components attached to it.  
 Some component like the Transform and MeshRenderer receives special treatment, but the user is free to create any sort of component they want.
@@ -96,7 +108,7 @@ GPU Instancing is also supported
 ### Prerequisites
 Complier with support for C++ 17 and std::filesystem / std::experimental::filesystem
 
-### Windows - Visual Studio 2017
+### Windows - Visual Studio 2017 with Visual Studio Tools for CMake
 1. File -> Open -> Folder - Select the root folder
 2. Select "main" as the startup item
 
