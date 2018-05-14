@@ -7,9 +7,7 @@
 
 #include "../TerrainMaterial.hpp"
 
-
 REGISTER_COMPONENT_CPP(Terrain, "Terrain");
-
 
 void Terrain::Awake()
 {
@@ -22,6 +20,19 @@ void Terrain::Awake()
 	m_Material->materialShininess = m_MaterialShininess;
 
 	SetHeightMap(m_HeightMapPath);
+}
+
+void Terrain::Update(float deltaTime)
+{
+	if (EVA::Input::KeyDown(EVA::Input::O))
+		contourLines = !contourLines;
+}
+
+float Terrain::HeightData(const float x, const float y)
+{
+	const unsigned int indexX = glm::clamp(x * m_HeightData[0].size(), 0.0f, (float)m_HeightData[0].size() - 1.0f);
+	const unsigned int indexY = glm::clamp(y * m_HeightData.size(), 0.0f, (float)m_HeightData.size() - 1.0f);
+	return m_HeightData[indexY][indexX] / 255.0f;
 }
 
 void Terrain::Load(const EVA::DataObject data)
@@ -70,12 +81,6 @@ void Terrain::Inspector()
 	ComponentInspector::Float("Specular strength", m_SpecularStrength);
 }
 
-void Terrain::Update(float deltaTime)
-{
-	if (EVA::Input::KeyDown(EVA::Input::O))
-		contourLines = !contourLines;
-}
-
 void Terrain::SetHeightMap(const FS::path& newHeightMapPath)
 {
 	m_HeightMapPath = newHeightMapPath;
@@ -86,8 +91,8 @@ void Terrain::SetHeightMap(const FS::path& newHeightMapPath)
 		return;
 
 	m_HeightData.clear();
-
 	m_HeightData.resize(data->height);
+	
 	for (unsigned int y = 0; y < data->height; ++y)
 	{
 		if(y % 100 == 0)
@@ -96,6 +101,7 @@ void Terrain::SetHeightMap(const FS::path& newHeightMapPath)
 		m_HeightData[y].resize(data->width);
 		for (unsigned int x = 0; x < data->width; ++x)
 		{
+			// Copy the data from the first(red) channel
 			m_HeightData[y][x] = data->data[y*data->width + x * data->channels];
 		}
 	}
@@ -111,11 +117,10 @@ void Terrain::CreateMesh()
 
 	std::cout << "Terrain::CreateMesh - Generating mesh" << std::endl;
 
-	m_TerrainLength = (float)m_TerrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size());
+	m_TerrainLength = m_TerrainWidth * ((float)m_HeightData.size() / (float)m_HeightData[0].size()); // Length = width * (length width ratio)
 
 	const auto verticesY = (unsigned int)std::floor(m_TerrainLength * m_VerticesPerUnit);
 	const auto verticesX = (unsigned int)std::floor(m_TerrainWidth * m_VerticesPerUnit);
-
 
 	// Vertices
 	std::vector<EVA::Vertex> vertices;
@@ -184,9 +189,3 @@ void Terrain::CreateMesh()
 		m_MeshRenderer->Set(mesh, m_Material);
 }
 
-float Terrain::HeightData(const float x, const float y)
-{
-	const unsigned int indexX = glm::clamp(x * m_HeightData[0].size(), 0.0f, (float)m_HeightData[0].size() - 1.0f);
-	const unsigned int indexY = glm::clamp(y * m_HeightData.size(), 0.0f, (float)m_HeightData.size() - 1.0f);
-	return m_HeightData[indexY][indexX] / 255.0f;
-}

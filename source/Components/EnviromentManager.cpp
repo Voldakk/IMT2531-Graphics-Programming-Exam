@@ -11,8 +11,11 @@ REGISTER_COMPONENT_CPP(EnviromentManager, "EnviromentManager")
 void EnviromentManager::Start()
 {
 	m_Sun = scene->GetLights()[0].get();
-	UpdateTime();
+	m_Terrain = gameObject->GetComponentOfType<Terrain>();
 
+	UpdateTime();
+	PlaceTrees();
+	
 	// Labels
 	m_TimeLabel = scene->CreateUiElement<EVA::Label>("Time:");
 	m_TimeLabel->SetAnchorAndPivot(-1.0f, 1.0f); // Top left
@@ -21,16 +24,12 @@ void EnviromentManager::Start()
 	m_SeasonLabel = scene->CreateUiElement<EVA::Label>("Month:");
 	m_SeasonLabel->SetAnchorAndPivot(1.0f, 1.0f); // Top right
 	m_SeasonLabel->SetOffsetFromAnchor(0.05f);
-
-	m_Terrain = gameObject->GetComponentOfType<Terrain>();
-
-	PlaceTrees();
 }
 
 void EnviromentManager::Load(const EVA::DataObject data)
 {
 	m_SecondsPerDay = data.GetFloat("secondsPerDay", m_SecondsPerDay);
-	m_SecondsPerYear = data.GetFloat("secondsPerYear", m_SecondsPerYear);
+	m_SecondsPerYear = data.GetFloat("secondsPerYear", 30.0f);
 
 	m_DayLengthSummer = data.GetFloat("dayLengthSummer", m_DayLengthSummer);
 	m_DayLengthWinter = data.GetFloat("dayLengthWinter", m_DayLengthWinter);
@@ -70,6 +69,202 @@ void EnviromentManager::Load(const EVA::DataObject data)
 			m_Regions[i].treeName = regionData.GetString("treeName", m_Regions[i].treeName);
 		}
 	}
+}
+
+void EnviromentManager::Update(const float deltaTime)
+{
+	// Season controls
+	if (EVA::Input::KeyDown(EVA::Input::Alpha1))
+		m_Season = 3.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha2))
+		m_Season = 6.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha3))
+		m_Season = 9.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha4))
+		m_Season = 0.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha5))
+		m_SeasonPaused = !m_SeasonPaused;
+
+	// Time controls
+	if (EVA::Input::KeyDown(EVA::Input::Alpha6))
+		m_Time = 6.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha7))
+		m_Time = 12.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha8))
+		m_Time = 18.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha9))
+		m_Time = 0.0f;
+	if (EVA::Input::KeyDown(EVA::Input::Alpha0))
+		m_TimePaused = !m_TimePaused;
+
+	// Update
+	if (!m_SeasonPaused)
+	{
+		m_Season += (deltaTime * 12.0f) / m_SecondsPerYear;
+		if (m_Season >= 12.0f)
+			m_Season -= 12.0f;
+	}
+
+	if (!m_TimePaused)
+	{
+		m_Time += (deltaTime * 24.0f) / m_SecondsPerDay;
+		if (m_Time >= 24.0f)
+			m_Time -= 24.0f;
+	}
+
+	UpdateTime();
+
+	// Labels
+	const auto month = (int)ceilf(m_Season);
+
+	const auto seasonName = 
+		month <= 2 || month >= 12 ? "Winter" :
+		month <= 5 ? "Spring" :
+		month <= 8 ? "Summer" : "Autumn";
+
+	m_TimeLabel->SetText("Time: " + std::to_string((int)ceilf(m_Time)) + " (" + m_TimeOfDay + ")");
+	m_SeasonLabel->SetText("Month: " + std::to_string(month) + " (" + seasonName + ")");
+}
+
+void EnviromentManager::UpdateTime()
+{
+	if (m_Sun == nullptr)
+		return;
+
+	auto daylength = 0.0f;
+	if (season <= 6)
+		daylength = glm::mix(m_DayLengthWinter, m_DayLengthSummer, season / 6.0f) - -m_TransitionLength;
+	else
+		daylength = glm::mix(m_DayLengthSummer, m_DayLengthWinter, (season - 6.0f) / 6.0f) - -m_TransitionLength;
+
+	const auto nightLength = 24.0f - daylength - m_TransitionLength * 2.0f;
+
+	const auto halfDayLength = daylength / 2.0f;
+	const auto halfNightLength = nightLength / 2.0f;
+
+	const auto degPerHour = 180.0f / (24.0f - nightLength);
+
+	const auto yaw = glm::mix(0.0f, 180.0f, m_Time / 24.0f);
+	auto pitch = 0.0f;
+	auto color = m_Sun->color;
+
+	if (m_Time <= halfNightLength) // Night
+	{
+		m_TimeOfDay = "Night";
+
+		const auto t = m_Time / halfNightLength;
+
+		pitch = glm::mix(-90.0f, 0.0f, t);
+		color = m_NightColor;
+	}
+	else if (m_Time >= 24 - halfNightLength) // Night
+	{
+		m_TimeOfDay = "Night";
+
+		const auto t = (m_Time - (24 - halfNightLength)) / halfNightLength;
+
+		pitch = glm::mix(180.0f, 270.0f, t);
+		color = m_NightColor;
+	}
+	else if (m_Time >= 12 - halfDayLength && m_Time <= 12) // Day
+	{
+		m_TimeOfDay = "Day";
+
+		const auto t = (m_Time - (12 - halfDayLength)) / halfDayLength;
+
+		pitch = glm::mix(m_TransitionLength * degPerHour, m_MiddayAngle, t);
+		color = m_MiddayColor;
+	}
+	else if (m_Time >= 12 && m_Time <= 12 + halfDayLength) // Day
+	{
+		m_TimeOfDay = "Day";
+
+		const auto t = (m_Time - 12) / halfDayLength;
+
+		pitch = glm::mix(m_MiddayAngle, 180.0f - m_TransitionLength * degPerHour, t);
+		color = m_MiddayColor;
+	}
+	else if (m_Time < 12) // Sunrise
+	{
+		m_TimeOfDay = "Sunrise";
+
+		const auto t = (m_Time - halfNightLength) / m_TransitionLength;
+
+		pitch = glm::mix(0.0f, m_TransitionLength * degPerHour, t);
+		if (t < 0.5)
+			color = glm::mix(m_NightColor, m_SunriseColor, t * 2.0f);
+		else
+			color = glm::mix(m_SunriseColor, m_MiddayColor, (t - 0.5f) * 2.0f);
+	}
+	else // Sunset
+	{
+		m_TimeOfDay = "Sunset";
+
+		const auto t = (m_Time - (12 + halfDayLength)) / m_TransitionLength;
+
+		pitch = glm::mix(180.0f - m_TransitionLength * degPerHour, 180.0f, t);
+		if (t < 0.5)
+			color = glm::mix(m_MiddayColor, m_SunsetColor, t * 2.0f);
+		else
+			color = glm::mix(m_SunsetColor, m_NightColor, (t - 0.5f) * 2.0f);
+	}
+
+	m_Sun->SetRotation({ pitch, yaw });
+	m_Sun->color = color;
+
+	if (scene->skybox != nullptr)
+		scene->skybox->SetTint(color);
+}
+
+void EnviromentManager::PlaceTrees()
+{
+	unsigned int treeCount = 0;
+
+	for (auto& region : m_Regions)
+	{
+		if (region.treeName.empty() || region.treeDensity == 0.0f)
+			continue;
+
+		// Find the tree
+		auto go = scene->FindGameObjectByName(region.treeName);
+		if (go == nullptr)
+			continue;
+
+		auto treeTransform = go->transform.get();
+
+		// Positions
+		std::vector<glm::mat4> positions;
+
+		for (size_t x = 0; x < m_Terrain->terrainWidth; x++)
+		{
+			for (size_t z = 0; z < m_Terrain->terrainLength; z++)
+			{
+				if (std::rand() % 100000 > region.treeDensity * 100000.0f)
+					continue;
+
+				const auto height = m_Terrain->HeightData(x / m_Terrain->terrainWidth, z / m_Terrain->terrainLength);
+
+				if (height > region.MinHeight(m_Season) && height < region.MaxHeight(m_Season))
+				{
+					treeTransform->SetPosition(glm::vec3(x, height * m_Terrain->maxTerrainHeight, z));
+					positions.push_back(treeTransform->modelMatrix);
+				}
+			}
+		}
+
+		// Set the material MBOs
+		auto meshRenderers = go->GetComponentsOfType<EVA::MeshRenderer>();
+		for (auto& mr : meshRenderers)
+		{
+			auto material = mr->material.get();
+
+			material->SetMbo(mr->mesh, positions);
+		}
+
+		treeCount += positions.size();
+	}
+
+	std::cout << "EnviromentManager::PlaceTrees - Placed " << treeCount << " trees" << std::endl;
 }
 
 void EnviromentManager::Save(EVA::DataObject& data)
@@ -182,181 +377,4 @@ void EnviromentManager::Inspector()
 	}
 
 	UpdateTime();
-}
-
-void EnviromentManager::Update(const float deltaTime)
-{
-	// Season controls
-	if (EVA::Input::KeyDown(EVA::Input::Alpha1))
-		m_Season = 3.0f;
-	if (EVA::Input::KeyDown(EVA::Input::Alpha2))
-		m_Season = 6.0f;
-	if (EVA::Input::KeyDown(EVA::Input::Alpha3))
-		m_Season = 9.0f;
-	if (EVA::Input::KeyDown(EVA::Input::Alpha4))
-		m_Season = 0.0f;
-	if (EVA::Input::KeyDown(EVA::Input::Alpha5))
-		m_SeasonPaused = !m_SeasonPaused;
-
-	// Time controls
-	if (EVA::Input::KeyDown(EVA::Input::Alpha6))
-		m_Time = 6.0f;
-	if (EVA::Input::KeyDown(EVA::Input::Alpha7))
-		m_Time = 12.0f;
-	if (EVA::Input::KeyDown(EVA::Input::Alpha8))
-		m_Time = 18.0f;
-	if (EVA::Input::KeyDown(EVA::Input::Alpha9))
-		m_Time = 0.0f;
-	if (EVA::Input::KeyDown(EVA::Input::Alpha0))
-		m_TimePaused = !m_TimePaused;
-
-	// Update
-	if (!m_SeasonPaused)
-	{
-		m_Season += (deltaTime * 12.0f) / m_SecondsPerYear;
-		if (m_Season >= 12.0f)
-			m_Season -= 12.0f;
-	}
-	
-	if (!m_TimePaused)
-	{
-		m_Time += (deltaTime * 24.0f) / m_SecondsPerDay;
-		if (m_Time >= 24.0f)
-			m_Time -= 24.0f;
-	}
-
-	UpdateTime();
-
-	// Labels
-	m_TimeLabel->SetText("Time: " + std::to_string((int)ceilf(m_Time)));
-	m_SeasonLabel->SetText("Month: " + std::to_string((int)ceilf(m_Season)));
-}
-
-void EnviromentManager::UpdateTime() const
-{
-	if (m_Sun == nullptr)
-		return;
-
-	auto daylength = 0.0f;
-	if (season <= 6)
-		daylength = glm::mix(m_DayLengthWinter, m_DayLengthSummer, season / 6.0f) - -m_TransitionLength;
-	else
-		daylength = glm::mix(m_DayLengthSummer, m_DayLengthWinter, (season - 6.0f) / 6.0f) - -m_TransitionLength;
-
-	const auto nightLength = 24.0f - daylength - m_TransitionLength * 2.0f;
-
-	const auto halfDayLength = daylength / 2.0f;
-	const auto halfNightLength = nightLength / 2.0f;
-
-	const auto degPerHour = 180.0f / (24.0f - nightLength);
-
-	const auto yaw = glm::mix(0.0f, 180.0f, m_Time / 24.0f);
-	auto pitch = 0.0f;
-	auto color = m_Sun->color;
-
-	if (m_Time <= halfNightLength) // Night
-	{
-		const auto t = m_Time / halfNightLength;
-
-		pitch = glm::mix(-90.0f, 0.0f, t);
-		color = m_NightColor;
-	}
-	else if (m_Time >= 24 - halfNightLength) // Night
-	{
-		const auto t = (m_Time - (24 - halfNightLength)) / halfNightLength;
-
-		pitch = glm::mix(180.0f, 270.0f, t);
-		color = m_NightColor;
-	}
-	else if (m_Time >= 12 - halfDayLength && m_Time <= 12) // Day
-	{
-		const auto t = (m_Time - (12 - halfDayLength)) / halfDayLength;
-
-		pitch = glm::mix(m_TransitionLength * degPerHour, m_MiddayAngle, t);
-		color = m_MiddayColor;
-	}
-	else if (m_Time >= 12 && m_Time <= 12 + halfDayLength) // Day
-	{
-		const auto t = (m_Time - 12) / halfDayLength;
-
-		pitch = glm::mix(m_MiddayAngle, 180.0f - m_TransitionLength * degPerHour, t);
-		color = m_MiddayColor;
-	}
-	else if(m_Time < 12) // Sunrise
-	{
-		const auto t = (m_Time - halfNightLength) / m_TransitionLength;
-
-		pitch = glm::mix(0.0f, m_TransitionLength * degPerHour, t);
-		if (t < 0.5)
-			color = glm::mix(m_NightColor, m_SunriseColor, t * 2.0f);
-		else
-			color = glm::mix(m_SunriseColor, m_MiddayColor, (t - 0.5f) * 2.0f);
-	}
-	else // Sunset
-	{
-		const auto t = (m_Time - (12 + halfDayLength)) / m_TransitionLength;
-
-		pitch = glm::mix(180.0f - m_TransitionLength * degPerHour, 180.0f, t);
-		if (t < 0.5)
-			color = glm::mix(m_MiddayColor, m_SunsetColor, t * 2.0f);
-		else
-			color = glm::mix(m_SunsetColor, m_NightColor, (t - 0.5f) * 2.0f);
-	}
-
-	m_Sun->SetRotation({ pitch, yaw });
-	m_Sun->color = color;
-
-	if (scene->skybox != nullptr)
-		scene->skybox->SetTint(color);
-}
-
-void EnviromentManager::PlaceTrees()
-{
-	unsigned int treeCount = 0;
-
-	for(auto& region : m_Regions)
-	{
-		if (region.treeName.empty() || region.treeDensity == 0.0f)
-			continue;
-
-		// Find the tree
-		auto go = scene->FindGameObjectByName(region.treeName);
-		if (go == nullptr)
-			continue;
-
-		auto treeTransform = go->transform.get();
-
-		// Positions
-		std::vector<glm::mat4> positions;
-
-		for (size_t x = 0; x < m_Terrain->terrainWidth; x++)
-		{
-			for (size_t z = 0; z < m_Terrain->terrainLength; z++)
-			{
-				if (std::rand() % 100000 > region.treeDensity * 100000.0f)
-					continue;
-
-				const auto height = m_Terrain->HeightData(x / m_Terrain->terrainWidth, z / m_Terrain->terrainLength);
-
-				if (height > region.MinHeight(m_Season) && height < region.MaxHeight(m_Season))
-				{
-					treeTransform->SetPosition(glm::vec3(x, height * m_Terrain->maxTerrainHeight, z));
-					positions.push_back(treeTransform->modelMatrix);
-				}
-			}
-		}
-
-		// Set the material MBOs
-		auto meshRenderers = go->GetComponentsOfType<EVA::MeshRenderer>();
-		for (auto& mr : meshRenderers)
-		{
-			auto material = mr->material.get();
-
-			material->SetMbo(mr->mesh, positions);
-		}
-
-		treeCount += positions.size();
-	}
-
-	std::cout << "EnviromentManager::PlaceTrees - Placed " << treeCount << " trees" << std::endl;
 }

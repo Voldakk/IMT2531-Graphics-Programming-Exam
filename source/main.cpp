@@ -22,7 +22,7 @@ int main()
 
 #else
 	
-	if(!EVA::Application::Init("IMT2531 - Graphics Programming Take-Home Exam"))
+	if(!EVA::Application::Init("IMT253 Take-Home Exam 2018"))
 		return EXIT_FAILURE;
 
 	EVA::SceneManager::CreateScene<EVA::Scene>("./assets/scenes/main.scene");

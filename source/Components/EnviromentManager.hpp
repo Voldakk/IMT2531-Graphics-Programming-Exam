@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "EVA.hpp"
 #include "EVA/UI.hpp"
 
@@ -25,7 +27,7 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 		float textureTiling = 1.0f;
 
 		std::string treeName;
-		float treeDensity;
+		float treeDensity = 0.0f;
 
 		float MinHeight(const float season) const
 		{
@@ -65,8 +67,8 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 	float m_DayLengthWinter = 8.0f;
 	float m_TransitionLength = 1.0f;
 
-	bool m_TimePaused = true;
-	bool m_SeasonPaused = true;
+	bool m_TimePaused = false;
+	bool m_SeasonPaused = false;
 
 	float m_MiddayAngle = 60.0f;
 
@@ -77,6 +79,7 @@ class EnviromentManager : public EVA::Component, public EVA::IUpdateComponent
 
 	std::vector<Region> m_Regions;
 
+	std::string m_TimeOfDay;
 	EVA::Label* m_TimeLabel = nullptr;
 	EVA::Label* m_SeasonLabel = nullptr;
 
@@ -88,14 +91,12 @@ public:
 	const float& season = m_Season;
 
 	void Start() override;
+	void Update(float deltaTime) override;
+	
+	void UpdateTime();
+	void PlaceTrees();
 	
 	void Load(const EVA::DataObject data) override;
 	void Save(EVA::DataObject& data) override;
 	void Inspector() override;
-
-	void Update(float deltaTime) override;
-
-	void UpdateTime() const;
-
-	void PlaceTrees();
 };
