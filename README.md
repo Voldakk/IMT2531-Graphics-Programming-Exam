@@ -9,6 +9,7 @@
 * Arbitrary regions, they can also overlap
 
 ### Enviroment
+* Shadows
 * Days are longer in the summer
 * Rising water level in the summer, the water turns to ice in the winter
 * The skybox is tinted the same color as the sun. Orange sunrise and sunset
@@ -16,8 +17,19 @@
 #### Day/night & season cycle and region settings
 ![Image of the settings in the scene editor](https://i.imgur.com/gfJYtp3.jpg)
 
+Per region settings:
+* Range summer/winter: The min and max height for the region in the summer and winter, between 0 and 1
+* Diffuse texture: The texture
+* Color summer/winter: Texture tint in the summer/winter
+* Texture tiling: The amount of times the texture is tiled across the entire terrain
+* Tree name: The name of the tree object to use for trees in this region.
+* Tree dencity: The chance to spawn a tree per world unit.
 ## Task 2 - Glider
 ![Image of the glider in the scene editor](https://i.imgur.com/2GMIQGI.png)
+
+* Pitch, roll and yaw controlls.
+* Moving parts: joystick, throttle, propeller, alierons and tail fin.
+* Cockpit, tail, wing and chase camera
 
 ## Controls
 
